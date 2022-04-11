@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct TIAApp: App {
+    @StateObject var game = GameState()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainMenuView(game: game)
         }
     }
 }

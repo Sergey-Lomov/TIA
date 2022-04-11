@@ -32,7 +32,7 @@ struct WorldPickerView: View {
 
 struct WorldPickerView_Previews: PreviewProvider {
     static var previews: some View {
-        let scenario = GameState.shared.scenario
+        let scenario = GameState().scenario
         Group {
             WorldPickerView(scenario: scenario)
                 .frame(width: 200, height: 200)
@@ -50,7 +50,7 @@ struct ThemeAdventuresView: View {
                 let adventures = scenario.adventures[theme] ?? []
                 ForEach(adventures.indices, id: \.self) { index in
                     let adventure = adventures[index]
-                    AdventureWrapperView(adventure: adventure)
+                    AdventureIconWrapper(adventure: adventure)
                         .frame(geometry: geometry)
                 }
             }

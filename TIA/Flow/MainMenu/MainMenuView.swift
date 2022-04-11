@@ -29,6 +29,6 @@ struct MainMenuView: View {
 
 struct MainMenuView_Previews: PreviewProvider {
     static var previews: some View {
-        MainMenuView(game: GameState.shared)
+        MainMenuView(game: GameState())
     }
 }

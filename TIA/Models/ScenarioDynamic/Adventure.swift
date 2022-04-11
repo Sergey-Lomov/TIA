@@ -34,8 +34,13 @@ class Adventure: ObservableObject {
         }
         self.vertices = vertices
         
-        edges = prototype.edges.map {
-            Edge(prototype: $0, vertices: vertices)
+        edges = prototype.edges.compactMap {
+            do {
+                return try Edge(prototype: $0, vertices: vertices)
+            } catch {
+                print(error.localizedDescription)
+                return nil
+            }
         }
     }
 }

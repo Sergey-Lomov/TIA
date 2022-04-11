@@ -25,7 +25,7 @@
 		67B5336227FFAA6200EA959A /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5336127FFAA6200EA959A /* StorageService.swift */; };
 		67B5336428007C1400EA959A /* ScenarioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5336328007C1400EA959A /* ScenarioService.swift */; };
 		67B5336628008BA700EA959A /* GameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5336528008BA700EA959A /* GameState.swift */; };
-		67B5336828009BD200EA959A /* AdventureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5336728009BD200EA959A /* AdventureView.swift */; };
+		67B5336828009BD200EA959A /* AdventureIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5336728009BD200EA959A /* AdventureIconView.swift */; };
 		67B5336A28009C4D00EA959A /* CircleShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5336928009C4D00EA959A /* CircleShape.swift */; };
 		67B5336C28009DC100EA959A /* Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5336B28009DC100EA959A /* Path.swift */; };
 		67B5337128032EAD00EA959A /* BezierPositioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5337028032EAD00EA959A /* BezierPositioning.swift */; };
@@ -35,6 +35,12 @@
 		67B533812803868500EA959A /* BezierCurve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B533802803868500EA959A /* BezierCurve.swift */; };
 		67B5338328038D8C00EA959A /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5338228038D8C00EA959A /* Comparable.swift */; };
 		67B533852804969700EA959A /* AnyTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B533842804969700EA959A /* AnyTransaction.swift */; };
+		67B533892804CB8E00EA959A /* AdventureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B533882804CB8E00EA959A /* AdventureView.swift */; };
+		67B5338B2804CC4500EA959A /* VertexView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5338A2804CC4500EA959A /* VertexView.swift */; };
+		67B5338D2804D0F400EA959A /* AdventureVisualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5338C2804D0F400EA959A /* AdventureVisualizer.swift */; };
+		67B533902804D3CD00EA959A /* AdventureVisualization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5338F2804D3CD00EA959A /* AdventureVisualization.swift */; };
+		67B533962804EC6000EA959A /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B533952804EC6000EA959A /* Array.swift */; };
+		67B533982804ED6D00EA959A /* TIAPrototypingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B533972804ED6D00EA959A /* TIAPrototypingError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,7 +63,7 @@
 		67B5336127FFAA6200EA959A /* StorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
 		67B5336328007C1400EA959A /* ScenarioService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenarioService.swift; sourceTree = "<group>"; };
 		67B5336528008BA700EA959A /* GameState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameState.swift; sourceTree = "<group>"; };
-		67B5336728009BD200EA959A /* AdventureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureView.swift; sourceTree = "<group>"; };
+		67B5336728009BD200EA959A /* AdventureIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureIconView.swift; sourceTree = "<group>"; };
 		67B5336928009C4D00EA959A /* CircleShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleShape.swift; sourceTree = "<group>"; };
 		67B5336B28009DC100EA959A /* Path.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Path.swift; sourceTree = "<group>"; };
 		67B5337028032EAD00EA959A /* BezierPositioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BezierPositioning.swift; sourceTree = "<group>"; };
@@ -67,6 +73,12 @@
 		67B533802803868500EA959A /* BezierCurve.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BezierCurve.swift; sourceTree = "<group>"; };
 		67B5338228038D8C00EA959A /* Comparable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comparable.swift; sourceTree = "<group>"; };
 		67B533842804969700EA959A /* AnyTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyTransaction.swift; sourceTree = "<group>"; };
+		67B533882804CB8E00EA959A /* AdventureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureView.swift; sourceTree = "<group>"; };
+		67B5338A2804CC4500EA959A /* VertexView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexView.swift; sourceTree = "<group>"; };
+		67B5338C2804D0F400EA959A /* AdventureVisualizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureVisualizer.swift; sourceTree = "<group>"; };
+		67B5338F2804D3CD00EA959A /* AdventureVisualization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureVisualization.swift; sourceTree = "<group>"; };
+		67B533952804EC6000EA959A /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
+		67B533972804ED6D00EA959A /* TIAPrototypingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIAPrototypingError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,7 +116,7 @@
 				6793A98927FD18E0002198E9 /* Extensions */,
 				67B5336F28032E9700EA959A /* Modifiers */,
 				6793A98827FD0529002198E9 /* Views */,
-				6793A98327FCF4DE002198E9 /* MainMenu */,
+				67B533872804CB1400EA959A /* Flow */,
 				6793A97527FCF3B7002198E9 /* TIAApp.swift */,
 				6793A97927FCF3B9002198E9 /* Assets.xcassets */,
 				6793A97B27FCF3B9002198E9 /* Preview Content */,
@@ -125,7 +137,7 @@
 			children = (
 				6793A98427FCF4FD002198E9 /* MainMenuView.swift */,
 				6793A98627FCF50E002198E9 /* WorldPickerView.swift */,
-				67B5336728009BD200EA959A /* AdventureView.swift */,
+				67B5336728009BD200EA959A /* AdventureIconView.swift */,
 			);
 			path = MainMenu;
 			sourceTree = "<group>";
@@ -147,6 +159,7 @@
 				67B5337A28036F0700EA959A /* CGPoint.swift */,
 				67B5338228038D8C00EA959A /* Comparable.swift */,
 				67B533842804969700EA959A /* AnyTransaction.swift */,
+				67B533952804EC6000EA959A /* Array.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -158,6 +171,7 @@
 				67B5335727FF959900EA959A /* ScenarioDynamic */,
 				67B5336528008BA700EA959A /* GameState.swift */,
 				67B533802803868500EA959A /* BezierCurve.swift */,
+				67B533972804ED6D00EA959A /* TIAPrototypingError.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -201,6 +215,34 @@
 				67B5337E2803787300EA959A /* BezierStepsPositioning.swift */,
 			);
 			path = Modifiers;
+			sourceTree = "<group>";
+		};
+		67B533862804C90F00EA959A /* Adventure */ = {
+			isa = PBXGroup;
+			children = (
+				67B5338E2804D3AE00EA959A /* Visualization */,
+				67B533882804CB8E00EA959A /* AdventureView.swift */,
+				67B5338A2804CC4500EA959A /* VertexView.swift */,
+			);
+			path = Adventure;
+			sourceTree = "<group>";
+		};
+		67B533872804CB1400EA959A /* Flow */ = {
+			isa = PBXGroup;
+			children = (
+				67B533862804C90F00EA959A /* Adventure */,
+				6793A98327FCF4DE002198E9 /* MainMenu */,
+			);
+			path = Flow;
+			sourceTree = "<group>";
+		};
+		67B5338E2804D3AE00EA959A /* Visualization */ = {
+			isa = PBXGroup;
+			children = (
+				67B5338C2804D0F400EA959A /* AdventureVisualizer.swift */,
+				67B5338F2804D3CD00EA959A /* AdventureVisualization.swift */,
+			);
+			path = Visualization;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -276,18 +318,23 @@
 				67B533852804969700EA959A /* AnyTransaction.swift in Sources */,
 				67B5336C28009DC100EA959A /* Path.swift in Sources */,
 				67B5337128032EAD00EA959A /* BezierPositioning.swift in Sources */,
+				67B533902804D3CD00EA959A /* AdventureVisualization.swift in Sources */,
 				67B5334D27FF8A5000EA959A /* Resource.swift in Sources */,
 				67B5338328038D8C00EA959A /* Comparable.swift in Sources */,
 				6793A98527FCF4FD002198E9 /* MainMenuView.swift in Sources */,
 				67B5336628008BA700EA959A /* GameState.swift in Sources */,
 				67B5335F27FFA48100EA959A /* Scenario.swift in Sources */,
+				67B533892804CB8E00EA959A /* AdventureView.swift in Sources */,
 				6793A98B27FD1936002198E9 /* Colors.swift in Sources */,
+				67B533982804ED6D00EA959A /* TIAPrototypingError.swift in Sources */,
 				67B5336227FFAA6200EA959A /* StorageService.swift in Sources */,
 				67B5334F27FF8DCA00EA959A /* EdgePrototype.swift in Sources */,
 				67B5335B27FFA1A700EA959A /* Edge.swift in Sources */,
 				67B5335927FF95AC00EA959A /* Vertex.swift in Sources */,
+				67B5338D2804D0F400EA959A /* AdventureVisualizer.swift in Sources */,
 				67B5336428007C1400EA959A /* ScenarioService.swift in Sources */,
 				6793A98727FCF50E002198E9 /* WorldPickerView.swift in Sources */,
+				67B5338B2804CC4500EA959A /* VertexView.swift in Sources */,
 				67B533812803868500EA959A /* BezierCurve.swift in Sources */,
 				67B5337F2803787300EA959A /* BezierStepsPositioning.swift in Sources */,
 				67B5334B27FF8A1F00EA959A /* VertexPrototype.swift in Sources */,
@@ -295,10 +342,11 @@
 				6793A97627FCF3B7002198E9 /* TIAApp.swift in Sources */,
 				67B5335527FF949600EA959A /* ScenarioPrototype.swift in Sources */,
 				67B5337B28036F0700EA959A /* CGPoint.swift in Sources */,
-				67B5336828009BD200EA959A /* AdventureView.swift in Sources */,
+				67B5336828009BD200EA959A /* AdventureIconView.swift in Sources */,
 				67B5335127FF935800EA959A /* AdventurePrototype.swift in Sources */,
 				67B53379280336A900EA959A /* View.swift in Sources */,
 				67B5336A28009C4D00EA959A /* CircleShape.swift in Sources */,
+				67B533962804EC6000EA959A /* Array.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -13,15 +13,25 @@ enum EdgeState {
 }
 
 class Edge {
-    let from: Vertex?
-    var to: Vertex?
+    let from: Vertex
+    var to: Vertex
     var price: [Resource] = []
     var growOnStart: Bool
     var state: EdgeState = .seed
     
-    init(prototype: EdgePrototype, vertices: [Vertex]) {
-        from = vertices.first { $0.id == prototype.from.id }
-        to = vertices.first { $0.id == prototype.to.id }
+    init(prototype: EdgePrototype, vertices: [Vertex]) throws {
+        let fromId = prototype.from.id
+        guard let fromVertex = vertices.firstById(fromId) else {
+            throw TIAPrototypingError.missedVertex(id: fromId)
+        }
+        from = fromVertex
+        
+        let toId = prototype.to.id
+        guard let toVertex = vertices.firstById(toId) else {
+            throw TIAPrototypingError.missedVertex(id: toId)
+        }
+        to = toVertex
+        
         price = prototype.price
         growOnStart = prototype.growOnStart
     }

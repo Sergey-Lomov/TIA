@@ -1,5 +1,5 @@
 //
-//  AdventureView.swift
+//  AdventureIconView.swift
 //  TIA
 //
 //  Created by Serhii.Lomov on 08.04.2022.
@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct AdventureWrapperView: View {
+struct AdventureIconWrapper: View {
     @ObservedObject var adventure: Adventure
     private var stateModifier: BezierPositioning?
     
@@ -50,7 +50,7 @@ struct AdventureWrapperView: View {
         ZStack(alignment: .center) {
             GeometryReader { geometry in
                 ZStack {
-                        AdventureView(adventure: adventure)
+                    AdventureIconView(adventure: adventure)
                         .frame(geometry: geometry)
                         .scaleEffect(scale)
                         .animation(.easeInOut(duration: 2),
@@ -98,7 +98,7 @@ struct AdventureWrapperView: View {
     }
 }
 
-struct AdventureView: View {
+struct AdventureIconView: View {
     @StateObject var adventure: Adventure
     
     var body: some View {

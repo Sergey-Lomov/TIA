@@ -12,3 +12,9 @@ extension Array where Element : Vertex {
         return first { $0.id == id }
     }
 }
+
+extension Array where Element : Edge {
+    func firstById(_ id: String) -> Element? {
+        return first { $0.id == id }
+    }
+}

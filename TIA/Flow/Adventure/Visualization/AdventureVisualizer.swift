@@ -7,6 +7,7 @@
 
 import CoreGraphics
 
+// TODO: For now this class is unused. If this really not necessary it sohudl be removed
 class AdventureVisualizer {
     private let totalRandomizationLimit = 1000
     
@@ -28,9 +29,7 @@ class AdventureVisualizer {
     }
     
     init(adventure: Adventure) {
-        visualization = AdventureVisualization(model: adventure,
-                                               vertices: [],
-                                               edges: [])
+        visualization = AdventureVisualization(model: adventure)
     }
     
     func updateVisualization() {

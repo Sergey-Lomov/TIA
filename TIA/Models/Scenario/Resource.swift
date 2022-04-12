@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Resource {
+enum Resource: Codable {
     case despair
     case anger
     case yearning

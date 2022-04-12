@@ -8,6 +8,9 @@
 import CoreGraphics
 
 struct BezierCurve {
+    
+    static let zero = BezierCurve(points: [CGPoint](repeating: .zero, count: 4))
+    
     let p0: CGPoint
     let p1: CGPoint
     let p2: CGPoint

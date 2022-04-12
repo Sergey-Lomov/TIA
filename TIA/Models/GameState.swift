@@ -10,9 +10,15 @@ import Foundation
 class GameState: ObservableObject {
     
     @Published var scenario = ScenarioService.shared.restoreScenario()
-    @Published var activeAdventure: Adventure?
+    @Published private(set) var activeAdventure: AdventureVisualization?
     
     func doneCurrentAdventure(theme: AdventureTheme) {
         scenario.doneCurrentAdventure(theme: theme)
+    }
+    
+    func setActiveAdventure(_ adventure: Adventure) {
+        let visualizer = AdventureVisualizer(adventure: adventure)
+        visualizer.updateVisualization()
+        activeAdventure = visualizer.visualization
     }
 }

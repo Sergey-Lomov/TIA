@@ -6,11 +6,17 @@
 //
 
 import CoreGraphics
+import Combine
 
-struct AdventureVisualization {
-    var model: Adventure
-    var vertices: [VertexVisualization]
-    var edges: [EdgeVisualization]
+// TODO: For now this class is unused. If this really not necessary it sohudl be removed
+class AdventureVisualization: ObservableObject {
+    @Published var model: Adventure
+    var vertices: [VertexVisualization] = []
+    var edges: [EdgeVisualization] = []
+    
+    init(model: Adventure) {
+        self.model = model
+    }
 }
 
 struct VertexVisualization {

@@ -13,10 +13,10 @@ struct TIAApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if game.activeAdventure == nil {
-                MainMenuView(game: game)
+            if let adventure = game.activeAdventure {
+                AdventureView(adventure: adventure)
             } else {
-                
+                MainMenuView(game: game)
             }
         }
     }

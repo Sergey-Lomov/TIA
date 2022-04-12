@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreGraphics
 
 class ScenarioService {
     
@@ -13,91 +14,67 @@ class ScenarioService {
     
     func restoreScenario() -> Scenario {
         let states = StorageService.shared.getAdventuresStates()
-        return Scenario(prototype: prototype, states: states)
+        
+        let protoScenario = JSONDecoder().decodeScenario()
+        let adventures = protoScenario.adventures.map {
+            adventure(id: $0)
+        }
+        
+        return Scenario(adventures: adventures)
     }
     
-    lazy var prototype: ScenarioPrototype = {
-        ScenarioPrototype(adventures: [
-            darkAdventure1,
-            darkAdventure2,
-            lightAdventure1,
-            truthAdventure1
-        ])
-    }()
+    private func adventure(id: String) -> Adventure {
+        let protoAdventure = JSONDecoder().decodeAdventure(id: id)
+        
+        let vertices = protoAdventure.vertices.map {
+            Vertex(id: $0.id, type: $0.type, resources: $0.resources)
+        }
+        
+        let edges: [Edge] = protoAdventure.edges.map {
+            guard let from = vertices.firstById($0.fromId),
+                  let to = vertices.firstById($0.toId) else {
+                fatalError("Missed vertex connected to edge \"\($0.id)\"")
+            }
+            
+            return Edge(id: $0.id,
+                        from: from,
+                        to: to,
+                        price: $0.price,
+                        growOnStart: $0.growOnStart)
+        }
+        
+        return Adventure(id: protoAdventure.id,
+                         index: protoAdventure.index,
+                         theme: protoAdventure.theme,
+                         vertices: vertices,
+                         edges: edges)
+    }
+
+// MARK: Codable prototypes
     
-    lazy var darkAdventure1: AdventurePrototype = {
-        let v1 = VertexPrototype(type: .entrance, resources: [])
-        let v2 = VertexPrototype(type: .intermediate, resources: [.anger])
-        let v3 = VertexPrototype(type: .intermediate, resources: [.anger, .despair])
-        let v4 = VertexPrototype(type: .intermediate, resources: [.yearning, .yearning])
-        let v5 = VertexPrototype(type: .intermediate, resources: [.despair])
-        let v6 = VertexPrototype(type: .exit, resources: [])
-        
-        let e1 = EdgePrototype(from: v1, to: v2)
-        let e2 = EdgePrototype(from: v1, to: v3)
-        let e3 = EdgePrototype(from: v2, to: v3)
-        let e4 = EdgePrototype(from: v3, to: v4, price: [.despair])
-        let e5 = EdgePrototype(from: v2, to: v4, price: [.anger])
-        let e6 = EdgePrototype(from: v4, to: v6, price: [.despair])
-        let e7 = EdgePrototype(from: v2, to: v5, price: [.anger])
-        let e8 = EdgePrototype(from: v3, to: v5, price: [.despair])
-        let e9 = EdgePrototype(from: v5, to: v6, price: [.yearning])
-        
-        var vertices = [v1, v2, v3,v4, v5, v6]
-        var edges = [e1, e2, e3, e4, e5, e6, e7, e8, e9]
-        
-        return AdventurePrototype(id: "dark1",
-                                  index: 1,
-                                  theme: .dark,
-                                  vertices: vertices,
-                                  edges: edges)
-    }()
+    struct VertexPrototype: Codable {
+        let id: String
+        let type: VertexType
+        let resources: [Resource]
+    }
     
-    lazy var darkAdventure2: AdventurePrototype = {
-        let v1 = VertexPrototype(type: .entrance, resources: [])
-        let v2 = VertexPrototype(type: .exit, resources: [])
-        
-        let e1 = EdgePrototype(from: v1, to: v2)
-        
-        var vertices = [v1, v2]
-        var edges = [e1]
-        
-        return AdventurePrototype(id: "dark2",
-                                  index: 2,
-                                  theme: .dark,
-                                  vertices: vertices,
-                                  edges: edges)
-    }()
+    struct EdgePrototype: Codable {
+        let id: String
+        let fromId: String
+        let toId: String
+        let price: [Resource]
+        let growOnStart: Bool
+    }
     
-    lazy var lightAdventure1: AdventurePrototype = {
-        let v1 = VertexPrototype(type: .entrance, resources: [])
-        let v2 = VertexPrototype(type: .exit, resources: [])
-        
-        let e1 = EdgePrototype(from: v1, to: v2)
-        
-        var vertices = [v1, v2]
-        var edges = [e1]
-        
-        return AdventurePrototype(id: "light1",
-                                  index: 1,
-                                  theme: .light,
-                                  vertices: vertices,
-                                  edges: edges)
-    }()
+    struct AdventurePrototype: Codable {
+        let id: String
+        let index: Int
+        let theme: AdventureTheme
+        let vertices: [VertexPrototype]
+        let edges: [EdgePrototype]
+    }
     
-    lazy var truthAdventure1: AdventurePrototype = {
-        let v1 = VertexPrototype(type: .entrance, resources: [])
-        let v2 = VertexPrototype(type: .exit, resources: [])
-        
-        let e1 = EdgePrototype(from: v1, to: v2)
-        
-        var vertices = [v1, v2]
-        var edges = [e1]
-        
-        return AdventurePrototype(id: "truth1",
-                                  index: 1,
-                                  theme: .truth,
-                                  vertices: vertices,
-                                  edges: edges)
-    }()
+    struct ScenarioPrototype: Codable {
+        let adventures: [String]
+    }
 }

@@ -10,19 +10,10 @@ import Foundation
 class Scenario: ObservableObject {
     @Published var adventures: [AdventureTheme: [Adventure]] = [:]
     
-    init(prototype: ScenarioPrototype,
-         states: [String: AdventureState]) {
+    init(adventures: [Adventure]) {
         for theme in AdventureTheme.allCases {
-            let prototypes = prototype.adventures.filter {
+            self.adventures[theme] = adventures.filter {
                 $0.theme == theme
-            }
-
-            adventures[theme] = prototypes.map {
-                Adventure(prototype: $0)
-            }
-
-            adventures[theme]?.forEach {
-                $0.state = states[$0.id] ?? .planed
             }
         }
     }

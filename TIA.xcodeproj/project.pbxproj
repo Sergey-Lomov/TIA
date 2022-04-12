@@ -7,17 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6727922C2805C2C000FEE07E /* scenario.json in Resources */ = {isa = PBXBuildFile; fileRef = 6727922B2805C2C000FEE07E /* scenario.json */; };
+		6727922F2805CBE400FEE07E /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6727922E2805CBE400FEE07E /* Bundle.swift */; };
+		672792322806073B00FEE07E /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 672792312806073B00FEE07E /* Data.swift */; };
+		67279234280608FC00FEE07E /* JSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67279233280608FC00FEE07E /* JSONDecoder.swift */; };
 		6793A97627FCF3B7002198E9 /* TIAApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6793A97527FCF3B7002198E9 /* TIAApp.swift */; };
 		6793A97A27FCF3B9002198E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6793A97927FCF3B9002198E9 /* Assets.xcassets */; };
 		6793A97D27FCF3B9002198E9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6793A97C27FCF3B9002198E9 /* Preview Assets.xcassets */; };
 		6793A98527FCF4FD002198E9 /* MainMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6793A98427FCF4FD002198E9 /* MainMenuView.swift */; };
 		6793A98727FCF50E002198E9 /* WorldPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6793A98627FCF50E002198E9 /* WorldPickerView.swift */; };
 		6793A98B27FD1936002198E9 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6793A98A27FD1936002198E9 /* Colors.swift */; };
-		67B5334B27FF8A1F00EA959A /* VertexPrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5334A27FF8A1F00EA959A /* VertexPrototype.swift */; };
 		67B5334D27FF8A5000EA959A /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5334C27FF8A5000EA959A /* Resource.swift */; };
-		67B5334F27FF8DCA00EA959A /* EdgePrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5334E27FF8DCA00EA959A /* EdgePrototype.swift */; };
-		67B5335127FF935800EA959A /* AdventurePrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5335027FF935800EA959A /* AdventurePrototype.swift */; };
-		67B5335527FF949600EA959A /* ScenarioPrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5335427FF949600EA959A /* ScenarioPrototype.swift */; };
 		67B5335927FF95AC00EA959A /* Vertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5335827FF95AC00EA959A /* Vertex.swift */; };
 		67B5335B27FFA1A700EA959A /* Edge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5335A27FFA1A700EA959A /* Edge.swift */; };
 		67B5335D27FFA24000EA959A /* Adventure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5335C27FFA24000EA959A /* Adventure.swift */; };
@@ -41,9 +41,16 @@
 		67B533902804D3CD00EA959A /* AdventureVisualization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5338F2804D3CD00EA959A /* AdventureVisualization.swift */; };
 		67B533962804EC6000EA959A /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B533952804EC6000EA959A /* Array.swift */; };
 		67B533982804ED6D00EA959A /* TIAPrototypingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B533972804ED6D00EA959A /* TIAPrototypingError.swift */; };
+		67B5339A2805B2B400EA959A /* AdventureLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B533992805B2B400EA959A /* AdventureLayout.swift */; };
+		67B5339D2805B5E200EA959A /* dark1.json in Resources */ = {isa = PBXBuildFile; fileRef = 67B5339C2805B5E200EA959A /* dark1.json */; };
+		67B533A12805BC0400EA959A /* dark1_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 67B533A02805BC0400EA959A /* dark1_1.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6727922B2805C2C000FEE07E /* scenario.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = scenario.json; sourceTree = "<group>"; };
+		6727922E2805CBE400FEE07E /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
+		672792312806073B00FEE07E /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
+		67279233280608FC00FEE07E /* JSONDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoder.swift; sourceTree = "<group>"; };
 		6793A97227FCF3B7002198E9 /* TIA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TIA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6793A97527FCF3B7002198E9 /* TIAApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIAApp.swift; sourceTree = "<group>"; };
 		6793A97927FCF3B9002198E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -51,11 +58,7 @@
 		6793A98427FCF4FD002198E9 /* MainMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuView.swift; sourceTree = "<group>"; };
 		6793A98627FCF50E002198E9 /* WorldPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldPickerView.swift; sourceTree = "<group>"; };
 		6793A98A27FD1936002198E9 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
-		67B5334A27FF8A1F00EA959A /* VertexPrototype.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexPrototype.swift; sourceTree = "<group>"; };
 		67B5334C27FF8A5000EA959A /* Resource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resource.swift; sourceTree = "<group>"; };
-		67B5334E27FF8DCA00EA959A /* EdgePrototype.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgePrototype.swift; sourceTree = "<group>"; };
-		67B5335027FF935800EA959A /* AdventurePrototype.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventurePrototype.swift; sourceTree = "<group>"; };
-		67B5335427FF949600EA959A /* ScenarioPrototype.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenarioPrototype.swift; sourceTree = "<group>"; };
 		67B5335827FF95AC00EA959A /* Vertex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vertex.swift; sourceTree = "<group>"; };
 		67B5335A27FFA1A700EA959A /* Edge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Edge.swift; sourceTree = "<group>"; };
 		67B5335C27FFA24000EA959A /* Adventure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Adventure.swift; sourceTree = "<group>"; };
@@ -79,6 +82,9 @@
 		67B5338F2804D3CD00EA959A /* AdventureVisualization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureVisualization.swift; sourceTree = "<group>"; };
 		67B533952804EC6000EA959A /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		67B533972804ED6D00EA959A /* TIAPrototypingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIAPrototypingError.swift; sourceTree = "<group>"; };
+		67B533992805B2B400EA959A /* AdventureLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureLayout.swift; sourceTree = "<group>"; };
+		67B5339C2805B5E200EA959A /* dark1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = dark1.json; sourceTree = "<group>"; };
+		67B533A02805BC0400EA959A /* dark1_1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = dark1_1.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +98,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		67279235280615A600FEE07E /* Layouts */ = {
+			isa = PBXGroup;
+			children = (
+				67B533A02805BC0400EA959A /* dark1_1.json */,
+			);
+			path = Layouts;
+			sourceTree = "<group>";
+		};
 		6793A96927FCF3B7002198E9 = {
 			isa = PBXGroup;
 			children = (
@@ -119,6 +133,7 @@
 				67B533872804CB1400EA959A /* Flow */,
 				6793A97527FCF3B7002198E9 /* TIAApp.swift */,
 				6793A97927FCF3B9002198E9 /* Assets.xcassets */,
+				67B5339B2805B49500EA959A /* Resources */,
 				6793A97B27FCF3B9002198E9 /* Preview Content */,
 			);
 			path = TIA;
@@ -160,6 +175,9 @@
 				67B5338228038D8C00EA959A /* Comparable.swift */,
 				67B533842804969700EA959A /* AnyTransaction.swift */,
 				67B533952804EC6000EA959A /* Array.swift */,
+				6727922E2805CBE400FEE07E /* Bundle.swift */,
+				672792312806073B00FEE07E /* Data.swift */,
+				67279233280608FC00FEE07E /* JSONDecoder.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -167,7 +185,7 @@
 		67B5334927FF5E6400EA959A /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				67B5335627FF959000EA959A /* ScenarioPrototypes */,
+				67B5335627FF959000EA959A /* Scenario */,
 				67B5335727FF959900EA959A /* ScenarioDynamic */,
 				67B5336528008BA700EA959A /* GameState.swift */,
 				67B533802803868500EA959A /* BezierCurve.swift */,
@@ -176,25 +194,21 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		67B5335627FF959000EA959A /* ScenarioPrototypes */ = {
+		67B5335627FF959000EA959A /* Scenario */ = {
 			isa = PBXGroup;
 			children = (
-				67B5334E27FF8DCA00EA959A /* EdgePrototype.swift */,
-				67B5334A27FF8A1F00EA959A /* VertexPrototype.swift */,
 				67B5334C27FF8A5000EA959A /* Resource.swift */,
-				67B5335027FF935800EA959A /* AdventurePrototype.swift */,
-				67B5335427FF949600EA959A /* ScenarioPrototype.swift */,
+				67B5335827FF95AC00EA959A /* Vertex.swift */,
+				67B5335A27FFA1A700EA959A /* Edge.swift */,
+				67B5335C27FFA24000EA959A /* Adventure.swift */,
+				67B5335E27FFA48100EA959A /* Scenario.swift */,
 			);
-			path = ScenarioPrototypes;
+			path = Scenario;
 			sourceTree = "<group>";
 		};
 		67B5335727FF959900EA959A /* ScenarioDynamic */ = {
 			isa = PBXGroup;
 			children = (
-				67B5335827FF95AC00EA959A /* Vertex.swift */,
-				67B5335A27FFA1A700EA959A /* Edge.swift */,
-				67B5335C27FFA24000EA959A /* Adventure.swift */,
-				67B5335E27FFA48100EA959A /* Scenario.swift */,
 			);
 			path = ScenarioDynamic;
 			sourceTree = "<group>";
@@ -223,6 +237,7 @@
 				67B5338E2804D3AE00EA959A /* Visualization */,
 				67B533882804CB8E00EA959A /* AdventureView.swift */,
 				67B5338A2804CC4500EA959A /* VertexView.swift */,
+				67B533992805B2B400EA959A /* AdventureLayout.swift */,
 			);
 			path = Adventure;
 			sourceTree = "<group>";
@@ -243,6 +258,24 @@
 				67B5338F2804D3CD00EA959A /* AdventureVisualization.swift */,
 			);
 			path = Visualization;
+			sourceTree = "<group>";
+		};
+		67B5339B2805B49500EA959A /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				67B5339E2805BBD600EA959A /* Adventures */,
+				67279235280615A600FEE07E /* Layouts */,
+				6727922B2805C2C000FEE07E /* scenario.json */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		67B5339E2805BBD600EA959A /* Adventures */ = {
+			isa = PBXGroup;
+			children = (
+				67B5339C2805B5E200EA959A /* dark1.json */,
+			);
+			path = Adventures;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -303,8 +336,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6727922C2805C2C000FEE07E /* scenario.json in Resources */,
+				67B5339D2805B5E200EA959A /* dark1.json in Resources */,
 				6793A97D27FCF3B9002198E9 /* Preview Assets.xcassets in Resources */,
 				6793A97A27FCF3B9002198E9 /* Assets.xcassets in Resources */,
+				67B533A12805BC0400EA959A /* dark1_1.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -328,7 +364,8 @@
 				6793A98B27FD1936002198E9 /* Colors.swift in Sources */,
 				67B533982804ED6D00EA959A /* TIAPrototypingError.swift in Sources */,
 				67B5336227FFAA6200EA959A /* StorageService.swift in Sources */,
-				67B5334F27FF8DCA00EA959A /* EdgePrototype.swift in Sources */,
+				672792322806073B00FEE07E /* Data.swift in Sources */,
+				6727922F2805CBE400FEE07E /* Bundle.swift in Sources */,
 				67B5335B27FFA1A700EA959A /* Edge.swift in Sources */,
 				67B5335927FF95AC00EA959A /* Vertex.swift in Sources */,
 				67B5338D2804D0F400EA959A /* AdventureVisualizer.swift in Sources */,
@@ -337,13 +374,12 @@
 				67B5338B2804CC4500EA959A /* VertexView.swift in Sources */,
 				67B533812803868500EA959A /* BezierCurve.swift in Sources */,
 				67B5337F2803787300EA959A /* BezierStepsPositioning.swift in Sources */,
-				67B5334B27FF8A1F00EA959A /* VertexPrototype.swift in Sources */,
 				67B5335D27FFA24000EA959A /* Adventure.swift in Sources */,
 				6793A97627FCF3B7002198E9 /* TIAApp.swift in Sources */,
-				67B5335527FF949600EA959A /* ScenarioPrototype.swift in Sources */,
 				67B5337B28036F0700EA959A /* CGPoint.swift in Sources */,
+				67B5339A2805B2B400EA959A /* AdventureLayout.swift in Sources */,
 				67B5336828009BD200EA959A /* AdventureIconView.swift in Sources */,
-				67B5335127FF935800EA959A /* AdventurePrototype.swift in Sources */,
+				67279234280608FC00FEE07E /* JSONDecoder.swift in Sources */,
 				67B53379280336A900EA959A /* View.swift in Sources */,
 				67B5336A28009C4D00EA959A /* CircleShape.swift in Sources */,
 				67B533962804EC6000EA959A /* Array.swift in Sources */,

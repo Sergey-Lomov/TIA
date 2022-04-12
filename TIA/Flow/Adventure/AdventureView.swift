@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AdventureView: View {
     
-    @ObservedObject var adventure: Adventure
+    @ObservedObject var adventure: AdventureVisualization
     
     var body: some View {
         Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
@@ -17,9 +17,11 @@ struct AdventureView: View {
 }
 
 struct AdventureView_Previews: PreviewProvider {
+    
     static var previews: some View {
-        if let adventure = GameState().scenario.adventures[.dark]?.first {
-            AdventureView(adventure: adventure)
-        }
+        let adventure = GameState().scenario.adventures[.dark]?.first
+        let visualizer = AdventureVisualizer(adventure: adventure!)
+        visualizer.updateVisualization()
+        return AdventureView(adventure: visualizer.visualization)
     }
 }

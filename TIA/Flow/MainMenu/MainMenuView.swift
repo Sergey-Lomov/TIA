@@ -16,12 +16,16 @@ struct MainMenuView: View {
             Color.yellow
             WorldPickerView(scenario: game.scenario)
                 .frame(width: 200, height: 200)
+            
             Button("Done dark1") {
-                withAnimation(.easeIn(duration: 3)) {
-                    game.doneCurrentAdventure(theme: .dark)
-                }
+                GameEngine.shared.doneCurrentAdventure(theme: .dark)
             }
                 .offset(x: 0, y: 150)
+            
+            Button("Start dark") {
+                GameEngine.shared.startAdventure(theme: .dark)
+            }
+                .offset(x: 0, y: 180)
         }
         .edgesIgnoringSafeArea(.all)
     }

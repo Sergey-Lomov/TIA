@@ -9,19 +9,49 @@ import SwiftUI
 
 struct AdventureView: View {
     
-    @ObservedObject var adventure: AdventureVisualization
-    
+    @StateObject var adventure: AdventureViewModel
+//    @State private var curve = BezierCurve(points: [
+//        CGPoint(x: 0, y: -0.1),
+//        CGPoint(x: 0, y: 0.1),
+//        CGPoint(x: -0.25, y: -0.05),
+//        CGPoint(x: -0.25, y: 0.15),
+//    ])
+//
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            Color.mainFor(adventure.model.theme)
+                .edgesIgnoringSafeArea(.all)
+
+            ForEach(adventure.edges, id:\.model.id) { edge in
+                EdgeWrapper(edge: edge)
+            }
+
+            ForEach(adventure.vertices, id:\.model.id) { vertex in
+                VertexWrapper(vertex: vertex)
+            }
+        }
+//        VStack {
+//           BezierCurveShape(curve: curve)
+//                .stroke(lineWidth: 4)
+//                .foregroundColor(.blue)
+//                .frame(width:200, height: 200)
+//                .animation(.linear(duration: 2))
+//       }
+//        .frame(width:400, height: 400)
+//       .onTapGesture {
+//           self.curve = self.curve.selfMirroredCurve()
+//       }
     }
 }
 
 struct AdventureView_Previews: PreviewProvider {
     
     static var previews: some View {
-        let adventure = GameState().scenario.adventures[.dark]?.first
-        let visualizer = AdventureVisualizer(adventure: adventure!)
-        visualizer.updateVisualization()
-        return AdventureView(adventure: visualizer.visualization)
+        let descriptor = GameState().scenario.adventures[.dark]?.first
+        let layout = AdventureLayout.random(for: descriptor!)
+        let adventure = ScenarioService.shared.adventureFor(descriptor!, layout: layout)
+        
+        let viewModel = AdventureViewModel(adventure)
+        return AdventureView(adventure: viewModel)
     }
 }

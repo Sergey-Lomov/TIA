@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// TODO: Investigate possiblity to remove custom CircleShape and use dafault Circle. This check should be done only after all circles animation completion (vertex shape change, vertex icon shape change e.t.c.)
 struct CircleShape: Shape {
     private let cirleControlCoefficient: CGFloat = 0.66666
 

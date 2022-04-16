@@ -9,8 +9,11 @@ import Foundation
 import SwiftUI
 
 struct AdventureIconWrapper: View {
-    @ObservedObject var adventure: Adventure
+    @ObservedObject var adventure: AdventureDescriptor
     private var stateModifier: BezierPositioning?
+    
+    private let moveDuration: TimeInterval = 2
+    private let scaleDuration: TimeInterval = 2
     
     private enum Layout {
         static let currentToDone = [
@@ -20,10 +23,6 @@ struct AdventureIconWrapper: View {
             CGPoint(x: -0.345, y: 0.25)
         ]
         static let planedToCurrent = [
-//            CGPoint(x: 0, y: 0.1),
-//            CGPoint(x: 0.025, y: -0.05),
-//            CGPoint(x: 0.25, y: -0.25),
-//            CGPoint(x: -0, y: -0.25)
             CGPoint(x: 0, y: 0.075),
             CGPoint(x: 0, y: 0.1),
             CGPoint(x: 0, y: -0.25),
@@ -42,26 +41,23 @@ struct AdventureIconWrapper: View {
         }
     }
     
-    init(adventure: Adventure) {
+    init(adventure: AdventureDescriptor) {
         self.adventure = adventure
     }
     
     var body: some View {
-        ZStack(alignment: .center) {
-            GeometryReader { geometry in
-                ZStack {
-                    AdventureIconView(adventure: adventure)
-                        .frame(geometry: geometry)
-                        .scaleEffect(scale)
-                        .animation(.easeInOut(duration: 2),
-                                   value: adventure.state)
-                        .modifier(bezierSteps(size: geometry.size))
-                        .animation(.easeInOut(duration: 2),
-                                   value: adventure.state)
-//                            .transition(.adventureIcon(curve: curveForPoints(Layout.planedToCurrent, size: metrics.size)))
-                }
-                .frame(geometry: geometry)
+        GeometryReader { geometry in
+            ZStack {
+                AdventureIconView(adventure: adventure)
+                    .frame(geometry: geometry)
+                    .scaleEffect(scale)
+                    .animation(.easeInOut(duration: scaleDuration),
+                               value: adventure.state)
+                    .modifier(bezierSteps(size: geometry.size))
+                    .animation(.easeInOut(duration: moveDuration),
+                               value: adventure.state)
             }
+            .frame(geometry: geometry)
         }
     }
 
@@ -91,7 +87,7 @@ struct AdventureIconWrapper: View {
         }
         
         let scaledPoints = points.map {
-            $0.multPoint(x: xMult, y: yMult)
+            $0.multedPoint(x: xMult, y: yMult)
         }
 
         return BezierCurve(points: scaledPoints)
@@ -99,7 +95,7 @@ struct AdventureIconWrapper: View {
 }
 
 struct AdventureIconView: View {
-    @StateObject var adventure: Adventure
+    @StateObject var adventure: AdventureDescriptor
     
     var body: some View {
         ZStack {

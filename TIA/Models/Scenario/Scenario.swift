@@ -8,9 +8,9 @@
 import Foundation
 
 class Scenario: ObservableObject {
-    @Published var adventures: [AdventureTheme: [Adventure]] = [:]
+    @Published var adventures: [AdventureTheme: [AdventureDescriptor]] = [:]
     
-    init(adventures: [Adventure]) {
+    init(adventures: [AdventureDescriptor]) {
         for theme in AdventureTheme.allCases {
             self.adventures[theme] = adventures.filter {
                 $0.theme == theme
@@ -18,7 +18,7 @@ class Scenario: ObservableObject {
         }
     }
     
-    func currentAdventure(theme: AdventureTheme) -> Adventure? {
+    func currentAdventure(theme: AdventureTheme) -> AdventureDescriptor? {
         return adventures[theme]?.first { $0.state == .current }
     }
     

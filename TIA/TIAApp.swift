@@ -9,12 +9,16 @@ import SwiftUI
 
 @main
 struct TIAApp: App {
-    @StateObject var game = GameState()
+    @ObservedObject var game = GameEngine.shared.state
     
     var body: some Scene {
         WindowGroup {
             if let adventure = game.activeAdventure {
-                AdventureView(adventure: adventure)
+                let viewModel = AdventureViewModel(adventure)
+                AdventureView(adventure: viewModel)
+                    .onAppear {
+                        GameEngine.shared.adventureEngine?.growFromEntrace()
+                    }
             } else {
                 MainMenuView(game: game)
             }

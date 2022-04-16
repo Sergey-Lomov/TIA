@@ -12,29 +12,40 @@ extension JSONDecoder {
     typealias Adventure = ScenarioService.AdventurePrototype
     typealias Layout = AdventureLayout.Prototype
     
-    func decodeScenario() -> Scenario {
+    static let snakeCaseDecoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        return decoder
+    }()
+    
+    private func decode<T: Decodable>(_ data: Data, errorMessage: String) -> T {
         do {
-            return try decode(Scenario.self, from: Data.scenarioData())
+            return try decode(T.self, from: data)
         } catch {
-            fatalError("Error at parsing scenarion json: \(error.localizedDescription)")
+            var details = error.localizedDescription
+            if let decodeError = error as? DecodingError {
+                details = decodeError.detailedDescription
+            }
+            
+            fatalError(errorMessage + "\n\(details)")
         }
     }
     
-    func decodeAdventure(id: String) -> Adventure {
-        do {
-            let data = Data.adventureData(id: id)
-            return try decode(Adventure.self, from: data)
-        } catch {
-            fatalError("Error at parsing adventure json for id \"\(id)\": \(error.localizedDescription)")
-        }
+    static func decodeScenario() -> Scenario {
+        let data = Data.scenarioData()
+        let message = "Error at parsing scenarion json"
+        return snakeCaseDecoder.decode(data, errorMessage: message)
     }
     
-    func decodeLayout(adventureId: String, index: Int) -> Layout {
-        do {
-            let data = Data.layoutData(adventureId: adventureId, index: index)
-            return try decode(Layout.self, from: data)
-        } catch {
-            fatalError("Error at parsing adventure layout json for adventure \"\(adventureId)\" index \(index): \(error.localizedDescription)")
-        }
+    static func decodeAdventure(id: String) -> Adventure {
+        let data = Data.adventureData(id: id)
+        let message = "Error at parsing adventure json for id \"\(id)\""
+        return snakeCaseDecoder.decode(data, errorMessage: message)
+    }
+    
+    static func decodeLayout(adventureId: String, index: Int) -> Layout {
+        let data = Data.layoutData(adventureId: adventureId, index: index)
+        let message = "Error at parsing adventure layout json for adventure \"\(adventureId)\" index \(index)"
+        return snakeCaseDecoder.decode(data, errorMessage: message)
     }
 }

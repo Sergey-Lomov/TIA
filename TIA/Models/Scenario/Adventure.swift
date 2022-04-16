@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum AdventureTheme: Codable, CaseIterable {
+enum AdventureTheme: String, Codable, CaseIterable {
     case dark
     case light
     case truth
@@ -20,6 +20,7 @@ enum AdventureState {
 }
 
 class Adventure: ObservableObject {
+
     let id: String
     let index: Int
     var theme: AdventureTheme

@@ -1,0 +1,37 @@
+//
+//  EdgeViewModel.swift
+//  TIA
+//
+//  Created by Serhii.Lomov on 16.04.2022.
+//
+
+import Foundation
+import SwiftUI
+import Combine
+
+class EdgeViewModel: ObservableObject {
+    @Published var model: Edge
+    @Published var color: Color
+    @Published var borderColor: Color
+    
+    private var anyCancellable: [AnyCancellable] = []
+    
+    var curve: BezierCurve {
+        get { model.curve }
+        set { model.curve = newValue }
+    }
+    
+    init(model: Edge,
+         color: Color,
+         borderColor: Color) {
+        self.model = model
+        self.color = color
+        self.borderColor = borderColor
+        
+        let subscription = model.objectWillChange.sink {
+            [weak self] _ in
+            self?.objectWillChange.send()
+        }
+        anyCancellable.append(subscription)
+    }
+}

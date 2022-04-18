@@ -29,7 +29,7 @@ class VertexViewModel: ObservableObject {
         set { model.point = newValue }
     }
     
-    private var anyCancellable: [AnyCancellable] = []
+    private var subscriptions: [AnyCancellable] = []
     
     init(vertex: Vertex,
          isCurrent: Bool = false,
@@ -42,6 +42,6 @@ class VertexViewModel: ObservableObject {
             [weak self] _ in
             self?.objectWillChange.send()
         }
-        anyCancellable.append(subscription)
+        subscriptions.append(subscription)
     }
 }

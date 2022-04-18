@@ -10,11 +10,12 @@ import SwiftUI
 
 struct BezierCurve: Equatable {
     
+    var id = UUID().uuidString
     var p0: CGPoint
     var p1: CGPoint
     var p2: CGPoint
     var p3: CGPoint
-    
+
     var points: [CGPoint] { [p0, p1, p2, p3] }
     var from: CGPoint { p0 }
     var to: CGPoint { p3 }

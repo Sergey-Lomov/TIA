@@ -61,7 +61,7 @@ final class ScenarioService {
                             price: $0.price,
                             growOnStart: $0.growOnStart,
                             curve: curve)
-
+            
             from.outEdges.append(edge)
             to.inEdges.append(edge)
 

@@ -7,10 +7,11 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
 struct BezierCurveShape: Shape {
+
     var curve: BezierCurve
-    
     var animatableData: BezierCurve {
         get { curve }
         set { curve = newValue }

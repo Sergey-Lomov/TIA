@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreGraphics
 
 enum EdgeState {
     case seed
@@ -14,13 +15,19 @@ enum EdgeState {
 }
 
 class Edge: ObservableObject {
+    private let curveLengthSteps: Int = 1000
+    private let seedCurveDelta: CGFloat = 0.1
+    
     let id: String
     let from: Vertex
     var to: Vertex
     var price: [Resource]
     var growOnStart: Bool
     @Published var state: EdgeState
+    var seedCurve: BezierCurve
     var curve: BezierCurve
+    
+    var length: CGFloat { curve.length(stepsCount: curveLengthSteps) }
   
     init(id: String,
          from: Vertex,
@@ -36,5 +43,6 @@ class Edge: ObservableObject {
         self.growOnStart = growOnStart
         self.state = state
         self.curve = curve
+        self.seedCurve = curve.randomControlsCurve(maxDelta: seedCurveDelta)
     }
 }

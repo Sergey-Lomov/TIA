@@ -14,7 +14,7 @@ class EdgeViewModel: ObservableObject {
     @Published var color: Color
     @Published var borderColor: Color
     
-    private var anyCancellable: [AnyCancellable] = []
+    private var subscriptions: [AnyCancellable] = []
     
     var curve: BezierCurve {
         get { model.curve }
@@ -32,6 +32,6 @@ class EdgeViewModel: ObservableObject {
             [weak self] _ in
             self?.objectWillChange.send()
         }
-        anyCancellable.append(subscription)
+        subscriptions.append(subscription)
     }
 }

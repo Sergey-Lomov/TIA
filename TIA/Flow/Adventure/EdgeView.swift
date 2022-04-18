@@ -28,47 +28,35 @@ struct EdgeView: View {
         GeometryReader { geometry in
 
             ZStack {
+                let animation = Animation.easeOut(duration: growDuration)
                 BezierCurveShape(curve: curve)
                     .trim(from: 0, to: progress)
                     .stroke(lineWidth: curveWidth + 2 * borderWidth)
-                    .animation(.easeInOut(duration: growDuration),
-                               value: progress)
-//                    .animation(.linear(duration: growDuration),
-//                               value: curve)
+                    .animation(animation, value: progress)
                     .foregroundColor(edge.borderColor)
                     .frame(geometry: geometry)
+                
                 BezierCurveShape(curve: curve)
+                    .onReach(curve) {
+                        DispatchQueue.main.async {
+                            GameEngine.shared.adventureEngine?.edgeGrowingDidFinish(edge.model)
+                        }
+                    }
                     .trim(from: 0, to: progress)
                     .stroke(lineWidth: curveWidth)
-                    .animation(.linear(duration: growDuration),
-                               value: progress)
-//                    .animation(.linear(duration: growDuration),
-//                               value: curve)
+                    .animation(animation, value: progress)
                     .foregroundColor(edge.color)
                     .frame(geometry: geometry)
             }.frame(geometry: geometry)
-//                .onAppear {
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + idleDuration) {
-//                        edge.curve = edge.curve.selfMirroredCurve()
-//                    }
-//                }
         }
     }
     
     private var curve: BezierCurve {
         switch edge.model.state {
-//        case .seed:
-//            let points = [
-//                edge.curve.p0,
-//                edge.curve.p1.multedPoint(x: -1, y: -1),
-//                edge.curve.p2.multedPoint(x: -1, y: -1),
-//                edge.curve.p3
-//            ]
-//            return BezierCurve(points: points)
-//            return edge.curve.selfMirroredCurve()
         case .seed:
-            //return edge.curve.randomControlsCurve(maxDelta: idleDelta)
-            return edge.curve.selfMirroredCurve()
+//            return edge.curve.randomControlsCurve(maxDelta: idleDelta)
+            //return edge.curve.selfMirroredCurve()
+            return edge.model.seedCurve
         default:
             return edge.curve
         }

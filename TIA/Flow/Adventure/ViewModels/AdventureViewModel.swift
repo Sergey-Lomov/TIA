@@ -25,9 +25,7 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
 
         let vertexColor = Color.inversedFor(adventure.theme)
         self.vertices = adventure.vertices.map {
-            return VertexViewModel(vertex: $0,
-                                   isCurrent: false,
-                                   color: vertexColor)
+            return VertexViewModel(vertex: $0, color: vertexColor)
         }
         
         let edgeColor = Color.inversedFor(adventure.theme)

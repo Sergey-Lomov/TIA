@@ -103,6 +103,8 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         playerPosition = .vertex(vertex: entrance)
     }
     
+    // MARK: View events handling
+
     private func handleViewEvent(_ event: ViewEvent) {
         switch event {
         case .viewInitFinished:
@@ -115,6 +117,21 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
             vertex.state = .active
             growFromVertex(vertex)
             checkInitGrowingCompletion()
+        case .vertexSelected(let vertex):
+            handleVertexSelection(vertex)
         }
+    }
+    
+    private func handleVertexSelection(_ vertex: Vertex) {
+        guard case .vertex(let old) = playerPosition else {
+            return
+        }
+        
+        let sharedEdges = old.edges.intersection(vertex.edges)
+        guard let edge = sharedEdges.first, edge.state.isGrowed else {
+            return
+        }
+        
+        playerPosition = .vertex(vertex: vertex)
     }
 }

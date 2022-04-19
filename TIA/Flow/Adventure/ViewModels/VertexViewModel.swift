@@ -13,7 +13,6 @@ class VertexViewModel: ObservableObject {
     var eventsPublisher: ViewEventsPublisher?
     
     @Published var model: Vertex
-    @Published var isCurrent: Bool
     @Published var color: Color
     
     var state: VertexState {
@@ -34,10 +33,8 @@ class VertexViewModel: ObservableObject {
     private var subscriptions: [AnyCancellable] = []
     
     init(vertex: Vertex,
-         isCurrent: Bool = false,
          color: Color) {
         self.model = vertex
-        self.isCurrent = isCurrent
         self.color = color
         
         let subscription = model.objectWillChange.sink {
@@ -52,5 +49,9 @@ class VertexViewModel: ObservableObject {
 extension VertexViewModel {
     func growingFinished() {
         eventsPublisher?.send(.vertexGrowingFinished(vertex: model))
+    }
+    
+    func wasTapped() {
+        eventsPublisher?.send(.vertexSelected(vertex: model))
     }
 }

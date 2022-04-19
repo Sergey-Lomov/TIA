@@ -57,3 +57,14 @@ class Edge: ObservableObject {
         self.seedCurve = curve.randomControlsCurve(maxDelta: seedCurveDelta)
     }
 }
+
+extension Edge: Equatable, Hashable {
+    
+    static func == (lhs: Edge, rhs: Edge) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}

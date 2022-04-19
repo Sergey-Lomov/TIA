@@ -31,6 +31,12 @@ extension Array {
     }
 }
 
+extension Array where Element: Equatable & Hashable {
+    func intersection(_ array: Array<Element>) -> Array<Element> {
+        return Array(Set(self).intersection(Set(array)))
+    }
+}
+
 extension Array where Element: Vertex {
     func firstById(_ id: String) -> Element? {
         return first { $0.id == id }

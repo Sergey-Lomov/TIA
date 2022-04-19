@@ -19,10 +19,9 @@ struct VertexWrapper: View {
         
             VertexView(vertex: vertex, radius: radius)
                 .offset(point: vertex.point, geometry: geometry)
-            if vertex.isCurrent {
-                EyeView(color: .softBlack)
-                    .frame(geometry: geometry)
-            }
+                .onTapGesture {
+                    vertex.wasTapped()
+                }
         }
     }
 }
@@ -32,9 +31,7 @@ struct VertexView_Previews: PreviewProvider {
         let descriptor = GameState().scenario.adventures[.dark]?.first
         let layout = AdventureLayout.random(for: descriptor!)
         let adventure = ScenarioService.shared.adventureFor(descriptor!, layout: layout)
-        let viewModel = VertexViewModel(vertex: adventure.vertices[0],
-                                        isCurrent: false,
-                                        color: Color.softWhite)
+        let viewModel = VertexViewModel(vertex: adventure.vertices[0], color: Color.softWhite)
         VertexWrapper(vertex: viewModel)
     }
 }

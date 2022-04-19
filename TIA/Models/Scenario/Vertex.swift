@@ -40,6 +40,8 @@ class Vertex: ObservableObject {
     var inEdges: [Edge] = []
     var outEdges: [Edge] = []
     
+    var edges: [Edge] { inEdges + outEdges }
+    
     init(id: String,
          type: VertexType = .common,
          state: VertexState = .seed,

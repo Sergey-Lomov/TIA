@@ -18,22 +18,23 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
     var player: PlayerViewModel
     @Published var vertices: [VertexViewModel]
     @Published var edges: [EdgeViewModel]
+    @Published var background: Color
     
     init(_ adventure: Adventure, listener: ViewEventsListener?, eventsSource: EngineEventsSource?) {
+        let schema = ColorSchema.schemaFor(adventure.theme)
+        
         self.model = adventure
-        self.player = PlayerViewModel()
+        self.player = PlayerViewModel(color: schema.player)
+        self.background = schema.background
 
-        let vertexColor = Color.inversedFor(adventure.theme)
         self.vertices = adventure.vertices.map {
-            return VertexViewModel(vertex: $0, color: vertexColor)
+            return VertexViewModel(vertex: $0, color: schema.vertex)
         }
         
-        let edgeColor = Color.inversedFor(adventure.theme)
-        let borderColor = Color.mainFor(adventure.theme)
         self.edges = adventure.edges.map {
             return EdgeViewModel(model: $0,
-                                 color: edgeColor,
-                                 borderColor: borderColor)
+                                 color: schema.edge,
+                                 borderColor: schema.background)
         }
         
         // Combine setup
@@ -53,6 +54,8 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
         subscriptions.append(subscription)
     }
     
+    // TODO: Engine should notify view by @ObserverObject. So, this handler should be removed if ti still be empty
+    // MARK: Engine events handler
     private func handleEngineEvent(_ event: EngineEvent) {
         switch event {
         case .playerMoves(let from, let to):
@@ -60,10 +63,10 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
         }
     }
     
-    // MARK: Engine events handler
     private func handlePlayersMove(from: PlayerPosition?, to: PlayerPosition?) {
         player.position = to
     }
+
 }
 
 // MARK: View interaction methods

@@ -17,7 +17,7 @@ struct PlayerView: View {
                 case .edge(let edge, let success):
                     EmptyView()
                 case .vertex(let vertex):
-                    EyeView(color: .yellow)
+                    EyeView(color: player.color)
                         .offset(point: vertex.point, geometry: geometry)
                         .frame(width: 40, height: 40)
                 }

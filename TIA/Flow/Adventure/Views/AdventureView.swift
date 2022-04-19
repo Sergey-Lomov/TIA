@@ -20,7 +20,7 @@ struct AdventureView: View {
     
     var body: some View {
         ZStack {
-            Color.mainFor(adventure.model.theme)
+            adventure.background
                 .edgesIgnoringSafeArea(.all)
 
             ForEach(adventure.edges, id:\.model.id) { edge in

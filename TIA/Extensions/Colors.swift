@@ -22,26 +22,4 @@ extension Color {
 extension Color {
     static let softBlack = Color(hex: 0x181A18)
     static let softWhite = Color(hex: 0xFBFAF5)
-    
-    static func mainFor(_ theme: AdventureTheme) -> Color {
-        switch theme {
-        case .dark:
-            return softBlack
-        case .light:
-            return softWhite
-        case .truth:
-            return softBlack
-        }
-    }
-    
-    static func inversedFor(_ theme: AdventureTheme) -> Color {
-        switch theme {
-        case .dark:
-            return softWhite
-        case .light:
-            return softBlack
-        case .truth:
-            return softWhite
-        }
-    }
 }

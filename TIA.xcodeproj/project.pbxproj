@@ -39,6 +39,7 @@
 		675E2768280F064500FB5783 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E2767280F064400FB5783 /* PlayerView.swift */; };
 		675E276A280F066800FB5783 /* PlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E2769280F066800FB5783 /* PlayerViewModel.swift */; };
 		675E276E280F39B500FB5783 /* CenteredGeometryReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E276D280F39B500FB5783 /* CenteredGeometryReader.swift */; };
+		675E2770280F6F0400FB5783 /* ColorSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E276F280F6F0400FB5783 /* ColorSchema.swift */; };
 		6793A97627FCF3B7002198E9 /* TIAApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6793A97527FCF3B7002198E9 /* TIAApp.swift */; };
 		6793A97A27FCF3B9002198E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6793A97927FCF3B9002198E9 /* Assets.xcassets */; };
 		6793A97D27FCF3B9002198E9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6793A97C27FCF3B9002198E9 /* Preview Assets.xcassets */; };
@@ -104,6 +105,7 @@
 		675E2767280F064400FB5783 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		675E2769280F066800FB5783 /* PlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewModel.swift; sourceTree = "<group>"; };
 		675E276D280F39B500FB5783 /* CenteredGeometryReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteredGeometryReader.swift; sourceTree = "<group>"; };
+		675E276F280F6F0400FB5783 /* ColorSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSchema.swift; sourceTree = "<group>"; };
 		6793A97227FCF3B7002198E9 /* TIA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TIA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6793A97527FCF3B7002198E9 /* TIAApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIAApp.swift; sourceTree = "<group>"; };
 		6793A97927FCF3B9002198E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -172,6 +174,7 @@
 			children = (
 				675E274F280C8C2F00FB5783 /* PointerWrapper.swift */,
 				675E2751280CE33100FB5783 /* HandleableAnimationData.swift */,
+				675E276F280F6F0400FB5783 /* ColorSchema.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -465,6 +468,7 @@
 				675E2759280DD96300FB5783 /* ComplexCurve.swift in Sources */,
 				675E276A280F066800FB5783 /* PlayerViewModel.swift in Sources */,
 				675E2745280B4BC000FB5783 /* EdgeViewModel.swift in Sources */,
+				675E2770280F6F0400FB5783 /* ColorSchema.swift in Sources */,
 				67B533892804CB8E00EA959A /* AdventureView.swift in Sources */,
 				675E2747280B4BD100FB5783 /* VertexViewModel.swift in Sources */,
 				675E275D280E22CC00FB5783 /* GeometryProxy.swift in Sources */,

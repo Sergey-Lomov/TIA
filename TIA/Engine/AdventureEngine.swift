@@ -35,7 +35,8 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     var lifestate: AdventureLifecycle = .initiation
     var playerPosition: PlayerPosition? = nil {
         didSet {
-            eventsPublisher.send(.playerMoves(from: oldValue, to: playerPosition))
+            eventsPublisher.send(
+                .playerMoves(from: oldValue, to: playerPosition))
         }
     }
     
@@ -85,24 +86,6 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         edge.state = .growing(duration: duration)
     }
     
-    private func checkInitGrowingCompletion() {
-        let inactiveEdges = adventure.edges.filter { !$0.state.isGrowed}
-        let inactiveVertex = adventure.vertices.filter { !$0.state.isGrowed}
-        
-        if inactiveEdges.isEmpty && inactiveVertex.isEmpty {
-            handleInitGrowingCompletion()
-        }
-    }
-    
-    private func handleInitGrowingCompletion() {
-        guard let entrance = adventure.entrances.first else {
-            fatalError("Adventure \"\(adventure.id)\" have no entrances")
-        }
-        
-        lifestate = .gameplay
-        playerPosition = .vertex(vertex: entrance)
-    }
-    
     // MARK: View events handling
 
     private func handleViewEvent(_ event: ViewEvent) {
@@ -120,6 +103,24 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         case .vertexSelected(let vertex):
             handleVertexSelection(vertex)
         }
+    }
+    
+    private func checkInitGrowingCompletion() {
+        let inactiveEdges = adventure.edges.filter { !$0.state.isGrowed}
+        let inactiveVertex = adventure.vertices.filter { !$0.state.isGrowed}
+        
+        if inactiveEdges.isEmpty && inactiveVertex.isEmpty {
+            handleInitGrowingCompletion()
+        }
+    }
+    
+    private func handleInitGrowingCompletion() {
+        guard let entrance = adventure.entrances.first else {
+            fatalError("Adventure \"\(adventure.id)\" have no entrances")
+        }
+        
+        lifestate = .gameplay
+        playerPosition = .vertex(vertex: entrance)
     }
     
     private func handleVertexSelection(_ vertex: Vertex) {

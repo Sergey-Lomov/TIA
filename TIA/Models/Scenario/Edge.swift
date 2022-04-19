@@ -12,6 +12,15 @@ enum EdgeState {
     case seed
     case growing(duration: TimeInterval)
     case active
+    
+    var isGrowed: Bool {
+        switch self {
+        case .seed, .growing:
+            return false
+        case .active:
+            return true
+        }
+    }
 }
 
 class Edge: ObservableObject {
@@ -24,6 +33,8 @@ class Edge: ObservableObject {
     var price: [Resource]
     var growOnStart: Bool
     @Published var state: EdgeState
+    
+    // TODO: Change random seed curve to tension seed curve
     var seedCurve: BezierCurve
     var curve: BezierCurve
     

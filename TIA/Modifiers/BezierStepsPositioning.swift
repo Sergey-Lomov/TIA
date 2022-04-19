@@ -40,15 +40,10 @@ struct BezierStepsPositioning: Animatable, ViewModifier {
     }
     
     func body(content: Content) -> some View {
-        GeometryReader {
-            geometry in
-            
-            ZStack{
-                content
-                    .offset(x: curves[step].getX(t: stepProgress),
-                            y: curves[step].getY(t: stepProgress))
+        CenteredGeometryReader {
+            content
+                .offset(x: curves[step].getX(t: stepProgress), y: curves[step].getY(t: stepProgress))
                 .animation(nil)
-            }.frame(width: geometry.size.width, height: geometry.size.height)
         }
     }
 }

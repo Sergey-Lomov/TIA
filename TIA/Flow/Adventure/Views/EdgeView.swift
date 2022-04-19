@@ -25,29 +25,24 @@ struct EdgeView: View {
     @ObservedObject var edge: EdgeViewModel
     
     var body: some View {
-        GeometryReader { geometry in
-
-            ZStack {
-                let animation = Animation.easeOut(duration: growDuration)
-                BezierCurveShape(curve: curve)
-                    .trim(from: 0, to: progress)
-                    .stroke(lineWidth: curveWidth + 2 * borderWidth)
-                    .animation(animation, value: progress)
-                    .foregroundColor(edge.borderColor)
-                    .frame(geometry: geometry)
-                
-                BezierCurveShape(curve: curve)
-                    .onReach(curve) {
-                        DispatchQueue.main.async {
-                            GameEngine.shared.adventureEngine?.edgeGrowingDidFinish(edge.model)
-                        }
-                    }
-                    .trim(from: 0, to: progress)
-                    .stroke(lineWidth: curveWidth)
-                    .animation(animation, value: progress)
-                    .foregroundColor(edge.color)
-                    .frame(geometry: geometry)
-            }.frame(geometry: geometry)
+        CenteredGeometryReader { geometry in
+            let animation = Animation.easeOut(duration: growDuration)
+            SingleCurveShape(curve: curve)
+                .trim(from: 0, to: progress)
+                .stroke(lineWidth: curveWidth + 2 * borderWidth)
+                .animation(animation, value: progress)
+                .foregroundColor(edge.borderColor)
+                .frame(geometry: geometry)
+            
+            SingleCurveShape(curve: curve)
+                .onReach(curve) {
+                    edge.growingFinished()
+                }
+                .trim(from: 0, to: progress)
+                .stroke(lineWidth: curveWidth)
+                .animation(animation, value: progress)
+                .foregroundColor(edge.color)
+                .frame(geometry: geometry)
         }
     }
     
@@ -86,7 +81,10 @@ struct EdgeView_Previews: PreviewProvider {
         let descriptor = GameState().scenario.adventures[.dark]?.first
         let layout = AdventureLayout.random(for: descriptor!)
         let adventure = ScenarioService.shared.adventureFor(descriptor!, layout: layout)
-        let viewModel = AdventureViewModel(adventure)
+        let viewModel = AdventureViewModel(
+            adventure,
+            listener: GameEngine.shared.adventureEngine,
+            eventsSource: GameEngine.shared.adventureEngine)
         let edge = viewModel.edges.first
         EdgeView(edge: edge!)
     }

@@ -29,6 +29,10 @@ class Adventure: ObservableObject {
     
     @Published var state: AdventureState = .planed
     
+    var entrances: [Vertex] {
+        vertices.filter { $0.type == .entrance }
+    }
+    
     init(id: String,
          index: Int,
          theme: AdventureTheme,

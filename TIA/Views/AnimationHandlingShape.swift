@@ -7,11 +7,8 @@
 
 import Foundation
 import SwiftUI
-import Combine
 
 struct AnimationHandlingShape<T: Shape>: Shape {
-    
-    private var subscription: AnyCancellable?
     
     var content: T
     var target: T.AnimatableData

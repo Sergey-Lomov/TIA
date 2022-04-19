@@ -10,6 +10,8 @@ import SwiftUI
 import Combine
 
 class EdgeViewModel: ObservableObject {
+    var eventsPublisher: ViewEventsPublisher?
+    
     @Published var model: Edge
     @Published var color: Color
     @Published var borderColor: Color
@@ -33,5 +35,12 @@ class EdgeViewModel: ObservableObject {
             self?.objectWillChange.send()
         }
         subscriptions.append(subscription)
+    }
+}
+
+// MARK: View interaction methods
+extension EdgeViewModel {
+    func growingFinished() {
+        eventsPublisher?.send(.edgeGrowingFinished(edge: model))
     }
 }

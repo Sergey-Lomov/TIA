@@ -20,6 +20,15 @@ enum VertexState {
     case seed
     case growing(duration: TimeInterval)
     case active
+    
+    var isGrowed: Bool {
+        switch self {
+        case .seed, .growing:
+            return false
+        case .active:
+            return true
+        }
+    }
 }
 
 class Vertex: ObservableObject {

@@ -29,11 +29,27 @@ extension View {
     func bezierPositioning(step: Int, curves: [BezierCurve]) -> some View {
         modifier(BezierStepsPositioning(step: step, curves: curves))
     }
-}
-
-extension Shape {
-    func onReach(_ value: AnimatableData,
-                 handler: @escaping () -> Void) -> some Shape {
-        AnimationHandlingShape(content: self, target: value, handler: handler)
+    
+    func offset(_ point: CGPoint, geomtery: GeometryProxy) -> some View {
+        let x = point.x * geomtery.size.width
+        let y = point.y * geomtery.size.height
+        return offset(x: x, y: y)
     }
 }
+
+// TODO: Remove code if still be unused
+//extension View where Self: EngineEventsListener {
+//    mutating func listenTo(_ source: EngineEventsSource?) -> Self {
+//        if let publisher = source?.eventsPublisher {
+//            subscribeTo(publisher)
+//        }
+//        return self
+//    }
+//}
+//
+//extension View where Self: ViewEventsSource {
+//    func sendEventsTo(_ listener: inout ViewEventsListener?) -> Self {
+//        listener?.subscribeTo(eventsPublisher)
+//        return self
+//    }
+//}

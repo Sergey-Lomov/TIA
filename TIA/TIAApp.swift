@@ -14,11 +14,12 @@ struct TIAApp: App {
     var body: some Scene {
         WindowGroup {
             if let adventure = game.activeAdventure {
-                let viewModel = AdventureViewModel(adventure)
+                let viewModel = AdventureViewModel(
+                    adventure,
+                    listener: GameEngine.shared.adventureEngine,
+                    eventsSource: GameEngine.shared.adventureEngine)
+                
                 AdventureView(adventure: viewModel)
-                    .onAppear {
-                        GameEngine.shared.adventureEngine?.growFromEntrace()
-                    }
             } else {
                 MainMenuView(game: game)
             }

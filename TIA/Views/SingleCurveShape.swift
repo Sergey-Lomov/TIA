@@ -1,5 +1,5 @@
 //
-//  BezierCurveShape.swift
+//  SingleCurveShape.swift
 //  TIA
 //
 //  Created by Serhii.Lomov on 15.04.2022.
@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import Combine
 
-struct BezierCurveShape: Shape {
+struct SingleCurveShape: Shape {
 
     var curve: BezierCurve
     var animatableData: BezierCurve {

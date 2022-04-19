@@ -11,21 +11,17 @@ struct WorldPickerView: View {
     @StateObject var scenario: Scenario
     
     var body: some View {
-        GeometryReader { geometry in
-
-            ZStack {
-                DropShape()
-                    .fill(Color.softBlack)
-                DropShape()
-                    .fill(Color.softWhite)
-                    .rotationEffect(.radians(Double.pi))
-                
-                let themes = AdventureTheme.allCases
-                ForEach(themes.indices, id: \.self) { index in
-                    ThemeAdventuresView(scenario: scenario, theme: themes[index])
-                }
+        CenteredGeometryReader {
+            DropShape()
+                .fill(Color.softBlack)
+            DropShape()
+                .fill(Color.softWhite)
+                .rotationEffect(.radians(Double.pi))
+            
+            let themes = AdventureTheme.allCases
+            ForEach(themes.indices, id: \.self) { index in
+                ThemeAdventuresView(scenario: scenario, theme: themes[index])
             }
-            .frame(geometry: geometry)
         }
     }
 }
@@ -45,14 +41,12 @@ struct ThemeAdventuresView: View {
     let theme: AdventureTheme
     
     var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                let adventures = scenario.adventures[theme] ?? []
-                ForEach(adventures.indices, id: \.self) { index in
-                    let adventure = adventures[index]
-                    AdventureIconWrapper(adventure: adventure)
-                        .frame(geometry: geometry)
-                }
+        CenteredGeometryReader { geometry in
+            let adventures = scenario.adventures[theme] ?? []
+            ForEach(adventures.indices, id: \.self) { index in
+                let adventure = adventures[index]
+                AdventureIconWrapper(adventure: adventure)
+                    .frame(geometry: geometry)
             }
         }
     }

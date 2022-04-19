@@ -13,15 +13,16 @@ struct VertexWrapper: View {
     @ObservedObject var vertex: VertexViewModel
     
     var body: some View {
-        GeometryReader { geometry in
-            
-            let radius = min(geometry.size.height, geometry.size.width) * radiusCoefficient
-            
-            ZStack {
-                VertexView(vertex: vertex, radius: radius)
-                    .offset(point: vertex.point, geometry: geometry)
+        CenteredGeometryReader { geometry in
+
+            let radius = geometry.minSize * radiusCoefficient
+        
+            VertexView(vertex: vertex, radius: radius)
+                .offset(point: vertex.point, geometry: geometry)
+            if vertex.isCurrent {
+                EyeView(color: .softBlack)
+                    .frame(geometry: geometry)
             }
-            .frame(geometry: geometry)
         }
     }
 }
@@ -45,21 +46,23 @@ struct VertexView: View {
     
     var body: some View {
         ZStack {
-            CircleShape()
+            ComplexCurveShape(curve: curve)
+                .onReach(curve) {
+                    vertex.growingFinished()
+                }
                 .frame(width: radius, height: radius)
                 .foregroundColor(vertex.color)
-                .scaleEffect(scale)
                 .animation(.easeOut(duration: growDuration),
-                           value: scale)
+                           value: curve)
         }
     }
     
-    private var scale: CGFloat {
+    private var curve: ComplexCurve {
         switch vertex.model.state {
         case .seed:
-            return 0.001
+            return ComplexCurve.circle(radius: 0)
         default:
-            return 1
+            return ComplexCurve.circle(radius: 0.5)
         }
     }
     

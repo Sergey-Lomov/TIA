@@ -10,6 +10,8 @@ import SwiftUI
 import Combine
 
 class VertexViewModel: ObservableObject {
+    var eventsPublisher: ViewEventsPublisher?
+    
     @Published var model: Vertex
     @Published var isCurrent: Bool
     @Published var color: Color
@@ -43,5 +45,12 @@ class VertexViewModel: ObservableObject {
             self?.objectWillChange.send()
         }
         subscriptions.append(subscription)
+    }
+}
+
+// MARK: View interaction methods
+extension VertexViewModel {
+    func growingFinished() {
+        eventsPublisher?.send(.vertexGrowingFinished(vertex: model))
     }
 }

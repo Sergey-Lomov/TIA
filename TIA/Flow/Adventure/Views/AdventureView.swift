@@ -6,20 +6,21 @@
 //
 
 import SwiftUI
+import Combine
 
 struct AdventureView: View {
-    
+
     @StateObject var adventure: AdventureViewModel
 //    @State private var curve = BezierCurve(points: [
 //        CGPoint(x: 0, y: -0.1),
 //        CGPoint(x: 0, y: 0.1),
 //        CGPoint(x: -0.25, y: -0.05),
 //        CGPoint(x: -0.25, y: 0.15),
-//    ])
-//
+//    ]
+    
     var body: some View {
         ZStack {
-            Color.green
+            Color.mainFor(adventure.model.theme)
                 .edgesIgnoringSafeArea(.all)
 
             ForEach(adventure.edges, id:\.model.id) { edge in
@@ -29,9 +30,14 @@ struct AdventureView: View {
             ForEach(adventure.vertices, id:\.model.id) { vertex in
                 VertexWrapper(vertex: vertex)
             }
+            
+            PlayerView(player: adventure.player)
+        }
+        .onAppear {
+            adventure.viewInitCompleted()
         }
 //        VStack {
-//           BezierCurveShape(curve: curve)
+//           SingleCurveShape(curve: curve)
 //                .stroke(lineWidth: 4)
 //                .foregroundColor(.blue)
 //                .frame(width:200, height: 200)
@@ -51,7 +57,10 @@ struct AdventureView_Previews: PreviewProvider {
         let layout = AdventureLayout.random(for: descriptor!)
         let adventure = ScenarioService.shared.adventureFor(descriptor!, layout: layout)
         
-        let viewModel = AdventureViewModel(adventure)
+        let viewModel = AdventureViewModel(
+            adventure,
+            listener: GameEngine.shared.adventureEngine,
+            eventsSource: GameEngine.shared.adventureEngine)
         return AdventureView(adventure: viewModel)
     }
 }

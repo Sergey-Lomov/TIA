@@ -15,6 +15,7 @@ struct AdventureIconWrapper: View {
     private let moveDuration: TimeInterval = 2
     private let scaleDuration: TimeInterval = 2
     
+    // TODO: Move to BezierCurve extension
     private enum Layout {
         static let currentToDone = [
             CGPoint(x: 0, y: -0.25),
@@ -46,18 +47,15 @@ struct AdventureIconWrapper: View {
     }
     
     var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                AdventureIconView(adventure: adventure)
-                    .frame(geometry: geometry)
-                    .scaleEffect(scale)
-                    .animation(.easeInOut(duration: scaleDuration),
-                               value: adventure.state)
-                    .modifier(bezierSteps(size: geometry.size))
-                    .animation(.easeInOut(duration: moveDuration),
-                               value: adventure.state)
-            }
-            .frame(geometry: geometry)
+        CenteredGeometryReader { geometry in
+            AdventureIconView(adventure: adventure)
+                .frame(geometry: geometry)
+                .scaleEffect(scale)
+                .animation(.easeInOut(duration: scaleDuration),
+                           value: adventure.state)
+                .modifier(bezierSteps(size: geometry.size))
+                .animation(.easeInOut(duration: moveDuration),
+                           value: adventure.state)
         }
     }
 
@@ -73,6 +71,7 @@ struct AdventureIconWrapper: View {
         case .current:
             return BezierStepsPositioning(step: 1, curves: curves)
         case .done:
+            // FIXME: Here is a crash - step 2, but only 2 curves
             return BezierStepsPositioning(step: 2, curves: curves)
         }
     }

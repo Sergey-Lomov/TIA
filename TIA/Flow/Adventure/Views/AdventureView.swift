@@ -31,7 +31,7 @@ struct AdventureView: View {
                 VertexWrapper(vertex: vertex)
             }
             
-            PlayerView(player: adventure.player)
+            PlayerWrapperView(player: adventure.player)
         }
         .onAppear {
             adventure.viewInitCompleted()
@@ -59,6 +59,7 @@ struct AdventureView_Previews: PreviewProvider {
         
         let viewModel = AdventureViewModel(
             adventure,
+            player: GameEngine.shared.adventureEngine!.player,
             listener: GameEngine.shared.adventureEngine,
             eventsSource: GameEngine.shared.adventureEngine)
         return AdventureView(adventure: viewModel)

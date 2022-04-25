@@ -83,6 +83,7 @@ struct EdgeView_Previews: PreviewProvider {
         let adventure = ScenarioService.shared.adventureFor(descriptor!, layout: layout)
         let viewModel = AdventureViewModel(
             adventure,
+            player: GameEngine.shared.adventureEngine!.player,
             listener: GameEngine.shared.adventureEngine,
             eventsSource: GameEngine.shared.adventureEngine)
         let edge = viewModel.edges.first

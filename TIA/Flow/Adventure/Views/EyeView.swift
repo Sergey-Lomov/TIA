@@ -7,22 +7,6 @@
 
 import SwiftUI
 
-private enum EyeState {
-    case initial
-    case expanding
-    case opening
-    case opened
-    
-    var isOpen: Bool {
-        switch self {
-        case .initial, .expanding:
-            return false
-        default:
-            return true
-        }
-    }
-}
-
 private struct StrokeWidthKey: EnvironmentKey {
     static var defaultValue: CGFloat = 1
 }
@@ -36,74 +20,74 @@ private extension EnvironmentValues {
 
 struct EyeView: View {
     private let strokeRatio = 0.05
-    @State private var state: EyeState = .initial
+    
+    @Binding var eye: EyeViewModel
+    
     var color: Color
+    var onAnimationFinish: (() -> Void)?
 
     var body: some View {
-        GeometryReader { geometry in
+        return GeometryReader { geometry in
             ZStack {
-                EyelidView(state: $state)
+                EyelidView(status: $eye.status)
                 EyeballView(size: geometry.size)
                     .mask(
-                        EyeSocketView(state: $state)
+                        EyeSocketView(eye: $eye)
                     )
                     
             }
             .foregroundColor(color)
             .frame(geometry: geometry)
             .environment(\.strokeWidth, geometry.minSize * strokeRatio)
-        }.onAppear() { state = .expanding }
-    }
-}
-
-struct EyeView_Previews: PreviewProvider {
-    static var previews: some View {
-        EyeView(color: .softBlack)
+        }.onAppear {
+            eye.open()
+        }
     }
 }
 
 private struct EyeSocketView: View {
     
-    @Binding fileprivate var state: EyeState
-    var curve: ComplexCurve { ComplexCurve.eyelid(state: state) }
+    @Binding var eye: EyeViewModel
+    
+    var curve: ComplexCurve { ComplexCurve.eyelid(status: eye.status) }
+    var animation: Animation { Animation.forStatus(eye.status) }
     
     var body: some View {
         ComplexCurveShape(curve: curve)
-            .onReach(curve) { handleAnimationFinish() }
-            .foregroundColor(.black)
-            .animation(Animation.forState(state), value: curve)
-    }
-    
-    func handleAnimationFinish() {
-        DispatchQueue.main.async {
-            if state == .expanding {
-                state = .opening
-            } else if state == .opening {
-                state = .opened
+            .onReach(curve) {
+                eye.transitionFinished()
             }
-        }
+            .foregroundColor(.black)
+            .animation(animation, value: curve)
     }
 }
 
 private struct EyelidView: View {
 
+    private let compressedMult: CGFloat = 4
+    
     @Environment(\.strokeWidth) var strokeWidth
-    @Binding fileprivate var state: EyeState
-    var curve: ComplexCurve { ComplexCurve.eyelid(state: state) }
+    @Binding var status: EyeStatus
+    
+    var curve: ComplexCurve { ComplexCurve.eyelid(status: status) }
+    var animation: Animation { Animation.forStatus(status) }
     
     var body: some View {
-        ComplexCurveShape(curve: curve)
+        ComplexCurveShape(curve: curve, close: true)
             .stroke(style: style)
-            .animation(Animation.forState(state), value: curve)
+            .animation(animation, value: curve)
     }
 
     var style: StrokeStyle {
-        switch state {
-        case .initial, .expanding, .opening:
-            return StrokeStyle(lineWidth: strokeWidth, lineJoin: .round)
-        case .opened:
-            return StrokeStyle(lineWidth: strokeWidth, lineJoin: .miter)
+        var width: CGFloat = 0
+        switch status.targetState {
+        case .compressed:
+            width = strokeWidth * compressedMult
+        default:
+            width = strokeWidth
         }
+        
+        return StrokeStyle(lineWidth: width, lineCap: .round, lineJoin: .round)
     }
 }
 
@@ -129,6 +113,7 @@ private struct EyeballView: View {
 }
 
 private extension BezierCurve {
+    // TODO: Change bottom eyelid curves from predefined valus to calculated. To convert top eyelid to bottom should be used mirroring and reversing (change curve direction)
     private static let closedTopEyelid = BezierCurve(points: [
         CGPoint(x: -0.5, y: 0),
         CGPoint(x: -0.25, y: 0),
@@ -158,13 +143,25 @@ private extension BezierCurve {
     ])
     
     static func topEyelid(state: EyeState) -> BezierCurve {
-        if state == .initial { return .zero }
-        return state.isOpen ? .topEyelid : .closedTopEyelid
+        switch state {
+        case .compressed:
+            return .zero
+        case .closed:
+            return .closedTopEyelid
+        case .opened:
+            return .topEyelid
+        }
     }
     
     static func bottomEyelid(state: EyeState) -> BezierCurve {
-        if state == .initial { return .zero }
-        return state.isOpen ? .bottomEyelid : .closedBottomEyelid
+        switch state {
+        case .compressed:
+            return .zero
+        case .closed:
+            return .closedBottomEyelid
+        case .opened:
+            return .bottomEyelid
+        }
     }
 }
 
@@ -175,22 +172,31 @@ private extension ComplexCurve {
             BezierCurve.bottomEyelid(state: state)
         ])
     }
+    
+    static func eyelid(status: EyeStatus) -> ComplexCurve {
+        switch status {
+        case .state(let state):
+            return ComplexCurve.eyelid(state: state)
+        case .transiotion(_, let to):
+            return ComplexCurve.eyelid(state: to)
+        }
+    }
 }
 
 private extension Animation {
-    static var expanding: Animation { .easeOut(duration: 0.5) }
-    static var opening: Animation { .easeOut(duration: 1) }
-    
-    static func forState(_ state: EyeState) -> Animation {
-        switch state {
-        case .initial:
+    static var transitions: [EyeState: [EyeState: Animation]] = [
+        .closed: [.compressed: Animation.easeIn(duration: 0.5),
+                  .opened: Animation.easeOut(duration: 1)],
+        .compressed: [.closed: Animation.easeIn(duration: 0.5)],
+        .opened: [.closed: Animation.easeIn(duration: 1)],
+    ]
+
+    static func forStatus(_ status: EyeStatus) -> Animation {
+        switch status {
+        case .state:
             return .default
-        case .expanding:
-            return .expanding
-        case .opening:
-            return .opening
-        case .opened:
-            return .default
+        case .transiotion(let from, let to):
+            return transitions[from]?[to] ?? .default
         }
     }
 }

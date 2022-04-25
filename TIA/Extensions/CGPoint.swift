@@ -9,11 +9,20 @@ import CoreGraphics
 import SwiftUI
 
 extension CGPoint {
-    func multedPoint(x mx: CGFloat, y my: CGFloat) -> CGPoint {
-        CGPoint(x: x * mx, y: y * my)
+    
+    func scaled(_ geometry: GeometryProxy) -> CGPoint {
+        scaled(geometry.size)
     }
     
-    func translatedPoint(x dx: CGFloat, y dy: CGFloat) -> CGPoint {
+    func scaled(_ size: CGSize) -> CGPoint {
+        return scaled(x: size.width, y: size.height)
+    }
+    
+    func scaled(x sx: CGFloat, y sy: CGFloat) -> CGPoint {
+        CGPoint(x: x * sx, y: y * sy)
+    }
+    
+    func translated(x dx: CGFloat, y dy: CGFloat) -> CGPoint {
         CGPoint(x: x + dx, y: y + dy)
     }
     

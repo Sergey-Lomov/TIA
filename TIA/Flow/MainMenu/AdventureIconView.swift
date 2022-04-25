@@ -10,7 +10,6 @@ import SwiftUI
 
 struct AdventureIconWrapper: View {
     @ObservedObject var adventure: AdventureDescriptor
-    private var stateModifier: BezierPositioning?
     
     private let moveDuration: TimeInterval = 2
     private let scaleDuration: TimeInterval = 2
@@ -86,7 +85,7 @@ struct AdventureIconWrapper: View {
         }
         
         let scaledPoints = points.map {
-            $0.multedPoint(x: xMult, y: yMult)
+            $0.scaled(x: xMult, y: yMult)
         }
 
         return BezierCurve(points: scaledPoints)

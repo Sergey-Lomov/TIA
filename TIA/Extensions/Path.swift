@@ -9,29 +9,31 @@ import SwiftUI
 
 extension Path {
     
-    init (curves: [BezierCurve], size: CGSize? = nil) {
+    init (curves: [BezierCurve], size: CGSize? = nil, close: Bool = false) {
         self.init()
         
         for curve in curves {
             var normalizedCurve = curve
             if let size = size {
                 normalizedCurve = curve
-                    .multedCurve(x: size.width, y: size.height)
-                    .translatedCurve(x: size.width / 2, y: size.height / 2)
+                    .scaled(size)
+                    .translated(x: size.width / 2, y: size.height / 2)
             }
         
             addCurve(normalizedCurve)
         }
         
-        //closeSubpath()
+        if close {
+            closeSubpath()
+        }
     }
     
     init (curve: BezierCurve, size: CGSize? = nil) {
         self.init(curves: [curve], size: size)
     }
     
-    init(curve: BezierCurve, geometry: GeometryProxy? = nil) {
-        self.init(curve: curve, size: geometry?.size)
+    init(curve: BezierCurve, geometry: GeometryProxy) {
+        self.init(curve: curve, size: geometry.size)
     }
     
     mutating func addCurve(_ curve: BezierCurve) {

@@ -14,6 +14,8 @@ final class GameEngine {
     let state: GameState
     var adventureEngine: AdventureEngine?
     
+    var player: Player? { adventureEngine?.player }
+    
     init(state: GameState) {
         self.state = state
     }

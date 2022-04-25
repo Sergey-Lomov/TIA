@@ -17,13 +17,14 @@ extension View {
     }
     
     func offset(point: CGPoint, geometry: GeometryProxy ) -> some View {
-        let scaledPoint = point.multedPoint(x: geometry.size.width,
-                                          y: geometry.size.height)
-        return offset(x: scaledPoint.x, y: scaledPoint.y)
+        let scaled = point.scaled(geometry)
+        return offset(x: scaled.x, y: scaled.y)
     }
     
-    func bezierPositioning(curve: BezierCurve, progress: CGFloat = 0) -> some View {
-        modifier(BezierPositioning(curve: curve, progress: progress))
+    func bezierPositioning(curve: BezierCurve,
+                           progress: CGFloat = 0,
+                           onFinish: (() -> Void)? = nil ) -> some View {
+        modifier(BezierPositioning(curve: curve, onFinish: onFinish, progress: progress))
     }
     
     func bezierPositioning(step: Int, curves: [BezierCurve]) -> some View {
@@ -34,6 +35,31 @@ extension View {
         let x = point.x * geomtery.size.width
         let y = point.y * geomtery.size.height
         return offset(x: x, y: y)
+    }
+    
+    func invertedMask<Mask>(size: CGSize, _ mask: Mask) -> some View where Mask: View {
+        self.mask(
+//        overlay (
+            ZStack {
+                Rectangle()
+                    .foregroundColor(.yellow)
+                mask.blendMode(.destinationOut)
+            }.frame(size: size)
+        )
+       // )
+    }
+
+    // TODO: It was a try to wrap mofidifers into views. Remove if still be unsused.
+//    func wrappedModifier<M>(_ modifier: M)  -> AnimatableModifierWrapper<M> where M: Animatable & ViewModifier, M.Content == Self {
+//        AnimatableModifierWrapper(content: self, modifier: modifier)
+//    }
+}
+
+extension View where Self: Animatable {
+    func animate(builder: (inout [AnimationState<AnimatableData>]) -> Void) -> StatesAnimationView<Self> {
+        var states = [AnimationState<AnimatableData>]()
+        builder(&states)
+        return StatesAnimationView(content: self, states: states)
     }
 }
 

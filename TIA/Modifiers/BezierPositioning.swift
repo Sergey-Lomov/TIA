@@ -7,14 +7,19 @@
 
 import SwiftUI
 
-struct BezierPositioning: Animatable, ViewModifier  {
+struct BezierPositioning: AnimatableModifier  {
     
     let curve: BezierCurve
+    let onFinish: (() -> Void)?
     var progress: CGFloat
     
     public var animatableData: CGFloat {
         get { progress }
-        set { progress = newValue }
+        set { progress = newValue
+            if progress == 1 {
+                onFinish?()
+            }
+        }
     }
     
     func body(content: Content) -> some View {

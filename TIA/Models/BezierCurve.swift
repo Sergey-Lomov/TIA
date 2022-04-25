@@ -22,6 +22,21 @@ struct BezierCurve: Equatable {
     var control1: CGPoint { p1 }
     var control2: CGPoint { p2 }
     
+    static func onePoint(_ point: CGPoint) -> Self {
+        return BezierCurve(points: [point, point, point, point])
+    }
+    
+    init(from: CGPoint, to: CGPoint, control1: CGPoint, control2: CGPoint) {
+        self.init(points: [from, control1, control2, to])
+    }
+    
+    init(points:[CGPoint]) {
+        p0 = points[0]
+        p1 = points[1]
+        p2 = points[2]
+        p3 = points[3]
+    }
+    
     func length(stepsCount: Int) -> CGFloat {
         var lenght: CGFloat = 0
         var prevPoint = from
@@ -36,29 +51,30 @@ struct BezierCurve: Equatable {
         return lenght
     }
     
-    init(from: CGPoint, to: CGPoint, control1: CGPoint, control2: CGPoint) {
-        self.init(points: [from, control1, control2, to])
+    func scaled(_ geometry: GeometryProxy) -> BezierCurve {
+        return scaled(geometry.size)
     }
     
-    init(points:[CGPoint]) {
-        p0 = points[0]
-        p1 = points[1]
-        p2 = points[2]
-        p3 = points[3]
+    func scaled(_ size: CGSize) -> BezierCurve {
+        return scaled(x: size.width, y: size.height)
     }
     
-    func multedCurve(x xScale: CGFloat, y yScale: CGFloat) -> BezierCurve {
+    func scaled(x xScale: CGFloat, y yScale: CGFloat) -> BezierCurve {
         let points = self.points.map {
-            $0.multedPoint(x: xScale, y: yScale)
+            $0.scaled(x: xScale, y: yScale)
         }
         return BezierCurve(points: points)
     }
     
-    func translatedCurve(x dx: CGFloat, y dy: CGFloat) -> BezierCurve {
+    func translated(x dx: CGFloat, y dy: CGFloat) -> BezierCurve {
         let points = self.points.map {
-            $0.translatedPoint(x: dx, y: dy)
+            $0.translated(x: dx, y: dy)
         }
         return BezierCurve(points: points)
+    }
+    
+    func reversed() -> BezierCurve {
+        return BezierCurve(points: [p3, p2, p1, p0])
     }
     
     func selfMirroredCurve() -> BezierCurve {
@@ -130,5 +146,13 @@ extension BezierCurve: VectorArithmetic {
             lhs.p2 - rhs.p2,
             lhs.p3 - rhs.p3,
         ])
+    }
+}
+
+// MARK: Timing curves
+extension BezierCurve {
+    
+    static var linearTiming: BezierCurve {
+        BezierCurve(points: [.zero, .zero, CGPoint(x: 1, y: 1), CGPoint(x: 1, y: 1)])
     }
 }

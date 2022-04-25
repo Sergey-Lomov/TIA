@@ -13,9 +13,11 @@ struct TIAApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if let adventure = game.activeAdventure {
+            if let adventure = game.activeAdventure,
+               let player = GameEngine.shared.player {
                 let viewModel = AdventureViewModel(
                     adventure,
+                    player: player,
                     listener: GameEngine.shared.adventureEngine,
                     eventsSource: GameEngine.shared.adventureEngine)
                 

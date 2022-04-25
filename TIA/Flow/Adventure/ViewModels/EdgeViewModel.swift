@@ -12,7 +12,7 @@ import Combine
 class EdgeViewModel: ObservableObject {
     var eventsPublisher: ViewEventsPublisher?
     
-    @Published var model: Edge
+    var model: Edge
     @Published var color: Color
     @Published var borderColor: Color
     

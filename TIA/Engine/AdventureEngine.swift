@@ -8,11 +8,6 @@
 import Foundation
 import Combine
 
-enum PlayerPosition {
-    case edge(edge: Edge, success: Bool)
-    case vertex(vertex: Vertex)
-}
-
 enum AdventureLifecycle {
     case initiation
     case gameplay
@@ -24,8 +19,8 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     private enum Timing {
         // TODO: Remove when view-engine interaction will be finished
         static let queue = DispatchQueue.main
-        static let edgeGrowing: TimeInterval = 1.5
-        static let vertexGrowing: TimeInterval = 0.3
+        static let edgeGrowing: TimeInterval = 1.5 //* 0.1
+        static let vertexGrowing: TimeInterval = 0.3 //* 0.1
     }
     
     var subscriptions: [AnyCancellable] = []
@@ -33,15 +28,11 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     
     var adventure: Adventure
     var lifestate: AdventureLifecycle = .initiation
-    var playerPosition: PlayerPosition? = nil {
-        didSet {
-            eventsPublisher.send(
-                .playerMoves(from: oldValue, to: playerPosition))
-        }
-    }
+    var player: Player
     
     init(adventure: Adventure) {
         self.adventure = adventure
+        self.player = Player(position: .abscent)
     }
     
     func subscribeTo(_ publisher: ViewEventsPublisher) {
@@ -120,11 +111,11 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         }
         
         lifestate = .gameplay
-        playerPosition = .vertex(vertex: entrance)
+        player.position = .vertex(vertex: entrance)
     }
     
     private func handleVertexSelection(_ vertex: Vertex) {
-        guard case .vertex(let old) = playerPosition else {
+        guard case .vertex(let old) = player.position else {
             return
         }
         
@@ -133,6 +124,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
             return
         }
         
-        playerPosition = .vertex(vertex: vertex)
+        let direction: EdgeMovingDirection = edge.from.id == old.id ? .forward : .backward
+        player.position = .edge(edge: edge, status: .compressing, direction: direction)
     }
 }

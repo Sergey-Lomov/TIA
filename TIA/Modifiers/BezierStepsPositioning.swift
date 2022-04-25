@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct BezierStepsPositioning: Animatable, ViewModifier {
+struct BezierStepsPositioning: AnimatableModifier {
     
     private var _step: Int
     var step: Int {
@@ -30,7 +30,7 @@ struct BezierStepsPositioning: Animatable, ViewModifier {
     }
     
     init(step: Int, curves: [BezierCurve]) {
-        self._step = step.normalized(min: 0, max: curves.count)
+        self._step = step.normalized(min: 0, max: curves.count - 1)
         self.curves = curves
     }
     

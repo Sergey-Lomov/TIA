@@ -31,6 +31,10 @@ struct AdventureView: View {
                 VertexWrapper(vertex: vertex)
             }
             
+            ForEach(adventure.resources.indices, id:\.self) { index in
+                ResourceWrapper(resource: adventure.resources[index])
+            }
+            
             PlayerWrapperView(player: adventure.player)
         }
         .onAppear {
@@ -60,6 +64,7 @@ struct AdventureView_Previews: PreviewProvider {
         let viewModel = AdventureViewModel(
             adventure,
             player: GameEngine.shared.adventureEngine!.player,
+            resources: GameEngine.shared.adventureEngine!.resources,
             listener: GameEngine.shared.adventureEngine,
             eventsSource: GameEngine.shared.adventureEngine)
         return AdventureView(adventure: viewModel)

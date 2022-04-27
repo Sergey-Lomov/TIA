@@ -16,12 +16,6 @@ struct EdgeWrapper: View {
 }
 
 struct EdgeView: View {
-    
-    private let curveWidth: CGFloat = 4
-    private let borderWidth: CGFloat = 2
-    private let idleDelta: CGFloat = 0.1
-    private let idleDuration: CGFloat = 4
-    
     @ObservedObject var edge: EdgeViewModel
     
     var body: some View {
@@ -29,7 +23,7 @@ struct EdgeView: View {
             let animation = Animation.easeOut(duration: growDuration)
             SingleCurveShape(curve: curve)
                 .trim(from: 0, to: progress)
-                .stroke(lineWidth: curveWidth + 2 * borderWidth)
+                .stroke(lineWidth: Layout.Edge.undrelineWidth)
                 .animation(animation, value: progress)
                 .foregroundColor(edge.borderColor)
                 .frame(geometry: geometry)
@@ -39,7 +33,7 @@ struct EdgeView: View {
                     edge.growingFinished()
                 }
                 .trim(from: 0, to: progress)
-                .stroke(lineWidth: curveWidth)
+                .stroke(lineWidth: Layout.Edge.curveWidth)
                 .animation(animation, value: progress)
                 .foregroundColor(edge.color)
                 .frame(geometry: geometry)
@@ -84,6 +78,7 @@ struct EdgeView_Previews: PreviewProvider {
         let viewModel = AdventureViewModel(
             adventure,
             player: GameEngine.shared.adventureEngine!.player,
+            resources: GameEngine.shared.adventureEngine!.resources,
             listener: GameEngine.shared.adventureEngine,
             eventsSource: GameEngine.shared.adventureEngine)
         let edge = viewModel.edges.first

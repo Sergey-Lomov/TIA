@@ -14,6 +14,7 @@ class VertexViewModel: ObservableObject {
     
     @Published var model: Vertex
     @Published var color: Color
+    @Published var resourceColor: Color
     
     var state: VertexState {
         get { model.state }
@@ -33,9 +34,11 @@ class VertexViewModel: ObservableObject {
     private var subscriptions: [AnyCancellable] = []
     
     init(vertex: Vertex,
-         color: Color) {
+         color: Color,
+         resourceColor: Color) {
         self.model = vertex
         self.color = color
+        self.resourceColor = resourceColor
         
         let subscription = model.objectWillChange.sink {
             [weak self] _ in

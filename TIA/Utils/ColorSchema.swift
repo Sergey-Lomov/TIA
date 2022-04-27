@@ -11,6 +11,8 @@ struct ColorSchema {
     let background: Color
     let vertex: Color
     let edge: Color
+    let resources: Color
+    let resourcesBorder: Color
     let player: Color
     
     static func schemaFor(_ theme: AdventureTheme) -> ColorSchema {
@@ -27,15 +29,21 @@ struct ColorSchema {
     static let dark = ColorSchema(background: .softBlack,
                                   vertex: .softWhite,
                                   edge: .softWhite,
+                                  resources: .softWhite,
+                                  resourcesBorder: .softBlack,
                                   player: .softBlack)
     
     static let light = ColorSchema(background: .softWhite,
                                    vertex: .softBlack,
                                    edge: .softBlack,
+                                   resources: .softBlack,
+                                   resourcesBorder: .softWhite,
                                    player: .softWhite)
     
     static let truth = ColorSchema(background: .softBlack,
                                    vertex: .softWhite,
                                    edge: .softWhite,
+                                   resources: .softWhite,
+                                   resourcesBorder: .softBlack,
                                    player: .softBlack)
 }

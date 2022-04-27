@@ -36,7 +36,7 @@ class Vertex: ObservableObject {
     var type: VertexType
     @Published var state: VertexState
     var point: CGPoint
-    var resources: [Resource]
+    var initialResources: [ResourceType]
     var inEdges: [Edge] = []
     var outEdges: [Edge] = []
     
@@ -46,11 +46,11 @@ class Vertex: ObservableObject {
          type: VertexType = .common,
          state: VertexState = .seed,
          point: CGPoint,
-         resources: [Resource] = []) {
+         resources: [ResourceType] = []) {
         self.id = id
         self.type = type
         self.state = state
         self.point = point
-        self.resources = resources
+        self.initialResources = resources
     }
 }

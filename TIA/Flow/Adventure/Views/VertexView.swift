@@ -8,14 +8,13 @@
 import SwiftUI
 
 struct VertexWrapper: View {
-    private let radiusCoefficient: CGFloat = 0.15
     
     @ObservedObject var vertex: VertexViewModel
     
     var body: some View {
         CenteredGeometryReader { geometry in
 
-            let radius = geometry.minSize * radiusCoefficient
+            let radius = geometry.minSize * Layout.Vertex.radius
         
             VertexView(vertex: vertex, radius: radius)
                 .offset(point: vertex.point, geometry: geometry)
@@ -31,13 +30,12 @@ struct VertexView_Previews: PreviewProvider {
         let descriptor = GameState().scenario.adventures[.dark]?.first
         let layout = AdventureLayout.random(for: descriptor!)
         let adventure = ScenarioService.shared.adventureFor(descriptor!, layout: layout)
-        let viewModel = VertexViewModel(vertex: adventure.vertices[0], color: Color.softWhite)
+        let viewModel = VertexViewModel(vertex: adventure.vertices[0], color: Color.softWhite, resourceColor: .softBlack)
         VertexWrapper(vertex: viewModel)
     }
 }
 
 struct VertexView: View {
-
     @ObservedObject var vertex: VertexViewModel
     var radius: CGFloat
     
@@ -47,7 +45,7 @@ struct VertexView: View {
                 .onReach(curve) {
                     vertex.growingFinished()
                 }
-                .frame(width: radius, height: radius)
+                .frame(size: radius)
                 .foregroundColor(vertex.color)
                 .animation(.easeOut(duration: growDuration),
                            value: curve)

@@ -76,6 +76,11 @@
 		67B5339A2805B2B400EA959A /* AdventureLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B533992805B2B400EA959A /* AdventureLayout.swift */; };
 		67B5339D2805B5E200EA959A /* dark1.json in Resources */ = {isa = PBXBuildFile; fileRef = 67B5339C2805B5E200EA959A /* dark1.json */; };
 		67B533A12805BC0400EA959A /* dark1_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 67B533A02805BC0400EA959A /* dark1_1.json */; };
+		67BDE95328171112005B0194 /* ResourceShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BDE95228171112005B0194 /* ResourceShape.swift */; };
+		67BDE95B281712BC005B0194 /* ResourcePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BDE95A281712BC005B0194 /* ResourcePath.swift */; };
+		67BDE95D2817E841005B0194 /* ResourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BDE95C2817E841005B0194 /* ResourceView.swift */; };
+		67BDE95F2817E879005B0194 /* ResourceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BDE95E2817E879005B0194 /* ResourceViewModel.swift */; };
+		67BDE961281833D5005B0194 /* LayoutConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BDE960281833D5005B0194 /* LayoutConstants.swift */; };
 		67E4DD412812DF9D00F05D87 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E4DD402812DF9D00F05D87 /* Player.swift */; };
 /* End PBXBuildFile section */
 
@@ -150,6 +155,11 @@
 		67B533992805B2B400EA959A /* AdventureLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureLayout.swift; sourceTree = "<group>"; };
 		67B5339C2805B5E200EA959A /* dark1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = dark1.json; sourceTree = "<group>"; };
 		67B533A02805BC0400EA959A /* dark1_1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = dark1_1.json; sourceTree = "<group>"; };
+		67BDE95228171112005B0194 /* ResourceShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceShape.swift; sourceTree = "<group>"; };
+		67BDE95A281712BC005B0194 /* ResourcePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourcePath.swift; sourceTree = "<group>"; };
+		67BDE95C2817E841005B0194 /* ResourceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceView.swift; sourceTree = "<group>"; };
+		67BDE95E2817E879005B0194 /* ResourceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceViewModel.swift; sourceTree = "<group>"; };
+		67BDE960281833D5005B0194 /* LayoutConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutConstants.swift; sourceTree = "<group>"; };
 		67E4DD402812DF9D00F05D87 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -179,6 +189,7 @@
 				675E2746280B4BD100FB5783 /* VertexViewModel.swift */,
 				675E2769280F066800FB5783 /* PlayerViewModel.swift */,
 				675E2744280B4BC000FB5783 /* EdgeViewModel.swift */,
+				67BDE95E2817E879005B0194 /* ResourceViewModel.swift */,
 				678DE68728129D840084006F /* EyeViewModel.swift */,
 			);
 			path = ViewModels;
@@ -190,6 +201,7 @@
 				675E274F280C8C2F00FB5783 /* PointerWrapper.swift */,
 				675E2751280CE33100FB5783 /* HandleableAnimationData.swift */,
 				675E276F280F6F0400FB5783 /* ColorSchema.swift */,
+				67BDE960281833D5005B0194 /* LayoutConstants.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -202,6 +214,7 @@
 				672792462806441300FEE07E /* EdgeView.swift */,
 				675E2754280DA0E600FB5783 /* EyeView.swift */,
 				675E2767280F064400FB5783 /* PlayerView.swift */,
+				67BDE95C2817E841005B0194 /* ResourceView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -286,6 +299,7 @@
 		6793A98827FD0529002198E9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				67BDE95128171105005B0194 /* Resources */,
 				677C30FE281098BD0014BECD /* Animation */,
 				67B5336928009C4D00EA959A /* CircleShape.swift */,
 				675E273D2809E36800FB5783 /* SingleCurveShape.swift */,
@@ -320,6 +334,7 @@
 			isa = PBXGroup;
 			children = (
 				67B5335627FF959000EA959A /* Scenario */,
+				67B5334C27FF8A5000EA959A /* Resource.swift */,
 				67B5336528008BA700EA959A /* GameState.swift */,
 				67B533802803868500EA959A /* BezierCurve.swift */,
 				675E2758280DD96300FB5783 /* ComplexCurve.swift */,
@@ -333,7 +348,6 @@
 		67B5335627FF959000EA959A /* Scenario */ = {
 			isa = PBXGroup;
 			children = (
-				67B5334C27FF8A5000EA959A /* Resource.swift */,
 				67B5335827FF95AC00EA959A /* Vertex.swift */,
 				67B5335A27FFA1A700EA959A /* Edge.swift */,
 				67B5335C27FFA24000EA959A /* Adventure.swift */,
@@ -399,6 +413,15 @@
 				672792422806330100FEE07E /* truth1.json */,
 			);
 			path = Adventures;
+			sourceTree = "<group>";
+		};
+		67BDE95128171105005B0194 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				67BDE95228171112005B0194 /* ResourceShape.swift */,
+				67BDE95A281712BC005B0194 /* ResourcePath.swift */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -478,6 +501,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				67B5336C28009DC100EA959A /* Path.swift in Sources */,
+				67BDE961281833D5005B0194 /* LayoutConstants.swift in Sources */,
 				67B5337128032EAD00EA959A /* BezierPositioning.swift in Sources */,
 				67B5334D27FF8A5000EA959A /* Resource.swift in Sources */,
 				67B5338328038D8C00EA959A /* Comparable.swift in Sources */,
@@ -498,6 +522,7 @@
 				6793A98B27FD1936002198E9 /* Colors.swift in Sources */,
 				675E274D280C5EF500FB5783 /* AnimationHandlingShape.swift in Sources */,
 				677C3100281099500014BECD /* AnimationState.swift in Sources */,
+				67BDE95D2817E841005B0194 /* ResourceView.swift in Sources */,
 				67B533982804ED6D00EA959A /* TIAPrototypingError.swift in Sources */,
 				6727923D28062CF200FEE07E /* DecodingError.swift in Sources */,
 				672792472806441300FEE07E /* EdgeView.swift in Sources */,
@@ -508,6 +533,7 @@
 				6727922F2805CBE400FEE07E /* Bundle.swift in Sources */,
 				67B5335B27FFA1A700EA959A /* Edge.swift in Sources */,
 				675E275B280DDC4F00FB5783 /* ComplexCurveShape.swift in Sources */,
+				67BDE95F2817E879005B0194 /* ResourceViewModel.swift in Sources */,
 				675E2755280DA0E600FB5783 /* EyeView.swift in Sources */,
 				67B5335927FF95AC00EA959A /* Vertex.swift in Sources */,
 				675E2760280E2FC500FB5783 /* EngineEvent.swift in Sources */,
@@ -517,6 +543,7 @@
 				6793A98727FCF50E002198E9 /* WorldPickerView.swift in Sources */,
 				67B5338B2804CC4500EA959A /* VertexView.swift in Sources */,
 				67B533812803868500EA959A /* BezierCurve.swift in Sources */,
+				67BDE95B281712BC005B0194 /* ResourcePath.swift in Sources */,
 				67B5337F2803787300EA959A /* BezierStepsPositioning.swift in Sources */,
 				67B5335D27FFA24000EA959A /* Adventure.swift in Sources */,
 				6793A97627FCF3B7002198E9 /* TIAApp.swift in Sources */,
@@ -536,6 +563,7 @@
 				67B53379280336A900EA959A /* View.swift in Sources */,
 				67B5336A28009C4D00EA959A /* CircleShape.swift in Sources */,
 				677C31252811C97A0014BECD /* AnimatableProxy.swift in Sources */,
+				67BDE95328171112005B0194 /* ResourceShape.swift in Sources */,
 				67B533962804EC6000EA959A /* Array.swift in Sources */,
 				675E2749280B502900FB5783 /* AdventureDescriptor.swift in Sources */,
 				677C31232811C80E0014BECD /* AnimatableModifierWrapper.swift in Sources */,

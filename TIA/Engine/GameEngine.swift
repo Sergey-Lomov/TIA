@@ -15,6 +15,7 @@ final class GameEngine {
     var adventureEngine: AdventureEngine?
     
     var player: Player? { adventureEngine?.player }
+    var resources: [Resource]? { adventureEngine?.resources }
     
     init(state: GameState) {
         self.state = state

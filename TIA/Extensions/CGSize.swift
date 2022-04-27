@@ -13,4 +13,8 @@ extension CGSize {
         return CGSize(width: width * mult,
                       height: height * mult)
     }
+    
+    init(_ size: CGFloat) {
+        self.init(width: size, height: size)
+    }
 }

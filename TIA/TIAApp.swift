@@ -14,10 +14,12 @@ struct TIAApp: App {
     var body: some Scene {
         WindowGroup {
             if let adventure = game.activeAdventure,
-               let player = GameEngine.shared.player {
+               let player = GameEngine.shared.player,
+               let resources = GameEngine.shared.resources {
                 let viewModel = AdventureViewModel(
                     adventure,
                     player: player,
+                    resources: resources,
                     listener: GameEngine.shared.adventureEngine,
                     eventsSource: GameEngine.shared.adventureEngine)
                 

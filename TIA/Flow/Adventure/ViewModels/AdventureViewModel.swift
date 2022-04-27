@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import Combine
 
+// TODO: Investigate possibility to change provide protocol to Combine concept (provider)
 protocol ViewModelsProvider: AnyObject {
     func edgeViewModel(for edge: Edge) -> EdgeViewModel?
     func vertexViewModel(for vertex: Vertex) -> VertexViewModel?
@@ -23,10 +24,12 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
     var player: PlayerViewModel
     @Published var vertices: [VertexViewModel]
     @Published var edges: [EdgeViewModel]
+    @Published var resources: [ResourceViewModel]
     @Published var background: Color
     
     init(_ adventure: Adventure,
          player: Player,
+         resources: [Resource],
          listener: ViewEventsListener?,
          eventsSource: EngineEventsSource?) {
         let schema = ColorSchema.schemaFor(adventure.theme)
@@ -38,13 +41,19 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
         self.background = schema.background
 
         self.vertices = adventure.vertices.map {
-            return VertexViewModel(vertex: $0, color: schema.vertex)
+            return VertexViewModel(vertex: $0, color: schema.vertex, resourceColor: schema.resources)
         }
         
         self.edges = adventure.edges.map {
             return EdgeViewModel(model: $0,
                                  color: schema.edge,
                                  borderColor: schema.background)
+        }
+        
+        self.resources = resources.map {
+            return ResourceViewModel(model: $0,
+                                     color: schema.resources,
+                                     borderColor: schema.resourcesBorder)
         }
         
         // Combine setup
@@ -55,9 +64,21 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
         vertices.forEach { $0.eventsPublisher = eventsPublisher }
         edges.forEach { $0.eventsPublisher = eventsPublisher }
         
+        // Add notification about resource update, when related vertex's state update. This is necessary for valid handling resources visibility.
+        for vertex in vertices {
+            let subscription = vertex.model.$state.sink { _ in
+                let resources = self.resourcesFor(vertex.model)
+                for resource in resources {
+                    resource.objectWillChange.send()
+                }
+            }
+            subscriptions.append(subscription)
+        }
+        
         self.player.viewModelsProvider = self
     }
     
+    // TODO: Remove if still be unsused
     func subscribeTo(_ publisher: EngineEventsPublisher) {
 //        let subscription = publisher.sink {
 //            [self] event in
@@ -78,7 +99,16 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
 //    private func handlePlayersMove(from: PlayerPosition?, to: PlayerPosition?) {
 //        player.position = to
 //    }
-
+    
+    private func resourcesFor(_ vertex: Vertex) -> [ResourceViewModel] {
+        return resources.filter {
+            guard case .inVertex(let inVertex, _, _) = $0.state else {
+                return false
+            }
+            
+            return inVertex.id == vertex.id
+        }
+    }
 }
 
 extension AdventureViewModel: ViewModelsProvider {

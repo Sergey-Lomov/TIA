@@ -30,7 +30,7 @@ class Edge: ObservableObject {
     let id: String
     let from: Vertex
     var to: Vertex
-    var price: [Resource]
+    var price: [ResourceType]
     var growOnStart: Bool
     @Published var state: EdgeState
     
@@ -43,7 +43,7 @@ class Edge: ObservableObject {
     init(id: String,
          from: Vertex,
          to: Vertex,
-         price: [Resource] = [],
+         price: [ResourceType] = [],
          growOnStart: Bool,
          state: EdgeState = .seed,
          curve: BezierCurve) {

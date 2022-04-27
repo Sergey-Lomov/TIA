@@ -80,14 +80,14 @@ final class ScenarioService {
     struct VertexPrototype: Codable {
         let id: String
         let type: VertexType
-        let resources: [Resource]
+        let resources: [ResourceType]
     }
     
     struct EdgePrototype: Codable {
         let id: String
         let from: String
         let to: String
-        let price: [Resource]
+        let price: [ResourceType]
         let growOnStart: Bool
     }
     

@@ -29,10 +29,22 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     var adventure: Adventure
     var lifestate: AdventureLifecycle = .initiation
     var player: Player
+    var resources: [Resource]
     
     init(adventure: Adventure) {
         self.adventure = adventure
         self.player = Player(position: .abscent)
+        
+        self.resources = []
+        for vertex in adventure.vertices {
+            let total = vertex.initialResources.count
+            for index in 0..<total {
+                let type = vertex.initialResources[index]
+                let state = ResourceState.inVertex(vertex: vertex, index: index, total: total)
+                let resource = Resource(type: type, state: state)
+                self.resources.append(resource)
+            }
+        }
     }
     
     func subscribeTo(_ publisher: ViewEventsPublisher) {

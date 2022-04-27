@@ -16,6 +16,10 @@ extension View {
         frame(width: size.width, height: size.height)
     }
     
+    func frame(size: CGFloat) -> some View {
+        frame(width: size, height: size)
+    }
+    
     func offset(point: CGPoint, geometry: GeometryProxy ) -> some View {
         let scaled = point.scaled(geometry)
         return offset(x: scaled.x, y: scaled.y)

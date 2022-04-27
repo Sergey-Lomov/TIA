@@ -15,15 +15,15 @@ struct ResourceWrapper: View {
     
     var body: some View {
         CenteredGeometryReader { geometry in
-            let angle = isIdle ? 360.0 : 0.0
+            let angle = Angle(degrees: isIdle ? 360.0 : 0.0)
             if isVisible {
                 ResourceView(resource: resource)
                     .frame(size: size(geometry))
                     .offset(point: resPosition, geometry: geometry)
-                    .rotationEffect(Angle(degrees: angle))
+                    .rotationEffect(angle)
                     .offset(point: vertexPosition, geometry: geometry)
                 // TODO: Change constant rotation animation to different animation based on resource or vertex personality
-                    .animation(.linear(duration: 10).repeatForever(autoreverses: false), value: Angle(degrees: angle))
+                    .animation(.rotation, value: angle)
                     .transition(transition)
                     .onAppear {
                         withAnimation {
@@ -71,7 +71,7 @@ struct ResourceWrapper: View {
             } else {
                 let angle = CGFloat.pi * 2.0 / CGFloat(total) * CGFloat(index)
                 var delta = CGPoint(x: cos(angle), y: sin(angle))
-                delta.scale(by: 0.025)
+                delta.scale(by: Layout.Resources.Vertex.angleScale)
                 return delta
             }
         }
@@ -96,5 +96,12 @@ struct ResourceView_Previews: PreviewProvider {
         let resource = Resource(type: .despair, state: .ownByPlayer)
         let viewModel = ResourceViewModel(model: resource, color: .softBlack, borderColor: .green)
         ResourceView(resource: viewModel)
+    }
+}
+
+// TODO: Should be removed if became unused after adding different idle animations for resources based on vertex personality.
+private extension Animation {
+    static var rotation: Animation {
+        linear(duration: 10).repeatForever(autoreverses: false)
     }
 }

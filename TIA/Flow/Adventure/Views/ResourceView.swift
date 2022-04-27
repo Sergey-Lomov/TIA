@@ -23,7 +23,7 @@ struct ResourceWrapper: View {
                     .rotationEffect(angle)
                     .offset(point: vertexPosition, geometry: geometry)
                 // TODO: Change constant rotation animation to different animation based on resource or vertex personality
-                    .animation(.rotation, value: angle)
+                    .animation(rotationAnimation, value: angle)
                     .transition(transition)
                     .onAppear {
                         withAnimation {
@@ -76,6 +76,15 @@ struct ResourceWrapper: View {
             }
         }
     }
+    
+    var rotationAnimation: Animation {
+        switch resource.state {
+        case .ownByPlayer:
+            return .soloRotation
+        case .inVertex(_, let index, let total):
+            return total == 1 ? .soloRotation : .groupRotation
+        }
+    }
 }
 
 struct ResourceView: View {
@@ -101,7 +110,11 @@ struct ResourceView_Previews: PreviewProvider {
 
 // TODO: Should be removed if became unused after adding different idle animations for resources based on vertex personality.
 private extension Animation {
-    static var rotation: Animation {
-        linear(duration: 10).repeatForever(autoreverses: false)
+    static var groupRotation: Animation {
+        linear(duration: 40).repeatForever(autoreverses: false)
+    }
+    
+    static var soloRotation: Animation {
+        linear(duration: 15).repeatForever(autoreverses: false)
     }
 }

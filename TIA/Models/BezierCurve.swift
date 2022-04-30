@@ -10,6 +10,8 @@ import SwiftUI
 
 struct BezierCurve: Equatable {
     
+    private static let intersectionLimit: Int = 1000
+    
     var id = UUID().uuidString
     var p0: CGPoint
     var p1: CGPoint
@@ -103,6 +105,38 @@ struct BezierCurve: Equatable {
     
     func getY(t: CGFloat) -> CGFloat {
         return getCoord(t: t, p0: p0.y, p1: p1.y, p2: p2.y, p3: p3.y)
+    }
+    
+    func getPoint(t: CGFloat) -> CGPoint {
+        return CGPoint(x: getX(t: t), y: getY(t: t))
+    }
+    
+    /// This method is not fully strong from math point of view. But should be enough in estimated in-game cases. For example, p0 or p3 should be in any case a center of cricle. 
+    func intersectionWith(center: CGPoint, radius: CGFloat, accuracy: CGFloat, limit: Int = Self.intersectionLimit) -> CGPoint? {
+        var left = p0
+        var right = p3
+        var leftT: CGFloat = 0
+        var rightT: CGFloat = 1
+        
+        for _ in 0..<limit {
+            let leftDelta = abs(left.distanceTo(center) - radius)
+            let rightDelta = abs(right.distanceTo(center) - radius)
+            
+            let midT = (leftT + rightT) / 2
+            let mid = getPoint(t: midT)
+            let midDelta = abs(mid.distanceTo(center) - radius)
+            if midDelta <= accuracy { return mid }
+            
+            if leftDelta < rightDelta {
+                right = mid
+                rightT = midT
+            } else {
+                left = mid
+                leftT = midT
+            }
+        }
+        
+        return nil
     }
     
     static func == (lhs: Self, rhs: Self) -> Bool {

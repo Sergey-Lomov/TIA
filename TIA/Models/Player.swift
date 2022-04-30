@@ -50,6 +50,7 @@ enum PlayerPosition {
 
 class Player: ObservableObject {
     @Published var position: PlayerPosition
+    var id = UUID().uuidString
     
     init(position: PlayerPosition) {
         self.position = position

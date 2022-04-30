@@ -45,6 +45,16 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
                 self.resources.append(resource)
             }
         }
+        
+        // When player update position all owned resources should be notified
+        let positionSubscribtion = player.$position.sink {
+            [weak self] receiveValue in
+            guard let player = self?.player else { return }
+            self?.playerResources(player).forEach { resource in
+                resource.objectWillChange.send()
+            }
+        }
+        subscriptions.append(positionSubscribtion)
     }
     
     func subscribeTo(_ publisher: ViewEventsPublisher) {
@@ -138,5 +148,29 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         
         let direction: EdgeMovingDirection = edge.from.id == old.id ? .forward : .backward
         player.position = .edge(edge: edge, status: .compressing, direction: direction)
+        addPlayerResources(vertexResources(vertex))
+    }
+    
+    // MARK: Resources handling
+    private func vertexResources(_ vertex: Vertex) -> [Resource] {
+        resources.filter {
+            guard case .inVertex(let resVertex, _, _) = $0.state else { return false }
+            return resVertex.id == vertex.id
+        }
+    }
+    
+    private func playerResources(_ player: Player) -> [Resource]  {
+        resources.filter {
+            guard case .ownByPlayer(let resPlayer, _) = $0.state else { return false }
+            return resPlayer.id == player.id
+        }
+    }
+    
+    private func addPlayerResources(_ resources: [Resource]) {
+        var index = playerResources(player).count
+        resources.forEach {
+            $0.state = .ownByPlayer(player: player, index: index)
+            index += 1
+        }
     }
 }

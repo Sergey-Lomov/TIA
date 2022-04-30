@@ -9,12 +9,17 @@ import Foundation
 import SwiftUI
 
 extension CGSize {
-    func multed(_ mult: CGFloat) -> CGSize {
-        return CGSize(width: width * mult,
-                      height: height * mult)
+    
+    var minSize: CGFloat {
+        return min(width, height)
     }
     
     init(_ size: CGFloat) {
         self.init(width: size, height: size)
+    }
+    
+    func scaled(_ mult: CGFloat) -> CGSize {
+        return CGSize(width: width * mult,
+                      height: height * mult)
     }
 }

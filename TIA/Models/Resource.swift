@@ -18,7 +18,7 @@ enum ResourceType: String, Codable {
 
 enum ResourceState {
     case inVertex(vertex: Vertex, index: Int, total: Int)
-    case ownByPlayer
+    case ownByPlayer(player: Player, index: Int)
 }
 
 class Resource: ObservableObject {

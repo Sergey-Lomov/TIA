@@ -82,6 +82,7 @@
 		67BDE95F2817E879005B0194 /* ResourceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BDE95E2817E879005B0194 /* ResourceViewModel.swift */; };
 		67BDE961281833D5005B0194 /* LayoutConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BDE960281833D5005B0194 /* LayoutConstants.swift */; };
 		67E4DD412812DF9D00F05D87 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E4DD402812DF9D00F05D87 /* Player.swift */; };
+		67EDAC27281CA01F00EA41CF /* VertexSurroundingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EDAC26281CA01F00EA41CF /* VertexSurroundingService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -161,6 +162,7 @@
 		67BDE95E2817E879005B0194 /* ResourceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceViewModel.swift; sourceTree = "<group>"; };
 		67BDE960281833D5005B0194 /* LayoutConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutConstants.swift; sourceTree = "<group>"; };
 		67E4DD402812DF9D00F05D87 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		67EDAC26281CA01F00EA41CF /* VertexSurroundingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexSurroundingService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -362,6 +364,7 @@
 			children = (
 				67B5336127FFAA6200EA959A /* StorageService.swift */,
 				67B5336328007C1400EA959A /* ScenarioService.swift */,
+				67EDAC26281CA01F00EA41CF /* VertexSurroundingService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -503,6 +506,7 @@
 				67B5336C28009DC100EA959A /* Path.swift in Sources */,
 				67BDE961281833D5005B0194 /* LayoutConstants.swift in Sources */,
 				67B5337128032EAD00EA959A /* BezierPositioning.swift in Sources */,
+				67EDAC27281CA01F00EA41CF /* VertexSurroundingService.swift in Sources */,
 				67B5334D27FF8A5000EA959A /* Resource.swift in Sources */,
 				67B5338328038D8C00EA959A /* Comparable.swift in Sources */,
 				6793A98527FCF4FD002198E9 /* MainMenuView.swift in Sources */,
@@ -697,7 +701,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"TIA/Preview Content\"";
-				DEVELOPMENT_TEAM = BUP95A8K4H;
+				DEVELOPMENT_TEAM = TW5C93DFWS;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -726,7 +730,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"TIA/Preview Content\"";
-				DEVELOPMENT_TEAM = BUP95A8K4H;
+				DEVELOPMENT_TEAM = TW5C93DFWS;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

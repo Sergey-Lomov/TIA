@@ -12,7 +12,7 @@ struct ResourceShape: Shape {
     let type: ResourceType
     
     func path(in rect: CGRect) -> Path {
-        let halfSize = rect.size.multed(0.5)
+        let halfSize = rect.size.scaled(0.5)
         var transform = CGAffineTransform(scaleX: halfSize.width, y: halfSize.height)
         transform = transform.translatedBy(x: 1, y: 1)
         

@@ -7,22 +7,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "A7E6F0B3-B7E5-4179-ABDF-72FB3387438E"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "TIA/Models/BezierCurve.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "101"
-            endingLineNumber = "101"
-            landmarkName = "getX(t:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "B2E5F8E5-4105-4B22-8267-C69BDC8FB112"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -87,16 +71,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "F6E662E1-F11B-4405-973F-6450F61DC7AB"
+            uuid = "5034F103-6EB6-4DE9-BD96-65C281A02590"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "TIA/Engine/AdventureEngine.swift"
+            filePath = "TIA/Flow/Adventure/Views/ResourceView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "130"
-            endingLineNumber = "130"
-            landmarkName = "handleVertexSelection(_:)"
+            startingLineNumber = "86"
+            endingLineNumber = "86"
+            landmarkName = "resPosition(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

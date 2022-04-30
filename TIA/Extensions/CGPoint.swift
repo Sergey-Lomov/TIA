@@ -10,6 +10,12 @@ import SwiftUI
 
 extension CGPoint {
     
+    init(center: CGPoint, angle: CGFloat, radius: CGFloat) {
+        let x = center.x + cos(angle) * radius
+        let y = center.y - sin(angle) * radius // Due to inveted Y axis
+        self.init(x: x, y: y)
+    }
+    
     func scaled(_ geometry: GeometryProxy) -> CGPoint {
         scaled(geometry.size)
     }
@@ -30,10 +36,13 @@ extension CGPoint {
         return mirroredByLine(Line(p1: p1, p2: p2))
     }
     
+    func relative(zero: CGPoint, unit: CGFloat = 1) -> CGPoint {
+        return CGPoint(x: (x - zero.x) / unit, y: (y - zero.y) / unit)
+    }
+    
     func randomPoint(maxDelta: CGFloat) -> CGPoint {
         let rx = CGFloat.random(in: (x - maxDelta)...(x + maxDelta))
         let ry = CGFloat.random(in: (y - maxDelta)...(y + maxDelta))
-//        let ry = CGFloat.random(max: y + maxDelta, min: y - maxDelta)
         return CGPoint(x: rx, y: ry)
     }
     

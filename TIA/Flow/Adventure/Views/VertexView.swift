@@ -14,7 +14,7 @@ struct VertexWrapper: View {
     var body: some View {
         CenteredGeometryReader { geometry in
 
-            let radius = geometry.minSize * Layout.Vertex.radius
+            let radius = geometry.minSize * Layout.Vertex.diameter
         
             VertexView(vertex: vertex, radius: radius)
                 .offset(point: vertex.point, geometry: geometry)

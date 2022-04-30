@@ -17,19 +17,34 @@ struct ResourceWrapper: View {
         CenteredGeometryReader { geometry in
             let angle = Angle(degrees: isIdle ? 360.0 : 0.0)
             if isVisible {
-                ResourceView(resource: resource)
-                    .frame(size: size(geometry))
-                    .offset(point: resPosition, geometry: geometry)
-                    .rotationEffect(angle)
-                    .offset(point: vertexPosition, geometry: geometry)
-                // TODO: Change constant rotation animation to different animation based on resource or vertex personality
-                    .animation(rotationAnimation, value: angle)
-                    .transition(transition)
-                    .onAppear {
-                        withAnimation {
-                            isIdle = true
+                switch resource.state {
+                case .ownByPlayer:
+                    ResourceView(resource: resource)
+                        .frame(size: size(geometry))
+                        .offset(point: resPosition(geometry))
+                        .offset(point: vertexPosition, geometry: geometry)
+                    //.animation(rotationAnimation, value: angle)
+                    //    .transition(transition)
+//                        .onAppear {
+//                            withAnimation {
+//                                isIdle = true
+//                            }
+//                        }
+                case .inVertex:
+                    ResourceView(resource: resource)
+                        .frame(size: size(geometry))
+                        .offset(point: resPosition(geometry))
+                        .rotationEffect(angle)
+                        .offset(point: vertexPosition, geometry: geometry)
+                    // TODO: Change constant rotation animation to different animation based on resource or vertex personality
+                        .animation(rotationAnimation, value: angle)
+                        .transition(transition)
+                        .onAppear {
+                            withAnimation {
+                                isIdle = true
+                            }
                         }
-                    }
+                }
             }
         }
     }
@@ -37,16 +52,16 @@ struct ResourceWrapper: View {
     func size(_ geometry: GeometryProxy) -> CGSize {
         switch resource.state {
         case .ownByPlayer:
-            return CGSize(Layout.Vertex.radius * Layout.Resources.Player.sizeRatio).multed(geometry.minSize)
+            return CGSize(Layout.Vertex.diameter * Layout.Resources.Player.sizeRatio).scaled(geometry.minSize)
         case .inVertex:
-            return CGSize(Layout.Vertex.radius * Layout.Resources.Vertex.sizeRatio).multed(geometry.minSize)
+            return CGSize(Layout.Vertex.diameter * Layout.Resources.Vertex.sizeRatio).scaled(geometry.minSize)
         }
     }
 
     var isVisible: Bool {
         switch resource.state {
-        case .ownByPlayer:
-            return true
+        case .ownByPlayer(let player, _):
+            return !player.position.isAbscent
         case .inVertex(let vertex, _, _):
             return vertex.state.isGrowed
         }
@@ -54,17 +69,21 @@ struct ResourceWrapper: View {
     
     var vertexPosition: CGPoint {
         switch resource.state {
-        case .ownByPlayer:
-            return .zero
+        case .ownByPlayer(let player, _):
+            guard let vertex = player.position.resourcesVertex else { return .zero }
+            return vertex.point
         case .inVertex(let vertex, _, _):
             return vertex.point
         }
     }
     
-    var resPosition: CGPoint {
+    func resPosition(_ geometry: GeometryProxy) -> CGPoint {
         switch resource.state {
-        case .ownByPlayer:
-            return .zero
+        case .ownByPlayer(let player, let index):
+            guard let vertex = player.position.resourcesVertex else { return .zero }
+            let service = VertexSurroundingService(screenSize: geometry.size)
+            let surrounding = service.surroundingFor(vertex, slotsCount: index + 1)
+            return surrounding.slots.last ?? .zero
         case .inVertex(_, let index, let total):
             if total == 1 {
                 return .zero
@@ -72,7 +91,7 @@ struct ResourceWrapper: View {
                 let angle = CGFloat.pi * 2.0 / CGFloat(total) * CGFloat(index)
                 var delta = CGPoint(x: cos(angle), y: sin(angle))
                 delta.scale(by: Layout.Resources.Vertex.angleScale)
-                return delta
+                return delta.scaled(geometry)
             }
         }
     }
@@ -100,14 +119,6 @@ struct ResourceView: View {
     }
 }
 
-struct ResourceView_Previews: PreviewProvider {
-    static var previews: some View {
-        let resource = Resource(type: .despair, state: .ownByPlayer)
-        let viewModel = ResourceViewModel(model: resource, color: .softBlack, borderColor: .green)
-        ResourceView(resource: viewModel)
-    }
-}
-
 // TODO: Should be removed if became unused after adding different idle animations for resources based on vertex personality.
 private extension Animation {
     static var groupRotation: Animation {
@@ -116,5 +127,18 @@ private extension Animation {
     
     static var soloRotation: Animation {
         linear(duration: 15).repeatForever(autoreverses: false)
+    }
+}
+
+private extension PlayerPosition {
+    var resourcesVertex: Vertex? {
+        switch self {
+        case .abscent:
+            return nil
+        case .edge(let edge, _, let direction):
+            return direction == .forward ? edge.to : edge.from
+        case .vertex(let vertex):
+            return vertex
+        }
     }
 }

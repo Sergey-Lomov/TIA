@@ -100,8 +100,8 @@ private struct EyeballView: View {
     
     var body: some View {
         ZStack {
-            let pupilSize = size.multed(pupilSize)
-            let eyeballSize = size.multed(eyeballSize)
+            let pupilSize = size.scaled(pupilSize)
+            let eyeballSize = size.scaled(eyeballSize)
             
             CircleShape()
                 .stroke(lineWidth: strokeWidth)

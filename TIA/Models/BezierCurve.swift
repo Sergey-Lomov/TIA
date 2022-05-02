@@ -11,6 +11,7 @@ import SwiftUI
 struct BezierCurve: Equatable {
     
     private static let intersectionLimit: Int = 1000
+    private static let legthRatioLimit: Int = 100
     
     var id = UUID().uuidString
     var p0: CGPoint
@@ -111,32 +112,38 @@ struct BezierCurve: Equatable {
         return CGPoint(x: getX(t: t), y: getY(t: t))
     }
     
-    /// This method is not fully strong from math point of view. But should be enough in estimated in-game cases. For example, p0 or p3 should be in any case a center of cricle. 
-    func intersectionWith(center: CGPoint, radius: CGFloat, accuracy: CGFloat, limit: Int = Self.intersectionLimit) -> CGPoint? {
-        var left = p0
-        var right = p3
-        var leftT: CGFloat = 0
-        var rightT: CGFloat = 1
+    func getPoint(lengthRatio: CGFloat, steps: Int = legthRatioLimit) -> CGPoint {
+        let total = length(stepsCount: steps)
+        let required = total * lengthRatio
         
-        for _ in 0..<limit {
-            let leftDelta = abs(left.distanceTo(center) - radius)
-            let rightDelta = abs(right.distanceTo(center) - radius)
+        var current: CGFloat = 0
+        var t: CGFloat = 0
+        var point = getPoint(t: t)
+        
+        for _ in 0 ..< steps {
+            let newT = t + 1 / CGFloat(steps)
+            let newPoint = getPoint(t: newT)
+            let newLenght = current + point.distanceTo(newPoint)
             
-            let midT = (leftT + rightT) / 2
-            let mid = getPoint(t: midT)
-            let midDelta = abs(mid.distanceTo(center) - radius)
-            if midDelta <= accuracy { return mid }
-            
-            if leftDelta < rightDelta {
-                right = mid
-                rightT = midT
-            } else {
-                left = mid
-                leftT = midT
+            if newLenght > required {
+                let oldAccuracy = abs(current - required)
+                let newAccuracy = abs(newLenght - required)
+                return oldAccuracy < newAccuracy ? point : newPoint
             }
+            
+            point = newPoint
+            t = newT
+            current = newLenght
         }
         
-        return nil
+        return point
+    }
+    
+    func intersectionWith(center: CGPoint, radius: CGFloat, accuracy: CGFloat, limit: Int = Self.intersectionLimit) -> CGPoint {
+        let t = Math.stepSearch(from: 0, to: 1, steps: limit) {
+            abs(getPoint(t: $0).distanceTo(center) - radius)
+        }
+        return getPoint(t: t)
     }
     
     static func == (lhs: Self, rhs: Self) -> Bool {

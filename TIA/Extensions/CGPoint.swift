@@ -64,6 +64,10 @@ extension CGPoint {
         let dy = self.y - point.y
         return sqrt(dx * dx + dy * dy)
     }
+    
+    func toUnit(geometry: GeometryProxy) -> UnitPoint {
+        return UnitPoint(x: (x / geometry.size.width) + 0.5, y: (y / geometry.size.width) + 0.5)
+    }
 }
 
 extension CGPoint: VectorArithmetic {

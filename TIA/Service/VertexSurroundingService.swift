@@ -57,9 +57,7 @@ final class VertexSurroundingService {
     private func edgesOuts(edges: [Edge], center: CGPoint, radius: CGFloat) -> [CGFloat] {
         let edgesOutPoints: [CGPoint] = edges.map {
             let scaled = $0.curve.scaled(size)
-            let nearestControl = scaled.p0 == center ? scaled.p1 : scaled.p2
-            let calculated = scaled.intersectionWith(center: center, radius: radius, accuracy: accuracy)
-            return calculated ?? nearestControl
+            return scaled.intersectionWith(center: center, radius: radius, accuracy: accuracy)
         }
         
         return edgesOutPoints.map {

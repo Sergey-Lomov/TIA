@@ -1,4 +1,4 @@
-//
+ //
 //  EdgeView.swift
 //  TIA
 //
@@ -11,11 +11,35 @@ struct EdgeWrapper: View {
     @ObservedObject var edge: EdgeViewModel
     
     var body: some View {
-        EdgeView(edge: edge)
+        CenteredGeometryReader { geometry in
+            EdgePathView(edge: edge)
+            
+            if edge.model.state.isGrowed {
+                ForEach(edge.model.price.indices, id: \.self) { index in
+                    let type = edge.model.price[index]
+                    let position = gatePosition(geometry: geometry, index: index)
+                    
+                    EdgeGateView(edge: edge, type: type)
+                        .offset(point: position)
+                        .transition(gateTransition(position: position, geometry: geometry))
+                }
+            }
+        }
+    }
+    
+    func gatePosition(geometry: GeometryProxy, index: Int) -> CGPoint {
+        let curve = edge.curve.scaled(geometry)
+        let ratio = CGFloat(index + 1) / CGFloat(edge.model.price.count + 1)
+        return curve.getPoint(lengthRatio: ratio)
+    }
+    
+    func gateTransition(position: CGPoint, geometry: GeometryProxy) -> AnyTransition {
+        let anchor = position.toUnit(geometry: geometry)
+        return .scale(scale: 0, anchor: anchor).animation(.easeOut(duration: 2))
     }
 }
 
-struct EdgeView: View {
+struct EdgePathView: View {
     @ObservedObject var edge: EdgeViewModel
     
     var body: some View {
@@ -43,8 +67,6 @@ struct EdgeView: View {
     private var curve: BezierCurve {
         switch edge.model.state {
         case .seed:
-//            return edge.curve.randomControlsCurve(maxDelta: idleDelta)
-            //return edge.curve.selfMirroredCurve()
             return edge.model.seedCurve
         default:
             return edge.curve
@@ -70,6 +92,26 @@ struct EdgeView: View {
     }
 }
 
+struct EdgeGateView: View {
+    @ObservedObject var edge: EdgeViewModel
+    var type: ResourceType
+    
+    var body: some View {
+        CenteredGeometryReader { geometry in
+            let circleSize = geometry.minSize * Layout.Edge.gateSize
+            let symbolSize = circleSize * Layout.Edge.gateSymbolSize
+            
+            CircleShape()
+                .frame(size: circleSize)
+                .foregroundColor(edge.color)
+            
+            ResourceShape(type: type)
+                .frame(size: symbolSize)
+                .foregroundColor(edge.borderColor)
+        }
+    }
+}
+
 struct EdgeView_Previews: PreviewProvider {
     static var previews: some View {
         let descriptor = GameState().scenario.adventures[.dark]?.first
@@ -82,6 +124,6 @@ struct EdgeView_Previews: PreviewProvider {
             listener: GameEngine.shared.adventureEngine,
             eventsSource: GameEngine.shared.adventureEngine)
         let edge = viewModel.edges.first
-        EdgeView(edge: edge!)
+        EdgePathView(edge: edge!)
     }
 }

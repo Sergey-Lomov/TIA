@@ -20,6 +20,8 @@ struct Layout {
         static let borderWidth: CGFloat = 2
         static let idleDelta: CGFloat = 0.1
         static let idleDuration: CGFloat = 4
+        static let gateSize: CGFloat = 0.05
+        static let gateSymbolSize: CGFloat = 0.75
         static let undrelineWidth = curveWidth + borderWidth * 2
         static let outSpacing: CGFloat = curveWidth + borderWidth * 6
     }

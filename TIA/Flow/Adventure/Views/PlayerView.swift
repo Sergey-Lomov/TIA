@@ -91,6 +91,7 @@ struct PlayerView: View {
                     .frame(width: 16, height: 16)
                     .foregroundColor(edgeBlobColor)
                     .maskToCurrentEdgeVertices(player: player, size: superSize)
+                    .transition(.identity)
             }
             
             EyeView(eye: $player.eye, color: player.color)

@@ -23,7 +23,7 @@ struct ResourceWrapper: View {
                 ResourceView(resource: resource)
                     .frame(size: size(geometry))
                     .bezierPositioning(curve: positionCurve(geometry), progress: positionProgress)
-                    .animation(.easeInOut(duration: 1), value: positionProgress)
+                    .animation(positionAnimation, value: positionProgress)
                     .offset(point: resourcePosition(geometry))
                     .rotationEffect(vertextRotationAngle)
                     .offset(point: vertexPosition(geometry))
@@ -45,15 +45,6 @@ struct ResourceWrapper: View {
             return !player.position.isAbscent
         case .inVertex(let vertex, _, _):
             return vertex.state.isGrowed
-        }
-    }
-    
-    private var bezierPositioned: Bool {
-        switch resource.metastate {
-        case .playerMoving, .playerCompressing, .playerExpanding:
-            return true
-        default:
-            return false
         }
     }
     
@@ -108,12 +99,6 @@ struct ResourceWrapper: View {
             return vertex.point.scaled(geometry)
         case .playerAbscent, .playerMoving, .playerExpanding, .playerCompressing:
             return .zero
-            
-//        case .ownByPlayer(let player, _):
-//            let vertex = player.position.resourcesVertex
-//            return vertex?.point.scaled(geometry) ?? .zero
-//        case .inVertex(let vertex, _, _):
-//            return vertex.point.scaled(geometry)
         }
     }
     
@@ -126,12 +111,6 @@ struct ResourceWrapper: View {
             return resourceSlot(geometry: geometry, vertex: vertex, index: index)
         case .playerAbscent, .playerMoving, .playerExpanding, .playerCompressing:
             return .zero
-            
-//        case .ownByPlayer(let player, let index):
-//            guard let vertex = player.position.resourcesVertex else { return .zero }
-//            return resourceSlot(geometry: geometry, vertex: vertex, index: index)
-//        case .inVertex(_, let index, let total):
-//            return inVertextResourcePosition(index: index, total: total)
         }
     }
     
@@ -158,6 +137,17 @@ struct ResourceWrapper: View {
             return Angle(radians: isIdle ? .pi * 2 : 0.0)
         case .ownByPlayer:
             return Angle(radians: 0)
+        }
+    }
+    
+    private var positionAnimation: Animation? {
+        switch resource.metastate {
+        case .playerMoving(let edge, _, _),
+                .playerExpanding(let edge, _, _):
+            let duration = AnimationService.shared.playerMovingDuration(edgeLength: edge.length)
+            return .positioning(duration)
+        default:
+            return nil
         }
     }
     
@@ -204,6 +194,10 @@ private extension Animation {
     
     static func vertexOut(_ duration: TimeInterval) -> Animation {
         easeOut(duration: duration)
+    }
+    
+    static func positioning(_ duration: TimeInterval) -> Animation {
+        easeInOut(duration: duration)
     }
 }
 

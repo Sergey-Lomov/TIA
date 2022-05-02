@@ -155,7 +155,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     }
     
     private func handleVertexSelection(_ vertex: Vertex) {
-        guard case .vertex(let old) = player.position else {
+        guard case .vertex(let old) = player.position, old.id != vertex.id else {
             return
         }
         

@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct PlayerWrapperView: View {
-    private let durationMult: Double = 4
     
     @ObservedObject var player: PlayerViewModel
     
@@ -16,7 +15,7 @@ struct PlayerWrapperView: View {
         CenteredGeometryReader { geometry in
             if let position = player.position, !position.isAbscent {
                 PlayerView(player: player, superSize: geometry.size)
-                    .position(position, player: player, geometry: geometry, durationMult: durationMult)
+                    .position(position, player: player, geometry: geometry)
             }
         }
     }
@@ -34,8 +33,7 @@ struct PlayerWrapperView: View {
 fileprivate extension View {
     func position(_ position: PlayerPosition,
                   player: PlayerViewModel,
-                  geometry: GeometryProxy,
-                  durationMult: Double) -> some View {
+                  geometry: GeometryProxy) -> some View {
         var curve: BezierCurve = .zero
         var progress: CGFloat = 0
         var duration: TimeInterval = 0
@@ -47,7 +45,7 @@ fileprivate extension View {
             curve = edge.curve.scaled(geometry)
             if dir == .backward { curve = curve.reversed() }
             progress = progressForStatus(status)
-            duration = edge.length * durationMult
+            duration = AnimationService.shared.playerMovingDuration(edgeLength: edge.length)
         case .vertex(let vertex):
             let point = vertex.point.scaled(geometry)
             curve = BezierCurve.onePoint(point)

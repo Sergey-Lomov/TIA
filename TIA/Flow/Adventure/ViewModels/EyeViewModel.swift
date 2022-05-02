@@ -32,7 +32,7 @@ enum EyeStatus {
         switch self {
         case .state(let eyeState):
             return eyeState
-        case .transiotion(let from, let to):
+        case .transiotion(_, let to):
             return to
         }
     }

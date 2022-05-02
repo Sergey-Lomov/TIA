@@ -49,10 +49,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         // When player update position all owned resources should be notified
         let positionSubscribtion = player.$position.sink {
             [weak self] receiveValue in
-            guard let player = self?.player else { return }
-            self?.playerResources(player).forEach { resource in
-                resource.objectWillChange.send()
-            }
+            self?.handlePlayerPositionUpdate(receiveValue)
         }
         subscriptions.append(positionSubscribtion)
     }
@@ -97,6 +94,27 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     private func growEdge(_ edge: Edge) {
         let duration = Timing.edgeGrowing * edge.length
         edge.state = .growing(duration: duration)
+    }
+    
+    private func handlePlayerPositionUpdate(_ newValue: PlayerPosition) {
+        playerResources(player).forEach { resource in
+            resource.objectWillChange.send()
+        }
+        
+        switch newValue {
+        case .abscent, .vertex:
+            break
+        case .edge(let edge, let status, let direction):
+            switch status {
+            case .compressing:
+                unfreshPlayerResources(player)
+            case .moving:
+                let vertex = direction == .forward ? edge.to : edge.from
+                addPlayerResources(vertexResources(vertex))
+            case .expanding:
+                break
+            }
+        }
     }
     
     // MARK: View events handling
@@ -148,7 +166,6 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         
         let direction: EdgeMovingDirection = edge.from.id == old.id ? .forward : .backward
         player.position = .edge(edge: edge, status: .compressing, direction: direction)
-        addPlayerResources(vertexResources(vertex))
     }
     
     // MARK: Resources handling
@@ -161,7 +178,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     
     private func playerResources(_ player: Player) -> [Resource]  {
         resources.filter {
-            guard case .ownByPlayer(let resPlayer, _) = $0.state else { return false }
+            guard case .ownByPlayer(let resPlayer, _, _) = $0.state else { return false }
             return resPlayer.id == player.id
         }
     }
@@ -169,8 +186,15 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     private func addPlayerResources(_ resources: [Resource]) {
         var index = playerResources(player).count
         resources.forEach {
-            $0.state = .ownByPlayer(player: player, index: index)
+            $0.state = .ownByPlayer(player: player, index: index, isFresh: true)
             index += 1
+        }
+    }
+    
+    private func unfreshPlayerResources(_ player: Player) {
+        let resources = playerResources(player)
+        resources.enumerated().forEach { index, res in
+            res.state = .ownByPlayer(player: player, index: index, isFresh: false)
         }
     }
 }

@@ -83,6 +83,7 @@
 		67BDE961281833D5005B0194 /* LayoutConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BDE960281833D5005B0194 /* LayoutConstants.swift */; };
 		67E4DD412812DF9D00F05D87 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E4DD402812DF9D00F05D87 /* Player.swift */; };
 		67EDAC27281CA01F00EA41CF /* VertexSurroundingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EDAC26281CA01F00EA41CF /* VertexSurroundingService.swift */; };
+		67EDAC5F281F3E2200EA41CF /* AnimationsTmingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EDAC5E281F3E2200EA41CF /* AnimationsTmingService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -163,6 +164,7 @@
 		67BDE960281833D5005B0194 /* LayoutConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutConstants.swift; sourceTree = "<group>"; };
 		67E4DD402812DF9D00F05D87 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		67EDAC26281CA01F00EA41CF /* VertexSurroundingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexSurroundingService.swift; sourceTree = "<group>"; };
+		67EDAC5E281F3E2200EA41CF /* AnimationsTmingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationsTmingService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -365,6 +367,7 @@
 				67B5336127FFAA6200EA959A /* StorageService.swift */,
 				67B5336328007C1400EA959A /* ScenarioService.swift */,
 				67EDAC26281CA01F00EA41CF /* VertexSurroundingService.swift */,
+				67EDAC5E281F3E2200EA41CF /* AnimationsTmingService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -569,6 +572,7 @@
 				677C31252811C97A0014BECD /* AnimatableProxy.swift in Sources */,
 				67BDE95328171112005B0194 /* ResourceShape.swift in Sources */,
 				67B533962804EC6000EA959A /* Array.swift in Sources */,
+				67EDAC5F281F3E2200EA41CF /* AnimationsTmingService.swift in Sources */,
 				675E2749280B502900FB5783 /* AdventureDescriptor.swift in Sources */,
 				677C31232811C80E0014BECD /* AnimatableModifierWrapper.swift in Sources */,
 			);

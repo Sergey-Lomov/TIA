@@ -10,6 +10,8 @@ import Combine
 
 class PlayerViewModel: ObservableObject {
     var model: Player
+    
+    // TODO: Think about changing old data source solution to combine-like solution
     weak var viewModelsProvider: ViewModelsProvider?
     @Published var eye: EyeViewModel
     @Published var color: Color

@@ -11,6 +11,10 @@ import SwiftUI
 struct TIAApp: App {
     @ObservedObject var game = GameEngine.shared.state
     
+    @Namespace var wrapper: Namespace.ID
+    @State var testBool = false
+    let randomPoint = CGPoint.zero.randomPoint(maxDelta: 300)
+    
     var body: some Scene {
         WindowGroup {
             if let adventure = game.activeAdventure,
@@ -22,7 +26,7 @@ struct TIAApp: App {
                     resources: resources,
                     listener: GameEngine.shared.adventureEngine,
                     eventsSource: GameEngine.shared.adventureEngine)
-                
+
                 AdventureView(adventure: viewModel)
             } else {
                 MainMenuView(game: game)

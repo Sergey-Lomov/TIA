@@ -18,7 +18,7 @@ enum ResourceType: String, Codable {
 
 enum ResourceState {
     case inVertex(vertex: Vertex, index: Int, total: Int)
-    case ownByPlayer(player: Player, index: Int, isFresh: Bool) // "Fresh" means gathered at last turn
+    case ownByPlayer(player: Player, index: Int, total: Int, isFresh: Bool) // "Fresh" means gathered at last turn
 }
 
 class Resource: ObservableObject {

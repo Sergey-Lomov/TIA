@@ -14,8 +14,7 @@ struct ResourceWrapper: View {
     @Namespace var wrapper
     @ObservedObject var resource: ResourceViewModel
     @State var isIdle = false
-    @State var ra: Angle = .zero
-    @State var pp: CGFloat = .zero
+    @State var positionProgress: CGFloat = 0
     
     var body: some View {
         CenteredGeometryReader { geometry in
@@ -34,6 +33,12 @@ struct ResourceWrapper: View {
                         withAnimation {
                             isIdle = true
                         }
+                    }.onReceive(resource.objectWillChange) {
+                        if case .playerMoving = resource.metastate {
+                            positionProgress = 1
+                        } else {
+                            positionProgress = 0
+                        }
                     }
             }
         }
@@ -41,7 +46,7 @@ struct ResourceWrapper: View {
 
     private var isVisible: Bool {
         switch resource.state {
-        case .ownByPlayer(let player, _, _):
+        case .ownByPlayer(let player, _, _, _):
             return !player.position.isAbscent
         case .inVertex(let vertex, _, _):
             return vertex.state.isGrowed
@@ -49,11 +54,8 @@ struct ResourceWrapper: View {
     }
     
     private func positionCurve(_ geometry: GeometryProxy) -> BezierCurve {
-//    var positionCurve: BezierCurve {
         switch resource.metastate {
-        case .playerMoving(let edge, let direction, let index),
-                .playerCompressing(let edge, let direction, let index),
-                .playerExpanding(let edge, let direction, let index):
+        case .playerMoving(let edge, let direction, let index, _):
             let from = direction == .forward ? edge.from : edge.to
             let rawP1 = direction == .forward ? edge.curve.p1 : edge.curve.p2
             let rawP2 = direction == .forward ? edge.curve.p2 : edge.curve.p1
@@ -67,21 +69,11 @@ struct ResourceWrapper: View {
             let p2 = rawP2.scaled(geometry)
             
             return .init(points: [source, p1, p2, target])
-//            return direction == .forward ? edge.curve : edge.curve.reversed()
         default:
             return .zero
         }
     }
-    
-    var positionProgress: CGFloat {
-        switch resource.metastate {
-        case .playerMoving, .playerExpanding:
-            return 1
-        default:
-            return 0
-        }
-    }
-    
+
     private func size(_ geometry: GeometryProxy) -> CGSize {
         switch resource.state {
         case .ownByPlayer:
@@ -93,11 +85,9 @@ struct ResourceWrapper: View {
     
     private func vertexPosition(_ geometry: GeometryProxy) -> CGPoint {
         switch resource.metastate {
-        case .inVertex(let vertex, _, _),
-                .playerAtVertex(let vertex, _),
-                .freshGathered(let vertex, _):
+        case .inVertex(let vertex, _, _), .playerAtVertex(let vertex, _):
             return vertex.point.scaled(geometry)
-        case .playerAbscent, .playerMoving, .playerExpanding, .playerCompressing:
+        case .playerAbscent, .playerMoving:
             return .zero
         }
     }
@@ -106,10 +96,9 @@ struct ResourceWrapper: View {
         switch resource.metastate {
         case .inVertex(_, let index, let total):
             return inVertextResourcePosition(index: index, total: total).scaled(geometry)
-        case .playerAtVertex(let vertex, let index),
-                .freshGathered(let vertex, let index):
+        case .playerAtVertex(let vertex, let index):
             return resourceSlot(geometry: geometry, vertex: vertex, index: index)
-        case .playerAbscent, .playerMoving, .playerExpanding, .playerCompressing:
+        case .playerAbscent, .playerMoving:
             return .zero
         }
     }
@@ -142,24 +131,21 @@ struct ResourceWrapper: View {
     
     private var positionAnimation: Animation? {
         switch resource.metastate {
-        case .playerMoving(let edge, _, _),
-                .playerExpanding(let edge, _, _):
-            let duration = AnimationService.shared.playerMovingDuration(edgeLength: edge.length)
-            return .positioning(duration)
+        case .playerMoving(let edge, _, let index, let total):
+            return .positioning(edgeLength: edge.length, index: index, total: total)
         default:
             return nil
         }
     }
     
-    private var rotationAnimation: Animation {
+    private var rotationAnimation: Animation? {
         switch resource.state {
-        case .ownByPlayer(let player, _, _):
+        case .ownByPlayer(let player, _, _, _):
             switch player.position {
             case .abscent:
-                return .default
+                return nil
             case .edge(let edge, _, _):
-                let duration = AnimationService.shared.playerMovingDuration(edgeLength: edge.length)
-                return .vertexOut(duration)
+                return .vertexOut(edgeLength: edge.length)
             case .vertex:
                 return .soloRotation
             }
@@ -192,36 +178,22 @@ private extension Animation {
         linear(duration: 15).repeatForever(autoreverses: false)
     }
     
-    static func vertexOut(_ duration: TimeInterval) -> Animation {
-        easeOut(duration: duration)
+    static func vertexOut(edgeLength: CGFloat) -> Animation {
+        let duration = AnimationService.shared.playerMovingDuration(edgeLength: edgeLength)
+        return .easeOut(duration: duration)
     }
     
-    static func positioning(_ duration: TimeInterval) -> Animation {
-        easeInOut(duration: duration)
-    }
-}
-
-private extension PlayerPosition {
-    var resourcesVertex: Vertex? {
-        switch self {
-        case .abscent:
-            return nil
-        case .edge(let edge, _, let direction):
-            return direction == .forward ? edge.to : edge.from
-        case .vertex(let vertex):
-            return vertex
-        }
+    static func positioning(edgeLength: CGFloat, index: Int, total: Int) -> Animation {
+        let timing = AnimationService.shared.resourceMovingTiming(edgeLength: edgeLength, index: index, total: total)
+        return .easeInOut(duration: timing.duration).delay(timing.delay)
     }
 }
 
 // TODO: Check is this solution (flating two nested switch) really useful or not
 private enum ResourceMetastate {
     case inVertex(vertex: Vertex, index: Int, total: Int)
-    case freshGathered(vertex: Vertex, index: Int)
     case playerAtVertex(vertex: Vertex, index: Int)
-    case playerMoving(edge: Edge, direction: EdgeMovingDirection, index: Int)
-    case playerCompressing(edge: Edge, direction: EdgeMovingDirection, index: Int)
-    case playerExpanding(edge: Edge, direction: EdgeMovingDirection, index: Int)
+    case playerMoving(edge: Edge, direction: EdgeMovingDirection, index: Int, total: Int)
     case playerAbscent
 }
 
@@ -230,34 +202,28 @@ private extension ResourceViewModel {
         switch state {
         case .inVertex(let vertex, let index, let total):
             return .inVertex(vertex: vertex, index: index, total: total)
-        case .ownByPlayer(let player, let index, let isFresh):
-            if isFresh {
-                if let vertex = player.position.resourcesVertex {
-                    return .freshGathered(vertex: vertex, index: index)
-                } else {
-                    return .playerAbscent
+        case .ownByPlayer(let player, let index, let total, let isFresh):
+            switch player.position {
+            case .abscent:
+                return .playerAbscent
+            case .vertex(let vertex):
+                return .playerAtVertex(vertex: vertex, index: index)
+            case .edge(let edge, let status, let direction):
+                let from = direction == .forward ? edge.from : edge.to
+                let to = direction == .forward ? edge.to : edge.from
+                switch status {
+                case .compressing:
+                    return .playerAtVertex(vertex: from, index: index)
+                case .moving:
+                    if isFresh {
+                        return .playerAtVertex(vertex: to, index: index)
+                    } else {
+                        return .playerMoving(edge: edge, direction: direction, index: index, total: total)
+                    }
+                case .expanding:
+                    return .playerAtVertex(vertex: to, index: index)
                 }
-            } else {
-                return metastateFor(player.position, index: index)
             }
-        }
-    }
-    
-    private func metastateFor(_ position: PlayerPosition, index: Int) -> ResourceMetastate {
-        switch position {
-        case .vertex(let vertex):
-            return .playerAtVertex(vertex: vertex, index: index)
-        case .edge(let edge, let status, let direction):
-            switch status {
-            case .compressing:
-                return .playerCompressing(edge: edge, direction: direction, index: index)
-            case .moving:
-                return .playerMoving(edge: edge, direction: direction, index: index)
-            case .expanding:
-                return .playerExpanding(edge: edge, direction: direction, index: index)
-            }
-        case .abscent:
-            return .playerAbscent
         }
     }
 }

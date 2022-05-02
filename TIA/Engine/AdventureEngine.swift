@@ -178,15 +178,22 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     
     private func playerResources(_ player: Player) -> [Resource]  {
         resources.filter {
-            guard case .ownByPlayer(let resPlayer, _, _) = $0.state else { return false }
+            guard case .ownByPlayer(let resPlayer, _, _, _) = $0.state else { return false }
             return resPlayer.id == player.id
         }
     }
     
     private func addPlayerResources(_ resources: [Resource]) {
-        var index = playerResources(player).count
+        let oldResources = playerResources(player)
+        let total = oldResources.count + resources.count
+        oldResources.forEach {
+            guard case .ownByPlayer(_, let index, _, let isFresh) = $0.state else { return }
+            $0.state = .ownByPlayer(player: player, index: index, total: total, isFresh: isFresh)
+        }
+        
+        var index = oldResources.count
         resources.forEach {
-            $0.state = .ownByPlayer(player: player, index: index, isFresh: true)
+            $0.state = .ownByPlayer(player: player, index: index, total: total, isFresh: true)
             index += 1
         }
     }
@@ -194,8 +201,8 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     private func unfreshPlayerResources(_ player: Player) {
         let resources = playerResources(player)
         resources.forEach {
-            guard case .ownByPlayer(_, let index, _) = $0.state else { return }
-            $0.state = .ownByPlayer(player: player, index: index, isFresh: false)
+            guard case .ownByPlayer(_, let index, let total, _) = $0.state else { return }
+            $0.state = .ownByPlayer(player: player, index: index, total: total, isFresh: false)
         }
     }
 }

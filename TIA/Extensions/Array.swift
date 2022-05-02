@@ -29,6 +29,13 @@ extension Array {
         }
         return result
     }
+    
+    func allSatisfy(validator: (Element) -> Bool) -> Bool {
+        for element in self {
+            if !validator(element) { return false }
+        }
+        return true
+    }
 }
 
 extension Array where Element: Equatable & Hashable {

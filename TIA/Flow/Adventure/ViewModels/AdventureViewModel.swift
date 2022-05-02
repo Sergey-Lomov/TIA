@@ -102,7 +102,7 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
     
     private func resourcesFor(_ vertex: Vertex) -> [ResourceViewModel] {
         return resources.filter {
-            guard case .inVertex(let inVertex, _, _) = $0.state else {
+            guard case .vertex(let inVertex, _, _) = $0.state else {
                 return false
             }
             

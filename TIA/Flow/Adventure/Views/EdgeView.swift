@@ -15,11 +15,11 @@ struct EdgeWrapper: View {
             EdgePathView(edge: edge)
             
             if edge.model.state.isGrowed {
-                ForEach(edge.model.price.indices, id: \.self) { index in
-                    let type = edge.model.price[index]
-                    let position = gatePosition(geometry: geometry, index: index)
+                ForEach(edge.model.gates.indices, id: \.self) { index in
+                    let gate = edge.model.gates[index]
+                    let position = LayoutService.gatePosition(geometry, edge: edge.model, index: index)
                     
-                    EdgeGateView(edge: edge, type: type)
+                    EdgeGateView(gate: gate, backColor: edge.color, symbolColor: edge.borderColor)
                         .offset(point: position)
                         .transition(gateTransition(position: position, geometry: geometry))
                 }
@@ -27,15 +27,9 @@ struct EdgeWrapper: View {
         }
     }
     
-    func gatePosition(geometry: GeometryProxy, index: Int) -> CGPoint {
-        let curve = edge.curve.scaled(geometry)
-        let ratio = CGFloat(index + 1) / CGFloat(edge.model.price.count + 1)
-        return curve.getPoint(lengthRatio: ratio)
-    }
-    
     func gateTransition(position: CGPoint, geometry: GeometryProxy) -> AnyTransition {
         let anchor = position.toUnit(geometry: geometry)
-        return .scale(scale: 0, anchor: anchor).animation(.easeOut(duration: 2))
+        return .scale(scale: 0, anchor: anchor).animation(.easeOut(duration: 1))
     }
 }
 
@@ -93,21 +87,25 @@ struct EdgePathView: View {
 }
 
 struct EdgeGateView: View {
-    @ObservedObject var edge: EdgeViewModel
-    var type: ResourceType
+    @ObservedObject var gate: EdgeGate
+    var backColor: Color
+    var symbolColor: Color
     
     var body: some View {
         CenteredGeometryReader { geometry in
-            let circleSize = geometry.minSize * Layout.Edge.gateSize
-            let symbolSize = circleSize * Layout.Edge.gateSymbolSize
+            let circleSize = geometry.minSize * Layout.EdgeGate.sizeRatio
+            let symbolSize = circleSize * Layout.EdgeGate.symbolRatio
             
             CircleShape()
                 .frame(size: circleSize)
-                .foregroundColor(edge.color)
+                .foregroundColor(backColor)
             
-            ResourceShape(type: type)
-                .frame(size: symbolSize)
-                .foregroundColor(edge.borderColor)
+            switch gate.requirement {
+            case .resource(let type):
+                ResourceShape(type: type)
+                    .frame(size: symbolSize)
+                    .foregroundColor(symbolColor)
+            }
         }
     }
 }

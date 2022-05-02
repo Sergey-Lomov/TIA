@@ -30,7 +30,7 @@ class Edge: ObservableObject {
     let id: String
     let from: Vertex
     var to: Vertex
-    var price: [ResourceType]
+    var gates: [EdgeGate]
     var growOnStart: Bool
     @Published var state: EdgeState
     
@@ -50,11 +50,19 @@ class Edge: ObservableObject {
         self.id = id
         self.from = from
         self.to = to
-        self.price = price
         self.growOnStart = growOnStart
         self.state = state
         self.curve = curve
         self.seedCurve = curve.randomControlsCurve(maxDelta: seedCurveDelta)
+        self.gates = price.map { .init(requirement: .resource($0)) }
+//        self.gates = []
+//
+//        for resource in price {
+//            let ratio = CGFloat(gates.count + 1) / CGFloat(price.count)
+//            let point = curve.getPoint(lengthRatio: ratio, steps: 100)
+//            let gate = EdgeGate(point: point, requirement: .resource(resource))
+//            gates.append(gate)
+//        }
     }
 }
 

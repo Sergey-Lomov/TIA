@@ -19,8 +19,8 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     private enum Timing {
         // TODO: Remove when view-engine interaction will be finished
         static let queue = DispatchQueue.main
-        static let edgeGrowing: TimeInterval = 1.5 //* 0.1
-        static let vertexGrowing: TimeInterval = 0.3 //* 0.1
+        static let edgeGrowing: TimeInterval = 1.5 * 0.1
+        static let vertexGrowing: TimeInterval = 0.3 * 0.1
     }
     
     var subscriptions: [AnyCancellable] = []
@@ -40,7 +40,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
             let total = vertex.initialResources.count
             for index in 0..<total {
                 let type = vertex.initialResources[index]
-                let state = ResourceState.inVertex(vertex: vertex, index: index, total: total)
+                let state = ResourceState.vertex(vertex: vertex, index: index, total: total)
                 let resource = Resource(type: type, state: state)
                 self.resources.append(resource)
             }
@@ -112,7 +112,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
                 let vertex = direction == .forward ? edge.to : edge.from
                 addPlayerResources(vertexResources(vertex))
             case .expanding:
-                break
+                applyEstimated(playerResources(player))
             }
         }
     }
@@ -165,20 +165,44 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         }
         
         let direction: EdgeMovingDirection = edge.from.id == old.id ? .forward : .backward
+        tryMove(player: player, edge: edge, direction: direction)
+    }
+    
+    private func tryMove(player: Player, edge: Edge, direction: EdgeMovingDirection) {
+        let gates = direction == .forward ? edge.gates : edge.gates.reversed()
+        
+        for gate in gates {
+            switch gate.requirement {
+            case .resource(let type):
+                let res = playerResources(player).first { $0.type == type }
+                
+                guard let res = res else { break }
+                guard case .inventory(_, let index, _, _, _) = res.state else { break }
+                
+                gate.isOpen = true
+                let from = direction == .forward ? edge.from : edge.to
+                res.state = .gate(gate: gate, edge: edge, fromVertex: from, fromIndex: index)
+            }
+        }
+        
+        if !gates.isEmpty && gates.allSatisfy(validator: { $0.isOpen }) {
+            reindexPlayerResources(player)
+        }
+        
         player.position = .edge(edge: edge, status: .compressing, direction: direction)
     }
     
     // MARK: Resources handling
     private func vertexResources(_ vertex: Vertex) -> [Resource] {
         resources.filter {
-            guard case .inVertex(let resVertex, _, _) = $0.state else { return false }
+            guard case .vertex(let resVertex, _, _) = $0.state else { return false }
             return resVertex.id == vertex.id
         }
     }
     
     private func playerResources(_ player: Player) -> [Resource]  {
         resources.filter {
-            guard case .ownByPlayer(let resPlayer, _, _, _) = $0.state else { return false }
+            guard case .inventory(let resPlayer, _, _, _, _) = $0.state else { return false }
             return resPlayer.id == player.id
         }
     }
@@ -187,13 +211,13 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         let oldResources = playerResources(player)
         let total = oldResources.count + resources.count
         oldResources.forEach {
-            guard case .ownByPlayer(_, let index, _, let isFresh) = $0.state else { return }
-            $0.state = .ownByPlayer(player: player, index: index, total: total, isFresh: isFresh)
+            guard case .inventory(_, let index, let estimated, _, let isFresh) = $0.state else { return }
+            $0.state = .inventory(player: player, index: index, estimatedIndex: estimated ,total: total, isFresh: isFresh)
         }
         
         var index = oldResources.count
         resources.forEach {
-            $0.state = .ownByPlayer(player: player, index: index, total: total, isFresh: true)
+            $0.state = .inventory(player: player, index: index, estimatedIndex: index, total: total, isFresh: true)
             index += 1
         }
     }
@@ -201,8 +225,33 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     private func unfreshPlayerResources(_ player: Player) {
         let resources = playerResources(player)
         resources.forEach {
-            guard case .ownByPlayer(_, let index, let total, _) = $0.state else { return }
-            $0.state = .ownByPlayer(player: player, index: index, total: total, isFresh: false)
+            guard case .inventory(_, let index, let estimatedIndex, let total, _) = $0.state else { return }
+            $0.state = .inventory(player: player, index: index, estimatedIndex: estimatedIndex, total: total, isFresh: false)
+        }
+    }
+    
+    private func reindexPlayerResources(_ player: Player) {
+        let indexator: (Resource) -> Int = { resource in
+            guard case .inventory(_, let index, _, _, _) = resource.state else {
+                return -1
+            }
+            return index
+        }
+        
+        let ordered = playerResources(player).sorted { indexator($0) > indexator($1) }
+        let total = ordered.count
+        ordered.enumerated().forEach { newIndex, res in
+            guard case .inventory(_, let index, _, _, let isFresh) = res.state else {
+                return
+            }
+            res.state = .inventory(player: player, index: index, estimatedIndex: newIndex, total: total, isFresh: isFresh)
+        }
+    }
+    
+    private func applyEstimated(_ resources: [Resource]) {
+        resources.forEach {
+            guard case .inventory(let player, _, let estimatedIndex, let total, let isFresh) = $0.state else { return }
+            $0.state = .inventory(player: player, index: estimatedIndex, estimatedIndex: estimatedIndex, total: total, isFresh: isFresh)
         }
     }
 }

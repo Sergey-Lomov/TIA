@@ -50,7 +50,7 @@ private struct EyeSocketView: View {
     @Binding var eye: EyeViewModel
     
     var curve: ComplexCurve { ComplexCurve.eyelid(status: eye.status) }
-    var animation: Animation { Animation.forStatus(eye.status) }
+    var animation: Animation? { Animation.forStatus(eye.status) }
     
     var body: some View {
         ComplexCurveShape(curve: curve)
@@ -70,7 +70,7 @@ private struct EyelidView: View {
     @Binding var status: EyeStatus
     
     var curve: ComplexCurve { ComplexCurve.eyelid(status: status) }
-    var animation: Animation { Animation.forStatus(status) }
+    var animation: Animation? { Animation.forStatus(status) }
     
     var body: some View {
         ComplexCurveShape(curve: curve, close: true)
@@ -184,19 +184,13 @@ private extension ComplexCurve {
 }
 
 private extension Animation {
-    static var transitions: [EyeState: [EyeState: Animation]] = [
-        .closed: [.compressed: Animation.easeIn(duration: 0.5),
-                  .opened: Animation.easeOut(duration: 1)],
-        .compressed: [.closed: Animation.easeIn(duration: 0.5)],
-        .opened: [.closed: Animation.easeIn(duration: 1)],
-    ]
 
-    static func forStatus(_ status: EyeStatus) -> Animation {
+    static func forStatus(_ status: EyeStatus) -> Animation? {
         switch status {
         case .state:
             return .default
         case .transiotion(let from, let to):
-            return transitions[from]?[to] ?? .default
+            return AnimationService.shared.eyeTransAnimation(from: from, to: to)
         }
     }
 }

@@ -66,7 +66,7 @@ extension CGPoint {
     }
     
     func toUnit(geometry: GeometryProxy) -> UnitPoint {
-        return UnitPoint(x: (x / geometry.size.width) + 0.5, y: (y / geometry.size.width) + 0.5)
+        return UnitPoint(x: (x / geometry.size.width) + 0.5, y: (y / geometry.size.height) + 0.5)
     }
 }
 

@@ -83,8 +83,10 @@
 		67BDE961281833D5005B0194 /* LayoutConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BDE960281833D5005B0194 /* LayoutConstants.swift */; };
 		67E4DD412812DF9D00F05D87 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E4DD402812DF9D00F05D87 /* Player.swift */; };
 		67EDAC27281CA01F00EA41CF /* VertexSurroundingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EDAC26281CA01F00EA41CF /* VertexSurroundingService.swift */; };
-		67EDAC5F281F3E2200EA41CF /* AnimationsTmingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EDAC5E281F3E2200EA41CF /* AnimationsTmingService.swift */; };
+		67EDAC5F281F3E2200EA41CF /* AnimationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EDAC5E281F3E2200EA41CF /* AnimationService.swift */; };
 		67EDAC6128201BFF00EA41CF /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EDAC6028201BFF00EA41CF /* Math.swift */; };
+		67EDAC632820448200EA41CF /* EdgeGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EDAC622820448200EA41CF /* EdgeGate.swift */; };
+		67EDAC652820625500EA41CF /* LayoutService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EDAC642820625500EA41CF /* LayoutService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -165,8 +167,10 @@
 		67BDE960281833D5005B0194 /* LayoutConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutConstants.swift; sourceTree = "<group>"; };
 		67E4DD402812DF9D00F05D87 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		67EDAC26281CA01F00EA41CF /* VertexSurroundingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexSurroundingService.swift; sourceTree = "<group>"; };
-		67EDAC5E281F3E2200EA41CF /* AnimationsTmingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationsTmingService.swift; sourceTree = "<group>"; };
+		67EDAC5E281F3E2200EA41CF /* AnimationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationService.swift; sourceTree = "<group>"; };
 		67EDAC6028201BFF00EA41CF /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
+		67EDAC622820448200EA41CF /* EdgeGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeGate.swift; sourceTree = "<group>"; };
+		67EDAC642820625500EA41CF /* LayoutService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -356,6 +360,7 @@
 			children = (
 				67B5335827FF95AC00EA959A /* Vertex.swift */,
 				67B5335A27FFA1A700EA959A /* Edge.swift */,
+				67EDAC622820448200EA41CF /* EdgeGate.swift */,
 				67B5335C27FFA24000EA959A /* Adventure.swift */,
 				675E2748280B502900FB5783 /* AdventureDescriptor.swift */,
 				67B5335E27FFA48100EA959A /* Scenario.swift */,
@@ -369,8 +374,9 @@
 				67B5336127FFAA6200EA959A /* StorageService.swift */,
 				67B5336328007C1400EA959A /* ScenarioService.swift */,
 				67EDAC26281CA01F00EA41CF /* VertexSurroundingService.swift */,
-				67EDAC5E281F3E2200EA41CF /* AnimationsTmingService.swift */,
+				67EDAC5E281F3E2200EA41CF /* AnimationService.swift */,
 				67EDAC6028201BFF00EA41CF /* Math.swift */,
+				67EDAC642820625500EA41CF /* LayoutService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -550,6 +556,7 @@
 				67B5336428007C1400EA959A /* ScenarioService.swift in Sources */,
 				675E2750280C8C2F00FB5783 /* PointerWrapper.swift in Sources */,
 				675E276E280F39B500FB5783 /* CenteredGeometryReader.swift in Sources */,
+				67EDAC632820448200EA41CF /* EdgeGate.swift in Sources */,
 				6793A98727FCF50E002198E9 /* WorldPickerView.swift in Sources */,
 				67B5338B2804CC4500EA959A /* VertexView.swift in Sources */,
 				67B533812803868500EA959A /* BezierCurve.swift in Sources */,
@@ -576,7 +583,8 @@
 				677C31252811C97A0014BECD /* AnimatableProxy.swift in Sources */,
 				67BDE95328171112005B0194 /* ResourceShape.swift in Sources */,
 				67B533962804EC6000EA959A /* Array.swift in Sources */,
-				67EDAC5F281F3E2200EA41CF /* AnimationsTmingService.swift in Sources */,
+				67EDAC5F281F3E2200EA41CF /* AnimationService.swift in Sources */,
+				67EDAC652820625500EA41CF /* LayoutService.swift in Sources */,
 				675E2749280B502900FB5783 /* AdventureDescriptor.swift in Sources */,
 				677C31232811C80E0014BECD /* AnimatableModifierWrapper.swift in Sources */,
 			);

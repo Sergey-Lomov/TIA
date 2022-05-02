@@ -193,8 +193,9 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     
     private func unfreshPlayerResources(_ player: Player) {
         let resources = playerResources(player)
-        resources.enumerated().forEach { index, res in
-            res.state = .ownByPlayer(player: player, index: index, isFresh: false)
+        resources.forEach {
+            guard case .ownByPlayer(_, let index, _) = $0.state else { return }
+            $0.state = .ownByPlayer(player: player, index: index, isFresh: false)
         }
     }
 }

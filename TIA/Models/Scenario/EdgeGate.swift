@@ -12,7 +12,7 @@ enum EdgeGateRequirement {
     case resource(ResourceType)
 }
 
-class EdgeGate: ObservableObject {
+class EdgeGate: ObservableObject, IdEqutable {
     let id = UUID().uuidString
     let requirement: EdgeGateRequirement
     @Published var isOpen: Bool = false

@@ -31,7 +31,7 @@ enum VertexState {
     }
 }
 
-class Vertex: ObservableObject {
+class Vertex: ObservableObject, IdEqutable {
     var id: String
     var type: VertexType
     @Published var state: VertexState

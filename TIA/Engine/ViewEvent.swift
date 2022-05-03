@@ -23,4 +23,5 @@ enum ViewEvent {
     case edgeGrowingFinished(edge: Edge)
     case vertexGrowingFinished(vertex: Vertex)
     case vertexSelected(vertex: Vertex)
+    case resourceMovedToGate(gate: EdgeGate)
 }

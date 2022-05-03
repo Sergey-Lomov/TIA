@@ -16,14 +16,7 @@ final class AnimationService {
     
     private let playerMovingMult: CGFloat = 4
     private let resourceMovingPhase: CGFloat = 0.3
-    
-    static var transitions: [EyeState: [EyeState: Animation]] = [
-        .closed: [.compressed: Animation.easeIn(duration: 0.5),
-                  .opened: Animation.easeOut(duration: 1)],
-        .compressed: [.closed: Animation.easeIn(duration: 0.5)],
-        .opened: [.closed: Animation.easeIn(duration: 1)],
-    ]
-
+    private let gateResizeDuration: CGFloat = 0.5
     
     private let eyeTransDuration: [EyeState: [EyeState: TimeInterval]] = [
         .closed: [.compressed: 0.5, .opened: 1],
@@ -36,6 +29,9 @@ final class AnimationService {
         .compressed: [.closed: { .easeIn(duration: $0) }],
         .opened: [.closed:  { .easeIn(duration: $0) }],
     ]
+    
+    var openGate: Animation { .easeIn(duration: gateResizeDuration) }
+    var closeGate: Animation { .easeOut(duration: gateResizeDuration) }
     
     init() {}
     

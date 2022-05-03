@@ -61,22 +61,39 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
         if let source = eventsSource {
             subscribeTo(source.eventsPublisher)
         }
-        vertices.forEach { $0.eventsPublisher = eventsPublisher }
-        edges.forEach { $0.eventsPublisher = eventsPublisher }
+       
+        self.vertices.forEach { $0.eventsPublisher = eventsPublisher }
+        self.edges.forEach { $0.eventsPublisher = eventsPublisher }
+        self.resources.forEach { resource in
+            resource.eventsPublisher = eventsPublisher
+            self.subscriptions.sink(resource.model.$state) { [weak self] newState in
+                self?.resource(resource, willChangeState: newState)
+            }
+        }
         
         // Add notification about resource update, when related vertex's state update. This is necessary for valid handling resources visibility.
+        // TODO: Same things should be done in scope of Adventure Engine
         for vertex in vertices {
-            let subscription = vertex.model.$state.sink { _ in
+            subscriptions.sink(vertex.model.$state) {
                 let resources = self.resourcesFor(vertex.model)
                 for resource in resources {
                     resource.objectWillChange.send()
                 }
             }
-            subscriptions.append(subscription)
         }
         
         self.player.viewModelsProvider = self
     }
+    
+    private func resource(_ resource: ResourceViewModel, willChangeState state: ResourceState) {
+        switch state {
+        case .deletion:
+            resources.remove(resource)
+        default:
+            break
+        }
+    }
+    
     
     // TODO: Remove if still be unsused
     func subscribeTo(_ publisher: EngineEventsPublisher) {
@@ -100,6 +117,7 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
 //        player.position = to
 //    }
     
+    // TODO: This method may became unused after done another TODOs in this file
     private func resourcesFor(_ vertex: Vertex) -> [ResourceViewModel] {
         return resources.filter {
             guard case .vertex(let inVertex, _, _) = $0.state else {

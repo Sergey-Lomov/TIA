@@ -23,7 +23,7 @@ enum EdgeState {
     }
 }
 
-class Edge: ObservableObject {
+class Edge: ObservableObject, IdEqutable {
     private let curveLengthSteps: Int = 100
     private let seedCurveDelta: CGFloat = 0.1
     

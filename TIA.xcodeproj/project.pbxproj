@@ -87,6 +87,7 @@
 		67EDAC6128201BFF00EA41CF /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EDAC6028201BFF00EA41CF /* Math.swift */; };
 		67EDAC632820448200EA41CF /* EdgeGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EDAC622820448200EA41CF /* EdgeGate.swift */; };
 		67EDAC652820625500EA41CF /* LayoutService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EDAC642820625500EA41CF /* LayoutService.swift */; };
+		67EDAC6728214FD600EA41CF /* IdEqutable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EDAC6628214FD600EA41CF /* IdEqutable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -171,6 +172,7 @@
 		67EDAC6028201BFF00EA41CF /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
 		67EDAC622820448200EA41CF /* EdgeGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeGate.swift; sourceTree = "<group>"; };
 		67EDAC642820625500EA41CF /* LayoutService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutService.swift; sourceTree = "<group>"; };
+		67EDAC6628214FD600EA41CF /* IdEqutable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdEqutable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,6 +214,7 @@
 				675E2751280CE33100FB5783 /* HandleableAnimationData.swift */,
 				675E276F280F6F0400FB5783 /* ColorSchema.swift */,
 				67BDE960281833D5005B0194 /* LayoutConstants.swift */,
+				67EDAC6628214FD600EA41CF /* IdEqutable.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -558,6 +561,7 @@
 				675E276E280F39B500FB5783 /* CenteredGeometryReader.swift in Sources */,
 				67EDAC632820448200EA41CF /* EdgeGate.swift in Sources */,
 				6793A98727FCF50E002198E9 /* WorldPickerView.swift in Sources */,
+				67EDAC6728214FD600EA41CF /* IdEqutable.swift in Sources */,
 				67B5338B2804CC4500EA959A /* VertexView.swift in Sources */,
 				67B533812803868500EA959A /* BezierCurve.swift in Sources */,
 				67BDE95B281712BC005B0194 /* ResourcePath.swift in Sources */,

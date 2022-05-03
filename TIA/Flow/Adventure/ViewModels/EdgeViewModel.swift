@@ -10,13 +10,13 @@ import SwiftUI
 import Combine
 
 class EdgeViewModel: ObservableObject {
-    var eventsPublisher: ViewEventsPublisher?
     
     var model: Edge
     @Published var color: Color
     @Published var borderColor: Color
     
     private var subscriptions: [AnyCancellable] = []
+    var eventsPublisher: ViewEventsPublisher?
     
     var curve: BezierCurve {
         get { model.curve }
@@ -30,11 +30,9 @@ class EdgeViewModel: ObservableObject {
         self.color = color
         self.borderColor = borderColor
         
-        let subscription = model.objectWillChange.sink {
-            [weak self] _ in
+        subscriptions.sink(model.objectWillChange) { [weak self] in
             self?.objectWillChange.send()
         }
-        subscriptions.append(subscription)
     }
 }
 

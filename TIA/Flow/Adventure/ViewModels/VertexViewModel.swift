@@ -40,11 +40,9 @@ class VertexViewModel: ObservableObject {
         self.color = color
         self.resourceColor = resourceColor
         
-        let subscription = model.objectWillChange.sink {
-            [weak self] _ in
+        subscriptions.sink(model.objectWillChange) { [weak self] in
             self?.objectWillChange.send()
         }
-        subscriptions.append(subscription)
     }
 }
 

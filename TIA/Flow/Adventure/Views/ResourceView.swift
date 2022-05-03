@@ -20,13 +20,15 @@ struct ResourceWrapper: View {
         CenteredGeometryReader { geometry in
             if isVisible {
                 ResourceView(resource: resource)
-                    .frame(size: size(geometry))
-                    .bezierPositioning(curve: positionCurve(geometry), progress: positionProgress)
+                    .bezierPositioning(curve: positionCurve(geometry), progress: positionProgress) {
+                        handlePositioningFinish()
+                    }
                     .animation(positionAnimation, value: positionProgress)
+                    .frame(size: size(geometry))
+                    .animation(sizeAnimation, value: size(geometry))
                     .offset(point: resourcePosition(geometry))
                     .rotationEffect(vertextRotationAngle)
                     .offset(point: vertexPosition(geometry))
-                // TODO: Change constant rotation animation to different animation based on resource or vertex personality
                     .animation(rotationAnimation, value: vertextRotationAngle)
                     .transition(transition)
                     .onAppear {
@@ -45,21 +47,21 @@ struct ResourceWrapper: View {
     }
 
     private var isVisible: Bool {
-        switch resource.state {
-        case .inventory(let player, _, _, _, _):
-            return !player.position.isAbscent
+        switch resource.metastate {
+        case .abscent:
+            return false
         case .vertex(let vertex, _, _):
             return vertex.state.isGrowed
-        case .gate:
+        default:
             return true
         }
     }
     
     private func positionCurve(_ geometry: GeometryProxy) -> BezierCurve {
         switch resource.metastate {
-        case .playerMoving(let edge, let direction, let fromIndex, let toIndex, _):
+        case .moving(let edge, let direction, let fromIndex, let toIndex, _):
             return alongEdgeCurve(edge: edge, direction: direction, fromIndex: fromIndex, toIndex: toIndex, geometry: geometry)
-        case .inGate(let gate, let edge, let vertex, let index):
+        case .gate(let gate, let edge, let vertex, let index):
             return toGateCurve(gate: gate, edge: edge, fromVertex: vertex, fromIndex: index, geometry: geometry)
         default:
             return .zero
@@ -94,32 +96,35 @@ struct ResourceWrapper: View {
     }
 
     private func size(_ geometry: GeometryProxy) -> CGSize {
-        switch resource.state {
-        case .gate:
-            return CGSize(Layout.EdgeGate.sizeRatio * Layout.EdgeGate.symbolRatio).scaled(geometry.minSize)
-        case .inventory:
+        switch resource.metastate {
+        case .gate(let gate, _, _, _):
+            let fullSize = CGSize(Layout.EdgeGate.sizeRatio * Layout.EdgeGate.symbolRatio).scaled(geometry.minSize)
+            return gate.isOpen ? .zero : fullSize
+        case .inventoryAtVertex, .moving:
             return CGSize(Layout.Vertex.diameter * Layout.Resources.Player.sizeRatio).scaled(geometry.minSize)
         case .vertex:
             return CGSize(Layout.Vertex.diameter * Layout.Resources.Vertex.sizeRatio).scaled(geometry.minSize)
+        case .abscent:
+            return .zero
         }
     }
     
     private func vertexPosition(_ geometry: GeometryProxy) -> CGPoint {
         switch resource.metastate {
-        case .inVertex(let vertex, _, _), .playerAtVertex(let vertex, _):
+        case .vertex(let vertex, _, _), .inventoryAtVertex(let vertex, _):
             return vertex.point.scaled(geometry)
-        case .playerAbscent, .playerMoving, .inGate:
+        case .abscent, .moving, .gate:
             return .zero
         }
     }
     
     private func resourcePosition(_ geometry: GeometryProxy) -> CGPoint {
         switch resource.metastate {
-        case .inVertex(_, let index, let total):
+        case .vertex(_, let index, let total):
             return inVertextResourcePosition(index: index, total: total).scaled(geometry)
-        case .playerAtVertex(let vertex, let index):
+        case .inventoryAtVertex(let vertex, let index):
             return resourceSlot(geometry: geometry, vertex: vertex, index: index)
-        case .playerAbscent, .playerMoving, .inGate:
+        case .abscent, .moving, .gate:
             return .zero
         }
     }
@@ -142,19 +147,28 @@ struct ResourceWrapper: View {
     }
     
     private var vertextRotationAngle: Angle {
-        switch resource.state {
+        switch resource.metastate {
         case .vertex:
             return Angle(radians: isIdle ? .pi * 2 : 0.0)
-        case .inventory, .gate:
+        default:
             return Angle(radians: 0)
+        }
+    }
+    
+    private var sizeAnimation: Animation? {
+        switch resource.metastate {
+        case .gate(let gate, _, _, _):
+            return gate.isOpen ? AnimationService.shared.closeGate : AnimationService.shared.closeGate
+        default:
+            return nil
         }
     }
     
     private var positionAnimation: Animation? {
         switch resource.metastate {
-        case .playerMoving(let edge, _, _, let toIndex, let total):
+        case .moving(let edge, _, _, let toIndex, let total):
             return .positioning(edgeLength: edge.length, index: toIndex, total: total)
-        case .inGate:
+        case .gate:
             return .toGate
         default:
             return nil
@@ -174,8 +188,17 @@ struct ResourceWrapper: View {
             }
         case .vertex(_, _, let total):
             return total == 1 ? .soloRotation : .groupRotation
-        case .gate:
+        case .gate, .deletion:
             return nil
+        }
+    }
+    
+    private func handlePositioningFinish() {
+        switch resource.metastate {
+        case .gate:
+            resource.moveToGateFinished()
+        default:
+            break
         }
     }
 }
@@ -221,15 +244,15 @@ private extension Animation {
 
 // TODO: Check is this solution (flating two nested switch) really useful or not
 private enum ResourceMetastate {
-    case inVertex(vertex: Vertex, index: Int, total: Int)
-    case playerAtVertex(vertex: Vertex, index: Int)
-    case playerMoving(edge: Edge, direction: EdgeMovingDirection, fromIndex: Int, toIndex: Int, total: Int)
-    case playerAbscent
-    case inGate(gate: EdgeGate, edge: Edge, fromVertex: Vertex, fromIndex: Int)
+    case abscent
+    case vertex(vertex: Vertex, index: Int, total: Int)
+    case inventoryAtVertex(vertex: Vertex, index: Int)
+    case moving(edge: Edge, direction: EdgeMovingDirection, fromIndex: Int, toIndex: Int, total: Int)
+    case gate(gate: EdgeGate, edge: Edge, fromVertex: Vertex, fromIndex: Int)
     
     var positionAnimated: Bool {
         switch self {
-        case .inGate, .playerMoving:
+        case .gate, .moving:
             return true
         default:
             return false
@@ -241,29 +264,31 @@ private extension ResourceViewModel {
      var metastate: ResourceMetastate {
         switch state {
         case .vertex(let vertex, let index, let total):
-            return .inVertex(vertex: vertex, index: index, total: total)
+            return .vertex(vertex: vertex, index: index, total: total)
         case .gate(let gate, let edge, let fromVertex, let fromIndex):
-            return .inGate(gate: gate, edge: edge, fromVertex: fromVertex, fromIndex: fromIndex)
+            return .gate(gate: gate, edge: edge, fromVertex: fromVertex, fromIndex: fromIndex)
+        case .deletion:
+            return .abscent
         case .inventory(let player, let index, let estimated, let total, let isFresh):
             switch player.position {
             case .abscent:
-                return .playerAbscent
+                return .abscent
             case .vertex(let vertex):
-                return .playerAtVertex(vertex: vertex, index: index)
+                return .inventoryAtVertex(vertex: vertex, index: index)
             case .edge(let edge, let status, let direction):
                 let from = direction == .forward ? edge.from : edge.to
                 let to = direction == .forward ? edge.to : edge.from
                 switch status {
                 case .compressing:
-                    return .playerAtVertex(vertex: from, index: index)
+                    return .inventoryAtVertex(vertex: from, index: index)
                 case .moving:
                     if isFresh {
-                        return .playerAtVertex(vertex: to, index: index)
+                        return .inventoryAtVertex(vertex: to, index: index)
                     } else {
-                        return .playerMoving(edge: edge, direction: direction, fromIndex: index, toIndex: estimated, total: total)
+                        return .moving(edge: edge, direction: direction, fromIndex: index, toIndex: estimated, total: total)
                     }
                 case .expanding:
-                    return .playerAtVertex(vertex: to, index: index)
+                    return .inventoryAtVertex(vertex: to, index: index)
                 }
             }
         }

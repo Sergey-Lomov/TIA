@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
 extension Array {
     public subscript(index: Int, default defaultValue: @autoclosure () -> Element) -> Element {
@@ -44,18 +45,6 @@ extension Array where Element: Equatable & Hashable {
     }
 }
 
-extension Array where Element: Vertex {
-    func firstById(_ id: String) -> Element? {
-        return first { $0.id == id }
-    }
-}
-
-extension Array where Element: Edge {
-    func firstById(_ id: String) -> Element? {
-        return first { $0.id == id }
-    }
-}
-
 extension Array where Element: AdditiveArithmetic {
     
     public func merged(with: Array<Element>,
@@ -78,5 +67,29 @@ extension Array where Element: VectorArithmetic {
     public var magnitudeSquared: Double {
         let magnitudes = map{ $0.magnitudeSquared }
         return magnitudes.reduce(into: 0) { $0 = $0 + $1}
+    }
+}
+
+extension Array where Element == AnyCancellable {
+    mutating func sink<P: Publisher>(_ publisher: P, handler: @escaping (P.Output) -> Void) where P.Failure == Never {
+        let subscription = publisher.sink { handler($0) }
+        self.append(subscription)
+    }
+    
+    mutating func sink<P: Publisher>(_ publisher: P, handler: @escaping () -> Void) where P.Failure == Never {
+        let subscription = publisher.sink { _ in handler() }
+        self.append(subscription)
+    }
+}
+
+extension Array where Element: IdEqutable {
+    func firstById(_ id: String) -> Element? {
+        return first { $0.id == id }
+    }
+}
+
+extension Array where Element: Equatable {
+    mutating func remove(_ element: Element) {
+        self = filter { $0 != element }
     }
 }

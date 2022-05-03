@@ -28,30 +28,22 @@ class PlayerViewModel: ObservableObject {
         self.color = color
         self.eye = EyeViewModel()
         
-        let positionSub = model.$position.sink {
-            [weak self] position in
+        subscriptions.sink(model.$position) { [weak self] position in
             if case .abscent = self?.model.position { return }
             self?.handlePositionUpdate(position)
         }
-        subscriptions.append(positionSub)
         
-        let eyeStatusSub = eye.$status.sink {
-            [weak self] status in
+        subscriptions.sink(eye.$status) { [weak self] status in
             self?.handleEyeStatusUpdate(status)
         }
-        subscriptions.append(eyeStatusSub)
         
-        let modelUpdateSub = model.objectWillChange.sink {
-            [weak self] _ in
+        subscriptions.sink(model.objectWillChange) { [weak self] in
             self?.objectWillChange.send()
         }
-        subscriptions.append(modelUpdateSub)
         
-        let eyeUpdateSub = eye.objectWillChange.sink {
-            [weak self] _ in
+        subscriptions.sink(eye.objectWillChange) { [weak self] in
             self?.objectWillChange.send()
         }
-        subscriptions.append(eyeUpdateSub)
     }
     
     func currentEdgeColor() -> Color {

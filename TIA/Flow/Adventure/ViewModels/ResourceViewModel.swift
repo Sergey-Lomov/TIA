@@ -9,13 +9,15 @@ import Foundation
 import SwiftUI
 import Combine
 
-class ResourceViewModel: ObservableObject {
+class ResourceViewModel: ObservableObject, IdEqutable {
     
+    var id: String { model.id }
     var model: Resource
     @Published var color: Color
     @Published var borderColor: Color
     
     private var subscriptions: [AnyCancellable] = []
+    var eventsPublisher: ViewEventsPublisher?
     
     var type: ResourceType {
         get { model.type }
@@ -27,17 +29,22 @@ class ResourceViewModel: ObservableObject {
         set { model.state = newValue }
     }
     
-    init(model: Resource,
-         color: Color,
-         borderColor: Color) {
+    init(model: Resource, color: Color, borderColor: Color) {
         self.model = model
         self.color = color
         self.borderColor = borderColor
         
-        let subscription = model.objectWillChange.sink {
-            [weak self] _ in
+        subscriptions.sink(model.objectWillChange) { [weak self] in
             self?.objectWillChange.send()
         }
-        subscriptions.append(subscription)
     }
 }
+
+// MARK: View interaction methods
+extension ResourceViewModel {
+    func moveToGateFinished() {
+        guard case .gate(let gate, _, _, _) = model.state else { return }
+        eventsPublisher?.send(.resourceMovedToGate(gate: gate))
+    }
+}
+

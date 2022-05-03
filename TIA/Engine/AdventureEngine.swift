@@ -46,20 +46,23 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
             }
         }
         
-        // When player update position all owned resources should be notified
-        let positionSubscribtion = player.$position.sink {
-            [weak self] receiveValue in
-            self?.handlePlayerPositionUpdate(receiveValue)
+        subscriptions.sink(player.$position) { [weak self] in
+            self?.handlePlayerPositionUpdate($0)
         }
-        subscriptions.append(positionSubscribtion)
+        
+        let gates = adventure.edges.flatMap { $0.gates }
+        for gate in gates {
+            subscriptions.sink(gate.$isOpen) { [weak self] in
+                self?.handleGateStatusUpdate(gate)
+            }
+        }
     }
     
     func subscribeTo(_ publisher: ViewEventsPublisher) {
-        let subscription = publisher.sink {
+        subscriptions.sink(publisher) {
             [weak self] event in
             self?.handleViewEvent(event)
         }
-        subscriptions.append(subscription)
     }
     
     private func growFromEntrace() {
@@ -113,6 +116,21 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
                 addPlayerResources(vertexResources(vertex))
             case .expanding:
                 applyEstimated(playerResources(player))
+                recloseGates(edge: edge)
+            }
+        }
+    }
+    
+    private func handleGateStatusUpdate(_ gate: EdgeGate) {
+        gateResources(gate).forEach { $0.objectWillChange.send() }
+    }
+    
+    private func recloseGates(edge: Edge) {
+        let wipeResources = edge.gates.allSatisfy { $0.isOpen }
+        for gate in edge.gates {
+            gate.isOpen = false
+            if wipeResources {
+                removeResources(gateResources(gate))
             }
         }
     }
@@ -133,6 +151,8 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
             checkInitGrowingCompletion()
         case .vertexSelected(let vertex):
             handleVertexSelection(vertex)
+        case .resourceMovedToGate(let gate):
+            gate.isOpen = true
         }
     }
     
@@ -171,6 +191,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     private func tryMove(player: Player, edge: Edge, direction: EdgeMovingDirection) {
         let gates = direction == .forward ? edge.gates : edge.gates.reversed()
         
+        var passedGates = 0
         for gate in gates {
             switch gate.requirement {
             case .resource(let type):
@@ -179,13 +200,13 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
                 guard let res = res else { break }
                 guard case .inventory(_, let index, _, _, _) = res.state else { break }
                 
-                gate.isOpen = true
+                passedGates += 1
                 let from = direction == .forward ? edge.from : edge.to
                 res.state = .gate(gate: gate, edge: edge, fromVertex: from, fromIndex: index)
             }
         }
         
-        if !gates.isEmpty && gates.allSatisfy(validator: { $0.isOpen }) {
+        if !gates.isEmpty && gates.count == passedGates {
             reindexPlayerResources(player)
         }
         
@@ -204,6 +225,13 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         resources.filter {
             guard case .inventory(let resPlayer, _, _, _, _) = $0.state else { return false }
             return resPlayer.id == player.id
+        }
+    }
+    
+    private func gateResources(_ gate: EdgeGate) -> [Resource] {
+        resources.filter {
+            guard case .gate(let resGate, _, _, _) = $0.state else { return false }
+            return resGate.id == gate.id
         }
     }
     
@@ -253,5 +281,10 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
             guard case .inventory(let player, _, let estimatedIndex, let total, let isFresh) = $0.state else { return }
             $0.state = .inventory(player: player, index: estimatedIndex, estimatedIndex: estimatedIndex, total: total, isFresh: isFresh)
         }
+    }
+    
+    private func removeResources(_ resources: [Resource]) {
+        resources.forEach { $0.state = .deletion }
+        self.resources.removeAllDeletion()
     }
 }

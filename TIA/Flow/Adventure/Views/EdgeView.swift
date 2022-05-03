@@ -93,20 +93,31 @@ struct EdgeGateView: View {
     
     var body: some View {
         CenteredGeometryReader { geometry in
-            let circleSize = geometry.minSize * Layout.EdgeGate.sizeRatio
-            let symbolSize = circleSize * Layout.EdgeGate.symbolRatio
-            
             CircleShape()
-                .frame(size: circleSize)
+                .frame(size: circleSize(geometry))
+                .animation(sizeAnimation, value: circleSize(geometry))
                 .foregroundColor(backColor)
             
             switch gate.requirement {
             case .resource(let type):
                 ResourceShape(type: type)
-                    .frame(size: symbolSize)
+                    .frame(size: symbolSize(geometry))
+                    .animation(sizeAnimation, value: symbolSize(geometry))
                     .foregroundColor(symbolColor)
             }
         }
+    }
+    
+    func circleSize(_ geometry: GeometryProxy) -> CGFloat {
+        return gate.isOpen ? 0 : geometry.minSize * Layout.EdgeGate.sizeRatio
+    }
+    
+    func symbolSize(_ geometry: GeometryProxy) -> CGFloat {
+        return circleSize(geometry) * Layout.EdgeGate.symbolRatio
+    }
+    
+    private var sizeAnimation: Animation? {
+        return gate.isOpen ? AnimationService.shared.closeGate : AnimationService.shared.closeGate
     }
 }
 

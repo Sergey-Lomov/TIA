@@ -112,7 +112,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
             case .compressing:
                 unfreshPlayerResources(player)
             case .moving:
-                let vertex = direction == .forward ? edge.to : edge.from
+                let vertex = direction.endVertex(edge)
                 addPlayerResources(vertexResources(vertex))
             case .expanding:
                 applyEstimated(playerResources(player))
@@ -184,54 +184,65 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
             return
         }
         
-        let direction: EdgeMovingDirection = edge.from.id == old.id ? .forward : .backward
-        tryMove(player: player, edge: edge, direction: direction)
+        tryMove(player: player, edge: edge, forward: edge.from == old)
     }
     
-    private func tryMove(player: Player, edge: Edge, direction: EdgeMovingDirection) {
-        let gates = direction == .forward ? edge.gates : edge.gates.reversed()
+    private func tryMove(player: Player, edge: Edge, forward: Bool) {
+        let count = edge.gates.count
+        let range = forward ? Array(0..<count) : (0..<count).reversed()
+        let fromVertex = forward ? edge.from : edge.to
         
-        var passedGates = 0
-        for gate in gates {
+        var failIndex: Int? = nil
+        for i in range {
+            let gate = edge.gates[i]
+            
             switch gate.requirement {
             case .resource(let type):
                 let res = playerResources(player).first { $0.type == type }
-                
-                guard let res = res else { break }
+                guard let res = res else {
+                    failIndex = i
+                    break
+                }
                 guard case .inventory(_, let index, _, _, _) = res.state else { break }
                 
-                passedGates += 1
-                let from = direction == .forward ? edge.from : edge.to
-                res.state = .gate(gate: gate, edge: edge, fromVertex: from, fromIndex: index)
+                res.state = .gate(gate: gate, edge: edge, fromVertex: fromVertex, fromIndex: index)
+            }
+            
+            if failIndex ~= nil { break }
+        }
+        
+        if let failIndex = failIndex {
+            let direction: EdgeMovingDirection = forward ? .forwardFail(gateIndex: failIndex, moveToGate: true) : .backwardFail(gateIndex: failIndex, moveToGate: true)
+            player.position = .edge(edge: edge, status: .compressing, direction: direction)
+        } else {
+            let direction: EdgeMovingDirection = forward ? .forward : .backward
+            player.position = .edge(edge: edge, status: .compressing, direction: direction)
+            
+            if !edge.gates.isEmpty {
+                reindexPlayerResources(player)
             }
         }
-        
-        if !gates.isEmpty && gates.count == passedGates {
-            reindexPlayerResources(player)
-        }
-        
-        player.position = .edge(edge: edge, status: .compressing, direction: direction)
     }
     
     // MARK: Resources handling
     private func vertexResources(_ vertex: Vertex) -> [Resource] {
         resources.filter {
             guard case .vertex(let resVertex, _, _) = $0.state else { return false }
-            return resVertex.id == vertex.id
+            return resVertex == vertex
         }
     }
     
     private func playerResources(_ player: Player) -> [Resource]  {
         resources.filter {
             guard case .inventory(let resPlayer, _, _, _, _) = $0.state else { return false }
-            return resPlayer.id == player.id
+            return resPlayer == player
         }
     }
     
     private func gateResources(_ gate: EdgeGate) -> [Resource] {
         resources.filter {
             guard case .gate(let resGate, _, _, _) = $0.state else { return false }
-            return resGate.id == gate.id
+            return resGate == gate
         }
     }
     

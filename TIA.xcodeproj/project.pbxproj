@@ -52,6 +52,7 @@
 		6793A98527FCF4FD002198E9 /* MainMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6793A98427FCF4FD002198E9 /* MainMenuView.swift */; };
 		6793A98727FCF50E002198E9 /* WorldPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6793A98627FCF50E002198E9 /* WorldPickerView.swift */; };
 		6793A98B27FD1936002198E9 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6793A98A27FD1936002198E9 /* Colors.swift */; };
+		67A3DD5A2821DD2F00B5A88F /* PlayerMetastate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67A3DD592821DD2F00B5A88F /* PlayerMetastate.swift */; };
 		67B5334D27FF8A5000EA959A /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5334C27FF8A5000EA959A /* Resource.swift */; };
 		67B5335927FF95AC00EA959A /* Vertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5335827FF95AC00EA959A /* Vertex.swift */; };
 		67B5335B27FFA1A700EA959A /* Edge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5335A27FFA1A700EA959A /* Edge.swift */; };
@@ -137,6 +138,7 @@
 		6793A98427FCF4FD002198E9 /* MainMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuView.swift; sourceTree = "<group>"; };
 		6793A98627FCF50E002198E9 /* WorldPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldPickerView.swift; sourceTree = "<group>"; };
 		6793A98A27FD1936002198E9 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		67A3DD592821DD2F00B5A88F /* PlayerMetastate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerMetastate.swift; sourceTree = "<group>"; };
 		67B5334C27FF8A5000EA959A /* Resource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resource.swift; sourceTree = "<group>"; };
 		67B5335827FF95AC00EA959A /* Vertex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vertex.swift; sourceTree = "<group>"; };
 		67B5335A27FFA1A700EA959A /* Edge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Edge.swift; sourceTree = "<group>"; };
@@ -354,6 +356,7 @@
 				67B533972804ED6D00EA959A /* TIAPrototypingError.swift */,
 				675E273F280A1E7100FB5783 /* Line.swift */,
 				67E4DD402812DF9D00F05D87 /* Player.swift */,
+				67A3DD592821DD2F00B5A88F /* PlayerMetastate.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -554,6 +557,7 @@
 				675E275B280DDC4F00FB5783 /* ComplexCurveShape.swift in Sources */,
 				67BDE95F2817E879005B0194 /* ResourceViewModel.swift in Sources */,
 				675E2755280DA0E600FB5783 /* EyeView.swift in Sources */,
+				67A3DD5A2821DD2F00B5A88F /* PlayerMetastate.swift in Sources */,
 				67B5335927FF95AC00EA959A /* Vertex.swift in Sources */,
 				675E2760280E2FC500FB5783 /* EngineEvent.swift in Sources */,
 				67B5336428007C1400EA959A /* ScenarioService.swift in Sources */,

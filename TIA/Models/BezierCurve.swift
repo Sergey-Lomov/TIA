@@ -112,7 +112,7 @@ struct BezierCurve: Equatable {
         return CGPoint(x: getX(t: t), y: getY(t: t))
     }
     
-    func getPoint(lengthRatio: CGFloat, steps: Int = legthRatioLimit) -> CGPoint {
+    func getT(lengthRatio: CGFloat, steps: Int = legthRatioLimit) -> CGFloat {
         let total = length(stepsCount: steps)
         let required = total * lengthRatio
         
@@ -128,7 +128,7 @@ struct BezierCurve: Equatable {
             if newLenght > required {
                 let oldAccuracy = abs(current - required)
                 let newAccuracy = abs(newLenght - required)
-                return oldAccuracy < newAccuracy ? point : newPoint
+                return oldAccuracy < newAccuracy ? t : newT
             }
             
             point = newPoint
@@ -136,7 +136,7 @@ struct BezierCurve: Equatable {
             current = newLenght
         }
         
-        return point
+        return t
     }
     
     func intersectionWith(center: CGPoint, radius: CGFloat, accuracy: CGFloat, limit: Int = Self.intersectionLimit) -> CGPoint {

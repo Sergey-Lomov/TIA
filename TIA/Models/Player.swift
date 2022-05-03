@@ -18,6 +18,31 @@ enum EdgeMovingStatus {
 enum EdgeMovingDirection {
     case forward
     case backward
+    case forwardFail(gateIndex: Int, moveToGate: Bool)
+    case backwardFail(gateIndex: Int, moveToGate: Bool)
+    
+    var isForward: Bool {
+        switch self {
+        case .forward, .forwardFail:
+            return true
+        case .backward, .backwardFail:
+            return false
+        }
+    }
+    
+    func startVertex(_ edge: Edge) -> Vertex {
+        switch self {
+        case .forward, .forwardFail: return edge.from
+        case .backward, .backwardFail: return edge.to
+        }
+    }
+    
+    func endVertex(_ edge: Edge) -> Vertex {
+        switch self {
+        case .forward, .backwardFail: return edge.to
+        case .backward, .forwardFail: return edge.from
+        }
+    }
 }
 
 enum PlayerPosition {
@@ -48,9 +73,10 @@ enum PlayerPosition {
     }
 }
 
-class Player: ObservableObject {
-    @Published var position: PlayerPosition
+class Player: ObservableObject, IdEqutable {
+    
     var id = UUID().uuidString
+    @Published var position: PlayerPosition
     
     init(position: PlayerPosition) {
         self.position = position
@@ -65,22 +91,42 @@ class Player: ObservableObject {
     }
     
     func movingFinished() {
-        guard case .edge(let edge, let status, let dir) = position, status == .moving else {
+        guard case .edge(let edge, let status, let direction) = position, status == .moving else {
             return
         }
         
-        position = .edge(edge: edge, status: .expanding, direction: dir)
+        switch direction {
+        case .forward, .backward:
+            position = .edge(edge: edge, status: .expanding, direction: direction)
+        case .forwardFail(_, let moveToGate),
+                .backwardFail(_, let moveToGate):
+            if moveToGate {
+                position = .edge(edge: edge, status: .moving, direction: invertFail(direction))
+            } else {
+                position = .edge(edge: edge, status: .expanding, direction: direction)
+            }
+        }
+    }
+    
+    private func invertFail(_ direction: EdgeMovingDirection) -> EdgeMovingDirection {
+        switch direction {
+        case .forward:
+            return .backward
+        case .backward:
+            return .forward
+        case .forwardFail(let gateIndex, let moveToGate):
+            return .forwardFail(gateIndex: gateIndex, moveToGate: !moveToGate)
+        case .backwardFail(let gateIndex, let moveToGate):
+            return .backwardFail(gateIndex: gateIndex, moveToGate: !moveToGate)
+        }
     }
     
     func expandingFinished() {
-        guard case .edge(let edge, let status, let dir) = position, status == .expanding else {
+        guard case .edge(let edge, let status, let direction) = position, status == .expanding else {
             return
         }
         
-        if dir == .forward {
-            position = .vertex(vertex: edge.to)
-        } else {
-            position = .vertex(vertex: edge.from)
-        }
+        let vertex = direction.endVertex(edge)
+        position = .vertex(vertex: vertex)
     }
 }

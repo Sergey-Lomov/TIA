@@ -66,11 +66,7 @@ class Edge: ObservableObject, IdEqutable {
     }
 }
 
-extension Edge: Equatable, Hashable {
-    
-    static func == (lhs: Edge, rhs: Edge) -> Bool {
-        return lhs.id == rhs.id
-    }
+extension Edge: Hashable {
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)

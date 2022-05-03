@@ -10,63 +10,72 @@ import SwiftUI
 struct PlayerWrapperView: View {
     
     @ObservedObject var player: PlayerViewModel
+    @State var positionProgress: CGFloat = 0
     
     var body: some View {
         CenteredGeometryReader { geometry in
-            if let position = player.position, !position.isAbscent {
+            if isVisible {
                 PlayerView(player: player, superSize: geometry.size)
-                    .position(position, player: player, geometry: geometry)
+                    .bezierPositioning(curve: curve(geometry), progress: positionProgress) {
+                        player.model.movingFinished()
+                    }
+                    .animation(positionAnimation, value: positionProgress)
+                    .onReceive(player.objectWillChange) {
+                        positionProgress = positionProgress(geometry)
+                    }
             }
         }
     }
     
-    func maskToCurrentEdgeVertices(player: PlayerViewModel) -> some View {
-        CenteredGeometryReader {
-            ForEach(player.currentEdgeVertices(), id: \.model.id) {
-                viewModel in
-                VertexWrapper(vertex: viewModel)
-            }
+    private var isVisible: Bool {
+        switch player.model.metastate {
+        case .abscent:
+            return false
+        default:
+            return true
+        }
+    }
+    
+    private func positionProgress(_ geometry: GeometryProxy) -> CGFloat {
+        switch player.model.metastate {
+        case .moving:
+            return 1
+        case .movingToGate(let edge, let index, let forward):
+            let progress = LayoutService.gateProgress(geometry, edge: edge, index: index)
+            return forward ? progress : 1 - progress
+        default:
+            return 0
+        }
+    }
+
+    private func curve(_ geometry: GeometryProxy) -> BezierCurve {
+        switch player.model.metastate {
+        case .abscent:
+            return .zero
+        case .moving(let edge, let forward),
+                .movingToGate(let edge, _, let forward),
+                .movingFromGate(let edge, _, let forward):
+            let scaled = edge.curve.scaled(geometry)
+            return forward ? scaled : scaled.reversed()
+        case .vertex(let vertex),
+                .compressing(let vertex),
+                .expanding(let vertex):
+            let point = vertex.point.scaled(geometry)
+            return .onePoint(point)
+        }
+    }
+    
+    private var positionAnimation: Animation? {
+        switch player.position {
+        case .abscent, .vertex:
+            return nil
+        case .edge(let edge, _, _):
+            return .positioning(length: edge.length)
         }
     }
 }
 
 fileprivate extension View {
-    func position(_ position: PlayerPosition,
-                  player: PlayerViewModel,
-                  geometry: GeometryProxy) -> some View {
-        var curve: BezierCurve = .zero
-        var progress: CGFloat = 0
-        var duration: TimeInterval = 0
-        
-        switch position {
-        case .abscent:
-            break
-        case .edge(let edge, let status, let dir):
-            curve = edge.curve.scaled(geometry)
-            if dir == .backward { curve = curve.reversed() }
-            progress = progressForStatus(status)
-            duration = AnimationService.shared.playerMovingDuration(edgeLength: edge.length)
-        case .vertex(let vertex):
-            let point = vertex.point.scaled(geometry)
-            curve = BezierCurve.onePoint(point)
-        }
-
-        return bezierPositioning(curve: curve, progress: progress) {
-            player.model.movingFinished()
-        }.animation(.linear(duration: duration), value: progress)
-    }
-    
-    private func progressForStatus(_ status: EdgeMovingStatus) -> CGFloat {
-        switch status {
-        case .compressing:
-            return 0
-        case .moving:
-            return 1
-        case .expanding:
-            return 1
-        }
-    }
-    
     func maskToCurrentEdgeVertices(player: PlayerViewModel, size: CGSize) -> some View {
         invertedMask(size: size,
             ZStack {
@@ -101,5 +110,12 @@ struct PlayerView: View {
     
     var edgeBlobColor: Color {
         return player.currentEdgeColor()
+    }
+}
+
+private extension Animation {
+    static func positioning(length: CGFloat) -> Animation {
+        let duration = AnimationService.shared.playerMovingDuration(edgeLength: length)
+        return .linear(duration: duration)
     }
 }

@@ -124,18 +124,18 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
                 return false
             }
             
-            return inVertex.id == vertex.id
+            return inVertex == vertex
         }
     }
 }
 
 extension AdventureViewModel: ViewModelsProvider {
     func edgeViewModel(for edge: Edge) -> EdgeViewModel? {
-        return edges.first { $0.model.id == edge.id }
+        return edges.first { $0.model == edge }
     }
     
     func vertexViewModel(for vertex: Vertex) -> VertexViewModel? {
-        return vertices.first { $0.model.id == vertex.id }
+        return vertices.first { $0.model == vertex }
     }
 }
 

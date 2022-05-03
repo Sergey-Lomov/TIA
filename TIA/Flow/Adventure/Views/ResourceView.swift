@@ -70,10 +70,10 @@ struct ResourceWrapper: View {
     
     private func alongEdgeCurve(edge: Edge, direction: EdgeMovingDirection, fromIndex: Int, toIndex: Int, geometry: GeometryProxy) -> BezierCurve {
         
-        let from = direction == .forward ? edge.from : edge.to
-        let rawP1 = direction == .forward ? edge.curve.p1 : edge.curve.p2
-        let rawP2 = direction == .forward ? edge.curve.p2 : edge.curve.p1
-        let to = direction == .forward ? edge.to : edge.from
+        let from = direction.startVertex(edge)
+        let rawP1 = direction.isForward ? edge.curve.p1 : edge.curve.p2
+        let rawP2 = direction.isForward ? edge.curve.p2 : edge.curve.p1
+        let to = direction.endVertex(edge)
 
         var source = resourceSlot(geometry: geometry, vertex: from, index: fromIndex)
         source = source.translated(by: from.point.scaled(geometry))
@@ -276,8 +276,8 @@ private extension ResourceViewModel {
             case .vertex(let vertex):
                 return .inventoryAtVertex(vertex: vertex, index: index)
             case .edge(let edge, let status, let direction):
-                let from = direction == .forward ? edge.from : edge.to
-                let to = direction == .forward ? edge.to : edge.from
+                let from = direction.startVertex(edge)
+                let to = direction.endVertex(edge)
                 switch status {
                 case .compressing:
                     return .inventoryAtVertex(vertex: from, index: index)

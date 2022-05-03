@@ -12,12 +12,14 @@ struct BezierPositioning: AnimatableModifier  {
     let curve: BezierCurve
     let onFinish: (() -> Void)?
     var progress: CGFloat
+    var targetProgress: CGFloat
     var point: CGPoint
     
-    init(curve: BezierCurve, onFinish: (() -> Void)?, progress: CGFloat) {
+    init(curve: BezierCurve, onFinish: (() -> Void)?, progress: CGFloat, targetProgress: CGFloat = 1) {
         self.curve = curve
         self.onFinish = onFinish
         self.progress = progress
+        self.targetProgress = targetProgress
         
         point = CGPoint(x: curve.getX(t: progress), y: curve.getY(t: progress))
     }
@@ -27,7 +29,7 @@ struct BezierPositioning: AnimatableModifier  {
         set {
             progress = newValue
             point = CGPoint(x: curve.getX(t: progress), y: curve.getY(t: progress))
-            if progress == 1 {
+            if progress == targetProgress {
                 onFinish?()
             }
         }

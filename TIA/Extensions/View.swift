@@ -40,8 +40,9 @@ extension View {
     
     func bezierPositioning(curve: BezierCurve,
                            progress: CGFloat = 0,
+                           targetProgress: CGFloat = 1,
                            onFinish: (() -> Void)? = nil ) -> some View {
-        modifier(BezierPositioning(curve: curve, onFinish: onFinish, progress: progress))
+        modifier(BezierPositioning(curve: curve, onFinish: onFinish, progress: progress, targetProgress: targetProgress))
     }
     
     func bezierPositioning(step: Int, curves: [BezierCurve]) -> some View {

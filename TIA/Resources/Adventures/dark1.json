@@ -89,7 +89,7 @@
             "from": "v3",
             "to": "v5",
             "grow_on_start": true,
-            "price": ["despair"]
+            "price": ["yearning", "despair"]
         },
         {
             "id": "e9",

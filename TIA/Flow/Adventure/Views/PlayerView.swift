@@ -16,7 +16,7 @@ struct PlayerWrapperView: View {
         CenteredGeometryReader { geometry in
             if isVisible {
                 PlayerView(player: player, superSize: geometry.size)
-                    .bezierPositioning(curve: curve(geometry), progress: positionProgress) {
+                    .bezierPositioning(curve: curve(geometry), progress: positionProgress, targetProgress: positionProgress(geometry)) {
                         player.model.movingFinished()
                     }
                     .animation(positionAnimation, value: positionProgress)
@@ -66,11 +66,16 @@ struct PlayerWrapperView: View {
     }
     
     private var positionAnimation: Animation? {
-        switch player.position {
-        case .abscent, .vertex:
+        switch player.model.metastate {
+        case .abscent, .vertex, .compressing, .expanding:
             return nil
-        case .edge(let edge, _, _):
+        case .moving(let edge, _):
             return .positioning(length: edge.length)
+        case .movingToGate(let edge, let index, let forward),
+                .movingFromGate(let edge, let index, let forward):
+            let ratio = CGFloat(index + 1) / CGFloat(edge.gates.count + 1)
+            let multiplier = forward ? ratio : 1 - ratio
+            return .positioning(length: edge.length * multiplier)
         }
     }
 }

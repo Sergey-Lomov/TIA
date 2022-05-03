@@ -31,8 +31,8 @@ struct AdventureView: View {
                 VertexWrapper(vertex: vertex)
             }
             
-            ForEach(adventure.resources.indices, id:\.self) { index in
-                ResourceWrapper(resource: adventure.resources[index])
+            ForEach(adventure.resources, id:\.model.id) { resource in
+                ResourceWrapper(resource: resource)
             }
             
             PlayerWrapperView(player: adventure.player)

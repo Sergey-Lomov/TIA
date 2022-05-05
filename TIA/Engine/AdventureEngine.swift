@@ -131,6 +131,11 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
             gate.isOpen = false
             if wipeResources {
                 removeResources(gateResources(gate))
+            } else {
+                gateResources(gate).forEach {
+                    guard case .gate(let gate, let edge, let vertex, let index, _, let prestate) = $0.state else { return }
+                    $0.state = .gate(gate: gate, edge: edge, fromVertex: vertex, fromIndex: index, state: .outcoming, prestate: prestate)
+                }
             }
         }
     }
@@ -205,7 +210,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
                 }
                 guard case .inventory(_, let index, _, _, _) = res.state else { break }
                 
-                res.state = .gate(gate: gate, edge: edge, fromVertex: fromVertex, fromIndex: index)
+                res.state = .gate(gate: gate, edge: edge, fromVertex: fromVertex, fromIndex: index, state: .incoming, prestate: res.state)
             }
             
             if failIndex != nil { break }
@@ -241,7 +246,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     
     private func gateResources(_ gate: EdgeGate) -> [Resource] {
         resources.filter {
-            guard case .gate(let resGate, _, _, _) = $0.state else { return false }
+            guard case .gate(let resGate, _, _, _, _, _) = $0.state else { return false }
             return resGate == gate
         }
     }

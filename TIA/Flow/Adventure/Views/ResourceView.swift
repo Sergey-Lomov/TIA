@@ -24,6 +24,7 @@ struct ResourceWrapper: View {
     @ObservedObject var resource: ResourceViewModel
     @State var isIdle = false
     @State var progress: CGFloat = 0
+    @State var positioningStarter: Bool = false
     
     var body: some View {
         return CenteredGeometryReader { geometry in
@@ -46,6 +47,10 @@ struct ResourceWrapper: View {
                         withAnimation { isIdle = true }
                     }.onReceive(resource.model.$state) { state in
                         handleStateUpdate(state)
+                    }.onChange(of: positioningStarter) { newValue in
+                        if resource.metastate.positionAnimated && progress == 0 {
+                            progress = 1
+                        }
                     }
                 
                 let testCurve = positioningCurve.scaled(x: 1 / geometry.size.width,
@@ -73,8 +78,10 @@ struct ResourceWrapper: View {
         switch resource.metastate {
         case .successMoving(let edge, let forward, let fromIndex, let toIndex, _):
             return alongEdgeCurve(edge: edge, forward: forward, fromIndex: fromIndex, toIndex: toIndex, geometry: geometry)
-        case .gate(let gate, let edge, let vertex, let index):
+        case .toGate(let gate, let edge, let vertex, let index):
             return toGateCurve(gate: gate, edge: edge, fromVertex: vertex, fromIndex: index, geometry: geometry)
+        case .fromGate(let gate, let edge, let vertex, let index):
+            return toGateCurve(gate: gate, edge: edge, fromVertex: vertex, fromIndex: index, geometry: geometry).reversed()
         case .failedNear(let edge, let gateIndex, let fromVertex, let fromIndex, _):
             return failNearGateCurve(geometry, edge: edge, gateIndex: gateIndex, vertex: fromVertex, slot: fromIndex)
         default:
@@ -84,7 +91,7 @@ struct ResourceWrapper: View {
     
     private var targetPositionProgress: CGFloat {
         switch resource.metastate {
-        case .successMoving, .failedNear, .gate:
+        case .successMoving, .failedNear, .toGate, .fromGate:
             return 1
         default:
             return 0
@@ -93,7 +100,9 @@ struct ResourceWrapper: View {
     
     private func size(_ geometry: GeometryProxy) -> CGSize {
         switch resource.metastate {
-        case .gate(let gate, _, _, _):
+        case .toGate(let gate, _, _, _),
+                .onGate(let gate, _),
+                .fromGate(let gate, _, _, _):
             let fullSize = CGSize(Layout.EdgeGate.sizeRatio * Layout.EdgeGate.symbolRatio).scaled(geometry.minSize)
             return gate.isOpen ? .zero : fullSize
         case .inventoryAtVertex, .successMoving, .failedNear:
@@ -136,8 +145,10 @@ struct ResourceWrapper: View {
     
     private var sizeAnimation: Animation? {
         switch resource.metastate {
-        case .gate(let gate, _, _, _):
-            return gate.isOpen ? AnimationService.shared.closeGate : AnimationService.shared.closeGate
+        case .toGate(let gate, _, _, _),
+                .fromGate(let gate, _, _, _),
+                .onGate(let gate, _):
+            return gate.isOpen ? AnimationService.shared.closeGate : AnimationService.shared.openGate
         default:
             return nil
         }
@@ -156,8 +167,8 @@ struct ResourceWrapper: View {
             let multiplier = edge.from == vertex ? ratio : 1 - ratio
             let length = edge.length(geometry) * multiplier * 2
             return .positioning(length: length, index: index, total: total)
-        case .gate:
-            return .toGate
+        case .toGate, .fromGate:
+            return .gateMoving
         default:
             return nil
         }
@@ -183,8 +194,10 @@ struct ResourceWrapper: View {
     
     private func handlePositioningFinish() {
         switch resource.metastate {
-        case .gate:
+        case .toGate:
             resource.moveToGateFinished()
+        case .fromGate:
+            resource.moveFromGateFinished()
         case .failedNear(let edge, let gateIndex, let vertex, _, _):
             let gate = edge.gates[gateIndex]
             GeometryCacheService.shared.invalidateFailNearGate(gate: gate, vertex: vertex)
@@ -196,12 +209,13 @@ struct ResourceWrapper: View {
     private func handleStateUpdate(_ state: ResourceState) {
         guard !state.animationIntermediate else { return }
         
-        let metastate = state.metastate
-        if metastate.positionAnimated {
+        if state.metastate.positionAnimated {
             progress = 0
-            DispatchQueue.main.async {
-                progress = targetPositionProgress
-            }
+            positioningStarter.toggle()
+            
+//            DispatchQueue.main.async {
+//                progress = targetPositionProgress
+//            }
         }
     }
     
@@ -308,7 +322,7 @@ private extension Animation {
         linear(duration: 15).repeatForever(autoreverses: false)
     }
     
-    static var toGate: Animation {
+    static var gateMoving: Animation {
         let duration = AnimationService.shared.resToEdgeDuration()
         return .easeInOut(duration: duration)
     }
@@ -331,11 +345,13 @@ private enum ResourceMetastate {
     case inventoryAtVertex(vertex: Vertex, index: Int)
     case successMoving(edge: Edge, forward: Bool, fromIndex: Int, toIndex: Int, total: Int)
     case failedNear(edge: Edge, gateIndex: Int, vertex: Vertex, index: Int, total: Int)
-    case gate(gate: EdgeGate, edge: Edge, fromVertex: Vertex, fromIndex: Int)
+    case toGate(gate: EdgeGate, edge: Edge, fromVertex: Vertex, fromIndex: Int)
+    case onGate(gate: EdgeGate, edge: Edge)
+    case fromGate(gate: EdgeGate, edge: Edge, toVertex: Vertex, toIndex: Int)
 
     var positionAnimated: Bool {
         switch self {
-        case .successMoving, .failedNear, .gate:
+        case .successMoving, .failedNear, .toGate, .fromGate:
             return true
         default:
             return false
@@ -362,12 +378,19 @@ private extension ResourceState {
         switch self {
         case .vertex(let vertex, let index, let total):
             return .vertex(vertex: vertex, index: index, total: total)
-        
-        case .gate(let gate, let edge, let fromVertex, let fromIndex):
-            return .gate(gate: gate, edge: edge, fromVertex: fromVertex, fromIndex: fromIndex)
-        
+            
         case .deletion:
             return .abscent
+        
+        case .gate(let gate, let edge, let vertex, let index, let state, _):
+            switch state {
+            case .incoming:
+                return .toGate(gate: gate, edge: edge, fromVertex: vertex, fromIndex: index)
+            case .stay:
+                return .onGate(gate: gate, edge: edge)
+            case .outcoming:
+                return .fromGate(gate: gate, edge: edge, toVertex: vertex, toIndex: index)
+            }
         
         case .inventory(let player, let index, let estimated, let total, let isFresh):
             switch player.metastate {

@@ -16,10 +16,16 @@ enum ResourceType: String, Codable {
     case love
 }
 
-enum ResourceState {
+enum ResourceOnGateState {
+    case incoming
+    case stay
+    case outcoming
+}
+
+indirect enum ResourceState {
     case vertex(vertex: Vertex, index: Int, total: Int)
     case inventory(player: Player, index: Int, estimatedIndex: Int, total: Int, isFresh: Bool) // "Fresh" means gathered at last turn
-    case gate(gate: EdgeGate, edge: Edge, fromVertex: Vertex, fromIndex: Int)
+    case gate(gate: EdgeGate, edge: Edge, fromVertex: Vertex, fromIndex: Int, state: ResourceOnGateState, prestate: ResourceState)
     case deletion // This state sets before resource will be deleted to notify view layer
 }
 

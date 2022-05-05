@@ -29,6 +29,11 @@ struct ComplexCurve {
         let components = self.components.map { $0.scaled(x: x, y: y) }
         return .init(components)
     }
+    
+    func reversed() -> ComplexCurve {
+        let components = self.components.map { $0.reversed() }
+        return .init(components.reversed())
+    }
 }
 
 extension ComplexCurve: VectorArithmetic {

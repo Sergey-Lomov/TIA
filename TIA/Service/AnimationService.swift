@@ -17,7 +17,7 @@ final class AnimationService {
     enum Const {
         enum Player {
             // TODO: this value was decreased for development purposes, should be changed to more slow
-            static let lengthMult: CGFloat = 0.025
+            static let lengthMult: CGFloat = 0.005
         }
         
         enum Gate {

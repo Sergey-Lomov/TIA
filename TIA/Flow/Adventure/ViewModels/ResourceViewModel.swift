@@ -43,8 +43,13 @@ class ResourceViewModel: ObservableObject, IdEqutable {
 // MARK: View interaction methods
 extension ResourceViewModel {
     func moveToGateFinished() {
-        guard case .gate(let gate, _, _, _) = model.state else { return }
+        guard case .gate(let gate, _, _, _, _, _) = model.state else { return }
         eventsPublisher?.send(.resourceMovedToGate(gate: gate))
+    }
+    
+    func moveFromGateFinished() {
+        guard case .gate(_, _, _, _, _, let prestate) = model.state else { return }
+        model.state = prestate
     }
 }
 

@@ -16,7 +16,7 @@
         {
             "id": "v3",
             "type": "common",
-            "resources": ["anger","despair"]
+            "resources": ["anger","despair","anger","despair"]
         },
         {
             "id": "v4",

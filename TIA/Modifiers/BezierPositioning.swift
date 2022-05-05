@@ -9,26 +9,31 @@ import SwiftUI
 
 struct BezierPositioning: AnimatableModifier  {
     
-    let curve: BezierCurve
-    let onFinish: (() -> Void)?
-    var progress: CGFloat
-    var targetProgress: CGFloat
-    var point: CGPoint
+    static private let defaultLengthSteps = 100
     
-    init(curve: BezierCurve, onFinish: (() -> Void)?, progress: CGFloat, targetProgress: CGFloat = 1) {
+    private let curve: ComplexCurve
+    private let ratios: [CGFloat]
+    private let onFinish: (() -> Void)?
+    private var progress: CGFloat
+    private var targetProgress: CGFloat
+    
+    init(curve: ComplexCurve, onFinish: (() -> Void)?, progress: CGFloat, targetProgress: CGFloat = 1, lengthSteps: Int = defaultLengthSteps) {
         self.curve = curve
         self.onFinish = onFinish
         self.progress = progress
         self.targetProgress = targetProgress
         
-        point = CGPoint(x: curve.getX(t: progress), y: curve.getY(t: progress))
+        let lengths = curve.components.map {
+            $0.length(stepsCount: lengthSteps)
+        }
+        let total = lengths.reduce(0, +)
+        self.ratios = lengths.map { Math.divide($0, total) }
     }
     
     public var animatableData: CGFloat {
         get { progress }
         set {
             progress = newValue
-            point = CGPoint(x: curve.getX(t: progress), y: curve.getY(t: progress))
             if progress == targetProgress {
                 onFinish?()
             }
@@ -37,9 +42,24 @@ struct BezierPositioning: AnimatableModifier  {
     
     func body(content: Content) -> some View {
         CenteredGeometryReader {
+            let point = getPoint(t: progress)
             content
                 .offset(point: point)
                 .animation(nil, value: point)
         }
+    }
+    
+    private func getPoint(t: CGFloat) -> CGPoint {
+        guard !curve.components.isEmpty else { return .zero }
+        
+        var left = t
+        var index = 0
+        while index < ratios.count - 1 && ratios[index] < left {
+            left -= ratios[index]
+            index += 1
+        }
+        let local = Math.divide(left, ratios[index])
+        let curve = curve.components[index]
+        return curve.getPoint(t: local)
     }
 }

@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreGraphics
+import SwiftUI
 
 enum EdgeState {
     case seed
@@ -38,7 +39,14 @@ class Edge: ObservableObject, IdEqutable {
     var seedCurve: BezierCurve
     var curve: BezierCurve
     
-    var length: CGFloat { curve.length(stepsCount: curveLengthSteps) }
+    // TODO: This method should be removed at further refactoring, because unscaled curve get no valid results (uses square coordinates insted of rectangle)
+    func length() -> CGFloat {
+        curve.length(stepsCount: curveLengthSteps)
+    }
+    
+    func length(_ geometry: GeometryProxy) -> CGFloat {
+        curve.scaled(geometry).length(stepsCount: curveLengthSteps)
+    }
   
     init(id: String,
          from: Vertex,

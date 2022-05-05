@@ -8,12 +8,13 @@
 import CoreGraphics
 import SwiftUI
 
-struct BezierCurve: Equatable {
+struct BezierCurve {
     
     private static let intersectionLimit: Int = 1000
     private static let legthRatioLimit: Int = 100
+    private static let targentDelta: CGFloat = 0.001
     
-    var id = UUID().uuidString
+    let id = UUID().uuidString
     var p0: CGPoint
     var p1: CGPoint
     var p2: CGPoint
@@ -80,7 +81,7 @@ struct BezierCurve: Equatable {
         return BezierCurve(points: [p3, p2, p1, p0])
     }
     
-    func selfMirroredCurve() -> BezierCurve {
+    func mirrored() -> BezierCurve {
         let p1m = p1.mirroredByLine(p1: p0, p2: p3)
         let p2m = p2.mirroredByLine(p1: p0, p2: p3)
         return BezierCurve(points: [p0, p1m, p2m, p3])
@@ -110,6 +111,16 @@ struct BezierCurve: Equatable {
     
     func getPoint(t: CGFloat) -> CGPoint {
         return CGPoint(x: getX(t: t), y: getY(t: t))
+    }
+    
+    func getTangentAngle(t: CGFloat) -> CGFloat {
+        let p1 = getPoint(t: t - Self.targentDelta)
+        let p2 = getPoint(t: t + Self.targentDelta)
+        return Math.angle(p1: p1, p2: p2)
+    }
+    
+    func getNormaAngle(t: CGFloat) -> CGFloat {
+        return getTangentAngle(t: t) + .pi / 2
     }
     
     func getT(lengthRatio: CGFloat, steps: Int = legthRatioLimit) -> CGFloat {
@@ -145,16 +156,16 @@ struct BezierCurve: Equatable {
         }
         return getPoint(t: t)
     }
-    
-    static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.p0 == rhs.p0 && lhs.p1 == rhs.p1 && lhs.p2 == rhs.p2 && lhs.p3 == rhs.p3
-    }
 }
 
 extension BezierCurve: VectorArithmetic {
     
     static var zero: BezierCurve {
         BezierCurve(points: [CGPoint](repeating: .zero, count: 4))
+    }
+    
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        return lhs.p0 == rhs.p0 && lhs.p1 == rhs.p1 && lhs.p2 == rhs.p2 && lhs.p3 == rhs.p3
     }
     
     mutating func scale(by rhs: Double) {

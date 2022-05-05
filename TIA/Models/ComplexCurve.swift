@@ -9,20 +9,32 @@ import Foundation
 import SwiftUI
 
 struct ComplexCurve {
-    static let empty = ComplexCurve(components: [])
-    
+    static let empty = ComplexCurve([])
+        
     var components: [BezierCurve]
+    
+    init(_ components: [BezierCurve]) {
+        self.components = components
+    }
+    
+    init(_ component: BezierCurve) {
+        self.components = [component]
+    }
+    
+    init(points: [CGPoint]) {
+        self.components = [.init(points: points)]
+    }
 }
 
 extension ComplexCurve: VectorArithmetic {
     static func - (lhs: ComplexCurve, rhs: ComplexCurve) -> ComplexCurve {
         let curves = lhs.components.merged(with: rhs.components) { $0 - $1 }
-        return ComplexCurve(components: curves)
+        return ComplexCurve(curves)
     }
     
     static func + (lhs: ComplexCurve, rhs: ComplexCurve) -> ComplexCurve {
         let curves = lhs.components.merged(with: rhs.components) { $0 + $1 }
-        return ComplexCurve(components: curves)
+        return ComplexCurve(curves)
     }
     
     mutating func scale(by rhs: Double) {
@@ -58,6 +70,6 @@ extension ComplexCurve {
             ]),
         ]
         
-        return ComplexCurve(components: components)
+        return ComplexCurve(components)
     }
 }

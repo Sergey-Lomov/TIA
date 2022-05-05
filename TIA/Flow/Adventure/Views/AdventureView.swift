@@ -49,7 +49,7 @@ struct AdventureView: View {
 //       }
 //        .frame(width:400, height: 400)
 //       .onTapGesture {
-//           self.curve = self.curve.selfMirroredCurve()
+//           self.curve = self.curve.mirrored()
 //       }
     }
 }

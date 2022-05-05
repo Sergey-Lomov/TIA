@@ -16,12 +16,12 @@ struct PlayerWrapperView: View {
         CenteredGeometryReader { geometry in
             if isVisible {
                 PlayerView(player: player, superSize: geometry.size)
-                    .bezierPositioning(curve: curve(geometry), progress: positionProgress, targetProgress: positionProgress(geometry)) {
+                    .bezierPositioning(curve: curve(geometry), progress: positionProgress, targetProgress: targetPositionProgress(geometry)) {
                         player.model.movingFinished()
                     }
-                    .animation(positionAnimation, value: positionProgress)
+                    .animation(positionAnimation(geometry), value: positionProgress)
                     .onReceive(player.objectWillChange) {
-                        positionProgress = positionProgress(geometry)
+                        positionProgress = targetPositionProgress(geometry)
                     }
             }
         }
@@ -36,7 +36,7 @@ struct PlayerWrapperView: View {
         }
     }
     
-    private func positionProgress(_ geometry: GeometryProxy) -> CGFloat {
+    private func targetPositionProgress(_ geometry: GeometryProxy) -> CGFloat {
         switch player.model.metastate {
         case .moving:
             return 1
@@ -65,17 +65,18 @@ struct PlayerWrapperView: View {
         }
     }
     
-    private var positionAnimation: Animation? {
+    private func positionAnimation(_ geometry: GeometryProxy) -> Animation? {
         switch player.model.metastate {
         case .abscent, .vertex, .compressing, .expanding:
             return nil
         case .moving(let edge, _):
-            return .positioning(length: edge.length)
+            return .positioning(length: edge.length(geometry))
         case .movingToGate(let edge, let index, let forward),
                 .movingFromGate(let edge, let index, let forward):
             let ratio = CGFloat(index + 1) / CGFloat(edge.gates.count + 1)
             let multiplier = forward ? ratio : 1 - ratio
-            return .positioning(length: edge.length * multiplier)
+            let length = edge.length(geometry) * multiplier
+            return .positioning(length: length)
         }
     }
 }
@@ -120,7 +121,7 @@ struct PlayerView: View {
 
 private extension Animation {
     static func positioning(length: CGFloat) -> Animation {
-        let duration = AnimationService.shared.playerMovingDuration(edgeLength: length)
+        let duration = AnimationService.shared.playerMovingDuration(length: length)
         return .linear(duration: duration)
     }
 }

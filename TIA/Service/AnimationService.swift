@@ -14,7 +14,7 @@ final class AnimationService {
     
     static let shared = AnimationService()
     
-    private let playerMovingMult: CGFloat = 4
+    private let playerMovingMult: CGFloat = 0.005 // TODO: this value was decreased for development purposes, should be changed to more slow
     private let resourceMovingPhase: CGFloat = 0.3
     private let gateResizeDuration: CGFloat = 0.5
     
@@ -52,12 +52,12 @@ final class AnimationService {
         return closing + compression
     }
     
-    func playerMovingDuration(edgeLength: CGFloat) -> TimeInterval {
-        return edgeLength * playerMovingMult
+    func playerMovingDuration(length: CGFloat) -> TimeInterval {
+        return length * playerMovingMult
     }
     
-    func resourceMovingTiming(edgeLength: CGFloat, index: Int, total: Int) -> (duration: CGFloat, delay: CGFloat) {
-        let playerDuration = playerMovingDuration(edgeLength: edgeLength)
+    func resourceMovingTiming(length: CGFloat, index: Int, total: Int) -> (duration: CGFloat, delay: CGFloat) {
+        let playerDuration = playerMovingDuration(length: length)
         guard total > 1 else {
             return (playerDuration, 0)
         }

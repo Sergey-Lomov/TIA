@@ -167,7 +167,7 @@ private extension BezierCurve {
 
 private extension ComplexCurve {
     static func eyelid(state: EyeState) -> ComplexCurve {
-        return ComplexCurve(components: [
+        return ComplexCurve([
             BezierCurve.topEyelid(state: state),
             BezierCurve.bottomEyelid(state: state)
         ])

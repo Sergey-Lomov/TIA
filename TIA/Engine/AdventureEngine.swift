@@ -95,7 +95,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     }
     
     private func growEdge(_ edge: Edge) {
-        let duration = Timing.edgeGrowing * edge.length
+        let duration = Timing.edgeGrowing * edge.length()
         edge.state = .growing(duration: duration)
     }
     
@@ -208,7 +208,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
                 res.state = .gate(gate: gate, edge: edge, fromVertex: fromVertex, fromIndex: index)
             }
             
-            if failIndex ~= nil { break }
+            if failIndex != nil { break }
         }
         
         if let failIndex = failIndex {

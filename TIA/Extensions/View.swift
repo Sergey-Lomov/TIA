@@ -41,7 +41,14 @@ extension View {
     func bezierPositioning(curve: BezierCurve,
                            progress: CGFloat = 0,
                            targetProgress: CGFloat = 1,
-                           onFinish: (() -> Void)? = nil ) -> some View {
+                           onFinish: @escaping (() -> Void)) -> some View {
+        bezierPositioning(curve: ComplexCurve(curve), progress: progress, targetProgress: targetProgress, onFinish: onFinish)
+    }
+    
+    func bezierPositioning(curve: ComplexCurve,
+                           progress: CGFloat = 0,
+                           targetProgress: CGFloat = 1,
+                           onFinish: @escaping (() -> Void)) -> some View {
         modifier(BezierPositioning(curve: curve, onFinish: onFinish, progress: progress, targetProgress: targetProgress))
     }
     

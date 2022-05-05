@@ -9,6 +9,17 @@ import Foundation
 import SwiftUI
 
 final class Math {
+    static func divide(_ v1: CGFloat, _ v2: CGFloat) -> CGFloat {
+        return v2 == 0 ? 0 : v1 / v2
+    }
+    
+    static func angle(p1: CGPoint, p2: CGPoint) -> CGFloat {
+        let distance = sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2))
+        let relative = p1.relative(zero: p2, unit: distance)
+        let acos = acos(relative.x)
+        return relative.y > 0 ? .pi * 2 - acos : acos
+    }
+    
     static func dichotomize<Value>(border1: Value, border2: Value, accuracy: CGFloat, stepsLimit: Int, estimator: (Value) -> CGFloat ) -> Value? where Value: VectorArithmetic {
         
         var b1 = border1

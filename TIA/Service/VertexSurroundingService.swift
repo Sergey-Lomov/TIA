@@ -61,10 +61,7 @@ final class VertexSurroundingService {
         }
         
         return edgesOutPoints.map {
-            let radius = sqrt(pow(center.x - $0.x, 2) + pow(center.y - $0.y, 2))
-            let relative = $0.relative(zero: center, unit: radius)
-            let acos = acos(relative.x)
-            return relative.y > 0 ? .pi * 2 - acos : acos
+            return Math.angle(p1: $0, p2: center)
         }
     }
     

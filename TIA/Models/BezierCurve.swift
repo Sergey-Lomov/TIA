@@ -12,7 +12,7 @@ struct BezierCurve {
     
     private static let intersectionLimit: Int = 1000
     private static let legthRatioLimit: Int = 100
-    private static let targentDelta: CGFloat = 0.001
+    private static let targentDelta: CGFloat = 0.01
     
     let id = UUID().uuidString
     var p0: CGPoint

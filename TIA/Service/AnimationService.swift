@@ -14,9 +14,21 @@ final class AnimationService {
     
     static let shared = AnimationService()
     
-    private let playerMovingMult: CGFloat = 0.005 // TODO: this value was decreased for development purposes, should be changed to more slow
-    private let resourceMovingPhase: CGFloat = 0.3
-    private let gateResizeDuration: CGFloat = 0.5
+    enum Const {
+        enum Player {
+            // TODO: this value was decreased for development purposes, should be changed to more slow
+            static let lengthMult: CGFloat = 0.025
+        }
+        
+        enum Gate {
+            static let resizeDuration: CGFloat = 0.5
+        }
+        
+        enum Resource {
+            static let maxItemDelta: TimeInterval = 0.5
+            static let startPhaseRatio: CGFloat = 0.3
+        }
+    }
     
     private let eyeTransDuration: [EyeState: [EyeState: TimeInterval]] = [
         .closed: [.compressed: 0.5, .opened: 1],
@@ -30,10 +42,8 @@ final class AnimationService {
         .opened: [.closed:  { .easeIn(duration: $0) }],
     ]
     
-    var openGate: Animation { .easeIn(duration: gateResizeDuration) }
-    var closeGate: Animation { .easeOut(duration: gateResizeDuration) }
-    
-    init() {}
+    var openGate: Animation { .easeIn(duration: Const.Gate.resizeDuration) }
+    var closeGate: Animation { .easeOut(duration: Const.Gate.resizeDuration) }
     
     func eyeTransDuration(from: EyeState, to: EyeState) -> TimeInterval {
         return eyeTransDuration[from]?[to] ?? 0
@@ -53,7 +63,7 @@ final class AnimationService {
     }
     
     func playerMovingDuration(length: CGFloat) -> TimeInterval {
-        return length * playerMovingMult
+        return length * Const.Player.lengthMult
     }
     
     func resourceMovingTiming(length: CGFloat, index: Int, total: Int) -> (duration: CGFloat, delay: CGFloat) {
@@ -62,8 +72,11 @@ final class AnimationService {
             return (playerDuration, 0)
         }
         
-        let duration = playerDuration * (1 - resourceMovingPhase)
-        let delay = (resourceMovingPhase * playerDuration) / CGFloat(total) * CGFloat(index)
+        let startByRatio = playerDuration * Const.Resource.startPhaseRatio
+        let startByItems = CGFloat(total) * Const.Resource.maxItemDelta
+        let start = min(startByRatio, startByItems)
+        let duration = playerDuration - start
+        let delay = start / CGFloat(total - 1) * CGFloat(index)
         return (duration, delay)
     }
 }

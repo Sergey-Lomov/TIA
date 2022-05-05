@@ -52,6 +52,7 @@
 		6793A98527FCF4FD002198E9 /* MainMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6793A98427FCF4FD002198E9 /* MainMenuView.swift */; };
 		6793A98727FCF50E002198E9 /* WorldPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6793A98627FCF50E002198E9 /* WorldPickerView.swift */; };
 		6793A98B27FD1936002198E9 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6793A98A27FD1936002198E9 /* Colors.swift */; };
+		679484FE2823D493002E3BB6 /* GeometryCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679484FD2823D493002E3BB6 /* GeometryCacheService.swift */; };
 		67A3DD5A2821DD2F00B5A88F /* PlayerMetastate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67A3DD592821DD2F00B5A88F /* PlayerMetastate.swift */; };
 		67B5334D27FF8A5000EA959A /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5334C27FF8A5000EA959A /* Resource.swift */; };
 		67B5335927FF95AC00EA959A /* Vertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5335827FF95AC00EA959A /* Vertex.swift */; };
@@ -138,6 +139,7 @@
 		6793A98427FCF4FD002198E9 /* MainMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuView.swift; sourceTree = "<group>"; };
 		6793A98627FCF50E002198E9 /* WorldPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldPickerView.swift; sourceTree = "<group>"; };
 		6793A98A27FD1936002198E9 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		679484FD2823D493002E3BB6 /* GeometryCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryCacheService.swift; sourceTree = "<group>"; };
 		67A3DD592821DD2F00B5A88F /* PlayerMetastate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerMetastate.swift; sourceTree = "<group>"; };
 		67B5334C27FF8A5000EA959A /* Resource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resource.swift; sourceTree = "<group>"; };
 		67B5335827FF95AC00EA959A /* Vertex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vertex.swift; sourceTree = "<group>"; };
@@ -377,12 +379,13 @@
 		67B5336027FFAA5500EA959A /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				67EDAC6028201BFF00EA41CF /* Math.swift */,
 				67B5336127FFAA6200EA959A /* StorageService.swift */,
 				67B5336328007C1400EA959A /* ScenarioService.swift */,
 				67EDAC26281CA01F00EA41CF /* VertexSurroundingService.swift */,
 				67EDAC5E281F3E2200EA41CF /* AnimationService.swift */,
-				67EDAC6028201BFF00EA41CF /* Math.swift */,
 				67EDAC642820625500EA41CF /* LayoutService.swift */,
+				679484FD2823D493002E3BB6 /* GeometryCacheService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -525,6 +528,7 @@
 				67BDE961281833D5005B0194 /* LayoutConstants.swift in Sources */,
 				67B5337128032EAD00EA959A /* BezierPositioning.swift in Sources */,
 				67EDAC27281CA01F00EA41CF /* VertexSurroundingService.swift in Sources */,
+				679484FE2823D493002E3BB6 /* GeometryCacheService.swift in Sources */,
 				67B5334D27FF8A5000EA959A /* Resource.swift in Sources */,
 				67B5338328038D8C00EA959A /* Comparable.swift in Sources */,
 				6793A98527FCF4FD002198E9 /* MainMenuView.swift in Sources */,

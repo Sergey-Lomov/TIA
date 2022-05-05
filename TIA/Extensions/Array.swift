@@ -23,7 +23,7 @@ extension Array {
                        merger: (Element, Element) -> Element) -> Array<Element> {
         var result = [Element]()
         let count = Swift.max(self.count, with.count)
-        for i in 0...(count - 1) {
+        for i in 0..<count {
             let v1 = self[i, default: stub]
             let v2 = with[i, default: stub]
             result.append(merger(v1, v2))
@@ -59,7 +59,7 @@ extension Array where Element: AdditiveArithmetic {
 
 extension Array where Element: VectorArithmetic {
     public mutating func scale(by rhs: Double) {
-        for i in 0...(count - 1) {
+        for i in 0..<count {
             self[i].scale(by: rhs)
         }
     }

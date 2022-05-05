@@ -24,6 +24,11 @@ struct ComplexCurve {
     init(points: [CGPoint]) {
         self.components = [.init(points: points)]
     }
+    
+    func scaled(x: CGFloat, y: CGFloat) -> ComplexCurve {
+        let components = self.components.map { $0.scaled(x: x, y: y) }
+        return .init(components)
+    }
 }
 
 extension ComplexCurve: VectorArithmetic {

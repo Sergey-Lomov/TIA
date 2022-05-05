@@ -13,6 +13,7 @@ struct BezierCurve {
     private static let intersectionLimit: Int = 1000
     private static let legthRatioLimit: Int = 100
     private static let targentDelta: CGFloat = 0.01
+    private static let lengthSteps: Int = 100
     
     let id = UUID().uuidString
     var p0: CGPoint
@@ -41,7 +42,7 @@ struct BezierCurve {
         p3 = points[3]
     }
     
-    func length(stepsCount: Int) -> CGFloat {
+    func length(stepsCount: Int = Self.lengthSteps) -> CGFloat {
         var lenght: CGFloat = 0
         var prevPoint = from
         

@@ -26,4 +26,16 @@ final class LayoutService {
         let progress = gateProgress(geometry, edge: edge, index: index)
         return edge.curve.scaled(geometry).getPoint(t: progress)
     }
+    
+    static func vertexResourceSize(_ geometry: GeometryProxy) -> CGSize {
+        CGSize(Layout.Vertex.diameter * Layout.Resources.Vertex.sizeRatio).scaled(geometry.minSize)
+    }
+    
+    static func gateResourceSize(_ geometry: GeometryProxy) -> CGSize {
+        CGSize(Layout.EdgeGate.sizeRatio * Layout.EdgeGate.symbolRatio).scaled(geometry.minSize)
+    }
+    
+    static func inventoryResourceSize(_ geometry: GeometryProxy) -> CGSize {
+        CGSize(Layout.Vertex.diameter * Layout.Resources.Player.sizeRatio).scaled(geometry.minSize)
+    }
 }

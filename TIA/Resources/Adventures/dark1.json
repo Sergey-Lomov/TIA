@@ -16,7 +16,7 @@
         {
             "id": "v3",
             "type": "common",
-            "resources": ["yearning", "anger"]
+            "resources": ["yearning", "yearning", "yearning", "anger"]
         },
         {
             "id": "v4",

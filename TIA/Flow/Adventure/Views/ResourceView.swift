@@ -14,12 +14,12 @@ struct ResourceWrapper: View {
     private let failedMovingRandomiztion: CGFloat = 100
     private let failedMovingGap: CGFloat = 0.1
     
-    static let colors: [Color] = [.yellow, .red, .green, .blue]
-    static var colorIndex = 0
-    static func getColor() -> Color {
-        colorIndex = colorIndex < colors.count - 1 ? colorIndex + 1 : 0
-        return colors[colorIndex]
-    }
+//    static let colors: [Color] = [.yellow, .red, .green, .blue]
+//    static var colorIndex = 0
+//    static func getColor() -> Color {
+//        colorIndex = colorIndex < colors.count - 1 ? colorIndex + 1 : 0
+//        return colors[colorIndex]
+//    }
     
     @ObservedObject var resource: ResourceViewModel
     @State var isIdle = false
@@ -29,9 +29,8 @@ struct ResourceWrapper: View {
     var body: some View {
         return CenteredGeometryReader { geometry in
             if isVisible {
-                let positioningCurve = positionCurve(geometry)
                 ResourceView(resource: resource)
-                    .bezierPositioning(curve: positioningCurve,
+                    .bezierPositioning(curve: positionCurve(geometry),
                                        progress: progress) {
                         handlePositioningFinish()
                     }
@@ -53,11 +52,11 @@ struct ResourceWrapper: View {
                         }
                     }
                 
-                let testCurve = positioningCurve.scaled(x: 1 / geometry.size.width,
-                                                        y: 1 / geometry.size.height)
-                ComplexCurveShape(curve: testCurve)
-                    .stroke(Self.getColor(), lineWidth: 2)
-                    .frame(geometry: geometry)
+//                let testCurve = positioningCurve.scaled(x: 1 / geometry.size.width,
+//                                                        y: 1 / geometry.size.height)
+//                ComplexCurveShape(curve: testCurve)
+//                    .stroke(Self.getColor(), lineWidth: 2)
+//                    .frame(geometry: geometry)
             }
         }
     }
@@ -103,12 +102,12 @@ struct ResourceWrapper: View {
         case .toGate(let gate, _, _, _),
                 .onGate(let gate, _),
                 .fromGate(let gate, _, _, _):
-            let fullSize = CGSize(Layout.EdgeGate.sizeRatio * Layout.EdgeGate.symbolRatio).scaled(geometry.minSize)
+            let fullSize = LayoutService.gateResourceSize(geometry)
             return gate.isOpen ? .zero : fullSize
         case .inventoryAtVertex, .successMoving, .failedNear:
-            return CGSize(Layout.Vertex.diameter * Layout.Resources.Player.sizeRatio).scaled(geometry.minSize)
+            return LayoutService.inventoryResourceSize(geometry)
         case .vertex:
-            return CGSize(Layout.Vertex.diameter * Layout.Resources.Vertex.sizeRatio).scaled(geometry.minSize)
+            return LayoutService.vertexResourceSize(geometry)
         case .abscent:
             return .zero
         }
@@ -161,12 +160,13 @@ struct ResourceWrapper: View {
         switch resource.metastate {
         case .successMoving(let edge, _, _, let toIndex, let total):
             let length = edge.length(geometry)
-            return .positioning(length: length, index: toIndex, total: total)
+            return .positioning(geometry, playerLength: length, resourceLength: length, index: toIndex, total: total)
         case .failedNear(let edge, let gateIndex, let vertex, let index, let total):
             let ratio = CGFloat(gateIndex + 1) / CGFloat(edge.gates.count + 1)
             let multiplier = edge.from == vertex ? ratio : 1 - ratio
-            let length = edge.length(geometry) * multiplier * 2
-            return .positioning(length: length, index: index, total: total)
+            let playerLength = edge.length(geometry) * multiplier * 2
+            let curve = failNearGateCurve(geometry, edge: edge, gateIndex: gateIndex, vertex: vertex, slot: index)
+            return .positioning(geometry, playerLength: playerLength, resourceLength: curve.length(), index: index, total: total)
         case .toGate, .fromGate:
             return .gateMoving
         default:
@@ -332,8 +332,8 @@ private extension Animation {
         return .easeOut(duration: duration)
     }
     
-    static func positioning(length: CGFloat, index: Int, total: Int) -> Animation {
-        let timing = AnimationService.shared.resourceMovingTiming(length: length, index: index, total: total)
+    static func positioning(_ geometry: GeometryProxy, playerLength: CGFloat, resourceLength: CGFloat, index: Int, total: Int) -> Animation {
+        let timing = AnimationService.shared.resourceMovingTiming(geometry, playerLength: playerLength, resourceLength: resourceLength, index: index, total: total)
         return .easeInOut(duration: timing.duration).delay(timing.delay)
     }
 }

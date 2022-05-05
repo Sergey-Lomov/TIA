@@ -9,6 +9,8 @@ import Foundation
 import SwiftUI
 
 struct ComplexCurve {
+    private static let lengthSteps: Int = 100
+    
     static let empty = ComplexCurve([])
         
     var components: [BezierCurve]
@@ -33,6 +35,11 @@ struct ComplexCurve {
     func reversed() -> ComplexCurve {
         let components = self.components.map { $0.reversed() }
         return .init(components.reversed())
+    }
+    
+    func length(stepsCount: Int = Self.lengthSteps) -> CGFloat {
+        let lengths = components.map { $0.length(stepsCount: stepsCount) }
+        return lengths.reduce(0, +)
     }
 }
 

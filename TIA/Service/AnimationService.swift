@@ -25,8 +25,8 @@ final class AnimationService {
         }
         
         enum Resource {
-            static let maxItemDelta: TimeInterval = 0.5
-            static let startPhaseRatio: CGFloat = 0.3
+            static let movingGapRatio: CGFloat = 1
+            static let startMaxRatio: CGFloat = 0.25
         }
     }
     
@@ -66,15 +66,21 @@ final class AnimationService {
         return length * Const.Player.lengthMult
     }
     
-    func resourceMovingTiming(length: CGFloat, index: Int, total: Int) -> (duration: CGFloat, delay: CGFloat) {
-        let playerDuration = playerMovingDuration(length: length)
+    func resourceMovingTiming(_ geometry: GeometryProxy,
+                              playerLength: CGFloat,
+                              resourceLength: CGFloat,
+                              index: Int,
+                              total: Int) -> (duration: CGFloat, delay: CGFloat) {
+        let playerDuration = playerMovingDuration(length: playerLength)
         guard total > 1 else {
             return (playerDuration, 0)
         }
         
-        let startByRatio = playerDuration * Const.Resource.startPhaseRatio
-        let startByItems = CGFloat(total) * Const.Resource.maxItemDelta
-        let start = min(startByRatio, startByItems)
+        let size = LayoutService.inventoryResourceSize(geometry)
+        let distance = (1 + Const.Resource.movingGapRatio) * size.minSize
+        let startEstimated = distance / (resourceLength / playerDuration) * CGFloat(total - 1)
+        let startMax = playerDuration * Const.Resource.startMaxRatio
+        let start = min(startEstimated, startMax)
         let duration = playerDuration - start
         let delay = start / CGFloat(total - 1) * CGFloat(index)
         return (duration, delay)

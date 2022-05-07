@@ -25,7 +25,7 @@ struct Layout {
     }
     
     struct EdgeGate {
-        static let sizeRatio: CGFloat = 0.05
+        static let sizeRatio: CGFloat = 0.02
         static let symbolRatio: CGFloat = 0.75
     }
     

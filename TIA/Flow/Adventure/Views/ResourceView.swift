@@ -29,25 +29,17 @@ struct ResourceWrapper: View {
     var body: some View {
         return CenteredGeometryReader { geometry in
             if isVisible {
+                let duration = resource.status.animationDuration(geometry)
                 ResourceView(resource: resource)
-                    .bezierPositioning(curve: positionCurve(geometry),
-                                       progress: progress) {
-                        handlePositioningFinish()
-                    }
-                    .animation(positionAnimation(geometry), value: progress)
-                    .frame(size: size(geometry))
-                    .animation(sizeAnimation, value: size(geometry))
-                    .offset(point: resourcePosition(geometry))
-                    .rotationEffect(vertextRotationAngle)
-                    .offset(point: vertexPosition(geometry))
-                    .animation(rotationAnimation(geometry), value: vertextRotationAngle)
+                    .modifier(ReourceViewStatusHandler(geometry, status: resource.status, progress: progress))
+                    .animation(.linear(duration: duration), value: progress)
                     .transition(transition)
                     .onAppear {
                         withAnimation { isIdle = true }
-                    }.onReceive(resource.model.$state) { state in
-                        handleStateUpdate(state)
+                    }.onReceive(resource.$status) { state in
+                        handleStatusUpdate()
                     }.onChange(of: positioningStarter) { newValue in
-                        if resource.metastate.positionAnimated && progress == 0 {
+                        if progress == 0 {
                             progress = 1
                         }
                     }
@@ -206,17 +198,17 @@ struct ResourceWrapper: View {
         }
     }
     
-    private func handleStateUpdate(_ state: ResourceState) {
-        guard !state.animationIntermediate else { return }
+    private func handleStatusUpdate() {
+//        guard !state.animationIntermediate else { return }
         
-        if state.metastate.positionAnimated {
+//        if state.metastate.positionAnimated {
             progress = 0
             positioningStarter.toggle()
             
 //            DispatchQueue.main.async {
 //                progress = targetPositionProgress
 //            }
-        }
+//        }
     }
     
     // MARK: Calculations
@@ -262,7 +254,8 @@ struct ResourceWrapper: View {
     }
     
     private func failNearGateControls(_ geometry: GeometryProxy, edge: Edge, gateIndex: Int, vertex: Vertex, slot: Int) -> [CGPoint] {
-        let gateT = LayoutService.gateProgress(geometry, edge: edge, index: gateIndex)
+        let gate = edge.gates[gateIndex]
+        let gateT = LayoutService.gateProgress(geometry, edge: edge, gate: gate)
         let t = edge.from == vertex ? gateT + failedMovingGap : gateT - failedMovingGap
         let nearGate = edge.curve.scaled(geometry).getPoint(t: t)
         
@@ -276,7 +269,6 @@ struct ResourceWrapper: View {
         let c2p1 = CGPoint(center: nearGate, angle: angle + .pi, radius: distance)
         
         let result = [c1p1, c1p2, nearGate, c2p1, c2p2]
-        let gate = edge.gates[gateIndex]
         GeometryCacheService.shared.setFailNearGate(gate: gate, vertex: vertex, controls: result)
         return result
     }

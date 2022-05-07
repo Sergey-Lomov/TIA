@@ -41,7 +41,8 @@ struct PlayerWrapperView: View {
         case .moving:
             return 1
         case .movingToGate(let edge, let index, let forward):
-            let progress = LayoutService.gateProgress(geometry, edge: edge, index: index)
+            let gate = edge.gates[index]
+            let progress = LayoutService.gateProgress(geometry, edge: edge, gate: gate)
             return forward ? progress : 1 - progress
         default:
             return 0

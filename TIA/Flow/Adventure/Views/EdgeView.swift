@@ -17,7 +17,7 @@ struct EdgeWrapper: View {
             if edge.model.state.isGrowed {
                 ForEach(edge.model.gates.indices, id: \.self) { index in
                     let gate = edge.model.gates[index]
-                    let position = LayoutService.gatePosition(geometry, edge: edge.model, index: index)
+                    let position = LayoutService.gatePosition(geometry, edge: edge.model, gate: gate)
                     
                     EdgeGateView(gate: gate, backColor: edge.color, symbolColor: edge.borderColor)
                         .offset(point: position)

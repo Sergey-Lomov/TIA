@@ -23,3 +23,25 @@ extension CGSize {
                       height: height * mult)
     }
 }
+
+extension CGSize: VectorArithmetic {
+    
+    public static func + (lhs: CGSize, rhs: CGSize) -> CGSize {
+        return CGSize(width: lhs.width + rhs.width, height: lhs.height + rhs.height)
+    }
+    
+    public static func - (lhs: CGSize, rhs: CGSize) -> CGSize {
+        return CGSize(width: lhs.width - rhs.width, height: lhs.height - rhs.height)
+    }
+    
+    public mutating func scale(by rhs: Double) {
+        width *= rhs
+        height *= rhs
+    }
+    
+    public var magnitudeSquared: Double {
+        width * width + height * height
+    }
+    
+    
+}

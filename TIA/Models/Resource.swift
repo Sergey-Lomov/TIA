@@ -16,6 +16,7 @@ enum ResourceType: String, Codable {
     case love
 }
 
+// TODO: Remove if became unused after resource state machine implementation
 enum ResourceOnGateState {
     case incoming
     case stay

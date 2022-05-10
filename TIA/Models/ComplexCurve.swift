@@ -15,6 +15,10 @@ struct ComplexCurve {
         
     var components: [BezierCurve]
     
+    static func onePoint(_ point: CGPoint) -> ComplexCurve {
+        return .init([.onePoint(point)])
+    }
+    
     init(_ components: [BezierCurve]) {
         self.components = components
     }

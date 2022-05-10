@@ -41,7 +41,7 @@ class VertexViewModel: ObservableObject {
         self.resourceColor = resourceColor
         
         subscriptions.sink(model.objectWillChange) { [weak self] in
-            self?.objectWillChange.send()
+            self?.objectWillChange.sendOnMain()
         }
     }
 }

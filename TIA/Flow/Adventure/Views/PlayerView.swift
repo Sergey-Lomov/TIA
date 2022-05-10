@@ -16,7 +16,7 @@ struct PlayerWrapperView: View {
         CenteredGeometryReader { geometry in
             if isVisible {
                 PlayerView(player: player, superSize: geometry.size)
-                    .bezierPositioning(curve: curve(geometry), progress: positionProgress, targetProgress: targetPositionProgress(geometry)) {
+                    .bezierPositioning(curve: curve(geometry), progress: positionProgress, target: targetPositionProgress(geometry)) {
                         player.model.movingFinished()
                     }
                     .animation(positionAnimation(geometry), value: positionProgress)

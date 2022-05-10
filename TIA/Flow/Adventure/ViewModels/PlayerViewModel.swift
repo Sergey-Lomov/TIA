@@ -38,11 +38,11 @@ class PlayerViewModel: ObservableObject {
         }
         
         subscriptions.sink(model.objectWillChange) { [weak self] in
-            self?.objectWillChange.send()
+            self?.objectWillChange.sendOnMain()
         }
         
         subscriptions.sink(eye.objectWillChange) { [weak self] in
-            self?.objectWillChange.send()
+            self?.objectWillChange.sendOnMain()
         }
     }
     

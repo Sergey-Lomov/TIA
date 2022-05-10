@@ -77,7 +77,7 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
             subscriptions.sink(vertex.model.$state) {
                 let resources = self.resourcesFor(vertex.model)
                 for resource in resources {
-                    resource.objectWillChange.send()
+                    resource.objectWillChange.sendOnMain()
                 }
             }
         }

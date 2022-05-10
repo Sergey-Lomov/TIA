@@ -27,6 +27,15 @@ indirect enum ResourceState {
     case inventory(player: Player, index: Int, estimatedIndex: Int, total: Int, isFresh: Bool) // "Fresh" means gathered at last turn
     case gate(gate: EdgeGate, edge: Edge, fromVertex: Vertex, fromIndex: Int, state: ResourceOnGateState, prestate: ResourceState)
     case deletion // This state sets before resource will be deleted to notify view layer
+    
+    var short: String {
+        switch self {
+        case .inventory: return "i"
+        case .gate: return "g"
+        case .vertex: return "v"
+        case .deletion: return "d"
+        }
+    }
 }
 
 class Resource: ObservableObject, IdEqutable {

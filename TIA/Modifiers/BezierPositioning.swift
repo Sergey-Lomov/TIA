@@ -16,12 +16,14 @@ struct BezierPositioning: AnimatableModifier  {
     private let onFinish: (() -> Void)?
     private var progress: CGFloat
     private var targetProgress: CGFloat
+    private var deltaT: CGFloat
     
-    init(curve: ComplexCurve, onFinish: (() -> Void)?, progress: CGFloat, targetProgress: CGFloat = 1, lengthSteps: Int = defaultLengthSteps) {
+    init(curve: ComplexCurve, onFinish: (() -> Void)?, progress: CGFloat, targetProgress: CGFloat = 1, deltaT: CGFloat = 0, lengthSteps: Int = defaultLengthSteps) {
         self.curve = curve
         self.onFinish = onFinish
         self.progress = progress
         self.targetProgress = targetProgress
+        self.deltaT = deltaT
         
         let lengths = curve.components.map {
             $0.length(stepsCount: lengthSteps)
@@ -42,7 +44,7 @@ struct BezierPositioning: AnimatableModifier  {
     
     func body(content: Content) -> some View {
         CenteredGeometryReader {
-            let point = getPoint(t: progress)
+            let point = getPoint(t: progress - deltaT)
             content
                 .offset(point: point)
                 .animation(nil, value: point)

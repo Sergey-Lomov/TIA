@@ -35,7 +35,7 @@ class ResourceViewModel: ObservableObject, IdEqutable {
         self.borderColor = borderColor
         
         subscriptions.sink(model.objectWillChange) { [weak self] in
-            self?.objectWillChange.send()
+            self?.objectWillChange.sendOnMain()
         }
     }
 }

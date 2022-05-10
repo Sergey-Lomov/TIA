@@ -14,49 +14,77 @@ struct ResourceWrapper: View {
     private let failedMovingRandomiztion: CGFloat = 100
     private let failedMovingGap: CGFloat = 0.1
     
-//    static let colors: [Color] = [.yellow, .red, .green, .blue]
-//    static var colorIndex = 0
-//    static func getColor() -> Color {
-//        colorIndex = colorIndex < colors.count - 1 ? colorIndex + 1 : 0
-//        return colors[colorIndex]
-//    }
+    static let colors: [Color] = [.yellow, .red, .green, .blue]
+    static var colorIndex = 0
+    static func getColor() -> Color {
+        colorIndex = colorIndex < colors.count - 1 ? colorIndex + 1 : 0
+        return colors[colorIndex]
+    }
     
     @ObservedObject var resource: ResourceViewModel
     @State var isIdle = false
-    @State var progress: CGFloat = 0
-    @State var positioningStarter: Bool = false
+    @State var positioningStep: CGFloat = 0
+//    @State var localOffset: CGPoint = .zero
+//    @State var size: CGSize = .zero
+//    @State var positionCurve: ComplexCurve = .zero
+//    @State var progress: CGFloat = 0
+//    @State var positioningStarter: Bool = false
     
     var body: some View {
         return CenteredGeometryReader { geometry in
             if isVisible {
+                let positionCurve = positionCurve(geometry)
+                let localOffset = localOffset(geometry)
+                let size = size(geometry)
+                
                 ResourceView(resource: resource)
-                    .bezierPositioning(curve: positionCurve(geometry),
-                                       progress: progress) {
+//                    .frame(geometry: geometry)
+                    .offset(point: localOffset)
+                    .animation(offsetAnimation(geometry), value: localOffset)
+                    .rotationEffect(localRotation)
+                    .animation(rotationAnimation(geometry), value: localRotation)
+                    .bezierPositioning(curve: positionCurve,
+                                       progress: positioningStep,
+                                       target: positioningStep,
+                                       deltaT: positioningStep - 1) {
                         handlePositioningFinish()
                     }
-                    .animation(positionAnimation(geometry), value: progress)
-                    .frame(size: size(geometry))
-                    .animation(sizeAnimation, value: size(geometry))
-                    .offset(point: resourcePosition(geometry))
-                    .rotationEffect(vertextRotationAngle)
-                    .offset(point: vertexPosition(geometry))
-                    .animation(rotationAnimation(geometry), value: vertextRotationAngle)
+                    .animation(positionAnimation(geometry), value: positioningStep)
+                    .frame(size: size)
+                    .animation(sizeAnimation, value: size)
                     .transition(transition)
                     .onAppear {
                         withAnimation { isIdle = true }
-                    }.onReceive(resource.model.$state) { state in
-                        handleStateUpdate(state)
-                    }.onChange(of: positioningStarter) { newValue in
-                        if resource.metastate.positionAnimated && progress == 0 {
-                            progress = 1
+                    }
+                    .onReceive(resource.model.$state) { _ in
+                        if !resource.state.animationIntermediate {
+                            positioningStep += 1
                         }
                     }
+//                    .onReceive(resource.model.$state) { state in
+//                        withAnimation {
+//                            localOffset = localOffset(geometry)
+//                            size = size(geometry)
+//                            positionCurve = positionCurve(geometry)
+//                            if state.metastate.positionAnimated {
+//                                progress = 0
+//                                positioningStarter.toggle()
+//                            }
+//                        }
+//                        handleStateUpdate(geometry, state: state)
+//                    }.onChange(of: positioningStarter) { newValue in
+////                        DispatchQueue.main.async {
+////                            if resource.metastate.positionAnimated && progress == 0 {
+//                                progress = 1
+////                            }
+////                        }
+//                    }
                 
-//                let testCurve = positioningCurve.scaled(x: 1 / geometry.size.width,
-//                                                        y: 1 / geometry.size.height)
-//                ComplexCurveShape(curve: testCurve)
-//                    .stroke(Self.getColor(), lineWidth: 2)
-//                    .frame(geometry: geometry)
+                let testCurve = positionCurve.scaled(x: 1 / geometry.size.width,
+                                                        y: 1 / geometry.size.height)
+                ComplexCurveShape(curve: testCurve)
+                    .stroke(Self.getColor(), lineWidth: 2)
+                    .frame(geometry: geometry)
             }
         }
     }
@@ -75,6 +103,9 @@ struct ResourceWrapper: View {
     
     private func positionCurve(_ geometry: GeometryProxy) -> ComplexCurve {
         switch resource.metastate {
+        case .vertex(let vertex, _, _), .inventoryAtVertex(let vertex, _):
+            let point = vertex.point.scaled(geometry)
+            return .onePoint(point)
         case .successMoving(let edge, let forward, let fromIndex, let toIndex, _):
             return alongEdgeCurve(edge: edge, forward: forward, fromIndex: fromIndex, toIndex: toIndex, geometry: geometry)
         case .toGate(let gate, let edge, let vertex, let index):
@@ -102,7 +133,7 @@ struct ResourceWrapper: View {
         case .toGate(let gate, _, _, _),
                 .onGate(let gate, _),
                 .fromGate(let gate, _, _, _):
-            let fullSize = LayoutService.gateResourceSize(geometry)
+            let fullSize = LayoutService.gateResourceSize(geometry).scaled(3)
             return gate.isOpen ? .zero : fullSize
         case .inventoryAtVertex, .successMoving, .failedNear:
             return LayoutService.inventoryResourceSize(geometry)
@@ -112,17 +143,8 @@ struct ResourceWrapper: View {
             return .zero
         }
     }
-    
-    private func vertexPosition(_ geometry: GeometryProxy) -> CGPoint {
-        switch resource.metastate {
-        case .vertex(let vertex, _, _), .inventoryAtVertex(let vertex, _):
-            return vertex.point.scaled(geometry)
-        default:
-            return .zero
-        }
-    }
-    
-    private func resourcePosition(_ geometry: GeometryProxy) -> CGPoint {
+
+    private func localOffset(_ geometry: GeometryProxy) -> CGPoint {
         switch resource.metastate {
         case .vertex(_, let index, let total):
             return inVertextResourcePosition(index: index, total: total).scaled(geometry)
@@ -133,7 +155,7 @@ struct ResourceWrapper: View {
         }
     }
     
-    private var vertextRotationAngle: Angle {
+    private var localRotation: Angle {
         switch resource.metastate {
         case .vertex:
             return Angle(radians: isIdle ? .pi * 2 : 0.0)
@@ -143,19 +165,21 @@ struct ResourceWrapper: View {
     }
     
     private var sizeAnimation: Animation? {
-        switch resource.metastate {
-        case .toGate(let gate, _, _, _),
-                .fromGate(let gate, _, _, _),
-                .onGate(let gate, _):
-            return gate.isOpen ? AnimationService.shared.closeGate : AnimationService.shared.openGate
-        default:
-            return nil
-        }
+//        switch resource.metastate {
+//        case .toGate:
+            return AnimationService.shared.resourceToGate
+//        case .fromGate:
+//            return AnimationService.shared.resourceFromGate
+//        case .onGate(let gate, _):
+//            return gate.isOpen ? AnimationService.shared.closeGate : AnimationService.shared.openGate
+//        default:
+//            return nil
+//        }
     }
     
     private func positionAnimation(_ geometry: GeometryProxy) -> Animation? {
         // Prevent animation in case, when progress sets to 0 before start valuable positioning animation
-        if progress == 0 && resource.metastate.positionAnimated { return nil }
+        //if progress == 0 && resource.metastate.positionAnimated { return nil }
         
         switch resource.metastate {
         case .successMoving(let edge, _, _, let toIndex, let total):
@@ -169,6 +193,16 @@ struct ResourceWrapper: View {
             return .positioning(geometry, playerLength: playerLength, resourceLength: curve.length(), index: index, total: total)
         case .toGate, .fromGate:
             return .gateMoving
+        default:
+            return nil
+        }
+    }
+    
+    private func offsetAnimation(_ geometry: GeometryProxy) -> Animation? {
+        switch resource.state {
+        case .inventory(let player, _, _, _, let isFresh):
+            guard case .edge(let edge, _, _) = player.position else { return nil }
+            return isFresh ? .vertexOut(edgeLength: edge.length(geometry)) : nil
         default:
             return nil
         }
@@ -205,20 +239,19 @@ struct ResourceWrapper: View {
             break
         }
     }
-    
-    private func handleStateUpdate(_ state: ResourceState) {
-        guard !state.animationIntermediate else { return }
-        
-        if state.metastate.positionAnimated {
-            progress = 0
-            positioningStarter.toggle()
-            
-//            DispatchQueue.main.async {
-//                progress = targetPositionProgress
-//            }
-        }
-    }
-    
+//
+//    private func handleStateUpdate(_ geometry: GeometryProxy, state: ResourceState) {
+//        guard !state.animationIntermediate else { return }
+//
+//        localOffset = localOffset(geometry)
+//        size = size(geometry)
+//        positionCurve = positionCurve(geometry)
+//        if state.metastate.positionAnimated {
+//            progress = 0
+//            positioningStarter.toggle()
+//        }
+//    }
+//
     // MARK: Calculations
     private func alongEdgeCurve(edge: Edge, forward: Bool, fromIndex: Int, toIndex: Int, geometry: GeometryProxy) -> ComplexCurve {
         
@@ -303,11 +336,63 @@ struct ResourceView: View {
     @ObservedObject var resource: ResourceViewModel
     
     var body: some View {
-        ZStack {
+        CenteredGeometryReader { geometry in
+//            let size = size(geometry)
+            
             ResourceShape(type: resource.type)
                 .fill(resource.color)
+//                .frame(size: size)
+//                .animation(sizeAnimation, value: size)
             ResourceShape(type: resource.type)
                 .stroke(resource.borderColor, lineWidth: 2)
+//                .frame(size: size)
+//                .animation(sizeAnimation, value: size)
+        }
+    }
+    
+    private func size(_ geometry: GeometryProxy) -> CGSize {
+        switch resource.metastate {
+        case .toGate(let gate, _, _, _),
+                .onGate(let gate, _),
+                .fromGate(let gate, _, _, _):
+            let fullSize = LayoutService.gateResourceSize(geometry).scaled(1.5)
+            return gate.isOpen ? .zero : fullSize
+        case .inventoryAtVertex, .successMoving, .failedNear:
+            return LayoutService.inventoryResourceSize(geometry)
+        case .vertex:
+            return LayoutService.vertexResourceSize(geometry)
+        case .abscent:
+            return .zero
+        }
+    }
+    
+    private var sizeAnimation: Animation? {
+        switch resource.metastate {
+        case .toGate:
+            return AnimationService.shared.resourceToGate
+        case .fromGate:
+            return AnimationService.shared.resourceFromGate
+        case .onGate(let gate, _):
+            return gate.isOpen ? AnimationService.shared.closeGate : AnimationService.shared.openGate
+        default:
+            return nil
+        }
+    }
+    
+    private func resourceSlot(geometry: GeometryProxy, vertex: Vertex, index: Int) -> CGPoint {
+        let service = VertexSurroundingService(screenSize: geometry.size)
+        let surrounding = service.surroundingFor(vertex, slotsCount: index + 1)
+        return surrounding.slots.last ?? .zero
+    }
+    
+    private func inVertextResourcePosition(index: Int, total: Int) -> CGPoint {
+        if total == 1 {
+            return .zero
+        } else {
+            let angle = CGFloat.pi * 2.0 / CGFloat(total) * CGFloat(index)
+            var delta = CGPoint(x: cos(angle), y: sin(angle))
+            delta.scale(by: Layout.Resources.Vertex.angleScale)
+            return delta
         }
     }
 }

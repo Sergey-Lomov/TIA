@@ -16,7 +16,7 @@
         {
             "id": "v3",
             "type": "common",
-            "resources": ["yearning"]
+            "resources": ["yearning", "yearning", "anger", "despair"]
         },
         {
             "id": "v4",
@@ -26,7 +26,7 @@
         {
             "id": "v5",
             "type": "common",
-            "resources": ["despair"]
+            "resources": []
         },
         {
             "id": "v6",

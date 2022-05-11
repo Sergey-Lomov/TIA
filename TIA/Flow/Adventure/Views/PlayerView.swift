@@ -40,8 +40,8 @@ struct PlayerWrapperView: View {
         switch player.model.metastate {
         case .moving:
             return 1
-        case .movingToGate(let edge, let index, let forward):
-            let progress = LayoutService.gateProgress(geometry, edge: edge, index: index)
+        case .movingToGate(let gate, let edge, let forward):
+            let progress = LayoutService.gateProgress(geometry, gate: gate, edge: edge)
             return forward ? progress : 1 - progress
         default:
             return 0
@@ -53,8 +53,8 @@ struct PlayerWrapperView: View {
         case .abscent:
             return .zero
         case .moving(let edge, let forward),
-                .movingToGate(let edge, _, let forward),
-                .movingFromGate(let edge, _, let forward):
+                .movingToGate(_, let edge, let forward),
+                .movingFromGate(_, let edge, let forward):
             let scaled = edge.curve.scaled(geometry)
             return forward ? scaled : scaled.reversed()
         case .vertex(let vertex),
@@ -71,8 +71,11 @@ struct PlayerWrapperView: View {
             return nil
         case .moving(let edge, _):
             return .positioning(length: edge.length(geometry))
-        case .movingToGate(let edge, let index, let forward),
-                .movingFromGate(let edge, let index, let forward):
+        case .movingToGate(let gate, let edge, let forward),
+                .movingFromGate(let gate, let edge, let forward):
+            guard let index = edge.gates.firstIndex(of: gate) else {
+                return nil
+            }
             let ratio = CGFloat(index + 1) / CGFloat(edge.gates.count + 1)
             let multiplier = forward ? ratio : 1 - ratio
             let length = edge.length(geometry) * multiplier

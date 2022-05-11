@@ -45,18 +45,6 @@ final class AnimationService {
     var openGate: Animation { .easeIn(duration: Const.Gate.resizeDuration) }
     var closeGate: Animation { .easeOut(duration: Const.Gate.resizeDuration) }
     
-    var resourceToGate: Animation {
-        let closing = eyeTransDuration(from: .opened, to: .closed)
-        let compressing = eyeTransDuration(from: .closed, to: .compressed)
-        return .easeOut(duration: closing + compressing)
-    }
-    
-    var resourceFromGate: Animation {
-        let opening = eyeTransDuration(from: .closed, to: .opened)
-        let expanding = eyeTransDuration(from: .compressed, to: .closed)
-        return .easeIn(duration: opening + expanding)
-    }
-    
     func eyeTransDuration(from: EyeState, to: EyeState) -> TimeInterval {
         return eyeTransDuration[from]?[to] ?? 0
     }
@@ -68,7 +56,7 @@ final class AnimationService {
         return builder(eyeTransDuration(from: from, to: to))
     }
     
-    func resToEdgeDuration() -> TimeInterval {
+    func resToGateDuration() -> TimeInterval {
         let closing = AnimationService.shared.eyeTransDuration(from: .opened, to: .closed)
         let compression = AnimationService.shared.eyeTransDuration(from: .closed, to: .compressed)
         return closing + compression

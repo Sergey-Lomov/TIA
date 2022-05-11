@@ -18,8 +18,8 @@ enum EdgeMovingStatus {
 enum EdgeMovingDirection {
     case forward
     case backward
-    case forwardFail(gateIndex: Int, moveToGate: Bool)
-    case backwardFail(gateIndex: Int, moveToGate: Bool)
+    case forwardFail(gate: EdgeGate, moveToGate: Bool)
+    case backwardFail(gate: EdgeGate, moveToGate: Bool)
     
     var isForward: Bool {
         switch self {
@@ -114,10 +114,10 @@ class Player: ObservableObject, IdEqutable {
             return .backward
         case .backward:
             return .forward
-        case .forwardFail(let gateIndex, let moveToGate):
-            return .forwardFail(gateIndex: gateIndex, moveToGate: !moveToGate)
-        case .backwardFail(let gateIndex, let moveToGate):
-            return .backwardFail(gateIndex: gateIndex, moveToGate: !moveToGate)
+        case .forwardFail(let gate, let moveToGate):
+            return .forwardFail(gate: gate, moveToGate: !moveToGate)
+        case .backwardFail(let gate, let moveToGate):
+            return .backwardFail(gate: gate, moveToGate: !moveToGate)
         }
     }
     

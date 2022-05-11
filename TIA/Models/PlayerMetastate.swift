@@ -13,8 +13,8 @@ enum PlayerMetastate {
     case compressing(vertex: Vertex)
     case expanding(vertex: Vertex)
     case moving(edge: Edge, forward: Bool)
-    case movingToGate(edge: Edge, index: Int, forward: Bool)
-    case movingFromGate(edge: Edge, index: Int, forward: Bool)
+    case movingToGate(gate: EdgeGate, edge: Edge, forward: Bool)
+    case movingFromGate(gate: EdgeGate, edge: Edge, forward: Bool)
 }
 
 extension Player {
@@ -34,12 +34,12 @@ extension Player {
                 switch direction {
                 case .forward, .backward:
                     return .moving(edge: edge, forward: forward)
-                case .forwardFail(let gateIndex, let moveToGate),
-                    .backwardFail(let gateIndex, let moveToGate):
+                case .forwardFail(let gate, let moveToGate),
+                    .backwardFail(let gate, let moveToGate):
                     if moveToGate {
-                        return .movingToGate(edge: edge, index: gateIndex, forward: forward)
+                        return .movingToGate(gate: gate, edge: edge, forward: forward)
                     } else {
-                        return .movingFromGate(edge: edge, index: gateIndex, forward: forward)
+                        return .movingFromGate(gate: gate, edge: edge, forward: forward)
                     }
                 }
             case .expanding:

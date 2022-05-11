@@ -42,14 +42,33 @@ class ResourceViewModel: ObservableObject, IdEqutable {
 
 // MARK: View interaction methods
 extension ResourceViewModel {
+    func presentationFinished() {
+        eventsPublisher?.send(.resourcePresented(resource: model))
+    }
+    
+    func idleFinished() {
+        eventsPublisher?.send(.resourceIdleFinished(resource: model))
+    }
+    
+    func idleRestoringFinished() {
+        eventsPublisher?.send(.resourceIdleRestored(resource: model))
+    }
+    
     func moveToGateFinished() {
-        guard case .gate(let gate, _, _, _, _, _) = model.state else { return }
-        eventsPublisher?.send(.resourceMovedToGate(gate: gate))
+        eventsPublisher?.send(.resourceMovedToGate(resource: model))
     }
     
     func moveFromGateFinished() {
         guard case .gate(_, _, _, _, _, let prestate) = model.state else { return }
         model.state = prestate
     }
+    
+    func moveNearGateFinished() {
+        switch metastate {
+        case .failedNear(let gate, _, let vertex, _, _):
+            GeometryCacheService.shared.invalidateFailNearGate(gate: gate, vertex: vertex)
+        default:
+            break
+        }
+    }
 }
-

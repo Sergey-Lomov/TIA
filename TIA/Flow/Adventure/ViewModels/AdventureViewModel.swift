@@ -120,7 +120,7 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
     // TODO: This method may became unused after done another TODOs in this file
     private func resourcesFor(_ vertex: Vertex) -> [ResourceViewModel] {
         return resources.filter {
-            guard case .vertex(let inVertex, _, _) = $0.state else {
+            guard case .vertex(let inVertex, _, _, _) = $0.state else {
                 return false
             }
             

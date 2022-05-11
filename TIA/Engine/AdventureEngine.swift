@@ -40,7 +40,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
             let total = vertex.initialResources.count
             for index in 0..<total {
                 let type = vertex.initialResources[index]
-                let state = ResourceState.vertex(vertex: vertex, index: index, total: total)
+                let state = ResourceState.vertex(vertex: vertex, index: index, total: total, idle: .none)
                 let resource = Resource(type: type, state: state)
                 self.resources.append(resource)
             }
@@ -143,6 +143,8 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     // MARK: View events handling
 
     private func handleViewEvent(_ event: ViewEvent) {
+        print("View event: \(event)")
+        
         switch event {
         case .viewInitFinished:
             growFromEntrace()
@@ -156,8 +158,14 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
             checkInitGrowingCompletion()
         case .vertexSelected(let vertex):
             handleVertexSelection(vertex)
-        case .resourceMovedToGate(let gate):
-            gate.isOpen = true
+        case .resourceMovedToGate(let resource):
+            handleResourceMovedToGate(resource)
+        case .resourcePresented(let resource):
+            handleResourcePresented(resource)
+        case .resourceIdleFinished(let resource):
+            handleResourceFinishIdle(resource)
+        case .resourceIdleRestored(let resource):
+            handleResourceIdleRestored(resource)
         }
     }
     
@@ -192,6 +200,21 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         tryMove(player: player, edge: edge, forward: edge.from == old)
     }
     
+    private func handleResourcePresented(_ resource: Resource) {
+        guard case .vertex(let vertex, let index, let total, _) = resource.state else { return }
+        resource.state = .vertex(vertex: vertex, index: index, total: total, idle: .rotation)
+    }
+    
+    private func handleResourceFinishIdle(_ resource: Resource) {
+        guard case .vertex(let vertex, let index, let total, _) = resource.state else { return }
+        resource.state = .vertex(vertex: vertex, index: index, total: total, idle: .restoring)
+    }
+    
+    private func handleResourceIdleRestored(_ resource: Resource) {
+        guard case .vertex(let vertex, let index, let total, _) = resource.state else { return }
+        resource.state = .vertex(vertex: vertex, index: index, total: total, idle: .rotation)
+    }
+    
     private func tryMove(player: Player, edge: Edge, forward: Bool) {
         let count = edge.gates.count
         let range = forward ? Array(0..<count) : (0..<count).reversed()
@@ -217,7 +240,8 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         }
         
         if let failIndex = failIndex {
-            let direction: EdgeMovingDirection = forward ? .forwardFail(gateIndex: failIndex, moveToGate: true) : .backwardFail(gateIndex: failIndex, moveToGate: true)
+            let gate = edge.gates[failIndex]
+            let direction: EdgeMovingDirection = forward ? .forwardFail(gate: gate, moveToGate: true) : .backwardFail(gate: gate, moveToGate: true)
             player.position = .edge(edge: edge, status: .compressing, direction: direction)
         } else {
             let direction: EdgeMovingDirection = forward ? .forward : .backward
@@ -229,10 +253,17 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         }
     }
     
+    private func handleResourceMovedToGate(_ resource: Resource) {
+        guard case .gate(let gate, let edge, let vertex, let index, let status, let prestate) = resource.state else { return }
+        guard status == .incoming else { return }
+        resource.state = .gate(gate: gate, edge: edge, fromVertex: vertex, fromIndex: index, state: .stay, prestate: prestate)
+        gate.isOpen = true
+    }
+    
     // MARK: Resources handling
     private func vertexResources(_ vertex: Vertex) -> [Resource] {
         resources.filter {
-            guard case .vertex(let resVertex, _, _) = $0.state else { return false }
+            guard case .vertex(let resVertex, _, _, _) = $0.state else { return false }
             return resVertex == vertex
         }
     }

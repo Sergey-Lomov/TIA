@@ -22,8 +22,14 @@ enum ResourceOnGateState {
     case outcoming
 }
 
+enum VertexIdleState {
+    case none
+    case rotation
+    case restoring
+}
+
 indirect enum ResourceState {
-    case vertex(vertex: Vertex, index: Int, total: Int)
+    case vertex(vertex: Vertex, index: Int, total: Int, idle: VertexIdleState)
     case inventory(player: Player, index: Int, estimatedIndex: Int, total: Int, isFresh: Bool) // "Fresh" means gathered at last turn
     case gate(gate: EdgeGate, edge: Edge, fromVertex: Vertex, fromIndex: Int, state: ResourceOnGateState, prestate: ResourceState)
     case deletion // This state sets before resource will be deleted to notify view layer

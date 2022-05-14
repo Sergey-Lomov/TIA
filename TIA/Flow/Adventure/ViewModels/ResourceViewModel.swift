@@ -13,6 +13,7 @@ class ResourceViewModel: ObservableObject, IdEqutable {
     
     var id: String { model.id }
     var model: Resource
+    var positioningStep: CGFloat = 0
     @Published var color: Color
     @Published var borderColor: Color
     
@@ -33,6 +34,12 @@ class ResourceViewModel: ObservableObject, IdEqutable {
         self.model = model
         self.color = color
         self.borderColor = borderColor
+        
+        subscriptions.sink(model.$state) { [weak self] state in
+            if !model.state.animationIntermediate {
+                self?.positioningStep += 1
+            }
+        }
         
         subscriptions.sink(model.objectWillChange) { [weak self] in
             self?.objectWillChange.sendOnMain()

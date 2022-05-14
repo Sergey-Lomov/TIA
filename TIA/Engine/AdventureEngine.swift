@@ -143,8 +143,6 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     // MARK: View events handling
 
     private func handleViewEvent(_ event: ViewEvent) {
-        print("View event: \(event)")
-        
         switch event {
         case .viewInitFinished:
             growFromEntrace()

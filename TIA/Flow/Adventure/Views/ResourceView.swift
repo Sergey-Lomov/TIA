@@ -22,7 +22,6 @@ struct ResourceWrapper: View {
     }
     
     @ObservedObject var resource: ResourceViewModel
-    @State var positioningStep: CGFloat = 0
     
     var body: some View {
         return CenteredGeometryReader { geometry in
@@ -37,17 +36,12 @@ struct ResourceWrapper: View {
                         positionCurve: positionCurve,
                         onFinish: {
                             handlePositioningFinish()
-                        }, targetPositioning: positioningStep,
-                        deltaPositioning: positioningStep - 1))
+                        }, targetPositioning: resource.positioningStep,
+                        deltaPositioning: resource.positioningStep - 1))
                     .animation(animation, value: transform)
                     .transition(transition)
                     .onAppear {
                         resource.presentationFinished()
-                    }
-                    .onReceive(resource.model.$state) { _ in
-                        if !resource.state.animationIntermediate {
-                            positioningStep += 1
-                        }
                     }
                 
                 let testCurve = positionCurve.scaled(x: 1 / geometry.size.width,
@@ -92,7 +86,7 @@ struct ResourceWrapper: View {
         .init(localOffset: localOffset(geometry),
               localAngle: localRotation,
               size: size(geometry),
-              positioning: positioningStep)
+              positioning: resource.positioningStep)
     }
     
     private func size(_ geometry: GeometryProxy) -> CGSize {
@@ -168,8 +162,6 @@ struct ResourceWrapper: View {
 
     // MARK: Positioning curve
     private func positionCurve(_ geometry: GeometryProxy) -> ComplexCurve {
-        print("Resource reloaded: \(resource.metastate)")
-        
         switch resource.metastate {
         case .vertex(let vertex, _, _),
                 .vertexIdle(let vertex, _, _),

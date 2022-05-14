@@ -36,7 +36,7 @@ extension ResourceState {
         switch self {
         case .inventory(let player, _, _, _, _):
             switch player.metastate {
-            case .movingFromGate:
+            case .movingFromGate, .movingToGate:
                 return true
             default:
                 return false

@@ -9,9 +9,16 @@ import Foundation
 import CoreGraphics
 import SwiftUI
 
+enum EdgeGrowingPhase {
+    case preparing
+    case pathGrowing(duration: TimeInterval)
+    case waitingDestinationVertex
+    case counterConnectionGrowing(duration: TimeInterval)
+}
+
 enum EdgeState {
     case seed
-    case growing(duration: TimeInterval)
+    case growing(phase: EdgeGrowingPhase)
     case active
     
     var isGrowed: Bool {

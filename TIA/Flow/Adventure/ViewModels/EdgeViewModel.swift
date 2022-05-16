@@ -18,10 +18,8 @@ class EdgeViewModel: ObservableObject {
     private var subscriptions: [AnyCancellable] = []
     var eventsPublisher: ViewEventsPublisher?
     
-    var curve: BezierCurve {
-        get { model.curve }
-        set { model.curve = newValue }
-    }
+    var curve: BezierCurve { model.curve }
+    var state: EdgeState { model.state }
     
     init(model: Edge,
          color: Color,
@@ -38,6 +36,10 @@ class EdgeViewModel: ObservableObject {
 
 // MARK: View interaction methods
 extension EdgeViewModel {
+    func growingPrepared() {
+        eventsPublisher?.send(.edgeGrowingPrepared(edge: model))
+    }
+    
     func growingFinished() {
         eventsPublisher?.send(.edgeGrowingFinished(edge: model))
     }

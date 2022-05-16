@@ -10,6 +10,12 @@ import SwiftUI
 
 extension CGPoint {
     
+    static func from(_ from: CGPoint, to: CGPoint, t: CGFloat) -> CGPoint {
+        let line = Line(p1: from, p2: to)
+        let x = from.x + (to.x - from.x) * t
+        return CGPoint(x: x, y: line.y(x: x))
+    }
+    
     init(center: CGPoint, angle: CGFloat, radius: CGFloat) {
         let x = center.x + cos(angle) * radius
         let y = center.y - sin(angle) * radius // Due to inveted Y axis

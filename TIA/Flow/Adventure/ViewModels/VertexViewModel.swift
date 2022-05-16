@@ -16,6 +16,7 @@ class VertexViewModel: ObservableObject {
     @Published var color: Color
     @Published var resourceColor: Color
     
+    // TODO: Make all wrapped vars calculated values (no setter). Here and in all same view models
     var state: VertexState {
         get { model.state }
         set { model.state = newValue }

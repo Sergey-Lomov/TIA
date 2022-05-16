@@ -35,4 +35,12 @@ struct Line {
             c = p1.y - (p1.x * (p2.y - p1.y) / (p2.x - p1.x) )
         }
     }
+    
+    func y(x: CGFloat) -> CGFloat {
+        -1 * (a * x + c) / b
+    }
+    
+    func point(x: CGFloat) -> CGPoint {
+        return CGPoint(x: x, y: y(x: x))
+    }
 }

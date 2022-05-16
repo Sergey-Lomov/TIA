@@ -19,8 +19,8 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     private enum Timing {
         // TODO: Remove when view-engine interaction will be finished
         static let queue = DispatchQueue.main
-        static let edgeGrowing: TimeInterval = 1.5 * 0.1
-        static let vertexGrowing: TimeInterval = 0.3 * 0.1
+        static let edgeGrowing: TimeInterval = 1.5 * 10
+        static let vertexGrowing: TimeInterval = 0.3 * 10
     }
     
     var subscriptions: [AnyCancellable] = []
@@ -95,8 +95,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     }
     
     private func growEdge(_ edge: Edge) {
-        let duration = Timing.edgeGrowing * edge.length()
-        edge.state = .growing(duration: duration)
+        edge.state = .preGrowing
     }
     
     private func handlePlayerPositionUpdate(_ newValue: PlayerPosition) {
@@ -146,6 +145,9 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         switch event {
         case .viewInitFinished:
             growFromEntrace()
+        case .edgeGrowingPrepared(let edge):
+            let duration = Timing.edgeGrowing * edge.length()
+            edge.state = .growing(duration: duration)
         case .edgeGrowingFinished(let edge):
             edge.state = .active
             growVertex(edge.to)

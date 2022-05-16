@@ -120,7 +120,7 @@ struct BezierCurve {
         return Math.angle(p1: p1, p2: p2)
     }
     
-    func getNormaAngle(t: CGFloat) -> CGFloat {
+    func getNormalAngle(t: CGFloat) -> CGFloat {
         return getTangentAngle(t: t) + .pi / 2
     }
     
@@ -151,10 +151,14 @@ struct BezierCurve {
         return t
     }
     
-    func intersectionWith(center: CGPoint, radius: CGFloat, accuracy: CGFloat, limit: Int = Self.intersectionLimit) -> CGPoint {
-        let t = Math.stepSearch(from: 0, to: 1, steps: limit) {
+    func intersectionTWith(center: CGPoint, radius: CGFloat, accuracy: CGFloat, limit: Int = Self.intersectionLimit) -> CGFloat {
+        return Math.stepSearch(from: 0, to: 1, steps: limit) {
             abs(getPoint(t: $0).distanceTo(center) - radius)
         }
+    }
+    
+    func intersectionWith(center: CGPoint, radius: CGFloat, accuracy: CGFloat, limit: Int = Self.intersectionLimit) -> CGPoint {
+        let t = intersectionTWith(center: center, radius: radius, accuracy: accuracy)
         return getPoint(t: t)
     }
 }

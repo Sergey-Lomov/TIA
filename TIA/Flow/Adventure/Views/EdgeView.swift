@@ -13,7 +13,7 @@ struct EdgeWrapper: View {
     var body: some View {
         CenteredGeometryReader { geometry in
             EdgePathView(edge: edge)
-            
+
             if edge.model.state.isGrowed {
                 ForEach(edge.model.gates.indices, id: \.self) { index in
                     let gate = edge.model.gates[index]
@@ -34,56 +34,106 @@ struct EdgeWrapper: View {
 }
 
 struct EdgePathView: View {
+    private static let intersectionAccuracy: CGFloat = 5
+    
     @ObservedObject var edge: EdgeViewModel
     
     var body: some View {
         CenteredGeometryReader { geometry in
-            let animation = Animation.easeOut(duration: growDuration)
+            let progress = progress(geometry)
+            
             SingleCurveShape(curve: curve)
                 .trim(from: 0, to: progress)
                 .stroke(lineWidth: Layout.Edge.undrelineWidth)
                 .animation(animation, value: progress)
                 .foregroundColor(edge.borderColor)
-                .frame(geometry: geometry)
             
             SingleCurveShape(curve: curve)
                 .onReach(curve) {
-                    edge.growingFinished()
+                    handleMutatingFinished()
                 }
                 .trim(from: 0, to: progress)
                 .stroke(lineWidth: Layout.Edge.curveWidth)
                 .animation(animation, value: progress)
                 .foregroundColor(edge.color)
-                .frame(geometry: geometry)
+            
+            if edge.model.from.state.isGrowed {
+                let scaledCurve = curve.scaled(geometry)
+                EdgeConnectorShape(constants: fromConnector(geometry), curve: scaledCurve, progress: progress)
+                    .animation(animation, value: AnimatablePair<BezierCurve, CGFloat>(scaledCurve, progress))
+                    .foregroundColor(edge.color)
+                    .offset(x: geometry.size.width / 2, y: geometry.size.height / 2)
+            }
         }
     }
     
     private var curve: BezierCurve {
-        switch edge.model.state {
-        case .seed:
+        switch edge.state {
+        case .seed, .preGrowing:
+            // TODO: Remove seed curve to consistent name (pregrowingCurve)
             return edge.model.seedCurve
         default:
             return edge.curve
         }
     }
     
-    private var progress: CGFloat {
-        switch edge.model.state {
+    private func progress(_ geometry: GeometryProxy) -> CGFloat {
+        switch edge.state {
         case .seed:
             return 0
+        case .preGrowing:
+            let curve = edge.curve.scaled(geometry)
+            let center = edge.model.from.point.scaled(geometry)
+            let radius = Layout.Vertex.diameter / 2 * geometry.minSize
+            return curve.intersectionTWith(center: center, radius: radius, accuracy: Self.intersectionAccuracy)
         default:
             return 1
         }
     }
     
-    private var growDuration: CGFloat {
-        switch edge.model.state {
+    private var animation: Animation? {
+        switch edge.state {
+        case .preGrowing:
+            return .linear(duration: 0)
         case .growing(let duration):
-            return duration
+            return .easeOut(duration: duration)
         default:
-            return 0
+            return nil
         }
     }
+
+    private func handleMutatingFinished() {
+        switch edge.state {
+        case .preGrowing:
+            edge.growingPrepared()
+        case .growing:
+            edge.growingFinished()
+        default:
+            break
+        }
+    }
+    
+    private func fromConnector(_ geometry: GeometryProxy) -> EdgeConnectorConstants {
+        let center = edge.model.from.point.scaled(geometry)
+        let radius = Layout.Vertex.diameter / 2 * geometry.minSize
+        return .init(geometry: geometry, center: center, radius: radius)
+    }
+    
+    // TODO: Add connectors calcualtion into geometry cashing system
+//    private func connector(_ geometry: GeometryProxy, center: CGPoint, radius: CGFloat) -> EdgeConnectorConstants {
+//        let curve = edge.curve.scaled(geometry)
+//        let initialT = curve.intersectionTWith(center: center, radius: radius, accuracy: intersectionAccuracy)
+//        let intersection = curve.getPoint(t: initialT)
+//        let fromAngle = Math.angle(p1: intersection, p2: center)
+//        let p1Angle = fromAngle - (connectWidth / 2 / radius)
+//        let p2Angle = fromAngle + (connectWidth / 2 / radius)
+//        let p1 = CGPoint(center: center, angle: p1Angle, radius: radius)
+//        let p2 = CGPoint(center: center, angle: p2Angle, radius: radius)
+//        let a1 = p1Angle > fromAngle ? p1Angle - .pi / 2 : p1Angle + .pi / 2
+//        let a2 = p2Angle > fromAngle ? p2Angle - .pi / 2 : p2Angle + .pi / 2
+//
+//        return .init(point1: p1, angle1: a1, point2: p2, angle2: a2, initialT: initialT)
+//    }
 }
 
 struct EdgeGateView: View {
@@ -121,18 +171,3 @@ struct EdgeGateView: View {
     }
 }
 
-struct EdgeView_Previews: PreviewProvider {
-    static var previews: some View {
-        let descriptor = GameState().scenario.adventures[.dark]?.first
-        let layout = AdventureLayout.random(for: descriptor!)
-        let adventure = ScenarioService.shared.adventureFor(descriptor!, layout: layout)
-        let viewModel = AdventureViewModel(
-            adventure,
-            player: GameEngine.shared.adventureEngine!.player,
-            resources: GameEngine.shared.adventureEngine!.resources,
-            listener: GameEngine.shared.adventureEngine,
-            eventsSource: GameEngine.shared.adventureEngine)
-        let edge = viewModel.edges.first
-        EdgePathView(edge: edge!)
-    }
-}

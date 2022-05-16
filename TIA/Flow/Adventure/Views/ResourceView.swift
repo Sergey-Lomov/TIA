@@ -238,7 +238,7 @@ struct ResourceWrapper: View {
         let c2p2 = mid.randomPoint(maxDelta: controlsRandomization)
         
         let distance = CGFloat.random(in: toGateRandomizationRange)
-        let angle = edge.curve.scaled(geometry).getNormaAngle(t: t)
+        let angle = edge.curve.scaled(geometry).getNormalAngle(t: t)
         let c1p2 = CGPoint(center: nearGate, angle: angle, radius: distance)
         let c2p1 = CGPoint(center: nearGate, angle: angle + .pi, radius: distance)
         

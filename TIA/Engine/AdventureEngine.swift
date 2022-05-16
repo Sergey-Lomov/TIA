@@ -19,8 +19,8 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     private enum Timing {
         // TODO: Remove when view-engine interaction will be finished
         static let queue = DispatchQueue.main
-        static let edgeGrowing: TimeInterval = 1.5 * 10
-        static let vertexGrowing: TimeInterval = 0.3 * 10
+        static let edgeGrowing: TimeInterval = 1.5 //* 10
+        static let vertexGrowing: TimeInterval = 0.3 //* 10
     }
     
     var subscriptions: [AnyCancellable] = []
@@ -92,10 +92,23 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
                 break
             }
         }
+        
+        let waitingEdges = vertex.inEdges.filter {
+            let metastate = EdgeViewMetastate.forState($0.state)
+            switch metastate {
+            case .waitingVertex:
+                return true
+            default:
+                return false
+            }
+        }
+        for edge in waitingEdges {
+            edge.state = .growing(phase: .preparingCounterConnector)
+        }
     }
     
     private func growEdge(_ edge: Edge) {
-        edge.state = .preGrowing
+        edge.state = .growing(phase: .preparing)
     }
     
     private func handlePlayerPositionUpdate(_ newValue: PlayerPosition) {
@@ -147,15 +160,16 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
             growFromEntrace()
         case .edgeGrowingPrepared(let edge):
             let duration = Timing.edgeGrowing * edge.length()
-            edge.state = .growing(duration: duration)
-        case .edgeGrowingFinished(let edge):
-            edge.state = .active
-            growVertex(edge.to)
-            checkInitGrowingCompletion()
+            edge.state = .growing(phase: .pathGrowing(duration: duration))
+        case .edgePathGrowed(let edge):
+            handleEdgePathGrowed(edge)
+        case .edgeCounterConnectorPrepared(let edge):
+            let duration = Timing.edgeGrowing * edge.length()
+            edge.state = .growing(phase: .counterConnectionGrowing(duration: duration))
+        case .edgeCounterConnectorGrowed(let edge):
+            handleEdgeCounterConnectorGrowed(edge)
         case .vertexGrowingFinished(let vertex):
-            vertex.state = .active
-            growFromVertex(vertex)
-            checkInitGrowingCompletion()
+            handleVertexGrowed(vertex)
         case .vertexSelected(let vertex):
             handleVertexSelection(vertex)
         case .resourceMovedToGate(let resource):
@@ -186,6 +200,12 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         lifestate = .gameplay
         player.position = .vertex(vertex: entrance)
     }
+                                                     
+    private func handleVertexGrowed(_ vertex: Vertex) {
+        vertex.state = .active
+        growFromVertex(vertex)
+        checkInitGrowingCompletion()
+    }
     
     private func handleVertexSelection(_ vertex: Vertex) {
         guard case .vertex(let old) = player.position, old.id != vertex.id else {
@@ -198,6 +218,20 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         }
         
         tryMove(player: player, edge: edge, forward: edge.from == old)
+    }
+    
+    private func handleEdgePathGrowed(_ edge: Edge) {
+        if edge.to.state.isGrowed {
+            edge.state = .growing(phase: .preparingCounterConnector)
+        } else {
+            edge.state = .growing(phase: .waitingDestinationVertex)
+            growVertex(edge.to)
+        }
+    }
+    
+    private func handleEdgeCounterConnectorGrowed(_ edge: Edge) {
+        edge.state = .active
+        checkInitGrowingCompletion()
     }
     
     private func handleResourcePresented(_ resource: Resource) {

@@ -40,7 +40,15 @@ extension EdgeViewModel {
         eventsPublisher?.send(.edgeGrowingPrepared(edge: model))
     }
     
-    func growingFinished() {
-        eventsPublisher?.send(.edgeGrowingFinished(edge: model))
+    func pathGrowingFinished() {
+        eventsPublisher?.send(.edgePathGrowed(edge: model))
+    }
+    
+    func counterConnectorGrowingPrepared() {
+        eventsPublisher?.send(.edgeCounterConnectorPrepared(edge: model))
+    }
+    
+    func counterConnectorGrowingFinished() {
+        eventsPublisher?.send(.edgeCounterConnectorGrowed(edge: model))
     }
 }

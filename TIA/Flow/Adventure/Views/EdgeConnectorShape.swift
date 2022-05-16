@@ -8,32 +8,19 @@
 import Foundation
 import SwiftUI
 
-struct EdgeConnectorConstants {
-    let geometry: GeometryProxy
-    let center: CGPoint
-    let radius: CGFloat
-    
-//    let point1: CGPoint
-//    let angle1: CGFloat
-//    let point2: CGPoint
-//    let angle2: CGFloat
-//    /// Thit value defines, what value of ''t'' should be used like zero for connector. This should be value of intersection of edge and vertex
-//    let initialT: CGFloat
-}
-
 struct EdgeConnectorShape: Shape {
     
-    private let connectWidth: CGFloat = 20
-    private let intersectionAccuracy: CGFloat = 5
-    private let connectLength: CGFloat = 0.05
-
+    static private let connectWidth: CGFloat = 20
+    static private let intersectionAccuracy: CGFloat = 5
+    static private let connectLength: CGFloat = 0.05
     static private let length: CGFloat = 0.1
     static private let hConcavity: CGFloat = 0.5
     static private let vConcavity: CGFloat = 0.2
     
-    let constants: EdgeConnectorConstants
     var curve: BezierCurve
     var progress: CGFloat
+    let center: CGPoint
+    let radius: CGFloat
     
     var animatableData: AnimatablePair<BezierCurve, CGFloat> {
         get { .init(curve, progress) }
@@ -44,13 +31,12 @@ struct EdgeConnectorShape: Shape {
     }
 
     func path(in rect: CGRect) -> Path {
-        let center = constants.center
-        let radius = constants.radius
-        let initialT = curve.intersectionTWith(center: center, radius: radius, accuracy: intersectionAccuracy)
+        // TODO: Investigate possibility to caches part of calculations. This may be actual for "from" connectors
+        let initialT = curve.intersectionTWith(center: center, radius: radius, accuracy: Self.intersectionAccuracy)
         let intersection = curve.getPoint(t: initialT)
         let fromAngle = Math.angle(p1: intersection, p2: center)
-        let p1Angle = fromAngle - (connectWidth / 2 / radius)
-        let p2Angle = fromAngle + (connectWidth / 2 / radius)
+        let p1Angle = fromAngle - (Self.connectWidth / 2 / radius)
+        let p2Angle = fromAngle + (Self.connectWidth / 2 / radius)
         
         let p1 = CGPoint(center: center, angle: p1Angle, radius: radius)
         let p2 = CGPoint(center: center, angle: p2Angle, radius: radius)

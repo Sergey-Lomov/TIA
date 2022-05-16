@@ -282,11 +282,11 @@ struct ResourceView: View {
 // TODO: Should be removed if became unused after adding different idle animations for resources based on vertex personality.
 private extension Animation {
     static var groupRotation: Animation {
-        linear(duration: 40)//.repeatForever(autoreverses: false)
+        linear(duration: 40)
     }
     
     static var soloRotation: Animation {
-        linear(duration: 5)//.repeatForever(autoreverses: false)
+        linear(duration: 15)
     }
     
     static var gateMoving: Animation {

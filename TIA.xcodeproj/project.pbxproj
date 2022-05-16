@@ -60,7 +60,6 @@
 		679E371828303BFB00D9EE41 /* IngameMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679E371728303BFB00D9EE41 /* IngameMenuView.swift */; };
 		679E371A28303D1900D9EE41 /* IngameMenuViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679E371928303D1900D9EE41 /* IngameMenuViewModel.swift */; };
 		679E371C28303DCC00D9EE41 /* IngameMenuModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679E371B28303DCC00D9EE41 /* IngameMenuModel.swift */; };
-		679E37202831283B00D9EE41 /* EdgePathView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679E371F2831283B00D9EE41 /* EdgePathView.swift */; };
 		679E37222831928700D9EE41 /* EdgeConnectorShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679E37212831928700D9EE41 /* EdgeConnectorShape.swift */; };
 		679E37242832616D00D9EE41 /* EdgeViewMetastate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679E37232832616D00D9EE41 /* EdgeViewMetastate.swift */; };
 		67A3DD5A2821DD2F00B5A88F /* PlayerMetastate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67A3DD592821DD2F00B5A88F /* PlayerMetastate.swift */; };
@@ -157,7 +156,6 @@
 		679E371728303BFB00D9EE41 /* IngameMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngameMenuView.swift; sourceTree = "<group>"; };
 		679E371928303D1900D9EE41 /* IngameMenuViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngameMenuViewModel.swift; sourceTree = "<group>"; };
 		679E371B28303DCC00D9EE41 /* IngameMenuModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngameMenuModel.swift; sourceTree = "<group>"; };
-		679E371F2831283B00D9EE41 /* EdgePathView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgePathView.swift; sourceTree = "<group>"; };
 		679E37212831928700D9EE41 /* EdgeConnectorShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeConnectorShape.swift; sourceTree = "<group>"; };
 		679E37232832616D00D9EE41 /* EdgeViewMetastate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeViewMetastate.swift; sourceTree = "<group>"; };
 		67A3DD592821DD2F00B5A88F /* PlayerMetastate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerMetastate.swift; sourceTree = "<group>"; };
@@ -253,7 +251,6 @@
 				67B533882804CB8E00EA959A /* AdventureView.swift */,
 				67B5338A2804CC4500EA959A /* VertexView.swift */,
 				672792462806441300FEE07E /* EdgeView.swift */,
-				679E371F2831283B00D9EE41 /* EdgePathView.swift */,
 				679E37212831928700D9EE41 /* EdgeConnectorShape.swift */,
 				675E2754280DA0E600FB5783 /* EyeView.swift */,
 				675E2767280F064400FB5783 /* PlayerView.swift */,
@@ -645,7 +642,6 @@
 				67B5336A28009C4D00EA959A /* CircleShape.swift in Sources */,
 				67834858282A9C44002D9ABA /* ResourceStateTransform.swift in Sources */,
 				679E371C28303DCC00D9EE41 /* IngameMenuModel.swift in Sources */,
-				679E37202831283B00D9EE41 /* EdgePathView.swift in Sources */,
 				677C31252811C97A0014BECD /* AnimatableProxy.swift in Sources */,
 				67BDE95328171112005B0194 /* ResourceShape.swift in Sources */,
 				67B533962804EC6000EA959A /* Array.swift in Sources */,

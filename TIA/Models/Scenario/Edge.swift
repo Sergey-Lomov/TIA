@@ -13,6 +13,7 @@ enum EdgeGrowingPhase {
     case preparing
     case pathGrowing(duration: TimeInterval)
     case waitingDestinationVertex
+    case preparingCounterConnector
     case counterConnectionGrowing(duration: TimeInterval)
 }
 

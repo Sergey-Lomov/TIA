@@ -8,6 +8,8 @@
 import CoreGraphics
 
 extension CGFloat {
+    static var hpi: CGFloat { .pi / 2 }
+    
     static var cos0: CGFloat = 1
     static var sin0: CGFloat = 0
     static var cos30: CGFloat = sqrt(3) / 2

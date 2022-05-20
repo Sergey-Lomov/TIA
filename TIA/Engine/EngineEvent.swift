@@ -19,5 +19,6 @@ protocol EngineEventsListener {
 }
 
 enum EngineEvent {
-    case playerMoves(from: PlayerPosition?, to: PlayerPosition?)
+    case edgeAdded(edge: Edge)
+    case edgeRemoved(edge: Edge)
 }

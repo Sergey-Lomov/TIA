@@ -17,8 +17,14 @@ enum EdgeGrowingPhase {
     case counterConnectionGrowing(duration: TimeInterval)
 }
 
+enum EdgeSeedPhase {
+    case compressed
+    case preextended
+    case extended
+}
+
 enum EdgeState {
-    case seed
+    case seed(phase: EdgeSeedPhase)
     case growing(phase: EdgeGrowingPhase)
     case active
     
@@ -37,7 +43,7 @@ class Edge: ObservableObject, IdEqutable {
     private let seedCurveDelta: CGFloat = 0.1
     
     let id: String
-    let from: Vertex
+    var from: Vertex
     var to: Vertex
     var gates: [EdgeGate]
     var growOnStart: Bool
@@ -61,7 +67,7 @@ class Edge: ObservableObject, IdEqutable {
          to: Vertex,
          price: [ResourceType] = [],
          growOnStart: Bool,
-         state: EdgeState = .seed,
+         state: EdgeState = .seed(phase: .compressed),
          curve: BezierCurve) {
         self.id = id
         self.from = from
@@ -71,14 +77,6 @@ class Edge: ObservableObject, IdEqutable {
         self.curve = curve
         self.seedCurve = curve.randomControlsCurve(maxDelta: seedCurveDelta)
         self.gates = price.map { .init(requirement: .resource($0)) }
-//        self.gates = []
-//
-//        for resource in price {
-//            let ratio = CGFloat(gates.count + 1) / CGFloat(price.count)
-//            let point = curve.getPoint(lengthRatio: ratio, steps: 100)
-//            let gate = EdgeGate(point: point, requirement: .resource(resource))
-//            gates.append(gate)
-//        }
     }
 }
 

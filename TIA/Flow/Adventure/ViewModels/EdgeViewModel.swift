@@ -36,6 +36,11 @@ class EdgeViewModel: ObservableObject {
 
 // MARK: View interaction methods
 extension EdgeViewModel {
+    
+    func seedExtensionPrepared() {
+        eventsPublisher?.send(.edgeSeedExtensionPrepared(edge: model))
+    }
+    
     func growingPrepared() {
         eventsPublisher?.send(.edgeGrowingPrepared(edge: model))
     }

@@ -72,10 +72,9 @@ extension ComplexCurve: VectorArithmetic {
 }
 
 extension ComplexCurve {
-    private static let cirleControlCoefficient: CGFloat = 0.66666
     
     static func circle(radius: CGFloat) -> ComplexCurve {
-        let control = radius * 2 * cirleControlCoefficient
+        let control = radius * 2 * Math.cirleControlCoefficient
         let components = [
             BezierCurve(points: [
                 CGPoint(x: 0, y: radius),

@@ -9,6 +9,8 @@ import Foundation
 import SwiftUI
 
 final class Math {
+    static let cirleControlCoefficient: CGFloat = 0.66666
+    
     static func divide(_ v1: CGFloat, _ v2: CGFloat) -> CGFloat {
         return v2 == 0 ? 0 : v1 / v2
     }

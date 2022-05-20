@@ -12,7 +12,7 @@ struct BezierCurve {
     
     private static let intersectionLimit: Int = 1000
     private static let legthRatioLimit: Int = 100
-    private static let targentDelta: CGFloat = 0.01
+    private static let tangentDelta: CGFloat = 0.01
     private static let lengthSteps: Int = 100
     
     let id = UUID().uuidString
@@ -115,13 +115,13 @@ struct BezierCurve {
     }
     
     func getTangentAngle(t: CGFloat) -> CGFloat {
-        let p1 = getPoint(t: t - Self.targentDelta)
-        let p2 = getPoint(t: t + Self.targentDelta)
+        let p1 = getPoint(t: t - Self.tangentDelta)
+        let p2 = getPoint(t: t + Self.tangentDelta)
         return Math.angle(p1: p1, p2: p2)
     }
     
     func getNormalAngle(t: CGFloat) -> CGFloat {
-        return getTangentAngle(t: t) + .pi / 2
+        return getTangentAngle(t: t) + .hpi
     }
     
     func getT(lengthRatio: CGFloat, steps: Int = legthRatioLimit) -> CGFloat {

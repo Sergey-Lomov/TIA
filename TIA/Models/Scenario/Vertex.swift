@@ -10,7 +10,7 @@ import CoreGraphics
 import Combine
 
 enum VertexType: String, Codable {
-    case tools
+    case menu
     case entrance
     case common
     case exit
@@ -45,7 +45,7 @@ class Vertex: ObservableObject, IdEqutable {
     init(id: String,
          type: VertexType = .common,
          state: VertexState = .seed,
-         point: CGPoint,
+         point: CGPoint = .zero,
          resources: [ResourceType] = []) {
         self.id = id
         self.type = type

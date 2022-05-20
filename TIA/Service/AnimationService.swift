@@ -30,6 +30,7 @@ final class AnimationService {
         }
     }
     
+    // TODO: Introduce player moving phases duration instead calculate durations each time based on eye transforamation durations. This will be clear concept instead current solution, which make many unrelated animations be based at yey transformation pahases.
     private let eyeTransDuration: [EyeState: [EyeState: TimeInterval]] = [
         .closed: [.compressed: 0.5, .opened: 1],
         .compressed: [.closed: 0.5],
@@ -44,6 +45,11 @@ final class AnimationService {
     
     var openGate: Animation { .easeIn(duration: Const.Gate.resizeDuration) }
     var closeGate: Animation { .easeOut(duration: Const.Gate.resizeDuration) }
+    
+    var menuSeedExtension: Animation {
+        let duration = eyeTransDuration(from: .compressed, to: .closed) + eyeTransDuration(from: .closed, to: .opened)
+        return .easeOut(duration: duration * 10)
+    }
     
     func eyeTransDuration(from: EyeState, to: EyeState) -> TimeInterval {
         return eyeTransDuration[from]?[to] ?? 0

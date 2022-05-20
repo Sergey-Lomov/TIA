@@ -9,6 +9,8 @@ import Foundation
 
 enum EdgeViewMetastate {
     case seed
+    case preextendedSeed
+    case extendedSeed
     case pregrowing
     case growPath(duration: TimeInterval)
     case waitingVertex
@@ -18,8 +20,15 @@ enum EdgeViewMetastate {
     
     static func forState(_ state: EdgeState) -> EdgeViewMetastate {
         switch state {
-        case .seed:
-            return .seed
+        case .seed(let phase):
+            switch phase {
+            case .compressed:
+                return .seed
+            case .preextended:
+                return .preextendedSeed
+            case .extended:
+                return .extendedSeed
+            }
         case .growing(let phase):
             switch phase {
             case .preparing:
@@ -49,7 +58,7 @@ enum EdgeViewMetastate {
     
     var toConnectorVisible: Bool {
         switch self {
-        case .seed, .pregrowing, .growPath, .waitingVertex:
+        case .seed, .preextendedSeed, .extendedSeed, .pregrowing, .growPath, .waitingVertex:
             return false
         default:
             return true

@@ -11,9 +11,9 @@ import SwiftUI
 extension CGPoint {
     
     static func from(_ from: CGPoint, to: CGPoint, t: CGFloat) -> CGPoint {
-        let line = Line(p1: from, p2: to)
         let x = from.x + (to.x - from.x) * t
-        return CGPoint(x: x, y: line.y(x: x))
+        let y = from.y + (to.y - from.y) * t
+        return CGPoint(x: x, y: y)
     }
     
     init(center: CGPoint, angle: CGFloat, radius: CGFloat) {

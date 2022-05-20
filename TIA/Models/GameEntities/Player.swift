@@ -59,6 +59,24 @@ enum PlayerPosition {
         }
     }
     
+    var currnetVertex: Vertex? {
+        switch self {
+        case .abscent:
+            return nil
+        case .edge(let edge, let status, let direction):
+            switch status {
+            case .compressing:
+                return direction.startVertex(edge)
+            case .moving:
+                return nil
+            case .expanding:
+                return direction.endVertex(edge)
+            }
+        case .vertex(let vertex):
+            return vertex
+        }
+    }
+    
     var currnetEdge: Edge? {
         switch self {
         case .edge(let edge, let status, _):

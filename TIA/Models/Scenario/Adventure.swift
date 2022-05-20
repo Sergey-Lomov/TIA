@@ -20,6 +20,8 @@ enum AdventureState {
 }
 
 class Adventure: ObservableObject {
+    
+    private static let menuEdgePrefix = "menu_edge_"
 
     let id: String
     let index: Int
@@ -43,5 +45,22 @@ class Adventure: ObservableObject {
         self.theme = theme
         self.vertices = vertices
         self.edges = edges
+    }
+    
+    func menuEdge(from: Vertex) -> Edge? {
+        return edges.firstById(Self.menuEdgePrefix + from.id)
+    }
+    
+    func addMenuEdge(from: Vertex, to: Vertex, curve: BezierCurve) -> Edge {
+        let edge = Edge(id: Self.menuEdgePrefix + from.id, from: from, to: to, growOnStart: false, curve: curve)
+        edges.append(edge)
+        return edge
+    }
+    
+    func removeMenuEdge(from: Vertex) -> Edge? {
+        let edge = edges.first { $0.id == Self.menuEdgePrefix + from.id }
+        guard let edge = edge else { return nil }
+        edges.remove(edge)
+        return edge
     }
 }

@@ -19,9 +19,12 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     private enum Timing {
         // TODO: Remove when view-engine interaction will be finished
         static let queue = DispatchQueue.main
-        static let edgeGrowing: TimeInterval = 1.5 //* 10
-        static let vertexGrowing: TimeInterval = 0.3 //* 10
+        static let edgeGrowing: TimeInterval = 1.5 * 0.3
+        static let vertexGrowing: TimeInterval = 0.3 * 0.3
     }
+    
+    private static let menuVertexId = "menu_vertex"
+    private static let menuEdgeId = "menu_edge"
     
     var subscriptions: [AnyCancellable] = []
     var eventsPublisher = EngineEventsPublisher()
@@ -30,10 +33,12 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     var lifestate: AdventureLifecycle = .initiation
     var player: Player
     var resources: [Resource]
+    var menuVertex: Vertex
     
     init(adventure: Adventure) {
         self.adventure = adventure
         self.player = Player(position: .abscent)
+        self.menuVertex = Vertex(id: Self.menuVertexId, type: .menu)
         
         self.resources = []
         for vertex in adventure.vertices {
@@ -117,16 +122,21 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         }
         
         switch newValue {
-        case .abscent, .vertex:
+        case .abscent:
+            removeMenuEdge(player.position)
+        case .vertex:
             break
         case .edge(let edge, let status, let direction):
             switch status {
             case .compressing:
                 unfreshPlayerResources(player)
             case .moving:
+                removeMenuEdge(player.position)
                 let vertex = direction.endVertex(edge)
                 addPlayerResources(vertexResources(vertex))
+                addMenuEdge(vertex)
             case .expanding:
+                extendMenuEdgeSeed(newValue)
                 applyEstimated(playerResources(player))
                 recloseGates(edge: edge)
             }
@@ -158,6 +168,14 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         switch event {
         case .viewInitFinished:
             growFromEntrace()
+            
+        case .vertexGrowingFinished(let vertex):
+            handleVertexGrowed(vertex)
+        case .vertexSelected(let vertex):
+            handleVertexSelection(vertex)
+        
+        case .edgeSeedExtensionPrepared(let edge):
+            edge.state = .seed(phase: .extended)
         case .edgeGrowingPrepared(let edge):
             let duration = Timing.edgeGrowing * edge.length()
             edge.state = .growing(phase: .pathGrowing(duration: duration))
@@ -168,10 +186,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
             edge.state = .growing(phase: .counterConnectionGrowing(duration: duration))
         case .edgeCounterConnectorGrowed(let edge):
             handleEdgeCounterConnectorGrowed(edge)
-        case .vertexGrowingFinished(let vertex):
-            handleVertexGrowed(vertex)
-        case .vertexSelected(let vertex):
-            handleVertexSelection(vertex)
+        
         case .resourceMovedToGate(let resource):
             handleResourceMovedToGate(resource)
         case .resourcePresented(let resource):
@@ -292,6 +307,33 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         guard status == .incoming else { return }
         resource.state = .gate(gate: gate, edge: edge, fromVertex: vertex, fromIndex: index, state: .stay, prestate: prestate)
         gate.isOpen = true
+    }
+    
+    // MARK: Menu edge
+    private func compressMenuEdgeSeed(_ position: PlayerPosition) {
+        guard let vertex = position.currnetVertex else { return }
+        let edge = adventure.menuEdge(from: vertex)
+        edge?.state = .seed(phase: .preextended)
+    }
+    
+    private func extendMenuEdgeSeed(_ position: PlayerPosition) {
+        guard let vertex = position.currnetVertex else { return }
+        let edge = adventure.menuEdge(from: vertex)
+        edge?.state = .seed(phase: .preextended)
+    }
+    
+    private func addMenuEdge(_ vertex: Vertex?) {
+        guard let vertex = vertex else { return }
+        let curve = BezierCurve(points: [vertex.point, vertex.point, menuVertex.point, menuVertex.point])
+        let edge = adventure.addMenuEdge(from: vertex, to: menuVertex, curve: curve)
+        eventsPublisher.send(.edgeAdded(edge: edge))
+    }
+    
+    private func removeMenuEdge(_ position: PlayerPosition) {
+        guard let vertex = position.currnetVertex else { return }
+        if let edge = adventure.removeMenuEdge(from: vertex) {
+            eventsPublisher.send(.edgeRemoved(edge: edge))
+        }
     }
     
     // MARK: Resources handling

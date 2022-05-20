@@ -87,6 +87,7 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
     
     private func resource(_ resource: ResourceViewModel, willChangeState state: ResourceState) {
         switch state {
+            // TODO: Use engine events publisher insted this additional resource state
         case .deletion:
             resources.remove(resource)
         default:
@@ -94,28 +95,34 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
         }
     }
     
-    
-    // TODO: Remove if still be unsused
     func subscribeTo(_ publisher: EngineEventsPublisher) {
-//        let subscription = publisher.sink {
-//            [self] event in
-//            handleEngineEvent(event)
-//        }
-//        subscriptions.append(subscription)
+        subscriptions.sink(publisher) {
+            [self] event in
+            handleEngineEvent(event)
+        }
     }
     
-    // TODO: Engine should notify view by @ObserverObject. So, this handler should be removed if it still be empty
     // MARK: Engine events handler
-//    private func handleEngineEvent(_ event: EngineEvent) {
-//        switch event {
-//        case .playerMoves(let from, let to):
-//            handlePlayersMove(from: from, to: to)
-//        }
-//    }
-//
-//    private func handlePlayersMove(from: PlayerPosition?, to: PlayerPosition?) {
-//        player.position = to
-//    }
+    
+    private func handleEngineEvent(_ event: EngineEvent) {
+        switch event {
+        case .edgeAdded(let edge):
+            handleEdgeAdding(edge)
+        case .edgeRemoved(let edge):
+            handleEdgeRemoving(edge)
+        }
+    }
+
+    private func handleEdgeAdding(_ edge: Edge) {
+        let schema = ColorSchema.schemaFor(model.theme)
+        let viewModel = EdgeViewModel(model: edge, color: schema.edge, borderColor: schema.background)
+        viewModel.eventsPublisher = eventsPublisher
+        edges.append(viewModel)
+    }
+    
+    private func handleEdgeRemoving(_ edge: Edge) {
+        edges.removeAll { $0.model == edge }
+    }
     
     // TODO: This method may became unused after done another TODOs in this file
     private func resourcesFor(_ vertex: Vertex) -> [ResourceViewModel] {

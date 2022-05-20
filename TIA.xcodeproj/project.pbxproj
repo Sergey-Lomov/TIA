@@ -62,6 +62,7 @@
 		679E371C28303DCC00D9EE41 /* IngameMenuModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679E371B28303DCC00D9EE41 /* IngameMenuModel.swift */; };
 		679E37222831928700D9EE41 /* EdgeConnectorShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679E37212831928700D9EE41 /* EdgeConnectorShape.swift */; };
 		679E37242832616D00D9EE41 /* EdgeViewMetastate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679E37232832616D00D9EE41 /* EdgeViewMetastate.swift */; };
+		679E372B2836C08800D9EE41 /* AnimatableTrio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679E372A2836C08800D9EE41 /* AnimatableTrio.swift */; };
 		67A3DD5A2821DD2F00B5A88F /* PlayerMetastate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67A3DD592821DD2F00B5A88F /* PlayerMetastate.swift */; };
 		67B5334D27FF8A5000EA959A /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5334C27FF8A5000EA959A /* Resource.swift */; };
 		67B5335927FF95AC00EA959A /* Vertex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5335827FF95AC00EA959A /* Vertex.swift */; };
@@ -158,6 +159,7 @@
 		679E371B28303DCC00D9EE41 /* IngameMenuModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngameMenuModel.swift; sourceTree = "<group>"; };
 		679E37212831928700D9EE41 /* EdgeConnectorShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeConnectorShape.swift; sourceTree = "<group>"; };
 		679E37232832616D00D9EE41 /* EdgeViewMetastate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeViewMetastate.swift; sourceTree = "<group>"; };
+		679E372A2836C08800D9EE41 /* AnimatableTrio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatableTrio.swift; sourceTree = "<group>"; };
 		67A3DD592821DD2F00B5A88F /* PlayerMetastate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerMetastate.swift; sourceTree = "<group>"; };
 		67B5334C27FF8A5000EA959A /* Resource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resource.swift; sourceTree = "<group>"; };
 		67B5335827FF95AC00EA959A /* Vertex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vertex.swift; sourceTree = "<group>"; };
@@ -240,6 +242,7 @@
 				675E276F280F6F0400FB5783 /* ColorSchema.swift */,
 				67BDE960281833D5005B0194 /* LayoutConstants.swift */,
 				67EDAC6628214FD600EA41CF /* IdEqutable.swift */,
+				679E372A2836C08800D9EE41 /* AnimatableTrio.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -634,6 +637,7 @@
 				67B5336828009BD200EA959A /* AdventureIconView.swift in Sources */,
 				675E2762280E313900FB5783 /* ViewEvent.swift in Sources */,
 				675E2740280A1E7100FB5783 /* Line.swift in Sources */,
+				679E372B2836C08800D9EE41 /* AnimatableTrio.swift in Sources */,
 				675E273C2809D98300FB5783 /* GameEngine.swift in Sources */,
 				67EDAC6128201BFF00EA41CF /* Math.swift in Sources */,
 				67279234280608FC00FEE07E /* JSONDecoder.swift in Sources */,

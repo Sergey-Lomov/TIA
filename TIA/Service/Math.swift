@@ -57,6 +57,20 @@ final class Math {
         
         return best
     }
+    
+    static func randomCurve(from: CGPoint, to: CGPoint, controlRadius: ClosedRange<CGFloat>, controlAngle: ClosedRange<CGFloat>) -> BezierCurve {
+        let fromToAngle = Math.angle(p1: to, p2: from)
+        let toFromAngle = fromToAngle + .pi
+        let c1_mult: CGFloat = Bool.random() ? 1 : -1
+        let c2_mult: CGFloat  = Bool.random() ? 1 : -1
+        let c1_angle = fromToAngle + CGFloat.random(in: controlAngle) * c1_mult
+        let c2_angle = toFromAngle + CGFloat.random(in: controlAngle) * c2_mult
+        let c1_radius = CGFloat.random(in: controlRadius)
+        let c2_radius = CGFloat.random(in: controlRadius)
+        let c1 = CGPoint(center: from, angle: c1_angle, radius: c1_radius)
+        let c2 = CGPoint(center: to, angle: c2_angle, radius: c2_radius)
+        return BezierCurve(points: [from, c1, c2, to])
+    }
 }
 
 extension VectorArithmetic {

@@ -205,12 +205,13 @@ struct ResourceWrapper: View {
     
     private func toGateCurve(gate: EdgeGate, edge: Edge, fromVertex: Vertex, fromIndex: Int, geometry: GeometryProxy) -> ComplexCurve {
         let delta = resourceSlot(geometry: geometry, vertex: fromVertex, index: fromIndex)
-        let p0 = fromVertex.point.scaled(geometry).translated(by: delta)
-        let p3 = LayoutService.gatePosition(geometry, gate: gate, edge: edge)
-        let mid = p0.average(with: p3)
-        let p1 = mid.randomPoint(maxDelta: controlsRandomization)
-        let p2 = mid.randomPoint(maxDelta: controlsRandomization)
-        return .init(points: [p0, p1, p2, p3])
+        let from = fromVertex.point.scaled(geometry).translated(by: delta)
+        let to = LayoutService.gatePosition(geometry, gate: gate, edge: edge)
+        let distance = from.distanceTo(to)
+        let radiusRange = FloatRange(from: distance / 2, to: distance)
+        let angleRange =  FloatRange(from: .hpi / 2, to: .hpi)
+        let curve = Math.randomCurve(from: from, to: to, controlRadius: radiusRange, controlAngle: angleRange)
+        return .init(curve)
     }
 
     private func failNearGateCurve(_ geometry: GeometryProxy, gate: EdgeGate, edge: Edge, vertex: Vertex, slot: Int) -> ComplexCurve {

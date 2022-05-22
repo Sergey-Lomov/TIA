@@ -23,9 +23,6 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         static let vertexGrowing: TimeInterval = 0.3 * 0.3
     }
     
-    private static let menuVertexId = "menu_vertex"
-    private static let menuEdgeId = "menu_edge"
-    
     var subscriptions: [AnyCancellable] = []
     var eventsPublisher = EngineEventsPublisher()
     
@@ -33,12 +30,13 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     var lifestate: AdventureLifecycle = .initiation
     var player: Player
     var resources: [Resource]
-    var menuVertex: Vertex
     
-    init(adventure: Adventure) {
+    private let menuPositioner: IngameMenuPositioner
+    
+    init(adventure: Adventure, menuPositioner: IngameMenuPositioner) {
         self.adventure = adventure
         self.player = Player(position: .abscent)
-        self.menuVertex = Vertex(id: Self.menuVertexId, type: .menu)
+        self.menuPositioner = menuPositioner
         
         self.resources = []
         for vertex in adventure.vertices {
@@ -131,12 +129,13 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
             case .compressing:
                 unfreshPlayerResources(player)
             case .moving:
-                removeMenuEdge(player.position)
                 let vertex = direction.endVertex(edge)
                 addPlayerResources(vertexResources(vertex))
+                removeMenuEdge(player.position)
+                updateMenuVertex()
                 addMenuEdge(vertex)
             case .expanding:
-                extendMenuEdgeSeed(newValue)
+                //extendMenuEdgeSeed(newValue)
                 applyEstimated(playerResources(player))
                 recloseGates(edge: edge)
             }
@@ -222,17 +221,13 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         checkInitGrowingCompletion()
     }
     
-    private func handleVertexSelection(_ vertex: Vertex) {
-        guard case .vertex(let old) = player.position, old.id != vertex.id else {
-            return
+    private func handleVertexSelection(_ newVertex: Vertex) {
+        guard case .vertex(let oldVertex) = player.position else { return }
+        if oldVertex == newVertex {
+            showIngameMenu(fromVertex: oldVertex)
+        } else {
+            tryMove(player: player, fromVertex: oldVertex, toVertex: newVertex)
         }
-        
-        let sharedEdges = old.edges.intersection(vertex.edges)
-        guard let edge = sharedEdges.first, edge.state.isGrowed else {
-            return
-        }
-        
-        tryMove(player: player, edge: edge, forward: edge.from == old)
     }
     
     private func handleEdgePathGrowed(_ edge: Edge) {
@@ -264,10 +259,26 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         resource.state = .vertex(vertex: vertex, index: index, total: total, idle: .rotation)
     }
     
-    private func tryMove(player: Player, edge: Edge, forward: Bool) {
+    private func showIngameMenu(fromVertex: Vertex) {
+        guard let edge = adventure.menuEdge(from: fromVertex) else { return }
+        
+        switch edge.state {
+        case .seed:
+            edge.state = .growing(phase: .preparing)
+        default:
+            break
+        }
+    }
+    
+    private func tryMove(player: Player, fromVertex: Vertex, toVertex: Vertex) {
+        let sharedEdges = fromVertex.edges.intersection(toVertex.edges)
+        guard let edge = sharedEdges.first, edge.state.isGrowed else {
+            return
+        }
+        
+        let forward = edge.from == fromVertex
         let count = edge.gates.count
         let range = forward ? Array(0..<count) : (0..<count).reversed()
-        let fromVertex = forward ? edge.from : edge.to
         
         var failIndex: Int? = nil
         for i in range {
@@ -310,6 +321,10 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     }
     
     // MARK: Menu edge
+    private func updateMenuVertex() {
+        menuVertex.point = menuPositioner.getMenuVertexPoint()
+    }
+    
     private func compressMenuEdgeSeed(_ position: PlayerPosition) {
         guard let vertex = position.currnetVertex else { return }
         let edge = adventure.menuEdge(from: vertex)
@@ -324,7 +339,9 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     
     private func addMenuEdge(_ vertex: Vertex?) {
         guard let vertex = vertex else { return }
-        let curve = BezierCurve(points: [vertex.point, vertex.point, menuVertex.point, menuVertex.point])
+        let menuVertex = Vertex(id: Self.menuVertexId + , type: .menu)
+        adventure.addVertex(menuVertex)
+        let curve = menuPositioner.randomMenuCurve(from: vertex.point, to: menuVertex.point)
         let edge = adventure.addMenuEdge(from: vertex, to: menuVertex, curve: curve)
         eventsPublisher.send(.edgeAdded(edge: edge))
     }

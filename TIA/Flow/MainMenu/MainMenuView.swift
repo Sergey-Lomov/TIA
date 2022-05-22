@@ -19,7 +19,8 @@ struct MainMenuView: View {
     @State var progress: CGFloat = 0
     
     var body: some View {
-        ZStack() {
+        CenteredGeometryReader { geometry in
+            
             Color.yellow
             WorldPickerView(scenario: game.scenario)
                 .frame(width: 200, height: 200)
@@ -30,7 +31,7 @@ struct MainMenuView: View {
                 .offset(x: 0, y: 150)
 
             Button("Start dark") {
-                GameEngine.shared.startAdventure(theme: .dark)
+                GameEngine.shared.startAdventure(theme: .dark, spaceSize: geometry.size)
             }
                 .offset(x: 0, y: 180)
         }.edgesIgnoringSafeArea(.all)

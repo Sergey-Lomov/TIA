@@ -24,6 +24,7 @@ enum EdgeSeedPhase {
 }
 
 enum EdgeState {
+    // TODO: Remove seed phases if extended seed blob still be unused
     case seed(phase: EdgeSeedPhase)
     case growing(phase: EdgeGrowingPhase)
     case active
@@ -75,6 +76,7 @@ class Edge: ObservableObject, IdEqutable {
         self.growOnStart = growOnStart
         self.state = state
         self.curve = curve
+        // TODO: For light theme seed curves should be equtable to main curves
         self.seedCurve = curve.randomControlsCurve(maxDelta: seedCurveDelta)
         self.gates = price.map { .init(requirement: .resource($0)) }
     }

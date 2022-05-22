@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreGraphics
 
 enum AdventureTheme: String, Codable, CaseIterable {
     case dark
@@ -22,12 +23,13 @@ enum AdventureState {
 class Adventure: ObservableObject {
     
     private static let menuEdgePrefix = "menu_edge_"
+    private static let menuVertexPrefix = "menu_vertex_"
 
     let id: String
     let index: Int
     var theme: AdventureTheme
-    var vertices: [Vertex]
-    var edges: [Edge]
+    private(set) var vertices: [Vertex]
+    private(set) var edges: [Edge]
     
     @Published var state: AdventureState = .planed
     
@@ -45,6 +47,15 @@ class Adventure: ObservableObject {
         self.theme = theme
         self.vertices = vertices
         self.edges = edges
+    }
+    
+    func addMenuVertex(from: Vertex, point: CGPoint) {
+        let id = Self.menuVertexPrefix + from.id
+        vertices.append(vertex)
+    }
+    
+    func removeVertex(_ vertex: Vertex) {
+        vertices.remove(vertex)
     }
     
     func menuEdge(from: Vertex) -> Edge? {

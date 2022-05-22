@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreGraphics
 
 final class GameEngine {
     
@@ -26,14 +27,15 @@ final class GameEngine {
         adventureEngine = nil
     }
     
-    func startAdventure(theme: AdventureTheme) {
+    func startAdventure(theme: AdventureTheme, spaceSize: CGSize) {
         let current = state.scenario.currentAdventure(theme: theme)
         guard let descriptor = current else { return }
         
         let layout = AdventureLayout.random(for: descriptor)
         let adventure = ScenarioService.shared.adventureFor(descriptor, layout: layout)
+        let menuPositioner = IngameMenuPositioner(adventure: adventure, size: spaceSize)
         
-        adventureEngine = AdventureEngine(adventure: adventure)
+        adventureEngine = AdventureEngine(adventure: adventure, menuPositioner: menuPositioner)
         state.activeAdventure = adventure
     }
 }

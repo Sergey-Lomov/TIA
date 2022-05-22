@@ -26,6 +26,10 @@ extension CGPoint {
         scaled(geometry.size)
     }
     
+    func scaled(_ scale: CGFloat) -> CGPoint {
+        return scaled(x: scale, y: scale)
+    }
+    
     func scaled(_ size: CGSize) -> CGPoint {
         return scaled(x: size.width, y: size.height)
     }

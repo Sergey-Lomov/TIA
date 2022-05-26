@@ -22,12 +22,21 @@ extension CGPoint {
         self.init(x: x, y: y)
     }
     
+    func mirrored(point: CGPoint = .zero) -> CGPoint {
+        return CGPoint(x: 2 * point.x - self.x,
+                       y: 2 * point.y - self.y)
+    }
+    
     func scaled(_ geometry: GeometryProxy) -> CGPoint {
         scaled(geometry.size)
     }
     
     func scaled(_ size: CGSize) -> CGPoint {
         return scaled(x: size.width, y: size.height)
+    }
+    
+    func scaled(_ scale: CGFloat) -> CGPoint {
+        return scaled(x: scale, y: scale)
     }
     
     func scaled(x sx: CGFloat, y sy: CGFloat) -> CGPoint {

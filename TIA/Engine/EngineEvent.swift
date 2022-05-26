@@ -19,6 +19,7 @@ protocol EngineEventsListener {
 }
 
 enum EngineEvent {
+    case showMenu(from: Vertex)
     case edgeAdded(edge: Edge)
     case edgeRemoved(edge: Edge)
 }

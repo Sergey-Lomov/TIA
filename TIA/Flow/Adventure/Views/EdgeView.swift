@@ -127,7 +127,6 @@ struct EdgePathView: View {
     }
     
     private var blobing: CGFloat {
-        print("Edge state: \(edge.metastate)")
         switch edge.metastate {
         case .extendedSeed:
             return 1

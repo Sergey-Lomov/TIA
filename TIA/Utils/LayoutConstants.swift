@@ -10,6 +10,10 @@ import CoreGraphics
 
 /// This struct constains all layout constants. Constants was moved out of related views because many of it related to each other.
 struct Layout {
+    struct Menu {
+        static let vertexDiameter: CGFloat = 0.2
+    }
+    
     struct Vertex {
         /// Vertex diamtere ration to screen size
         static let diameter: CGFloat = 0.15

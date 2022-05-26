@@ -20,14 +20,18 @@ struct TIAApp: App {
             if let adventure = game.activeAdventure,
                let player = GameEngine.shared.player,
                let resources = GameEngine.shared.resources {
-                let viewModel = AdventureViewModel(
-                    adventure,
-                    player: player,
-                    resources: resources,
-                    listener: GameEngine.shared.adventureEngine,
-                    eventsSource: GameEngine.shared.adventureEngine)
+                CenteredGeometryReader {geometry in
+                    let cameraService = CameraService(size: geometry.size)
+                    let viewModel = AdventureViewModel(
+                        adventure,
+                        cameraService: cameraService,
+                        player: player,
+                        resources: resources,
+                        listener: GameEngine.shared.adventureEngine,
+                        eventsSource: GameEngine.shared.adventureEngine)
 
-                AdventureView(adventure: viewModel)
+                    AdventureView(adventure: viewModel)
+                }
             } else {
                 MainMenuView(game: game)
             }

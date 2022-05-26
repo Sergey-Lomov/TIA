@@ -20,14 +20,18 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
     private var subscriptions: [AnyCancellable] = []
     var eventsPublisher = ViewEventsPublisher()
     
+    private var cameraService: CameraService
+    
     var model: Adventure
     var player: PlayerViewModel
     @Published var vertices: [VertexViewModel]
     @Published var edges: [EdgeViewModel]
     @Published var resources: [ResourceViewModel]
     @Published var background: Color
+    @Published var camera: CameraStatus
     
     init(_ adventure: Adventure,
+         cameraService: CameraService,
          player: Player,
          resources: [Resource],
          listener: ViewEventsListener?,
@@ -39,6 +43,8 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
                                       color: schema.player,
                                       movingColor: schema.edge)
         self.background = schema.background
+        self.cameraService = cameraService
+        self.camera = cameraService.initial(adventure: adventure)
 
         self.vertices = adventure.vertices.map {
             return VertexViewModel(vertex: $0, color: schema.vertex, resourceColor: schema.resources)
@@ -106,6 +112,8 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
     
     private func handleEngineEvent(_ event: EngineEvent) {
         switch event {
+        case .showMenu(let from):
+            handleMenuShowing(from)
         case .edgeAdded(let edge):
             handleEdgeAdding(edge)
         case .edgeRemoved(let edge):
@@ -113,6 +121,10 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
         }
     }
 
+    private func handleMenuShowing(_ vertex: Vertex) {
+        camera = cameraService.showMenu(from: vertex)
+    }
+    
     private func handleEdgeAdding(_ edge: Edge) {
         let schema = ColorSchema.schemaFor(model.theme)
         let viewModel = EdgeViewModel(model: edge, color: schema.edge, borderColor: schema.background)

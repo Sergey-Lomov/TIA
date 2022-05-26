@@ -11,6 +11,7 @@ import Combine
 enum AdventureLifecycle {
     case initiation
     case gameplay
+    case menu
     case finalizing
 }
 
@@ -122,21 +123,16 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         }
         
         switch newValue {
-        case .abscent:
-            removeMenuEdge(player.position)
-        case .vertex:
+        case .abscent, .vertex:
             break
         case .edge(let edge, let status, let direction):
             switch status {
             case .compressing:
                 unfreshPlayerResources(player)
             case .moving:
-                removeMenuEdge(player.position)
                 let vertex = direction.endVertex(edge)
                 addPlayerResources(vertexResources(vertex))
-                addMenuEdge(vertex)
             case .expanding:
-                extendMenuEdgeSeed(newValue)
                 applyEstimated(playerResources(player))
                 recloseGates(edge: edge)
             }
@@ -222,17 +218,13 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         checkInitGrowingCompletion()
     }
     
-    private func handleVertexSelection(_ vertex: Vertex) {
-        guard case .vertex(let old) = player.position, old.id != vertex.id else {
-            return
+    private func handleVertexSelection(_ newVertex: Vertex) {
+        guard case .vertex(let oldVertex) = player.position else { return }
+        if oldVertex == newVertex {
+            eventsPublisher.send(.showMenu(from: oldVertex))
+        } else {
+            tryMove(player: player, fromVertex: oldVertex, toVertex: newVertex)
         }
-        
-        let sharedEdges = old.edges.intersection(vertex.edges)
-        guard let edge = sharedEdges.first, edge.state.isGrowed else {
-            return
-        }
-        
-        tryMove(player: player, edge: edge, forward: edge.from == old)
     }
     
     private func handleEdgePathGrowed(_ edge: Edge) {
@@ -264,7 +256,13 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         resource.state = .vertex(vertex: vertex, index: index, total: total, idle: .rotation)
     }
     
-    private func tryMove(player: Player, edge: Edge, forward: Bool) {
+    private func tryMove(player: Player, fromVertex: Vertex, toVertex: Vertex) {
+        let sharedEdges = fromVertex.edges.intersection(toVertex.edges)
+        guard let edge = sharedEdges.first, edge.state.isGrowed else {
+            return
+        }
+        
+        let forward = edge.from == fromVertex
         let count = edge.gates.count
         let range = forward ? Array(0..<count) : (0..<count).reversed()
         let fromVertex = forward ? edge.from : edge.to
@@ -307,33 +305,6 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         guard status == .incoming else { return }
         resource.state = .gate(gate: gate, edge: edge, fromVertex: vertex, fromIndex: index, state: .stay, prestate: prestate)
         gate.isOpen = true
-    }
-    
-    // MARK: Menu edge
-    private func compressMenuEdgeSeed(_ position: PlayerPosition) {
-        guard let vertex = position.currnetVertex else { return }
-        let edge = adventure.menuEdge(from: vertex)
-        edge?.state = .seed(phase: .preextended)
-    }
-    
-    private func extendMenuEdgeSeed(_ position: PlayerPosition) {
-        guard let vertex = position.currnetVertex else { return }
-        let edge = adventure.menuEdge(from: vertex)
-        edge?.state = .seed(phase: .preextended)
-    }
-    
-    private func addMenuEdge(_ vertex: Vertex?) {
-        guard let vertex = vertex else { return }
-        let curve = BezierCurve(points: [vertex.point, vertex.point, menuVertex.point, menuVertex.point])
-        let edge = adventure.addMenuEdge(from: vertex, to: menuVertex, curve: curve)
-        eventsPublisher.send(.edgeAdded(edge: edge))
-    }
-    
-    private func removeMenuEdge(_ position: PlayerPosition) {
-        guard let vertex = position.currnetVertex else { return }
-        if let edge = adventure.removeMenuEdge(from: vertex) {
-            eventsPublisher.send(.edgeRemoved(edge: edge))
-        }
     }
     
     // MARK: Resources handling

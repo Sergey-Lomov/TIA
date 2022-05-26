@@ -11,62 +11,57 @@ import Combine
 struct AdventureView: View {
 
     @StateObject var adventure: AdventureViewModel
-//    @State private var curve = BezierCurve(points: [
-//        CGPoint(x: 0, y: -0.1),
-//        CGPoint(x: 0, y: 0.1),
-//        CGPoint(x: -0.25, y: -0.05),
-//        CGPoint(x: -0.25, y: 0.15),
-//    ]
     
     var body: some View {
         ZStack {
             adventure.background
                 .edgesIgnoringSafeArea(.all)
 
-            ForEach(adventure.edges, id:\.model.id) { edge in
-                EdgeWrapper(edge: edge)
-            }
-
-            ForEach(adventure.vertices, id:\.model.id) { vertex in
-                VertexWrapper(vertex: vertex)
-            }
-            
-            ForEach(adventure.resources, id:\.model.id) { resource in
-                ResourceWrapper(resource: resource)
-            }
-            
-            PlayerWrapperView(player: adventure.player)
+            AdventureContentView(adventure: adventure)
+                .applyCamera(adventure.camera)
         }
         .onAppear {
             adventure.viewInitCompleted()
         }
-//        VStack {
-//           SingleCurveShape(curve: curve)
-//                .stroke(lineWidth: 4)
-//                .foregroundColor(.blue)
-//                .frame(width:200, height: 200)
-//                .animation(.linear(duration: 2))
-//       }
-//        .frame(width:400, height: 400)
-//       .onTapGesture {
-//           self.curve = self.curve.mirrored()
-//       }
     }
 }
 
-struct AdventureView_Previews: PreviewProvider {
+struct AdventureContentView: View {
     
-    static var previews: some View {
-        let descriptor = GameState().scenario.adventures[.dark]?.first
-        let layout = AdventureLayout.random(for: descriptor!)
-        let adventure = ScenarioService.shared.adventureFor(descriptor!, layout: layout)
+    @ObservedObject var adventure: AdventureViewModel
+    
+    var body: some View {
+        ForEach(adventure.edges, id:\.model.id) { edge in
+            EdgeWrapper(edge: edge)
+        }
+
+        ForEach(adventure.vertices, id:\.model.id) { vertex in
+            VertexWrapper(vertex: vertex)
+        }
         
-        let viewModel = AdventureViewModel(
-            adventure,
-            player: GameEngine.shared.adventureEngine!.player,
-            resources: GameEngine.shared.adventureEngine!.resources,
-            listener: GameEngine.shared.adventureEngine,
-            eventsSource: GameEngine.shared.adventureEngine)
-        return AdventureView(adventure: viewModel)
+        ForEach(adventure.resources, id:\.model.id) { resource in
+            ResourceWrapper(resource: resource)
+        }
+        
+        PlayerWrapperView(player: adventure.player)
+    }
+}
+
+private extension View {
+    func applyCamera(_ camera: CameraStatus) -> some View {
+        self
+            .offset(point: camera.state.center)
+            .animation(animation(camera), value: camera.state.center)
+            .scaleEffect(camera.state.zoom)
+            .animation(animation(camera), value: camera.state.zoom)
+    }
+    
+    func animation(_ camera: CameraStatus) -> Animation? {
+        switch camera {
+        case .fixed:
+            return nil
+        case .transition(_, let animation):
+            return animation
+        }
     }
 }

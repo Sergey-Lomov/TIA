@@ -20,6 +20,10 @@ final class AnimationService {
             static let lengthMult: CGFloat = 0.005
         }
         
+        enum Menu {
+            static let transitionDuration: CGFloat = 2
+        }
+        
         enum Gate {
             static let resizeDuration: CGFloat = 0.5
         }
@@ -43,6 +47,13 @@ final class AnimationService {
         .opened: [.closed:  { .easeIn(duration: $0) }],
     ]
     
+    var showMenu: Animation {
+        .easeOut(duration: Const.Menu.transitionDuration)
+    }
+    var closeMenu: Animation {
+        .easeIn(duration: Const.Menu.transitionDuration)
+    }
+
     var openGate: Animation { .easeIn(duration: Const.Gate.resizeDuration) }
     var closeGate: Animation { .easeOut(duration: Const.Gate.resizeDuration) }
     

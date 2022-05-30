@@ -25,16 +25,6 @@ struct VertexWrapper: View {
     }
 }
 
-struct VertexView_Previews: PreviewProvider {
-    static var previews: some View {
-        let descriptor = GameState().scenario.adventures[.dark]?.first
-        let layout = AdventureLayout.random(for: descriptor!)
-        let adventure = ScenarioService.shared.adventureFor(descriptor!, layout: layout)
-        let viewModel = VertexViewModel(vertex: adventure.vertices[0], color: Color.softWhite, resourceColor: .softBlack)
-        VertexWrapper(vertex: viewModel)
-    }
-}
-
 struct VertexView: View {
     @ObservedObject var vertex: VertexViewModel
     var radius: CGFloat

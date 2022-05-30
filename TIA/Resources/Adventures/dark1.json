@@ -5,32 +5,32 @@
     "vertices": [
         {
             "id": "v1",
-            "type": "entrance",
+            "role": "entrance",
             "resources": []
         },
         {
             "id": "v2",
-            "type": "common",
+            "role": "common",
             "resources": ["anger"]
         },
         {
             "id": "v3",
-            "type": "common",
+            "role": "common",
             "resources": ["yearning", "yearning", "anger", "despair"]
         },
         {
             "id": "v4",
-            "type": "common",
+            "role": "common",
             "resources": ["yearning","yearning"]
         },
         {
             "id": "v5",
-            "type": "common",
+            "role": "common",
             "resources": []
         },
         {
             "id": "v6",
-            "type": "exit",
+            "role": "common",
             "resources": []
         }
     ],

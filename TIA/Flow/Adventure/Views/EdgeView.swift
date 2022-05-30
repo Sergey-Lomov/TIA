@@ -66,7 +66,7 @@ struct EdgePathView: View {
                 fromConnectorShape(geometry)
                     .animation(animation, value: fromConnectorData(geometry))
                     .foregroundColor(edge.color)
-                    .offset(x: geometry.size.width / 2, y: geometry.size.height / 2)
+                    .offset(geometry.size.half)
                     .onAppear() {
                         handleFromConnectorAppear(metastate)
                     }
@@ -80,7 +80,7 @@ struct EdgePathView: View {
                     }
                     .animation(animation, value: connectorData)
                     .foregroundColor(edge.color)
-                    .offset(x: geometry.size.width / 2, y: geometry.size.height / 2)
+                    .offset(geometry.size.half)
                     .onAppear {
                         edge.counterConnectorGrowingPrepared()
                     }

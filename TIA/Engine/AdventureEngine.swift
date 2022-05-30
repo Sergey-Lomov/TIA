@@ -34,29 +34,19 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     var lifestate: AdventureLifecycle = .initiation
     var player: Player
     var resources: [Resource]
-    var menuVertex: Vertex
     
     init(adventure: Adventure) {
         self.adventure = adventure
         self.player = Player(position: .abscent)
-        self.menuVertex = Vertex(id: Self.menuVertexId, type: .menu)
         
         self.resources = []
-        for vertex in adventure.vertices {
-            let total = vertex.initialResources.count
-            for index in 0..<total {
-                let type = vertex.initialResources[index]
-                let state = ResourceState.vertex(vertex: vertex, index: index, total: total, idle: .none)
-                let resource = Resource(type: type, state: state)
-                self.resources.append(resource)
-            }
-        }
+        adventure.allVertices.forEach { handleNewVertex($0) }
         
         subscriptions.sink(player.$position) { [weak self] in
             self?.handlePlayerPositionUpdate($0)
         }
         
-        let gates = adventure.edges.flatMap { $0.gates }
+        let gates = adventure.allEdges.flatMap { $0.gates }
         for gate in gates {
             subscriptions.sink(gate.$isOpen) { [weak self] in
                 self?.handleGateStatusUpdate(gate)
@@ -71,12 +61,17 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         }
     }
     
-    private func growFromEntrace() {
-        for vertex in adventure.vertices {
-            if vertex.type == .entrance {
-                vertex.state = .active
-                growFromVertex(vertex)
-            }
+    private func handleNewVertex(_ vertex: Vertex) {
+        let totalResources = vertex.initialResources.count
+        for index in 0..<totalResources {
+            let type = vertex.initialResources[index]
+            let state = ResourceState.vertex(vertex: vertex, index: index, total: totalResources, idle: .none)
+            let resource = Resource(type: type, state: state)
+            self.resources.append(resource)
+        }
+        
+        subscriptions.sink(vertex.$state) { [weak self] in
+            self?.handleVertexStateUpdate(vertex)
         }
     }
     
@@ -90,7 +85,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     }
     
     private func growFromVertex(_ vertex: Vertex) {
-        for edge in vertex.outEdges {
+        for edge in adventure.currentLayer.outcome(vertex) {
             switch edge.state {
             case .seed:
                 growEdge(edge)
@@ -99,7 +94,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
             }
         }
         
-        let waitingEdges = vertex.inEdges.filter {
+        let waitingEdges = adventure.currentLayer.income(vertex).filter {
             let metastate = EdgeViewMetastate.forState($0.state)
             switch metastate {
             case .waitingVertex:
@@ -115,6 +110,12 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     
     private func growEdge(_ edge: Edge) {
         edge.state = .growing(phase: .preparing)
+    }
+    
+    private func handleVertexStateUpdate(_ vertex: Vertex) {
+        vertexResources(vertex).forEach {
+            $0.objectWillChange.sendOnMain()
+        }
     }
     
     private func handlePlayerPositionUpdate(_ newValue: PlayerPosition) {
@@ -163,7 +164,14 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     private func handleViewEvent(_ event: ViewEvent) {
         switch event {
         case .viewInitFinished:
-            growFromEntrace()
+            growFromVertex(adventure.currentLayer.entrance)
+            
+        case .layerPrepared(let layer):
+            layer.state = .presenting
+        case .layerPresented(let layer):
+            handleLayerPresented(layer)
+        case .layerWasHidden(let layer):
+            handleLayerWasHidden(layer)
             
         case .vertexGrowingFinished(let vertex):
             handleVertexGrowed(vertex)
@@ -194,34 +202,42 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         }
     }
     
-    private func checkInitGrowingCompletion() {
-        let inactiveEdges = adventure.edges.filter { !$0.state.isGrowed}
-        let inactiveVertex = adventure.vertices.filter { !$0.state.isGrowed}
+    private func checkLayerGrowingCompletion() {
+        guard adventure.currentLayer.isInitialGrowingFinished() else {
+            return
+        }
         
-        if inactiveEdges.isEmpty && inactiveVertex.isEmpty {
+        if adventure.currentLayer.type == .initial {
             handleInitGrowingCompletion()
         }
+        adventure.currentLayer.state = .shown
     }
     
     private func handleInitGrowingCompletion() {
-        guard let entrance = adventure.entrances.first else {
-            fatalError("Adventure \"\(adventure.id)\" have no entrances")
-        }
-        
         lifestate = .gameplay
+        let entrance = adventure.currentLayer.entrance
         player.position = .vertex(vertex: entrance)
+    }
+    
+    private func handleLayerPresented(_ layer: AdventureLayer) {
+        layer.state = .growing
+        growFromVertex(layer.entrance)
+    }
+    
+    private func handleLayerWasHidden(_ layer: AdventureLayer) {
+        adventure.layers.remove(layer)
     }
                                                      
     private func handleVertexGrowed(_ vertex: Vertex) {
         vertex.state = .active
         growFromVertex(vertex)
-        checkInitGrowingCompletion()
+        checkLayerGrowingCompletion()
     }
     
     private func handleVertexSelection(_ newVertex: Vertex) {
         guard case .vertex(let oldVertex) = player.position else { return }
         if oldVertex == newVertex {
-            eventsPublisher.send(.showMenu(from: oldVertex))
+            showMenu(from: oldVertex)
         } else {
             tryMove(player: player, fromVertex: oldVertex, toVertex: newVertex)
         }
@@ -238,7 +254,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     
     private func handleEdgeCounterConnectorGrowed(_ edge: Edge) {
         edge.state = .active
-        checkInitGrowingCompletion()
+        checkLayerGrowingCompletion()
     }
     
     private func handleResourcePresented(_ resource: Resource) {
@@ -256,8 +272,17 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         resource.state = .vertex(vertex: vertex, index: index, total: total, idle: .rotation)
     }
     
+    private func showMenu(from: Vertex) {
+        guard lifestate == .gameplay else { return }
+        
+        lifestate = .menu
+        let menuLayer = IngameMenuService.menuLayer(from: from)
+        adventure.currentLayer = menuLayer
+        adventure.layers.append(menuLayer)
+    }
+    
     private func tryMove(player: Player, fromVertex: Vertex, toVertex: Vertex) {
-        let sharedEdges = fromVertex.edges.intersection(toVertex.edges)
+        let sharedEdges = adventure.currentLayer.edgesBetween(v1: fromVertex, v2: toVertex)
         guard let edge = sharedEdges.first, edge.state.isGrowed else {
             return
         }

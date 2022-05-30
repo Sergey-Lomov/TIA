@@ -20,7 +20,7 @@ struct Sector {
     
     init(min: CGFloat, max: CGFloat) {
         self.min = min
-        self.max = max >= min ? max : max + .pi * 2
+        self.max = max >= min ? max : max + .dpi
     }
 }
 
@@ -41,12 +41,13 @@ final class VertexSurroundingService {
         self.size = size
     }
 
-    func surroundingFor(_ vertex: Vertex, slotsCount: Int) -> VertexSurrounding {
+    func surroundingFor(_ vertex: Vertex, layer: AdventureLayer, slotsCount: Int) -> VertexSurrounding {
         
         let center = vertex.point.scaled(size)
         let radius = Layout.Vertex.diameter / 2 * size.minSize
         
-        let edgesOuts = edgesOuts(edges: vertex.edges, center: center, radius: radius)
+        let edges = layer.edges(of: vertex)
+        let edgesOuts = edgesOuts(edges: edges, center: center, radius: radius)
         let edgesSpacings = edgeSpacings(edgesOuts: edgesOuts, radius: radius)
         let freeSectors = freeSectors(edgesSpacings: edgesSpacings)
         let slots = slots(center: center, sectors: freeSectors, count: slotsCount, vertexRadius: radius)
@@ -85,7 +86,7 @@ final class VertexSurroundingService {
             }
         }
         if let lastSpacing = edgesSpacings.last, let firstSpacing = edgesSpacings.first {
-            let min = lastSpacing.max - 2 * .pi
+            let min = lastSpacing.max - .dpi
             if min < firstSpacing.min {
                 let sector = Sector(min: min, max: firstSpacing.min)
                 freeSectors.append(sector)

@@ -9,22 +9,18 @@ import Foundation
 import SwiftUI
 import Combine
 
-class VertexViewModel: ObservableObject {
-    var eventsPublisher: ViewEventsPublisher?
+class VertexViewModel: ObservableObject, IdEqutable {
+    var eventsPublisher: ViewEventsPublisher
     
     @Published var model: Vertex
     @Published var color: Color
     @Published var resourceColor: Color
     
     // TODO: Make all wrapped vars calculated values (no setter). Here and in all same view models
+    var id: String { model.id }
     var state: VertexState {
         get { model.state }
         set { model.state = newValue }
-    }
-    
-    var type: VertexType {
-        get { model.type }
-        set { model.type = newValue }
     }
     
     var point: CGPoint {
@@ -34,12 +30,11 @@ class VertexViewModel: ObservableObject {
     
     private var subscriptions: [AnyCancellable] = []
     
-    init(vertex: Vertex,
-         color: Color,
-         resourceColor: Color) {
+    init(vertex: Vertex, color: Color, resourceColor: Color, eventsPublisher: ViewEventsPublisher) {
         self.model = vertex
         self.color = color
         self.resourceColor = resourceColor
+        self.eventsPublisher = eventsPublisher
         
         subscriptions.sink(model.objectWillChange) { [weak self] in
             self?.objectWillChange.sendOnMain()
@@ -50,10 +45,10 @@ class VertexViewModel: ObservableObject {
 // MARK: View interaction methods
 extension VertexViewModel {
     func growingFinished() {
-        eventsPublisher?.send(.vertexGrowingFinished(vertex: model))
+        eventsPublisher.send(.vertexGrowingFinished(vertex: model))
     }
     
     func wasTapped() {
-        eventsPublisher?.send(.vertexSelected(vertex: model))
+        eventsPublisher.send(.vertexSelected(vertex: model))
     }
 }

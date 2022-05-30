@@ -36,4 +36,8 @@ final class GameEngine {
         adventureEngine = AdventureEngine(adventure: adventure)
         state.activeAdventure = adventure
     }
+    
+    func availableIngameMenuItems() -> [IngameMenuItem] {
+        return [.exit, .restart]
+    }
 }

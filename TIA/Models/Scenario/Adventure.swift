@@ -26,41 +26,24 @@ class Adventure: ObservableObject {
     let id: String
     let index: Int
     var theme: AdventureTheme
-    var vertices: [Vertex]
-    var edges: [Edge]
+    @Published var layers: [AdventureLayer]
+    @Published var currentLayer: AdventureLayer
     
-    @Published var state: AdventureState = .planed
-    
-    var entrances: [Vertex] {
-        vertices.filter { $0.type == .entrance }
+    var allVertices: [Vertex] {
+        layers.flatMap { $0.vertices }
     }
     
-    init(id: String,
-         index: Int,
-         theme: AdventureTheme,
-         vertices: [Vertex],
-         edges: [Edge]) {
+    var allEdges: [Edge] {
+        layers.flatMap { $0.edges }
+    }
+    
+    init(id: String, index: Int, theme: AdventureTheme, vertices: [Vertex], edges: [Edge], entrance: Vertex) {
         self.id = id
         self.index = index
         self.theme = theme
-        self.vertices = vertices
-        self.edges = edges
-    }
-    
-    func menuEdge(from: Vertex) -> Edge? {
-        return edges.firstById(Self.menuEdgePrefix + from.id)
-    }
-    
-    func addMenuEdge(from: Vertex, to: Vertex, curve: BezierCurve) -> Edge {
-        let edge = Edge(id: Self.menuEdgePrefix + from.id, from: from, to: to, growOnStart: false, curve: curve)
-        edges.append(edge)
-        return edge
-    }
-    
-    func removeMenuEdge(from: Vertex) -> Edge? {
-        let edge = edges.first { $0.id == Self.menuEdgePrefix + from.id }
-        guard let edge = edge else { return nil }
-        edges.remove(edge)
-        return edge
+        
+        let layer = AdventureLayer(type: .initial, state: .growing, vertices: vertices, edges: edges, entrance: entrance)
+        self.layers = [layer]
+        self.currentLayer = layer
     }
 }

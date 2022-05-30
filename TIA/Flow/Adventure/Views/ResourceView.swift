@@ -22,6 +22,7 @@ struct ResourceWrapper: View {
     }
     
     @ObservedObject var resource: ResourceViewModel
+    var layer: AdventureLayer
     
     var body: some View {
         return CenteredGeometryReader { geometry in
@@ -44,8 +45,7 @@ struct ResourceWrapper: View {
                         resource.presentationFinished()
                     }
                 
-                let testCurve = positionCurve.scaled(x: 1 / geometry.size.width,
-                                                        y: 1 / geometry.size.height)
+                let testCurve = positionCurve.scaled(x: 1 / geometry.size.width, y: 1 / geometry.size.height)
                 ComplexCurveShape(curve: testCurve)
                     .stroke(Self.getColor(), lineWidth: 2)
                     .frame(geometry: geometry)
@@ -122,7 +122,7 @@ struct ResourceWrapper: View {
     private var localRotation: CGFloat {
         switch resource.metastate {
         case .vertexIdle:
-            return .pi * 2
+            return .dpi
         default:
             return 0
         }
@@ -205,12 +205,13 @@ struct ResourceWrapper: View {
     
     private func toGateCurve(gate: EdgeGate, edge: Edge, fromVertex: Vertex, fromIndex: Int, geometry: GeometryProxy) -> ComplexCurve {
         let delta = resourceSlot(geometry: geometry, vertex: fromVertex, index: fromIndex)
-        let p0 = fromVertex.point.scaled(geometry).translated(by: delta)
-        let p3 = LayoutService.gatePosition(geometry, gate: gate, edge: edge)
-        let mid = p0.average(with: p3)
-        let p1 = mid.randomPoint(maxDelta: controlsRandomization)
-        let p2 = mid.randomPoint(maxDelta: controlsRandomization)
-        return .init(points: [p0, p1, p2, p3])
+        let from = fromVertex.point.scaled(geometry).translated(by: delta)
+        let to = LayoutService.gatePosition(geometry, gate: gate, edge: edge)
+        let distance = from.distanceTo(to)
+        let radiusRange = FloatRange(from: distance / 2, to: distance)
+        let angleRange =  FloatRange(from: .hpi / 2, to: .hpi)
+        let curve = Math.randomCurve(from: from, to: to, controlRadius: radiusRange, controlAngle: angleRange)
+        return .init(curve)
     }
 
     private func failNearGateCurve(_ geometry: GeometryProxy, gate: EdgeGate, edge: Edge, vertex: Vertex, slot: Int) -> ComplexCurve {
@@ -249,7 +250,7 @@ struct ResourceWrapper: View {
     
     private func resourceSlot(geometry: GeometryProxy, vertex: Vertex, index: Int) -> CGPoint {
         let service = VertexSurroundingService(screenSize: geometry.size)
-        let surrounding = service.surroundingFor(vertex, slotsCount: index + 1)
+        let surrounding = service.surroundingFor(vertex, layer: layer, slotsCount: index + 1)
         return surrounding.slots.last ?? .zero
     }
     
@@ -257,7 +258,7 @@ struct ResourceWrapper: View {
         if total == 1 {
             return .zero
         } else {
-            let angle = CGFloat.pi * 2.0 / CGFloat(total) * CGFloat(index)
+            let angle = CGFloat.dpi / CGFloat(total) * CGFloat(index)
             var delta = CGPoint(x: cos(angle), y: sin(angle))
             delta.scale(by: Layout.Resources.Vertex.angleScale)
             return delta

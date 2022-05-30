@@ -65,14 +65,16 @@ extension View {
     
     func invertedMask<Mask>(size: CGSize, _ mask: Mask) -> some View where Mask: View {
         self.mask(
-//        overlay (
             ZStack {
                 Rectangle()
                     .foregroundColor(.yellow)
                 mask.blendMode(.destinationOut)
             }.frame(size: size)
         )
-       // )
+    }
+    
+    func onAnimationCompleted<Value: VectorArithmetic>(for value: Value, completion: @escaping () -> Void) -> ModifiedContent<Self, AnimationCompletionObserverModifier<Value>> {
+        return modifier(AnimationCompletionObserverModifier(observedValue: value, completion: completion))
     }
 
     // TODO: It was a try to wrap mofidifers into views. Remove if still be unsused.
@@ -88,20 +90,3 @@ extension View where Self: Animatable {
         return StatesAnimationView(content: self, states: states)
     }
 }
-
-// TODO: Remove code if still be unused
-//extension View where Self: EngineEventsListener {
-//    mutating func listenTo(_ source: EngineEventsSource?) -> Self {
-//        if let publisher = source?.eventsPublisher {
-//            subscribeTo(publisher)
-//        }
-//        return self
-//    }
-//}
-//
-//extension View where Self: ViewEventsSource {
-//    func sendEventsTo(_ listener: inout ViewEventsListener?) -> Self {
-//        listener?.subscribeTo(eventsPublisher)
-//        return self
-//    }
-//}

@@ -9,24 +9,24 @@ import Foundation
 import SwiftUI
 import Combine
 
-class EdgeViewModel: ObservableObject {
-    
+class EdgeViewModel: ObservableObject, IdEqutable {
+
     var model: Edge
     @Published var color: Color
     @Published var borderColor: Color
     
     private var subscriptions: [AnyCancellable] = []
-    var eventsPublisher: ViewEventsPublisher?
+    var eventsPublisher: ViewEventsPublisher
     
+    var id: String { model.id }
     var curve: BezierCurve { model.curve }
     var state: EdgeState { model.state }
     
-    init(model: Edge,
-         color: Color,
-         borderColor: Color) {
+    init(model: Edge, color: Color, borderColor: Color, eventsPublisher: ViewEventsPublisher) {
         self.model = model
         self.color = color
         self.borderColor = borderColor
+        self.eventsPublisher = eventsPublisher
         
         subscriptions.sink(model.objectWillChange) { [weak self] in
             self?.objectWillChange.sendOnMain()
@@ -38,22 +38,22 @@ class EdgeViewModel: ObservableObject {
 extension EdgeViewModel {
     
     func seedExtensionPrepared() {
-        eventsPublisher?.send(.edgeSeedExtensionPrepared(edge: model))
+        eventsPublisher.send(.edgeSeedExtensionPrepared(edge: model))
     }
     
     func growingPrepared() {
-        eventsPublisher?.send(.edgeGrowingPrepared(edge: model))
+        eventsPublisher.send(.edgeGrowingPrepared(edge: model))
     }
     
     func pathGrowingFinished() {
-        eventsPublisher?.send(.edgePathGrowed(edge: model))
+        eventsPublisher.send(.edgePathGrowed(edge: model))
     }
     
     func counterConnectorGrowingPrepared() {
-        eventsPublisher?.send(.edgeCounterConnectorPrepared(edge: model))
+        eventsPublisher.send(.edgeCounterConnectorPrepared(edge: model))
     }
     
     func counterConnectorGrowingFinished() {
-        eventsPublisher?.send(.edgeCounterConnectorGrowed(edge: model))
+        eventsPublisher.send(.edgeCounterConnectorGrowed(edge: model))
     }
 }

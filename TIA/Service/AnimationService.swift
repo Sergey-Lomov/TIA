@@ -20,7 +20,7 @@ final class AnimationService {
             static let lengthMult: CGFloat = 0.005
         }
         
-        enum Menu {
+        enum Layer {
             static let transitionDuration: CGFloat = 2
         }
         
@@ -47,15 +47,19 @@ final class AnimationService {
         .opened: [.closed:  { .easeIn(duration: $0) }],
     ]
     
-    var showMenu: Animation {
-        .easeOut(duration: Const.Menu.transitionDuration)
+    var presentLayer: Animation {
+        .easeOut(duration: Const.Layer.transitionDuration)
     }
-    var closeMenu: Animation {
-        .easeIn(duration: Const.Menu.transitionDuration)
+    var hidingLayer: Animation {
+        .easeIn(duration: Const.Layer.transitionDuration)
     }
 
-    var openGate: Animation { .easeIn(duration: Const.Gate.resizeDuration) }
-    var closeGate: Animation { .easeOut(duration: Const.Gate.resizeDuration) }
+    var openGate: Animation {
+        .easeIn(duration: Const.Gate.resizeDuration)
+    }
+    var closeGate: Animation {
+        .easeOut(duration: Const.Gate.resizeDuration)
+    }
     
     var menuSeedExtension: Animation {
         let duration = eyeTransDuration(from: .compressed, to: .closed) + eyeTransDuration(from: .closed, to: .opened)

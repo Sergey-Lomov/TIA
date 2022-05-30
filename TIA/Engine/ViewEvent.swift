@@ -20,6 +20,10 @@ protocol ViewEventsListener {
 
 enum ViewEvent {
     case viewInitFinished
+
+    case layerPrepared(layer: AdventureLayer)
+    case layerPresented(layer: AdventureLayer)
+    case layerWasHidden(layer: AdventureLayer)
     
     case vertexGrowingFinished(vertex: Vertex)
     case vertexSelected(vertex: Vertex)

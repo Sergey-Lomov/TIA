@@ -76,6 +76,7 @@ class Edge: ObservableObject, IdEqutable {
         self.growOnStart = growOnStart
         self.state = state
         self.curve = curve
+        // TODO: For light theme seed curves should be equtable to main curves
         self.seedCurve = curve.randomControlsCurve(maxDelta: seedCurveDelta)
         self.gates = price.map { .init(requirement: .resource($0)) }
     }

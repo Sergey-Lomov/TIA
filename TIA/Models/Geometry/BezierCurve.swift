@@ -14,6 +14,7 @@ struct BezierCurve {
     private static let legthRatioLimit: Int = 100
     private static let tangentDelta: CGFloat = 0.01
     private static let lengthSteps: Int = 100
+    private static let frameSteps: Int = 100
     
     let id = UUID().uuidString
     var p0: CGPoint
@@ -151,15 +152,24 @@ struct BezierCurve {
         return t
     }
     
-    func intersectionTWith(center: CGPoint, radius: CGFloat, accuracy: CGFloat, limit: Int = Self.intersectionLimit) -> CGFloat {
+    func intersectionTWith(center: CGPoint, radius: CGFloat, accuracy: CGFloat, limit: Int = intersectionLimit) -> CGFloat {
         return Math.stepSearch(from: 0, to: 1, steps: limit) {
             abs(getPoint(t: $0).distanceTo(center) - radius)
         }
     }
     
-    func intersectionWith(center: CGPoint, radius: CGFloat, accuracy: CGFloat, limit: Int = Self.intersectionLimit) -> CGPoint {
+    func intersectionWith(center: CGPoint, radius: CGFloat, accuracy: CGFloat, limit: Int = intersectionLimit) -> CGPoint {
         let t = intersectionTWith(center: center, radius: radius, accuracy: accuracy)
         return getPoint(t: t)
+    }
+    
+    func frame(steps: Int = frameSteps) -> CGRect {
+        var frame = CGRect(origin: getPoint(t: 0), size: .zero)
+        for step in 0..<steps {
+            let t = CGFloat(step) / CGFloat(steps - 1)
+            frame = frame.union(getPoint(t: t))
+        }
+        return frame
     }
 }
 

@@ -51,6 +51,10 @@ extension CGPoint {
         CGPoint(x: x + point.x, y: y + point.y)
     }
     
+    func translated(by size: CGSize) -> CGPoint {
+        CGPoint(x: x + size.width, y: y + size.height)
+    }
+    
     func mirroredByLine(p1: CGPoint, p2: CGPoint) -> CGPoint {
         return mirroredByLine(Line(p1: p1, p2: p2))
     }

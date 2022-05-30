@@ -9,11 +9,9 @@ import Foundation
 import CoreGraphics
 import Combine
 
-enum VertexType: String, Codable {
-    case menu
-    case entrance
-    case common
+enum VertexAction {
     case exit
+    case restart
 }
 
 enum VertexState {
@@ -33,22 +31,15 @@ enum VertexState {
 
 class Vertex: ObservableObject, IdEqutable {
     var id: String
-    var type: VertexType
+    var onVisit: VertexAction?
+    var actions: [VertexAction] = []
+    
     @Published var state: VertexState
     var point: CGPoint
     var initialResources: [ResourceType]
-    var inEdges: [Edge] = []
-    var outEdges: [Edge] = []
     
-    var edges: [Edge] { inEdges + outEdges }
-    
-    init(id: String,
-         type: VertexType = .common,
-         state: VertexState = .seed,
-         point: CGPoint = .zero,
-         resources: [ResourceType] = []) {
+    init(id: String, state: VertexState = .seed, point: CGPoint = .zero, resources: [ResourceType] = []) {
         self.id = id
-        self.type = type
         self.state = state
         self.point = point
         self.initialResources = resources

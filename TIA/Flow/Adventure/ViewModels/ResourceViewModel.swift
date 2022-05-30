@@ -11,7 +11,6 @@ import Combine
 
 class ResourceViewModel: ObservableObject, IdEqutable {
     
-    var id: String { model.id }
     var model: Resource
     var positioningStep: CGFloat = 0
     @Published var color: Color
@@ -20,6 +19,7 @@ class ResourceViewModel: ObservableObject, IdEqutable {
     private var subscriptions: [AnyCancellable] = []
     var eventsPublisher: ViewEventsPublisher?
     
+    var id: String { model.id }
     var type: ResourceType {
         get { model.type }
         set { model.type = newValue }

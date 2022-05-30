@@ -8,7 +8,9 @@
 import CoreGraphics
 
 extension CGFloat {
+    static var negativeInfinity: CGFloat { -1 * infinity }
     static var hpi: CGFloat { .pi / 2 }
+    static var dpi: CGFloat { .pi * 2 }
     
     static var cos0: CGFloat = 1
     static var sin0: CGFloat = 0

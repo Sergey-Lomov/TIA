@@ -11,7 +11,13 @@ import CoreGraphics
 /// This struct constains all layout constants. Constants was moved out of related views because many of it related to each other.
 struct Layout {
     struct Menu {
-        static let vertexDiameter: CGFloat = 0.2
+        static let zoom: CGFloat = 1
+        static let gap: CGFloat = 0.1
+        static let radius: CGFloat = (1 - gap * 2 - Vertex.diameter) / zoom / 2
+    }
+    
+    struct Adventure {
+        static let border: CGFloat = 0.05
     }
     
     struct Vertex {

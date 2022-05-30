@@ -59,10 +59,12 @@ enum PlayerPosition {
         }
     }
     
-    var currnetVertex: Vertex? {
+    var currentVertex: Vertex? {
         switch self {
         case .abscent:
             return nil
+        case .vertex(let vertex):
+            return vertex
         case .edge(let edge, let status, let direction):
             switch status {
             case .compressing:
@@ -72,12 +74,10 @@ enum PlayerPosition {
             case .expanding:
                 return direction.endVertex(edge)
             }
-        case .vertex(let vertex):
-            return vertex
         }
     }
-    
-    var currnetEdge: Edge? {
+
+    var currentEdge: Edge? {
         switch self {
         case .edge(let edge, let status, _):
             if status == .moving {
@@ -146,5 +146,16 @@ class Player: ObservableObject, IdEqutable {
         
         let vertex = direction.endVertex(edge)
         position = .vertex(vertex: vertex)
+    }
+    
+    func isOnLayer(_ layer: AdventureLayer) -> Bool {
+        switch position {
+        case .abscent:
+            return false
+        case .edge(let edge, _, _):
+            return layer.edges.contains(edge)
+        case .vertex(let vertex):
+            return layer.vertices.contains(vertex)
+        }
     }
 }

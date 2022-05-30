@@ -104,7 +104,7 @@ struct PlayerView: View {
 
     var body: some View {
         CenteredGeometryReader { geometry in
-            if player.position.currnetEdge != nil {
+            if player.position.currentEdge != nil {
                 ComplexCurveShape(curve: .circle(radius: 0.5))
                     .frame(width: 16, height: 16)
                     .foregroundColor(edgeBlobColor)

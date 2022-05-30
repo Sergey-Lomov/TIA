@@ -47,7 +47,7 @@ class PlayerViewModel: ObservableObject {
     }
     
     func currentEdgeColor() -> Color {
-        guard let edge = position.currnetEdge, let edgeViewModel = viewModelsProvider?.edgeViewModel(for: edge) else {
+        guard let edge = position.currentEdge, let edgeViewModel = viewModelsProvider?.edgeViewModel(for: edge) else {
             return .clear
         }
         
@@ -55,7 +55,7 @@ class PlayerViewModel: ObservableObject {
     }
     
     func currentEdgeVertices() -> [VertexViewModel] {
-        guard let edge = position.currnetEdge else {
+        guard let edge = position.currentEdge else {
             return []
         }
         

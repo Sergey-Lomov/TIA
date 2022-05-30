@@ -18,17 +18,18 @@ protocol ViewModelsProvider: AnyObject {
 final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEventsListener {
     
     private var subscriptions: [AnyCancellable] = []
-    var eventsPublisher = ViewEventsPublisher()
+    private var layerSubscriptions: [AnyCancellable] = []
+    let eventsPublisher: ViewEventsPublisher
     
     private var cameraService: CameraService
     
     var model: Adventure
     var player: PlayerViewModel
-    @Published var vertices: [VertexViewModel]
-    @Published var edges: [EdgeViewModel]
+    @Published var layers: [AdventureLayerViewModel]
     @Published var resources: [ResourceViewModel]
     @Published var background: Color
     @Published var camera: CameraStatus
+    
     
     init(_ adventure: Adventure,
          cameraService: CameraService,
@@ -37,6 +38,7 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
          listener: ViewEventsListener?,
          eventsSource: EngineEventsSource?) {
         let schema = ColorSchema.schemaFor(adventure.theme)
+        let publisher = ViewEventsPublisher()
         
         self.model = adventure
         self.player = PlayerViewModel(player: player,
@@ -45,22 +47,17 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
         self.background = schema.background
         self.cameraService = cameraService
         self.camera = cameraService.initial(adventure: adventure)
-
-        self.vertices = adventure.vertices.map {
-            return VertexViewModel(vertex: $0, color: schema.vertex, resourceColor: schema.resources)
-        }
+        self.eventsPublisher = publisher
         
-        self.edges = adventure.edges.map {
-            return EdgeViewModel(model: $0,
-                                 color: schema.edge,
-                                 borderColor: schema.background)
+        self.layers = adventure.layers.map {
+            AdventureLayerViewModel(model: $0, schema: schema, eventsPublisher: publisher)
         }
         
         self.resources = resources.map {
-            return ResourceViewModel(model: $0,
-                                     color: schema.resources,
-                                     borderColor: schema.resourcesBorder)
+            ResourceViewModel(model: $0, color: schema.resources, borderColor: schema.resourcesBorder)
         }
+        
+        self.player.viewModelsProvider = self
         
         // Combine setup
         listener?.subscribeTo(eventsPublisher)
@@ -68,8 +65,6 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
             subscribeTo(source.eventsPublisher)
         }
        
-        self.vertices.forEach { $0.eventsPublisher = eventsPublisher }
-        self.edges.forEach { $0.eventsPublisher = eventsPublisher }
         self.resources.forEach { resource in
             resource.eventsPublisher = eventsPublisher
             self.subscriptions.sink(resource.model.$state) { [weak self] newState in
@@ -77,18 +72,28 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
             }
         }
         
-        // Add notification about resource update, when related vertex's state update. This is necessary for valid handling resources visibility.
-        // TODO: Same things should be done in scope of Adventure Engine
-        for vertex in vertices {
-            subscriptions.sink(vertex.model.$state) {
-                let resources = self.resourcesFor(vertex.model)
-                for resource in resources {
-                    resource.objectWillChange.sendOnMain()
-                }
-            }
+        subscriptions.sink(adventure.$layers) { [weak self] updatedLayers in
+            self?.handleLayersUpdate(updatedLayers)
         }
         
-        self.player.viewModelsProvider = self
+        subscriptions.sink(adventure.$currentLayer) { [weak self] layer in
+            self?.handleCurrentLayerChange(layer)
+        }
+    }
+    
+    func layerResources(_ layer: AdventureLayerViewModel) -> [ResourceViewModel] {
+        resources.filter {
+            switch $0.state {
+            case .gate(_, let edge, _, _, _, _):
+                return layer.edges.contains { $0.model == edge }
+            case .vertex(let vertex, _, _, _):
+                return layer.vertices.contains { $0.model == vertex }
+            case .inventory(let player, _, _, _, _):
+                return player.isOnLayer(layer.model)
+            case .deletion:
+                return false
+            }
+        }
     }
     
     private func resource(_ resource: ResourceViewModel, willChangeState state: ResourceState) {
@@ -101,59 +106,73 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
         }
     }
     
-    func subscribeTo(_ publisher: EngineEventsPublisher) {
-        subscriptions.sink(publisher) {
-            [self] event in
-            handleEngineEvent(event)
-        }
-    }
-    
-    // MARK: Engine events handler
-    
-    private func handleEngineEvent(_ event: EngineEvent) {
-        switch event {
-        case .showMenu(let from):
-            handleMenuShowing(from)
-        case .edgeAdded(let edge):
-            handleEdgeAdding(edge)
-        case .edgeRemoved(let edge):
-            handleEdgeRemoving(edge)
-        }
-    }
-
-    private func handleMenuShowing(_ vertex: Vertex) {
-        camera = cameraService.showMenu(from: vertex)
-    }
-    
-    private func handleEdgeAdding(_ edge: Edge) {
-        let schema = ColorSchema.schemaFor(model.theme)
-        let viewModel = EdgeViewModel(model: edge, color: schema.edge, borderColor: schema.background)
-        viewModel.eventsPublisher = eventsPublisher
-        edges.append(viewModel)
-    }
-    
-    private func handleEdgeRemoving(_ edge: Edge) {
-        edges.removeAll { $0.model == edge }
-    }
-    
-    // TODO: This method may became unused after done another TODOs in this file
-    private func resourcesFor(_ vertex: Vertex) -> [ResourceViewModel] {
-        return resources.filter {
-            guard case .vertex(let inVertex, _, _, _) = $0.state else {
-                return false
-            }
+    private func handleCurrentLayerChange(_ layer: AdventureLayer) {
+        let current = layers.first { $0.isCurrent }
+        current?.isCurrent = false
+        let new = layers.first { $0.model == layer }
+        new?.isCurrent = true
+        
+        layerSubscriptions.removeAll()
+        layerSubscriptions.sink(layer.$state) { [weak self] state in
+            guard let self = self else { return }
+            guard state != .preparing else { return }
             
-            return inVertex == vertex
+            let focus = self.player.position.currentVertex ?? layer.entrance
+            let cameraState = self.cameraService.forLayer(layer, focusPoint: focus.point)
+            let animation = self.cameraAnimation(layerState: state)
+            self.camera = .transition(to: cameraState, animation: animation)
         }
+    }
+    
+    private func cameraAnimation(layerState: AdventureLayerState) -> Animation? {
+        switch layerState {
+        case .presenting:
+            return AnimationService.shared.presentLayer
+        case .hiding:
+            return AnimationService.shared.hidingLayer
+        default:
+            return nil
+        }
+    }
+    
+    private func handleLayersUpdate(_ updatedModels: [AdventureLayer]) {
+        var newViews: [AdventureLayerViewModel] = []
+        for model in updatedModels {
+            let existView = layers.first{ $0.model == model }
+            if let existView = existView {
+                newViews.append(existView)
+            } else {
+                let schema = ColorSchema.schemaFor(self.model.theme)
+                let newView = AdventureLayerViewModel(model: model, schema: schema, eventsPublisher: eventsPublisher)
+                newViews.append(newView)
+            }
+        }
+        
+        layers = newViews
+    }
+    
+    // TODO: Remove engine to view publisher system if still be unused
+    func subscribeTo(_ publisher: EngineEventsPublisher) {
+//        subscriptions.sink(publisher) {
+//            [self] event in
+//            handleEngineEvent(event)
+//        }
+    }
+    
+    // TODO: May be removed if still be unused
+    // MARK: Engine events handler
+    private func handleEngineEvent(_ event: EngineEvent) {
     }
 }
 
 extension AdventureViewModel: ViewModelsProvider {
     func edgeViewModel(for edge: Edge) -> EdgeViewModel? {
+        let edges = layers.flatMap { $0.edges }
         return edges.first { $0.model == edge }
     }
     
     func vertexViewModel(for vertex: Vertex) -> VertexViewModel? {
+        let vertices = layers.flatMap { $0.vertices }
         return vertices.first { $0.model == vertex }
     }
 }

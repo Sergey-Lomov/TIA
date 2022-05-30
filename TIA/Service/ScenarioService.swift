@@ -35,15 +35,13 @@ final class ScenarioService {
     func adventureFor(_ descriptor: AdventureDescriptor, layout: AdventureLayout) -> Adventure {
         let protoAdventure = JSONDecoder.decodeAdventure(id: descriptor.id)
         
+        var entrance: Vertex?
         let vertices: [Vertex] = protoAdventure.vertices.map {
-            
-            let state: VertexState = $0.type == .entrance ? .active : .seed
+            let state: VertexState = $0.role == .entrance ? .active : .seed
             let point = layout.vertices[$0.id] ?? .zero
-            return Vertex(id: $0.id,
-                          type: $0.type,
-                          state: state,
-                          point: point,
-                          resources: $0.resources)
+            let vertex = Vertex(id: $0.id, state: state, point: point, resources: $0.resources)
+            if $0.role == .entrance { entrance = vertex }
+            return vertex
         }
 
         let edges: [Edge] = protoAdventure.edges.map {
@@ -62,24 +60,24 @@ final class ScenarioService {
                             growOnStart: $0.growOnStart,
                             curve: curve)
             
-            from.outEdges.append(edge)
-            to.inEdges.append(edge)
-
             return edge
         }
         
-        return Adventure(id: protoAdventure.id,
-                         index: protoAdventure.index,
-                         theme: protoAdventure.theme,
-                         vertices: vertices,
-                         edges: edges)
+        guard let entrance = entrance else { fatalError("Layout have no entrance") }
+        return Adventure(id: protoAdventure.id, index: protoAdventure.index, theme: protoAdventure.theme, vertices: vertices, edges: edges, entrance: entrance)
     }
 
 // MARK: Codable prototypes
     
+    enum VertexRole: String, Codable {
+        case entrance
+        case common
+        case exit
+    }
+    
     struct VertexPrototype: Codable {
         let id: String
-        let type: VertexType
+        let role: VertexRole
         let resources: [ResourceType]
     }
     

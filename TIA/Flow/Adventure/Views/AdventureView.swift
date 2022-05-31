@@ -20,6 +20,7 @@ struct AdventureView: View {
             ZStack {
                 ForEach(adventure.layers, id:\.id) { layer in
                     AdventureLayerBackground(layer: layer)
+                        .edgesIgnoringSafeArea(.all)
                     
                     LayerContentView(layer: layer)
                         .applyCamera(adventure.camera)
@@ -64,10 +65,6 @@ struct LayerContentView: View {
             }
         }
     }
-    
-//    private var blurRadius: CGFloat {
-//        return layer.isCurrent ? 0 : 6
-//    }
 }
 
 private extension View {

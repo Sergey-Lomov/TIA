@@ -32,13 +32,11 @@ struct ResourceWrapper: View {
                 let animation = stateAnimation(geometry)
                 
                 ResourceView(resource: resource)
-                    .modifier(ResourceStateHandler(
-                        transform: transform,
-                        positionCurve: positionCurve,
-                        onFinish: {
-                            handlePositioningFinish()
-                        }, targetPositioning: resource.positioningStep,
-                        deltaPositioning: resource.positioningStep - 1))
+                    .handleState(transform: transform,
+                                 positionCurve: positionCurve,
+                                 targetPositioning: resource.positioningStep) {
+                        handlePositioningFinish()
+                    }
                     .animation(animation, value: transform)
                     .transition(transition)
                     .onAppear {
@@ -96,7 +94,7 @@ struct ResourceWrapper: View {
                 .fromGate(let gate, _, _, _):
             let fullSize = LayoutService.gateResourceSize(geometry)
             return gate.isOpen ? .zero : fullSize
-        case .inventoryAtVertex, .successMoving, .failedNear, .outFromVertex:
+        case .inventoryAtVertex, .successMoving, .failedNear, .outFromVertex, .prelayerChanging, .layerChanging:
             return LayoutService.inventoryResourceSize(geometry)
         case .vertex, .vertexIdle, .vertexRestoring:
             return LayoutService.vertexResourceSize(geometry)
@@ -114,6 +112,9 @@ struct ResourceWrapper: View {
         case .inventoryAtVertex(let vertex, let index),
                 .outFromVertex(let vertex, let index, _):
             return resourceSlot(geometry: geometry, vertex: vertex, index: index)
+        case .prelayerChanging(let vertex, let index, let layer),
+                .layerChanging(let vertex, let index, let layer):
+            return resourceSlot(geometry: geometry, vertex: vertex, index: index, forcedLayer: layer)
         default:
             return .zero
         }
@@ -146,6 +147,8 @@ struct ResourceWrapper: View {
             return gate.isOpen ? AnimationService.shared.closeGate : AnimationService.shared.openGate
         case .failedNear(let gate, let edge, let vertex, let index, let total):
             return failNearGateAnimation(geometry, gate: gate, edge: edge, vertex: vertex, slot: index, total: total)
+        case .layerChanging:
+            return AnimationService.shared.presentLayer
         default:
             return nil
         }
@@ -167,7 +170,9 @@ struct ResourceWrapper: View {
                 .vertexIdle(let vertex, _, _),
                 .vertexRestoring(let vertex, _, _),
                 .outFromVertex(let vertex, _, _),
-                .inventoryAtVertex(let vertex, _):
+                .inventoryAtVertex(let vertex, _),
+                .prelayerChanging(let vertex, _, _),
+                .layerChanging(let vertex, _, _):
             let point = vertex.point.scaled(geometry)
             return .onePoint(point)
         case .successMoving(let edge, let forward, let fromIndex, let toIndex, _):
@@ -248,8 +253,9 @@ struct ResourceWrapper: View {
         return result
     }
     
-    private func resourceSlot(geometry: GeometryProxy, vertex: Vertex, index: Int) -> CGPoint {
+    private func resourceSlot(geometry: GeometryProxy, vertex: Vertex, index: Int, forcedLayer: AdventureLayer? = nil) -> CGPoint {
         let service = VertexSurroundingService(screenSize: geometry.size)
+        let layer = forcedLayer ?? layer
         let surrounding = service.surroundingFor(vertex, layer: layer, slotsCount: index + 1)
         return surrounding.slots.last ?? .zero
     }
@@ -277,6 +283,13 @@ struct ResourceView: View {
             ResourceShape(type: resource.type)
                 .stroke(resource.borderColor, lineWidth: 2)
         }
+    }
+    
+    func handleState(transform: ResourceStateTransform,
+                     positionCurve: ComplexCurve,
+                     targetPositioning: CGFloat,
+                     onFinish: (() -> Void)?) -> some View {
+        self.modifier(ResourceStateHandler(transform: transform, positionCurve: positionCurve, onFinish: onFinish, targetPositioning: targetPositioning, deltaPositioning: targetPositioning - 1))
     }
 }
 

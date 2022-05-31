@@ -20,6 +20,8 @@ enum ResourceMetastate {
     case toGate(gate: EdgeGate, edge: Edge, fromVertex: Vertex, fromIndex: Int)
     case onGate(gate: EdgeGate, edge: Edge)
     case fromGate(gate: EdgeGate, edge: Edge, toVertex: Vertex, toIndex: Int)
+    case prelayerChanging(vertex: Vertex, index: Int, oldLayer: AdventureLayer)
+    case layerChanging(vertex: Vertex, index: Int, newLayer: AdventureLayer)
 
     var positionAnimated: Bool {
         switch self {
@@ -80,7 +82,16 @@ extension ResourceState {
             case .vertex(let vertex),
                     .compressing(let vertex),
                     .expanding(let vertex):
-                return .inventoryAtVertex(vertex: vertex, index: index)
+                switch vertex.state {
+                case .changingLayer(let from, let to):
+                    if to.state == .preparing {
+                        return .prelayerChanging(vertex: vertex, index: index, oldLayer: from)
+                    } else {
+                        return .layerChanging(vertex: vertex, index: index, newLayer: to)
+                    }
+                default:
+                    return .inventoryAtVertex(vertex: vertex, index: index)
+                }
            
             case .moving(let edge, let forward):
                 if isFresh {

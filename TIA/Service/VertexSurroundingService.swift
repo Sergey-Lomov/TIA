@@ -24,6 +24,7 @@ struct Sector {
     }
 }
 
+// TODO: Implement double outs for each edge - first for edge out from vertex and second for edge out of resources orbit. This should fix problem with edges overlaping by resources in corner cases. For example in menu layer.
 struct VertexSurrounding {
     let slots: [CGPoint]
     let edgesOuts: [CGFloat]

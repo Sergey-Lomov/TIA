@@ -89,7 +89,11 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
             case .vertex(let vertex, _, _, _):
                 return layer.vertices.contains { $0.model == vertex }
             case .inventory(let player, _, _, _, _):
-                return player.isOnLayer(layer.model)
+                // TODO: Following check for current layer was necessary to handle situation when some vertex represents in few layers. If vertex-sharing solution will be moved out from project, this check should be removed
+                let onLayer = player.isOnLayer(layer.model)
+                let onCurrent = player.isOnLayer(model.currentLayer)
+                let layerIsCurrent = layer.model == model.currentLayer
+                return onLayer && (!onCurrent || layerIsCurrent)
             case .deletion:
                 return false
             }
@@ -107,11 +111,6 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
     }
     
     private func handleCurrentLayerChange(_ layer: AdventureLayer) {
-        let current = layers.first { $0.isCurrent }
-        current?.isCurrent = false
-        let new = layers.first { $0.model == layer }
-        new?.isCurrent = true
-        
         layerSubscriptions.removeAll()
         layerSubscriptions.sink(layer.$state) { [weak self] state in
             guard let self = self else { return }

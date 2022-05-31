@@ -21,7 +21,7 @@ final class AnimationService {
         }
         
         enum Layer {
-            static let transitionDuration: CGFloat = 2
+            static let transitionDuration: CGFloat = 1
         }
         
         enum Gate {

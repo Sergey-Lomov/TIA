@@ -55,7 +55,8 @@ final class CameraService {
     
     // TODO: Cash layer frame calculations
     private func layerFrame(_ layer: AdventureLayer) -> CGRect {
-        var frame = CGRect(origin: layer.entrance.point, size: .zero)
+        let entrancePoint = layer.entrance.point.scaled(screenSize)
+        var frame = CGRect(origin: entrancePoint, size: .zero)
         
         layer.vertices.forEach {
             let diameter = Layout.Vertex.diameter * screenSize.minSize
@@ -65,7 +66,7 @@ final class CameraService {
         }
         
         layer.edges.forEach {
-            let edgeFrame = $0.curve.frame()
+            let edgeFrame = $0.curve.scaled(screenSize).frame()
             frame = frame.union(edgeFrame)
         }
         

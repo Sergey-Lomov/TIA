@@ -15,8 +15,7 @@ class AdventureLayerViewModel: ObservableObject {
     var model: AdventureLayer
     @Published var vertices: [VertexViewModel]
     @Published var edges: [EdgeViewModel]
-    @Published var isCurrent: Bool = false
-    
+
     var id: String { model.id }
     var state: AdventureLayerState { model.state }
     

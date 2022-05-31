@@ -221,6 +221,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     
     private func handleLayerPresented(_ layer: AdventureLayer) {
         layer.state = .growing
+        layer.entrance.state = .active
         growFromVertex(layer.entrance)
     }
     
@@ -277,8 +278,15 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         
         lifestate = .menu
         let menuLayer = IngameMenuService.menuLayer(from: from)
-        adventure.currentLayer = menuLayer
+        setCurrentLayer(menuLayer)
         adventure.layers.append(menuLayer)
+    }
+    
+    private func setCurrentLayer(_ newLayer: AdventureLayer) {
+        newLayer.entrance.state = .changingLayer(from: adventure.currentLayer, to: newLayer)
+        let resources = playerResources(player)
+        resources.forEach { $0.objectWillChange.sendOnMain() }
+        adventure.currentLayer = newLayer
     }
     
     private func tryMove(player: Player, fromVertex: Vertex, toVertex: Vertex) {

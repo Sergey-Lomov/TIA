@@ -140,7 +140,7 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
         case .presenting:
             return AnimationService.shared.presentLayer
         case .hiding:
-            return AnimationService.shared.hidingLayer
+            return AnimationService.shared.hideLayer
         default:
             return nil
         }

@@ -14,12 +14,17 @@ enum VertexAction {
     case restart
 }
 
+enum LayerChangeType {
+    case presenting
+    case hiding
+}
+
 enum VertexState: Equatable {
     case seed
     case growing(duration: TimeInterval)
     case active
     case ungrowing(duration: TimeInterval)
-    case changingLayer(from: AdventureLayer, to: AdventureLayer)
+    case changingLayer(from: AdventureLayer, to: AdventureLayer, type: LayerChangeType)
     
     var isGrowed: Bool {
         switch self {

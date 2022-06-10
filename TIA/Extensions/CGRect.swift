@@ -20,4 +20,10 @@ extension CGRect {
     func union(_ point: CGPoint) -> CGRect {
         union(CGRect(origin: point, size: .zero))
     }
+    
+    func nearestPoint(to: CGPoint) -> CGPoint {
+        let x = min(maxX, max(minX, to.x))
+        let y = min(maxY, max(minY, to.y))
+        return CGPoint(x: x, y: y)
+    }
 }

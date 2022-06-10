@@ -225,6 +225,13 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     }
     
     private func handleLayerWasHidden(_ layer: AdventureLayer) {
+        guard case .hiding(let next) = layer.state else { return }
+        if layer.type == .menu {
+            lifestate = .gameplay
+        }
+        if let next = next {
+            adventure.currentLayer = next
+        }
         adventure.layers.remove(layer)
     }
                                                      
@@ -241,6 +248,8 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     
     private func handleVertexSelection(_ newVertex: Vertex) {
         guard case .vertex(let oldVertex) = player.position else { return }
+        guard case .shown = adventure.currentLayer.state else { return }
+        
         if oldVertex == newVertex {
             switch lifestate {
             case .gameplay:
@@ -321,15 +330,11 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     private func showMenu(from: Vertex) {
         lifestate = .menu
         let menuLayer = IngameMenuService.menuLayer(from: from)
-        setCurrentLayer(menuLayer)
-        adventure.layers.append(menuLayer)
-    }
-    
-    private func setCurrentLayer(_ newLayer: AdventureLayer) {
-        newLayer.entrance.state = .changingLayer(from: adventure.currentLayer, to: newLayer)
+        from.state = .changingLayer(from: adventure.currentLayer, to: menuLayer, type: .presenting)
         let resources = playerResources(player)
         resources.forEach { $0.objectWillChange.sendOnMain() }
-        adventure.currentLayer = newLayer
+        adventure.currentLayer = menuLayer
+        adventure.layers.append(menuLayer)
     }
     
     private func tryMove(player: Player, fromVertex: Vertex, toVertex: Vertex) {
@@ -409,7 +414,11 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         if seedsDone && verticesDone {
             var nextLayer: AdventureLayer? = nil
             if adventure.layers.count > 1 {
-                nextLayer = adventure.layers[adventure.layers.count - 2]
+                let prelayer = adventure.layers[adventure.layers.count - 2]
+                exit.state = .changingLayer(from: adventure.currentLayer, to: prelayer, type: .hiding)
+                let resources = playerResources(player)
+                resources.forEach { $0.objectWillChange.sendOnMain() }
+                nextLayer = prelayer
             }
             adventure.currentLayer.state = .hiding(next: nextLayer)
         }

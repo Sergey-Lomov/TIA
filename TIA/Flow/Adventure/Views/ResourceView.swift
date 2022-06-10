@@ -113,7 +113,7 @@ struct ResourceWrapper: View {
                 .outFromVertex(let vertex, let index, _):
             return resourceSlot(geometry: geometry, vertex: vertex, index: index)
         case .prelayerChanging(let vertex, let index, let layer),
-                .layerChanging(let vertex, let index, let layer):
+                .layerChanging(let vertex, let index, let layer, _):
             return resourceSlot(geometry: geometry, vertex: vertex, index: index, forcedLayer: layer)
         default:
             return .zero
@@ -147,8 +147,12 @@ struct ResourceWrapper: View {
             return gate.state == .open ? AnimationService.shared.closeGate : AnimationService.shared.openGate
         case .failedNear(let gate, let edge, let vertex, let index, let total):
             return failNearGateAnimation(geometry, gate: gate, edge: edge, vertex: vertex, slot: index, total: total)
-        case .layerChanging:
-            return AnimationService.shared.presentLayer
+        case .layerChanging(_, _, _, let type):
+            switch type {
+            case .presenting: return AnimationService.shared.presentLayer
+            case .hiding: return AnimationService.shared.hideLayer
+            }
+            
         default:
             return nil
         }
@@ -172,7 +176,7 @@ struct ResourceWrapper: View {
                 .outFromVertex(let vertex, _, _),
                 .inventoryAtVertex(let vertex, _),
                 .prelayerChanging(let vertex, _, _),
-                .layerChanging(let vertex, _, _):
+                .layerChanging(let vertex, _, _, _):
             let point = vertex.point.scaled(geometry)
             return .onePoint(point)
         case .successMoving(let edge, let forward, let fromIndex, let toIndex, _):

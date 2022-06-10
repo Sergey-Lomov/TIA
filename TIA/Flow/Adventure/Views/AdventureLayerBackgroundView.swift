@@ -33,7 +33,7 @@ struct AdventureLayerBackground: View {
     private var animation: Animation? {
         switch layer.state {
         case .presenting: return AnimationService.shared.presentLayer
-        case .hiding: return AnimationService.shared.hidingLayer
+        case .hiding: return AnimationService.shared.hideLayer
         default: return nil
         }
     }

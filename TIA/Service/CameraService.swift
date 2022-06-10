@@ -47,9 +47,12 @@ final class CameraService {
         let focusFrame = CGRect(center: scaledFocus, size: screenSize)
         let rawLayerFrame = layerFrame(layer)
         let layerFrame = CGRect(center: rawLayerFrame.center, size: screenSize)
-        let x = max(layerFrame.minX, focusFrame.minX)
-        let y = max(layerFrame.minY, focusFrame.minY)
-        let center = CGPoint(x: x, y: y).translated(by: screenSize.half)
+        let deltaWidth = layerFrame.width - focusFrame.width
+        let deltaHeight = layerFrame.height - focusFrame.height
+        let availableSize = CGSize(width: deltaWidth, height: deltaHeight)
+        let availableFrame = CGRect(origin: layerFrame.origin, size: availableSize)
+        let origin = availableFrame.nearestPoint(to: focusFrame.origin)
+        let center = origin.translated(by: screenSize.half)
         return .init(center: center, zoom: 1)
     }
     

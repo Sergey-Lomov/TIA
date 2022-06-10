@@ -61,7 +61,7 @@ final class AnimationService {
     var presentLayer: Animation {
         .easeOut(duration: Const.Layer.transitionDuration)
     }
-    var hidingLayer: Animation {
+    var hideLayer: Animation {
         .easeIn(duration: Const.Layer.transitionDuration)
     }
 

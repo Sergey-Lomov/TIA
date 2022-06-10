@@ -93,7 +93,7 @@ struct ResourceWrapper: View {
                 .onGate(let gate, _),
                 .fromGate(let gate, _, _, _):
             let fullSize = LayoutService.gateResourceSize(geometry)
-            return gate.isOpen ? .zero : fullSize
+            return gate.state == .open ? .zero : fullSize
         case .inventoryAtVertex, .successMoving, .failedNear, .outFromVertex, .prelayerChanging, .layerChanging:
             return LayoutService.inventoryResourceSize(geometry)
         case .vertex, .vertexIdle, .vertexRestoring:
@@ -144,7 +144,7 @@ struct ResourceWrapper: View {
         case .toGate, .fromGate:
             return .gateMoving
         case .onGate(let gate, _):
-            return gate.isOpen ? AnimationService.shared.closeGate : AnimationService.shared.openGate
+            return gate.state == .open ? AnimationService.shared.closeGate : AnimationService.shared.openGate
         case .failedNear(let gate, let edge, let vertex, let index, let total):
             return failNearGateAnimation(geometry, gate: gate, edge: edge, vertex: vertex, slot: index, total: total)
         case .layerChanging:

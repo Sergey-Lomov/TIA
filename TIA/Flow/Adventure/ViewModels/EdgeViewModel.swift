@@ -49,11 +49,23 @@ extension EdgeViewModel {
         eventsPublisher.send(.edgePathGrowed(edge: model))
     }
     
-    func counterConnectorGrowingPrepared() {
-        eventsPublisher.send(.edgeCounterConnectorPrepared(edge: model))
+    func elementsGrowingPrepared() {
+        eventsPublisher.send(.edgeElementsPrepared(edge: model))
     }
     
-    func counterConnectorGrowingFinished() {
-        eventsPublisher.send(.edgeCounterConnectorGrowed(edge: model))
+    func elementsGrowingFinished() {
+        eventsPublisher.send(.edgeElementsGrowed(edge: model))
+    }
+    
+    func ungrowingPrepared() {
+        eventsPublisher.send(.edgeUngrowingPrepared(edge: model))
+    }
+    
+    func elementsUngrowed() {
+        eventsPublisher.send(.edgeElementsUngrowed(edge: model))
+    }
+    
+    func ungrowingFinished() {
+        eventsPublisher.send(.edgeUngrowed(edge: model))
     }
 }

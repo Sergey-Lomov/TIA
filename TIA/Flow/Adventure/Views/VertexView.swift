@@ -33,30 +33,43 @@ struct VertexView: View {
         ZStack {
             ComplexCurveShape(curve: curve)
                 .onReach(curve) {
-                    vertex.growingFinished()
+                    handleMutatingFinished()
                 }
                 .frame(size: radius)
                 .foregroundColor(vertex.color)
-                .animation(.easeOut(duration: growDuration),
-                           value: curve)
+                .animation(animation, value: curve)
         }
     }
     
     private var curve: ComplexCurve {
         switch vertex.model.state {
-        case .seed:
+        case .seed, .ungrowing:
             return ComplexCurve.circle(radius: 0)
         default:
             return ComplexCurve.circle(radius: 0.5)
         }
     }
-    
-    private var growDuration: CGFloat {
-        switch vertex.model.state {
+
+    // TODO: Move animation to AnimationService
+    private var animation: Animation? {
+        switch vertex.state {
         case .growing(let duration):
-            return duration
+            return .easeOut(duration: duration)
+        case .ungrowing(let duration):
+            return .easeIn(duration: duration)
         default:
-            return 0
+            return nil
+        }
+    }
+    
+    private func handleMutatingFinished() {
+        switch vertex.state {
+        case .growing:
+            vertex.growingFinished()
+        case .ungrowing:
+            vertex.ungrowingFinished()
+        default:
+            break
         }
     }
 }

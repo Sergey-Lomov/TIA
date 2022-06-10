@@ -13,12 +13,13 @@ enum AdventureLayerType {
     case menu
 }
 
-enum AdventureLayerState {
+enum AdventureLayerState: Equatable {
     case preparing
     case presenting
     case growing
     case shown
-    case hiding
+    case ungrowing(exit: Vertex)
+    case hiding(next: AdventureLayer?)
     
     // TODO: Remove test code
     var short: String {
@@ -33,6 +34,8 @@ enum AdventureLayerState {
             return "s"
         case .hiding:
             return "h"
+        case .ungrowing:
+            return "u"
         }
     }
 }
@@ -75,7 +78,7 @@ class AdventureLayer : ObservableObject, IdEqutable {
     func isInitialGrowingFinished() -> Bool {
         switch state {
         case .preparing, .presenting: return false
-        case .shown, .hiding: return true
+        case .shown, .hiding, .ungrowing: return true
         case .growing: return calculateInitialGrowing()
         }
     }

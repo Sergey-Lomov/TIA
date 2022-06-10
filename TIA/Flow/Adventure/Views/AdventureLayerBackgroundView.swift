@@ -25,7 +25,7 @@ struct AdventureLayerBackground: View {
         switch layer.state {
         case .hiding, .preparing:
             return 0
-        case .growing, .presenting, .shown:
+        case .growing, .presenting, .shown, .ungrowing:
             return 0.99
         }
     }

@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+// TODO: Try to use AnimationCompletionObserverModifier instead
 struct AnimationHandlingShape<T: Shape>: Shape {
     
     var content: T

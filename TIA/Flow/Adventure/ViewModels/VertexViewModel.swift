@@ -48,6 +48,10 @@ extension VertexViewModel {
         eventsPublisher.send(.vertexGrowingFinished(vertex: model))
     }
     
+    func ungrowingFinished() {
+        eventsPublisher.send(.vertexUngrowingFinished(vertex: model))
+    }
+    
     func wasTapped() {
         eventsPublisher.send(.vertexSelected(vertex: model))
     }

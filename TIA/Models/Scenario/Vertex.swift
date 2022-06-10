@@ -14,15 +14,16 @@ enum VertexAction {
     case restart
 }
 
-enum VertexState {
+enum VertexState: Equatable {
     case seed
     case growing(duration: TimeInterval)
     case active
+    case ungrowing(duration: TimeInterval)
     case changingLayer(from: AdventureLayer, to: AdventureLayer)
     
     var isGrowed: Bool {
         switch self {
-        case .seed, .growing:
+        case .seed, .growing, .ungrowing:
             return false
         case .active, .changingLayer:
             return true

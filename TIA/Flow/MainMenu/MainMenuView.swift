@@ -10,12 +10,6 @@ import SwiftUI
 struct MainMenuView: View {
     
     @ObservedObject var game: GameState
-    private let curve = BezierCurve(points: [
-        CGPoint(x: 0, y: 0),
-        CGPoint(x: 100, y: 0),
-        CGPoint(x: 120, y: 100),
-        CGPoint(x: 100, y: 100),
-    ])
     @State var progress: CGFloat = 0
     
     var body: some View {

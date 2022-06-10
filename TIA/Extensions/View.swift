@@ -73,6 +73,10 @@ extension View {
         )
     }
     
+    func onRedraw(closure: @escaping () -> Void) -> some View {
+        modifier(ViewRedrawHandlerModifier(handler: closure))
+    }
+    
     func onAnimationCompleted<Value: VectorArithmetic>(for value: Value, completion: @escaping () -> Void) -> ModifiedContent<Self, AnimationCompletionObserverModifier<Value>> {
         return modifier(AnimationCompletionObserverModifier(observedValue: value, completion: completion))
     }

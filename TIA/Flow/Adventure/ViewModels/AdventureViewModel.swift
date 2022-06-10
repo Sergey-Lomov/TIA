@@ -113,14 +113,26 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
     private func handleCurrentLayerChange(_ layer: AdventureLayer) {
         layerSubscriptions.removeAll()
         layerSubscriptions.sink(layer.$state) { [weak self] state in
-            guard let self = self else { return }
-            guard state != .preparing else { return }
-            
-            let focus = self.player.position.currentVertex ?? layer.entrance
-            let cameraState = self.cameraService.forLayer(layer, focusPoint: focus.point)
-            let animation = self.cameraAnimation(layerState: state)
-            self.camera = .transition(to: cameraState, animation: animation)
+            self?.handleLayer(layer, newState: state)
         }
+    }
+    
+    private func handleLayer(_ layer: AdventureLayer, newState state: AdventureLayerState) {
+        guard state != .preparing else { return }
+        
+        var targetLayer: AdventureLayer? = layer
+        if case .hiding(let nextLayer) = state {
+            targetLayer = nextLayer
+        }
+        
+        let focus = player.position.currentVertex ?? layer.entrance
+        var cameraState = CameraState.default
+        if let targetLayer = targetLayer {
+            cameraState = cameraService.forLayer(targetLayer, focusPoint: focus.point)
+        }
+        
+        let animation = cameraAnimation(layerState: state)
+        camera = .transition(to: cameraState, animation: animation)
     }
     
     private func cameraAnimation(layerState: AdventureLayerState) -> Animation? {

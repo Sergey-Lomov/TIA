@@ -11,25 +11,36 @@ struct EdgeWrapper: View {
     @ObservedObject var edge: EdgeViewModel
     
     var body: some View {
+        let metastate = edge.metastate
         CenteredGeometryReader { geometry in
             EdgePathView(edge: edge)
 
-            if edge.model.state.isGrowed {
-                ForEach(edge.model.gates.indices, id: \.self) { index in
-                    let gate = edge.model.gates[index]
-                    let position = LayoutService.gatePosition(geometry, gate: gate, edge: edge.model)
-                    
-                    EdgeGateView(gate: gate, backColor: edge.color, symbolColor: edge.borderColor)
-                        .offset(point: position)
-                        .transition(gateTransition(position: position, geometry: geometry))
-                }
+            ForEach(edge.model.gates.indices, id: \.self) { index in
+                let gate = edge.model.gates[index]
+                let position = LayoutService.gatePosition(geometry, gate: gate, edge: edge.model)
+                
+                EdgeGateView(gate: gate, backColor: edge.color, symbolColor: edge.borderColor)
+                    .offset(point: position)
             }
+        }.onRedraw {
+            // Metastate stroing is a trick for fix unnecessary handling of updated state
+            handleViewRedraw(metastate)
         }
     }
     
-    func gateTransition(position: CGPoint, geometry: GeometryProxy) -> AnyTransition {
-        let anchor = position.toUnit(geometry: geometry)
-        return .scale(scale: 0, anchor: anchor).animation(.easeOut(duration: 1))
+    private func handleViewRedraw(_ metastate: EdgeViewMetastate) {
+        switch metastate {
+        case .preextendedSeed:
+            edge.seedExtensionPrepared()
+        case .pregrowing:
+            edge.growingPrepared()
+        case .pregrowingElements:
+            edge.elementsGrowingPrepared()
+        case .preungrowing:
+            edge.ungrowingPrepared()
+        default:
+            break
+        }
     }
 }
 
@@ -67,9 +78,6 @@ struct EdgePathView: View {
                     .animation(animation, value: fromConnectorData(geometry))
                     .foregroundColor(edge.color)
                     .offset(geometry.size.half)
-                    .onAppear() {
-                        handleFromConnectorAppear(metastate)
-                    }
             }
             
             if edge.metastate.toConnectorVisible {
@@ -81,16 +89,13 @@ struct EdgePathView: View {
                     .animation(animation, value: connectorData)
                     .foregroundColor(edge.color)
                     .offset(geometry.size.half)
-                    .onAppear {
-                        edge.counterConnectorGrowingPrepared()
-                    }
             }
         }
     }
     
     private var curve: BezierCurve {
         switch edge.metastate {
-        case .seed, .pregrowing:
+        case .seed, .pregrowing, .ungrowPath:
             // TODO: Rename seed curve to consistent name (pregrowingCurve)
             return edge.model.seedCurve
         default:
@@ -102,7 +107,8 @@ struct EdgePathView: View {
         switch edge.metastate {
         case .seed, .preextendedSeed, .extendedSeed:
             return 0
-        case .pregrowing:
+        // TODO: Think is it necessary to do same preparation in "preungrowing" state
+        case .pregrowing, .ungrowPath:
             let curve = edge.curve.scaled(geometry)
             let center = edge.model.from.point.scaled(geometry)
             let radius = Layout.Vertex.diameter / 2 * geometry.minSize
@@ -114,9 +120,9 @@ struct EdgePathView: View {
     
     private func counterConnectorProgress(_ geometry: GeometryProxy) -> CGFloat {
         switch edge.metastate {
-        case .seed, .preextendedSeed, .extendedSeed, .pregrowing, .growPath, .waitingVertex:
+        case .seed, .preextendedSeed, .extendedSeed, .pregrowing, .growPath, .waitingVertex, .ungrowPath, .ungrowElements:
             return 0
-        case .pregrowingCounterConnector:
+        case .pregrowingElements:
             let curve = edge.curve.reversed().scaled(geometry)
             let center = edge.model.to.point.scaled(geometry)
             let radius = Layout.Vertex.diameter / 2 * geometry.minSize
@@ -135,38 +141,32 @@ struct EdgePathView: View {
         }
     }
     
+    // TODO: Move all animations to AnimationsService
     private var animation: Animation? {
         switch edge.metastate {
-        case .preextendedSeed, .pregrowing, .pregrowingCounterConnector:
+        case .preextendedSeed, .pregrowing, .pregrowingElements:
             return .linear(duration: 0)
         case .extendedSeed:
             return AnimationService.shared.menuSeedExtension
-        case .growPath(let duration), .growCounterConnector(let duration):
+        case .growPath(let duration), .growElements(let duration):
             return .easeOut(duration: duration)
+        case .ungrowPath(let duration), .ungrowElements(let duration):
+            return .easeIn(duration: duration)
         default:
             return nil
-        }
-    }
-    
-    private func handleFromConnectorAppear(_ metastate: EdgeViewMetastate) {
-        switch metastate {
-        case .preextendedSeed:
-            edge.seedExtensionPrepared()
-        default:
-            break
         }
     }
 
     private func handleMutatingFinished(metastate: EdgeViewMetastate) {
         switch metastate {
-        case .pregrowing:
-            edge.growingPrepared()
         case .growPath:
             edge.pathGrowingFinished()
-        case .pregrowingCounterConnector:
-            edge.counterConnectorGrowingPrepared()
-        case .growCounterConnector:
-            edge.counterConnectorGrowingFinished()
+        case .growElements:
+            edge.elementsGrowingFinished()
+        case .ungrowElements:
+            edge.elementsUngrowed()
+        case .ungrowPath:
+            edge.ungrowingFinished()
         default:
             break
         }
@@ -222,7 +222,12 @@ struct EdgeGateView: View {
     }
     
     func circleSize(_ geometry: GeometryProxy) -> CGFloat {
-        return gate.isOpen ? 0 : geometry.minSize * Layout.EdgeGate.sizeRatio
+        switch gate.state {
+        case .open, .seed, .ungrowing:
+            return 0
+        case .growing, .close:
+            return geometry.minSize * Layout.EdgeGate.sizeRatio
+        }
     }
     
     func symbolSize(_ geometry: GeometryProxy) -> CGFloat {
@@ -230,7 +235,18 @@ struct EdgeGateView: View {
     }
     
     private var sizeAnimation: Animation? {
-        return gate.isOpen ? AnimationService.shared.closeGate : AnimationService.shared.closeGate
+        switch gate.state {
+        case .growing:
+            return AnimationService.shared.growingGate
+        case .open:
+            return AnimationService.shared.openGate
+        case .close:
+            return AnimationService.shared.closeGate
+        case .ungrowing:
+            return AnimationService.shared.ungrowingGate
+        default:
+            return nil
+        }
     }
 }
 

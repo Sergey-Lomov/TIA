@@ -9,12 +9,19 @@ import Foundation
 import CoreGraphics
 import SwiftUI
 
-enum EdgeGrowingPhase {
+// In scope of phases enums elements means counter connector and gates
+enum EdgeGrowingPhase: Equatable {
     case preparing
     case pathGrowing(duration: TimeInterval)
     case waitingDestinationVertex
-    case preparingCounterConnector
-    case counterConnectionGrowing(duration: TimeInterval)
+    case preparingElements
+    case elementsGrowing(duration: TimeInterval)
+}
+
+enum EdgeUngrowingPhase: Equatable {
+    case preparing
+    case elementsUngrowing(duration: TimeInterval)
+    case pathUngrowing(duration: TimeInterval)
 }
 
 enum EdgeSeedPhase {
@@ -23,15 +30,21 @@ enum EdgeSeedPhase {
     case extended
 }
 
-enum EdgeState {
+enum EdgeState: Equatable {
     // TODO: Remove seed phases before reslease if this concept still be unused. After removing phases should be carrefully checked edge view to find unused code.
     case seed(phase: EdgeSeedPhase)
     case growing(phase: EdgeGrowingPhase)
     case active
+    case ungrowing(phase: EdgeUngrowingPhase)
+    
+    // TODO: After handling another TODOs this bool may became unnecessary if all associated values will be removed
+    var isSeed: Bool {
+        if case .seed = self { return true } else { return false }
+    }
     
     var isGrowed: Bool {
         switch self {
-        case .seed, .growing:
+        case .seed, .growing, .ungrowing:
             return false
         case .active:
             return true
@@ -46,7 +59,7 @@ class Edge: ObservableObject, IdEqutable {
     let id: String
     var from: Vertex
     var to: Vertex
-    var gates: [EdgeGate]
+    var gates: [EdgeGate] = []
     var growOnStart: Bool
     @Published var state: EdgeState
     
@@ -78,7 +91,9 @@ class Edge: ObservableObject, IdEqutable {
         self.curve = curve
         // TODO: For light theme seed curves should be equtable to main curves
         self.seedCurve = curve.randomControlsCurve(maxDelta: seedCurveDelta)
-        self.gates = price.map { .init(requirement: .resource($0)) }
+        self.gates = price.map {
+            .init(requirement: .resource($0), edgeStatePublisher: $state)
+        }
     }
 }
 

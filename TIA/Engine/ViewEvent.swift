@@ -26,13 +26,17 @@ enum ViewEvent {
     case layerWasHidden(layer: AdventureLayer)
     
     case vertexGrowingFinished(vertex: Vertex)
+    case vertexUngrowingFinished(vertex: Vertex)
     case vertexSelected(vertex: Vertex)
     
     case edgeSeedExtensionPrepared(edge: Edge)
     case edgeGrowingPrepared(edge: Edge)
     case edgePathGrowed(edge: Edge)
-    case edgeCounterConnectorPrepared(edge: Edge)
-    case edgeCounterConnectorGrowed(edge: Edge)
+    case edgeElementsPrepared(edge: Edge)
+    case edgeElementsGrowed(edge: Edge)
+    case edgeUngrowingPrepared(edge: Edge)
+    case edgeElementsUngrowed(edge: Edge)
+    case edgeUngrowed(edge: Edge)
     
     case resourceMovedToGate(resource: Resource)
     case resourcePresented(resource: Resource)

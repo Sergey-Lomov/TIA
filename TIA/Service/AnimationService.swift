@@ -25,14 +25,14 @@ final class AnimationService {
         }
         
         enum Vertex {
-            static let ungrowingDuration: CGFloat = 1
+            static let ungrowingDuration: CGFloat = 0.5
         }
         
         enum Edge {
             // TODO: After edge animations refactoring this constant shoiuld be used to control counter connector growing duration
             static let elementsGrowingDuration: CGFloat = 0.5
             static let elementsUngrowingDuration: CGFloat = 0.3
-            static let pathUngrowingDuration: CGFloat = 1
+            static let pathUngrowingDuration: CGFloat = 0.7
         }
         
         enum Gate {

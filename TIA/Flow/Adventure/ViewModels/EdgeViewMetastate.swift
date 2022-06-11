@@ -70,7 +70,7 @@ enum EdgeViewMetastate {
     
     var toConnectorVisible: Bool {
         switch self {
-        case .seed, .preextendedSeed, .extendedSeed, .pregrowing, .growPath, .waitingVertex:
+        case .seed, .preextendedSeed, .extendedSeed, .pregrowing, .growPath, .waitingVertex, .ungrowPath:
             return false
         default:
             return true

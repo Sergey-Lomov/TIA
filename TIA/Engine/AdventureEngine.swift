@@ -195,9 +195,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         case .edgeUngrowingPrepared(let edge):
             handleEdgeUngrowingPrepared(edge)
         case .edgeElementsUngrowed(let edge):
-            // TODO: Duration should be moved to view instead state associated value
-            let duration = AnimationService.Const.Edge.pathUngrowingDuration
-            edge.state = .ungrowing(phase: .pathUngrowing(duration: duration))
+            handleEdgeElementsUngrowed(edge)
         case .edgeUngrowed(let edge):
             handleEdgeUngrowed(edge)
         
@@ -282,13 +280,19 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         // TODO: Duration should be moved to view instead state associated value
         let duration = AnimationService.Const.Edge.elementsUngrowingDuration
         edge.state = .ungrowing(phase: .elementsUngrowing(duration: duration))
-        //edge.gates.forEach { $0.state = .ungrowing }
+    }
+    
+    private func handleEdgeElementsUngrowed(_ edge: Edge) {
+        // TODO: Duration should be moved to view instead state associated value
+        let duration = AnimationService.Const.Edge.pathUngrowingDuration
+        edge.state = .ungrowing(phase: .pathUngrowing(duration: duration))
+        startUngrowingIfReady(edge.to)
     }
     
     private func handleEdgeUngrowed(_ edge: Edge) {
         edge.state = .seed(phase: .compressed)
-        startUngrowingIfReady(edge.to)
         startUngrowingIfReady(edge.from)
+        checkLayerUngrowingCompletion()
     }
     
     private func startUngrowingIfReady(_ vertex: Vertex) {
@@ -297,8 +301,14 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
                   return
               }
         
+        let edgeBlockVertex: (Edge) -> Bool = { edge in
+            if edge.to == vertex { return edge.state.blocksToUngrowing }
+            if edge.from == vertex { return edge.state.blocksFromUngrowing }
+            return false
+        }
+        
         let layerEdges = adventure.currentLayer.edges(of: vertex)
-        let readyToUngrowing = layerEdges.allSatisfy { $0.state.isSeed }
+        let readyToUngrowing = layerEdges.allSatisfy { !edgeBlockVertex($0) }
         if readyToUngrowing && vertex.state.isGrowed {
             // TODO: Move duration to view layer
             let duration = AnimationService.Const.Vertex.ungrowingDuration
@@ -497,5 +507,32 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     private func removeResources(_ resources: [Resource]) {
         resources.forEach { $0.state = .deletion }
         self.resources.removeAllDeletion()
+    }
+}
+
+private extension EdgeState {
+    var blocksToUngrowing: Bool {
+        switch self {
+        case .seed:
+            return false
+        case .ungrowing(let phase):
+            switch phase {
+            case .preparing, .elementsUngrowing:
+                return true
+            case .pathUngrowing:
+                return false
+            }
+        default:
+            return true
+        }
+    }
+    
+    var blocksFromUngrowing: Bool {
+        switch self {
+        case .seed:
+            return false
+        default:
+            return true
+        }
     }
 }

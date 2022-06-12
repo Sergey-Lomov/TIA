@@ -14,7 +14,6 @@ struct BezierCurve {
     private static let legthRatioLimit: Int = 100
     private static let tangentDelta: CGFloat = 0.01
     private static let lengthSteps: Int = 100
-    private static let frameSteps: Int = 100
     
     let id = UUID().uuidString
     var p0: CGPoint
@@ -28,8 +27,21 @@ struct BezierCurve {
     var control1: CGPoint { p1 }
     var control2: CGPoint { p2 }
     
-    static func onePoint(_ point: CGPoint) -> Self {
+    static func onePoint(_ point: CGPoint) -> BezierCurve {
         return BezierCurve(points: [point, point, point, point])
+    }
+    
+    static func line(from: CGPoint, to: CGPoint) -> BezierCurve {
+        .init(points: [from, from, to, to])
+    }
+    
+    static func arc(from: CGFloat, to: CGFloat) -> BezierCurve {
+        let p0 = CGPoint(center: .zero, angle: from, radius: 1)
+        let p3 = CGPoint(center: .zero, angle: to, radius: 1)
+        let controlRadius = 4 / 3 * tan((to - from) / 4)
+        let p1 = CGPoint(center: p0, angle: from + .hpi, radius: controlRadius)
+        let p2 = CGPoint(center: p3, angle: to - .hpi, radius: controlRadius)
+        return .init(points: [p0, p1, p2, p3])
     }
     
     init(from: CGPoint, to: CGPoint, control1: CGPoint, control2: CGPoint) {
@@ -63,6 +75,10 @@ struct BezierCurve {
     
     func scaled(_ size: CGSize) -> BezierCurve {
         return scaled(x: size.width, y: size.height)
+    }
+    
+    func scaled(_ scale: CGFloat) -> BezierCurve {
+        return self.scaled(x: scale, y: scale)
     }
     
     func scaled(x xScale: CGFloat, y yScale: CGFloat) -> BezierCurve {
@@ -163,13 +179,8 @@ struct BezierCurve {
         return getPoint(t: t)
     }
     
-    func frame(steps: Int = frameSteps) -> CGRect {
-        var frame = CGRect(origin: getPoint(t: 0), size: .zero)
-        for step in 0..<steps {
-            let t = CGFloat(step) / CGFloat(steps - 1)
-            frame = frame.union(getPoint(t: t))
-        }
-        return frame
+    func frame() -> CGRect {
+        return Path(curve: self).boundingRect
     }
 }
 

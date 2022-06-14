@@ -24,7 +24,7 @@ class AdventureLayerViewModel: ObservableObject {
         self.eventsPublisher = eventsPublisher
         
         self.vertices = model.vertices.map {
-            VertexViewModel(vertex: $0, color: schema.vertex, resourceColor: schema.resources, eventsPublisher: eventsPublisher)
+            VertexViewModel(vertex: $0, color: schema.vertex, elementsColor: schema.vertexElements, eventsPublisher: eventsPublisher)
         }
         
         self.edges = model.edges.map {

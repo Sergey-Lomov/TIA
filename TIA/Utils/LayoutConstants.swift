@@ -23,6 +23,7 @@ struct Layout {
     struct Vertex {
         /// Vertex diamtere ration to screen size
         static let diameter: CGFloat = 0.15
+        static let onVisitIcon: CGFloat = 0.75
     }
     
     struct Edge {

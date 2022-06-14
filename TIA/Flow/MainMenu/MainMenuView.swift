@@ -20,13 +20,11 @@ struct MainMenuView: View {
 
             Button("Done dark1") {
                 GameEngine.shared.doneCurrentAdventure(theme: .dark)
-            }
-                .offset(x: 0, y: 150)
+            }.offset(x: 0, y: 150)
 
             Button("Start dark") {
                 GameEngine.shared.startAdventure(theme: .dark)
-            }
-                .offset(x: 0, y: 180)
+            }.offset(x: 0, y: 180)
         }.edgesIgnoringSafeArea(.all)
     }
 }

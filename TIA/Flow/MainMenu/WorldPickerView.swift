@@ -55,6 +55,7 @@ struct ThemeAdventuresView: View {
 struct DropShape: Shape {
     private let cirleControlCoefficient: CGFloat = 0.66666
     
+    // TODO: Think of changing calculations to constants or using new 'arc' func in BezierCurve
     func path(in rect: CGRect) -> Path {
         
         let center = CGPoint(x:rect.midX, y: rect.midY)

@@ -14,7 +14,7 @@ class VertexViewModel: ObservableObject, IdEqutable {
     
     @Published var model: Vertex
     @Published var color: Color
-    @Published var resourceColor: Color
+    @Published var elementsColor: Color
     
     // TODO: Make all wrapped vars calculated values (no setter). Here and in all same view models
     var id: String { model.id }
@@ -30,10 +30,10 @@ class VertexViewModel: ObservableObject, IdEqutable {
     
     private var subscriptions: [AnyCancellable] = []
     
-    init(vertex: Vertex, color: Color, resourceColor: Color, eventsPublisher: ViewEventsPublisher) {
+    init(vertex: Vertex, color: Color, elementsColor: Color, eventsPublisher: ViewEventsPublisher) {
         self.model = vertex
         self.color = color
-        self.resourceColor = resourceColor
+        self.elementsColor = elementsColor
         self.eventsPublisher = eventsPublisher
         
         subscriptions.sink(model.objectWillChange) { [weak self] in

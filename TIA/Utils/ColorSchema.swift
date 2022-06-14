@@ -10,6 +10,7 @@ import SwiftUI
 struct ColorSchema {
     let background: Color
     let vertex: Color
+    let vertexElements: Color
     let edge: Color
     let resources: Color
     let resourcesBorder: Color
@@ -28,6 +29,7 @@ struct ColorSchema {
     
     static let dark = ColorSchema(background: .softBlack,
                                   vertex: .softWhite,
+                                  vertexElements: .softBlack,
                                   edge: .softWhite,
                                   resources: .softWhite,
                                   resourcesBorder: .softBlack,
@@ -35,6 +37,7 @@ struct ColorSchema {
     
     static let light = ColorSchema(background: .softWhite,
                                    vertex: .softBlack,
+                                   vertexElements: .softWhite,
                                    edge: .softBlack,
                                    resources: .softBlack,
                                    resourcesBorder: .softWhite,
@@ -42,6 +45,7 @@ struct ColorSchema {
     
     static let truth = ColorSchema(background: .softBlack,
                                    vertex: .softWhite,
+                                   vertexElements: .softBlack,
                                    edge: .softWhite,
                                    resources: .softWhite,
                                    resourcesBorder: .softBlack,

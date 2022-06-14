@@ -26,6 +26,7 @@ final class AnimationService {
         
         enum Vertex {
             static let ungrowingDuration: CGFloat = 0.5
+            static let elementsGrowingDuration: CGFloat = 1
         }
         
         enum Edge {
@@ -63,6 +64,10 @@ final class AnimationService {
     }
     var hideLayer: Animation {
         .easeIn(duration: Const.Layer.transitionDuration)
+    }
+    
+    var vertexElementsGrowing: Animation {
+        .linear(duration: Const.Vertex.elementsGrowingDuration)
     }
 
     var growingGate: Animation {

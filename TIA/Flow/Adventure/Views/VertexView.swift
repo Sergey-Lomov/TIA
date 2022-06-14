@@ -14,9 +14,9 @@ struct VertexWrapper: View {
     var body: some View {
         CenteredGeometryReader { geometry in
 
-            let radius = geometry.minSize * Layout.Vertex.diameter
+            let diameter = geometry.minSize * Layout.Vertex.diameter
         
-            VertexView(vertex: vertex, radius: radius)
+            VertexView(vertex: vertex, diameter: diameter)
                 .offset(point: vertex.point, geometry: geometry)
                 .onTapGesture {
                     vertex.wasTapped()
@@ -26,27 +26,48 @@ struct VertexWrapper: View {
 }
 
 struct VertexView: View {
+    
     @ObservedObject var vertex: VertexViewModel
-    var radius: CGFloat
+    var diameter: CGFloat
     
     var body: some View {
-        ZStack {
+        CenteredGeometryReader { geometry in
             ComplexCurveShape(curve: curve)
-                .onReach(curve) {
+                /*.onReach(curve) {
+                    handleMutatingFinished()
+                }*/
+                .scaleEffect(scale)
+                .frame(size: diameter)
+                .foregroundColor(vertex.color)
+                .onAnimationCompleted(for: scale) {
                     handleMutatingFinished()
                 }
-                .frame(size: radius)
-                .foregroundColor(vertex.color)
-                .animation(animation, value: curve)
+                .animation(animation, value: scale)
+            
+            
+            onVisitView()
+                .scaleEffect(scale)
+                .frame(size: diameter * Layout.Vertex.onVisitIcon)
+                .animation(onVisitAnimation, value: onVisitProgress)
+                .foregroundColor(vertex.elementsColor)
         }
     }
     
     private var curve: ComplexCurve {
+//        switch vertex.model.state {
+//        case .seed, .ungrowing:
+//            return ComplexCurve.circle(radius: 0)
+//        default:
+            return ComplexCurve.circle(radius: 0.5)
+//        }
+    }
+    
+    private var scale: CGFloat {
         switch vertex.model.state {
         case .seed, .ungrowing:
-            return ComplexCurve.circle(radius: 0)
+            return 0
         default:
-            return ComplexCurve.circle(radius: 0.5)
+            return 1
         }
     }
 
@@ -62,6 +83,26 @@ struct VertexView: View {
         }
     }
     
+    var onVisitProgress: CGFloat {
+        switch vertex.state {
+        case .active, .changingLayer:
+            return 1
+        default:
+            return 0
+        }
+    }
+    
+    private var onVisitAnimation: Animation? {
+        switch vertex.state {
+        case .active, .changingLayer:
+            return AnimationService.shared.vertexElementsGrowing
+        case .ungrowing(let duration):
+            return .easeIn(duration: duration)
+        default:
+            return nil
+        }
+    }
+    
     private func handleMutatingFinished() {
         switch vertex.state {
         case .growing:
@@ -70,6 +111,16 @@ struct VertexView: View {
             vertex.ungrowingFinished()
         default:
             break
+        }
+    }
+    
+    @ViewBuilder
+    private func onVisitView() -> some View {
+        if let action = vertex.model.onVisit,
+              let elements = VertexActionsIconsService.elements(action) {
+            DrawableCurvesView(elements: elements)
+                .drawingProgress(onVisitProgress)
+                .environment(\.drawingWidth, 4)
         }
     }
 }

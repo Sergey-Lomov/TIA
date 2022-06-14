@@ -40,8 +40,8 @@
             filePath = "TIA/Engine/AdventureEngine.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "283"
-            endingLineNumber = "283"
+            startingLineNumber = "281"
+            endingLineNumber = "281"
             landmarkName = "handleEdgeUngrowingPrepared(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -60,6 +60,32 @@
             endingLineNumber = "48"
             landmarkName = "forLayer(_:focusPoint:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "251362EE-5911-4461-A13B-C5DB90BD026F"
+            shouldBeEnabled = "No"
+            condition = "vertex.model.id == &quot;menu_restart&quot;"
+            ignoreCount = "0"
+            continueAfterRunningActions = "Yes"
+            filePath = "TIA/Flow/Adventure/Views/VertexView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "34"
+            endingLineNumber = "34"
+            landmarkName = "body"
+            landmarkType = "24">
+            <Actions>
+               <BreakpointActionProxy
+                  ActionExtensionID = "Xcode.BreakpointAction.Log">
+                  <ActionContent
+                     message = "@vertex.state@"
+                     conveyanceType = "0">
+                  </ActionContent>
+               </BreakpointActionProxy>
+            </Actions>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

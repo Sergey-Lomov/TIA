@@ -33,6 +33,7 @@ struct AdventureIconWrapper: View {
     var scale: CGFloat {
         switch adventure.state {
         case .planed:
+            // TODO: Remove hotfix uses new states approach
             return 0.0001
         case .current:
             return 0.15
@@ -52,6 +53,7 @@ struct AdventureIconWrapper: View {
                 .scaleEffect(scale)
                 .animation(.easeInOut(duration: scaleDuration),
                            value: adventure.state)
+                // TODO: Use View extension metyhod
                 .modifier(bezierSteps(size: geometry.size))
                 .animation(.easeInOut(duration: moveDuration),
                            value: adventure.state)

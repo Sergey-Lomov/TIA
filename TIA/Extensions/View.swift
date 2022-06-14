@@ -80,6 +80,10 @@ extension View {
     func onAnimationCompleted<Value: VectorArithmetic>(for value: Value, completion: @escaping () -> Void) -> ModifiedContent<Self, AnimationCompletionObserverModifier<Value>> {
         return modifier(AnimationCompletionObserverModifier(observedValue: value, completion: completion))
     }
+    
+    func drawingProgress(_ value: CGFloat) -> some View {
+        modifier(DrawingProgressModifier(drawingProgress: value))
+    }
 
     // TODO: It was a try to wrap mofidifers into views. Remove if still be unsused.
 //    func wrappedModifier<M>(_ modifier: M)  -> AnimatableModifierWrapper<M> where M: Animatable & ViewModifier, M.Content == Self {

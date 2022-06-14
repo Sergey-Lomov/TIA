@@ -42,6 +42,10 @@
 		675E2770280F6F0400FB5783 /* ColorSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E276F280F6F0400FB5783 /* ColorSchema.swift */; };
 		675E27F9281087E800FB5783 /* StatesAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E27F8281087E800FB5783 /* StatesAnimationView.swift */; };
 		6771F8DB2851677500D7B742 /* ViewRedrawHandlerModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6771F8DA2851677500D7B742 /* ViewRedrawHandlerModifier.swift */; };
+		6771F8E12855021B00D7B742 /* DrawableCurvesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6771F8E02855021B00D7B742 /* DrawableCurvesView.swift */; };
+		6771F8E62855242000D7B742 /* VertexActionsIconsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6771F8E52855242000D7B742 /* VertexActionsIconsService.swift */; };
+		6771F8F52857E2BA00D7B742 /* DrawingProgressModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6771F8F42857E2BA00D7B742 /* DrawingProgressModifier.swift */; };
+		6771F8F828592A3300D7B742 /* DrawableCurve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6771F8F728592A3300D7B742 /* DrawableCurve.swift */; };
 		677C3100281099500014BECD /* AnimationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677C30FF281099500014BECD /* AnimationState.swift */; };
 		677C31232811C80E0014BECD /* AnimatableModifierWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677C31222811C80E0014BECD /* AnimatableModifierWrapper.swift */; };
 		677D6988282B28EB00124486 /* ResourceViewMetastate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677D6987282B28EB00124486 /* ResourceViewMetastate.swift */; };
@@ -146,6 +150,10 @@
 		675E276F280F6F0400FB5783 /* ColorSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSchema.swift; sourceTree = "<group>"; };
 		675E27F8281087E800FB5783 /* StatesAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatesAnimationView.swift; sourceTree = "<group>"; };
 		6771F8DA2851677500D7B742 /* ViewRedrawHandlerModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewRedrawHandlerModifier.swift; sourceTree = "<group>"; };
+		6771F8E02855021B00D7B742 /* DrawableCurvesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawableCurvesView.swift; sourceTree = "<group>"; };
+		6771F8E52855242000D7B742 /* VertexActionsIconsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexActionsIconsService.swift; sourceTree = "<group>"; };
+		6771F8F42857E2BA00D7B742 /* DrawingProgressModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingProgressModifier.swift; sourceTree = "<group>"; };
+		6771F8F728592A3300D7B742 /* DrawableCurve.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawableCurve.swift; sourceTree = "<group>"; };
 		677C30FF281099500014BECD /* AnimationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationState.swift; sourceTree = "<group>"; };
 		677C31222811C80E0014BECD /* AnimatableModifierWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatableModifierWrapper.swift; sourceTree = "<group>"; };
 		677D6987282B28EB00124486 /* ResourceViewMetastate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceViewMetastate.swift; sourceTree = "<group>"; };
@@ -363,6 +371,7 @@
 				67B5336928009C4D00EA959A /* CircleShape.swift */,
 				675E273D2809E36800FB5783 /* SingleCurveShape.swift */,
 				675E275A280DDC4F00FB5783 /* ComplexCurveShape.swift */,
+				6771F8E02855021B00D7B742 /* DrawableCurvesView.swift */,
 				675E276D280F39B500FB5783 /* CenteredGeometryReader.swift */,
 				67EFD4762844348200DA02EC /* VisualEffectView.swift */,
 			);
@@ -422,6 +431,7 @@
 				679E371D28303E2200D9EE41 /* GameEntities */,
 				67B5335627FF959000EA959A /* Scenario */,
 				67B533972804ED6D00EA959A /* TIAPrototypingError.swift */,
+				6771F8F728592A3300D7B742 /* DrawableCurve.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -452,6 +462,7 @@
 				679484FD2823D493002E3BB6 /* GeometryCacheService.swift */,
 				67B07B05283ADC7F00EAC03D /* CameraService.swift */,
 				67B07B262840F7EE00EAC03D /* IngameMenuService.swift */,
+				6771F8E52855242000D7B742 /* VertexActionsIconsService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -465,6 +476,7 @@
 				67834857282A9C44002D9ABA /* ResourceStateTransform.swift */,
 				67B07B2E2841577500EAC03D /* AnimationCompletionObserverModifier.swift */,
 				6771F8DA2851677500D7B742 /* ViewRedrawHandlerModifier.swift */,
+				6771F8F42857E2BA00D7B742 /* DrawingProgressModifier.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -621,6 +633,7 @@
 				67B533892804CB8E00EA959A /* AdventureView.swift in Sources */,
 				675E2747280B4BD100FB5783 /* VertexViewModel.swift in Sources */,
 				675E275D280E22CC00FB5783 /* GeometryProxy.swift in Sources */,
+				6771F8E62855242000D7B742 /* VertexActionsIconsService.swift in Sources */,
 				679E37242832616D00D9EE41 /* EdgeViewMetastate.swift in Sources */,
 				6793A98B27FD1936002198E9 /* Colors.swift in Sources */,
 				675E274D280C5EF500FB5783 /* AnimationHandlingShape.swift in Sources */,
@@ -643,12 +656,14 @@
 				67BDE95F2817E879005B0194 /* ResourceViewModel.swift in Sources */,
 				675E2755280DA0E600FB5783 /* EyeView.swift in Sources */,
 				67A3DD5A2821DD2F00B5A88F /* PlayerMetastate.swift in Sources */,
+				6771F8F828592A3300D7B742 /* DrawableCurve.swift in Sources */,
 				67B5335927FF95AC00EA959A /* Vertex.swift in Sources */,
 				675E2760280E2FC500FB5783 /* EngineEvent.swift in Sources */,
 				67B5336428007C1400EA959A /* ScenarioService.swift in Sources */,
 				675E2750280C8C2F00FB5783 /* PointerWrapper.swift in Sources */,
 				675E276E280F39B500FB5783 /* CenteredGeometryReader.swift in Sources */,
 				67EDAC632820448200EA41CF /* EdgeGate.swift in Sources */,
+				6771F8E12855021B00D7B742 /* DrawableCurvesView.swift in Sources */,
 				6793A98727FCF50E002198E9 /* WorldPickerView.swift in Sources */,
 				67EDAC6728214FD600EA41CF /* IdEqutable.swift in Sources */,
 				67B5338B2804CC4500EA959A /* VertexView.swift in Sources */,
@@ -664,6 +679,7 @@
 				67B07B2B28410FA600EAC03D /* ClosedRange.swift in Sources */,
 				675E2764280E3C1200FB5783 /* Shape.swift in Sources */,
 				67B07B25283FA55800EAC03D /* AdventureLayerViewModel.swift in Sources */,
+				6771F8F52857E2BA00D7B742 /* DrawingProgressModifier.swift in Sources */,
 				67B5337B28036F0700EA959A /* CGPoint.swift in Sources */,
 				67B5339A2805B2B400EA959A /* AdventureLayout.swift in Sources */,
 				675E2752280CE33100FB5783 /* HandleableAnimationData.swift in Sources */,

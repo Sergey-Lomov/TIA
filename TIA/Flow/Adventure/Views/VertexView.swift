@@ -48,7 +48,7 @@ struct VertexView: View {
             onVisitView()
                 .scaleEffect(scale)
                 .frame(size: diameter * Layout.Vertex.onVisitIcon)
-                .animation(onVisitAnimation, value: onVisitProgress)
+                .animation(onVisitAnimation(geometry), value: onVisitProgress)
                 .foregroundColor(vertex.elementsColor)
         }
     }
@@ -63,7 +63,7 @@ struct VertexView: View {
     }
     
     private var scale: CGFloat {
-        switch vertex.model.state {
+        switch vertex.metastate {
         case .seed, .ungrowing:
             return 0
         default:
@@ -71,9 +71,9 @@ struct VertexView: View {
         }
     }
 
-    // TODO: Move animation to AnimationService
+    // TODO: Move animation to AnimationService. In onVisitAnimation also.
     private var animation: Animation? {
-        switch vertex.state {
+        switch vertex.metastate {
         case .growing(let duration):
             return .easeOut(duration: duration)
         case .ungrowing(let duration):
@@ -84,18 +84,21 @@ struct VertexView: View {
     }
     
     var onVisitProgress: CGFloat {
-        switch vertex.state {
-        case .active, .changingLayer:
+        switch vertex.metastate {
+        case .active:
             return 1
         default:
             return 0
         }
     }
     
-    private var onVisitAnimation: Animation? {
-        switch vertex.state {
-        case .active, .changingLayer:
+    private func onVisitAnimation(_ geometry: GeometryProxy) -> Animation? {
+        switch vertex.metastate {
+case .active:
             return AnimationService.shared.vertexElementsGrowing
+        case .playerIncome(let edge):
+            let length = edge.curve.scaled(geometry).length()
+            return AnimationService.shared.onVisitHiding(incomeLength: length)
         case .ungrowing(let duration):
             return .easeIn(duration: duration)
         default:

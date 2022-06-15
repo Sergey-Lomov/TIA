@@ -124,15 +124,24 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         }
         
         switch newValue {
-        case .abscent, .vertex:
+        case .abscent:
             break
+        case .vertex(let vertex):
+            let visit = VertexVisit(visitor: player, phase: .onVertex)
+            vertex.updateVisitInfo(visit)
         case .edge(let edge, let status, let direction):
             switch status {
             case .compressing:
                 unfreshPlayerResources(player)
+                let vertex = direction.startVertex(edge)
+                let visit = VertexVisit(visitor: player, phase: .outcome)
+                vertex.updateVisitInfo(visit)
             case .moving:
-                let vertex = direction.endVertex(edge)
-                addPlayerResources(vertexResources(vertex))
+                let endVertex = direction.endVertex(edge)
+                addPlayerResources(vertexResources(endVertex))
+                let endVisit = VertexVisit(visitor: player, phase: .income(edge: edge))
+                endVertex.updateVisitInfo(endVisit)
+                direction.startVertex(edge).updateVisitInfo(nil)
             case .expanding:
                 applyEstimated(playerResources(player))
                 recloseGates(edge: edge)
@@ -218,7 +227,8 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     
     private func handleLayerPresented(_ layer: AdventureLayer) {
         layer.state = .growing
-        layer.entrance.state = .active
+        let visit = VertexVisit(visitor: player, phase: .onVertex)
+        layer.entrance.state = .active(visit: visit)
         growFromVertex(layer.entrance)
     }
     
@@ -234,7 +244,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     }
                                                      
     private func handleVertexGrowed(_ vertex: Vertex) {
-        vertex.state = .active
+        vertex.state = .active()
         growFromVertex(vertex)
         checkLayerGrowingCompletion()
     }
@@ -338,9 +348,12 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     }
     
     private func showMenu(from: Vertex) {
+        guard case .active(let visit, _) = from.state else { return }
+        
         lifestate = .menu
         let menuLayer = IngameMenuService.menuLayer(from: from)
-        from.state = .changingLayer(from: adventure.currentLayer, to: menuLayer, type: .presenting)
+        let transfer = VertexLayerTransfer(from: adventure.currentLayer, to: menuLayer, type: .presenting)
+        from.state = .active(visit: visit, layerTransfer: transfer)
         let resources = playerResources(player)
         resources.forEach { $0.objectWillChange.sendOnMain() }
         adventure.currentLayer = menuLayer
@@ -424,8 +437,10 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         if seedsDone && verticesDone {
             var nextLayer: AdventureLayer? = nil
             if adventure.layers.count > 1 {
+                guard case .active(let visit, _) = exit.state else { return }
                 let prelayer = adventure.layers[adventure.layers.count - 2]
-                exit.state = .changingLayer(from: adventure.currentLayer, to: prelayer, type: .hiding)
+                let transfer = VertexLayerTransfer(from: adventure.currentLayer, to: prelayer, type: .hiding)
+                exit.state = .active(visit: visit, layerTransfer: transfer)
                 let resources = playerResources(player)
                 resources.forEach { $0.objectWillChange.sendOnMain() }
                 nextLayer = prelayer

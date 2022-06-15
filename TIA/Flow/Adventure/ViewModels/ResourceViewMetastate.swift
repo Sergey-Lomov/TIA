@@ -82,12 +82,12 @@ extension ResourceState {
             case .vertex(let vertex),
                     .compressing(let vertex),
                     .expanding(let vertex):
-                switch vertex.state {
-                case .changingLayer(let from, let to, let type):
-                    if to.state == .preparing {
-                        return .prelayerChanging(vertex: vertex, index: index, oldLayer: from)
+                switch vertex.state.metastate {
+                case .layerTransfer(let info):
+                    if info.to.state == .preparing {
+                        return .prelayerChanging(vertex: vertex, index: index, oldLayer: info.from)
                     } else {
-                        return .layerChanging(vertex: vertex, index: index, newLayer: to, type: type)
+                        return .layerChanging(vertex: vertex, index: index, newLayer: info.to, type: info.type)
                     }
                 default:
                     return .inventoryAtVertex(vertex: vertex, index: index)

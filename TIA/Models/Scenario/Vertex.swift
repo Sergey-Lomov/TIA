@@ -14,23 +14,39 @@ enum VertexAction {
     case restart
 }
 
-enum LayerChangeType {
+enum LayerChangeType: Equatable {
     case presenting
     case hiding
+}
+
+enum VertexVisitPhase: Equatable {
+    case income(edge: Edge)
+    case onVertex
+    case outcome
+}
+
+struct VertexVisit: Equatable {
+    let visitor: Player
+    let phase: VertexVisitPhase
+}
+
+struct VertexLayerTransfer: Equatable {
+    let from: AdventureLayer
+    let to: AdventureLayer
+    let type: LayerChangeType
 }
 
 enum VertexState: Equatable {
     case seed
     case growing(duration: TimeInterval)
-    case active
+    case active(visit: VertexVisit? = nil, layerTransfer: VertexLayerTransfer? = nil)
     case ungrowing(duration: TimeInterval)
-    case changingLayer(from: AdventureLayer, to: AdventureLayer, type: LayerChangeType)
     
     var isGrowed: Bool {
         switch self {
         case .seed, .growing, .ungrowing:
             return false
-        case .active, .changingLayer:
+        case .active:
             return true
         }
     }
@@ -50,5 +66,10 @@ class Vertex: ObservableObject, IdEqutable {
         self.state = state
         self.point = point
         self.initialResources = resources
+    }
+    
+    func updateVisitInfo(_ visit: VertexVisit?) {
+        guard case .active(_, let transfer) = state else { return }
+        state = .active(visit: visit, layerTransfer: transfer)
     }
 }

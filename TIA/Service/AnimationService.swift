@@ -109,6 +109,11 @@ final class AnimationService {
         return length * Const.Player.lengthMult
     }
     
+    func onVisitHiding(incomeLength: CGFloat) -> Animation {
+        let duration = playerMovingDuration(length: incomeLength)
+        return .linear(duration: duration)
+    }
+    
     func resourceMovingTiming(_ geometry: GeometryProxy,
                               playerLength: CGFloat,
                               resourceLength: CGFloat,

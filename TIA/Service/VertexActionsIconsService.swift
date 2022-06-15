@@ -47,11 +47,11 @@ class VertexActionsIconsService {
             let p1 = BezierCurve.onePoint(CGPoint(x: -0, y: -0.5))
             let p2 = BezierCurve.onePoint(CGPoint(x: 0, y: 0.5))
             return [
-                .init(curve: c1, startAt: 0, finishAt: 0.3),
-                .init(curve: c2, startAt: 0.3, finishAt: 0.6),
-                .init(curve: c3, startAt: 0.6, finishAt: 0.8),
-                .init(curve: c4, startAt: 0.8, finishAt: 1.0),
-                .init(curve: p1, startAt: 1.0, finishAt: 1.0, widthMult: 2),
+                .init(curve: c1, startAt: 0, finishAt: 0.25),
+                .init(curve: c2, startAt: 0.25, finishAt: 0.5),
+                .init(curve: c3, startAt: 0.5, finishAt: 0.65),
+                .init(curve: c4, startAt: 0.65, finishAt: 0.8),
+                .init(curve: p1, startAt: 0.9, finishAt: 0.9, widthMult: 2),
                 .init(curve: p2, startAt: 1.0, finishAt: 1.0, widthMult: 2),
                 ].scaled(0.5)
         }()

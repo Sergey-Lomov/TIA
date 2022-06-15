@@ -37,7 +37,7 @@ final class ScenarioService {
         
         var entrance: Vertex?
         let vertices: [Vertex] = protoAdventure.vertices.map {
-            let state: VertexState = $0.role == .entrance ? .active : .seed
+            let state: VertexState = $0.role == .entrance ? .active() : .seed
             let point = layout.vertices[$0.id] ?? .zero
             let vertex = Vertex(id: $0.id, state: state, point: point, resources: $0.resources)
             if $0.role == .entrance { entrance = vertex }

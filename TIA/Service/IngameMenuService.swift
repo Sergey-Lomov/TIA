@@ -38,7 +38,7 @@ final class IngameMenuService {
         let radius = Layout.Menu.radius
         for item in items {
             let point = CGPoint(center: source.point, angle: angle, radius: radius)
-            let id = vertexIdPrefix + item.rawValue
+            let id = vertexIdPrefix + item.rawValue + UUID().uuidString
             let vertex = Vertex(id: id, state: .seed, point: point)
             vertex.actions = item.actions
             vertex.onVisit = item.onVisit

@@ -15,12 +15,12 @@ final class AdventureLayout {
     
     private static let layoutsCount = 1
     
-    let vertices: [String: CGPoint]
-    let edges: [String: Controls]
+    var vertices: [String: CGPoint]
+    var edges: [String: Controls]
     
-    static func random(for descriptor: AdventureDescriptor) -> AdventureLayout {
+    static func random(for id: String) -> AdventureLayout {
         let index = Int.random(in: 1...layoutsCount)
-        let prototype = JSONDecoder.decodeLayout(adventureId: descriptor.id, index: index)
+        let prototype = JSONDecoder.decodeLayout(adventureId: id, index: index)
         
         let vertices = prototype.vertices.reduce(into: [String: CGPoint]()) {
             $0[$1.id] = $1.point
@@ -36,6 +36,18 @@ final class AdventureLayout {
     init(vertices: [String: CGPoint], edges: [String: Controls]) {
         self.vertices = vertices
         self.edges = edges
+    }
+    
+    func translate(by delta: CGPoint) {
+        for id in vertices.keys {
+            vertices[id] = vertices[id]?.translated(by: delta)
+        }
+        for id in edges.keys {
+            guard let p1 = edges[id]?.p1, let p2 = edges[id]?.p2 else {
+                continue
+            }
+            edges[id] = (p1.translated(by: delta), p2.translated(by: delta))
+        }
     }
     
     struct Prototype: Decodable {

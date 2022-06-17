@@ -67,15 +67,11 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
        
         self.resources.forEach { resource in
             resource.eventsPublisher = eventsPublisher
-            self.subscriptions.sink(resource.model.$state) { [weak self] newState in
-                self?.resource(resource, willChangeState: newState)
-            }
         }
         
         subscriptions.sink(adventure.$layers) { [weak self] updatedLayers in
             self?.handleLayersUpdate(updatedLayers)
         }
-        
         subscriptions.sink(adventure.$currentLayer) { [weak self] layer in
             self?.handleCurrentLayerChange(layer)
         }
@@ -94,19 +90,7 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
                 let onCurrent = player.isOnLayer(model.currentLayer)
                 let layerIsCurrent = layer.model == model.currentLayer
                 return onLayer && (!onCurrent || layerIsCurrent)
-            case .deletion:
-                return false
             }
-        }
-    }
-    
-    private func resource(_ resource: ResourceViewModel, willChangeState state: ResourceState) {
-        switch state {
-            // TODO: Use engine events publisher insted this additional resource state
-        case .deletion:
-            resources.remove(resource)
-        default:
-            break
         }
     }
     
@@ -132,7 +116,9 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
         }
         
         let animation = cameraAnimation(layerState: state)
-        camera = .transition(to: cameraState, animation: animation)
+        DispatchQueue.main.async {
+            self.camera = .transition(to: cameraState, animation: animation)
+        }
     }
     
     private func cameraAnimation(layerState: AdventureLayerState) -> Animation? {
@@ -159,20 +145,38 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
             }
         }
         
-        layers = newViews
+        DispatchQueue.main.async {
+            self.layers = newViews
+        }
     }
     
     // TODO: Remove engine to view publisher system if still be unused
     func subscribeTo(_ publisher: EngineEventsPublisher) {
-//        subscriptions.sink(publisher) {
-//            [self] event in
-//            handleEngineEvent(event)
-//        }
+        subscriptions.sink(publisher) { [self] event in
+            handleEngineEvent(event)
+        }
     }
     
     // TODO: May be removed if still be unused
     // MARK: Engine events handler
     private func handleEngineEvent(_ event: EngineEvent) {
+        switch event {
+        case .resourceAdded(let resource):
+            handleResourceAdding(resource)
+        case .resourceRemoved(let resource):
+            handleResourceRemoving(resource)
+        }
+    }
+    
+    private func handleResourceAdding(_ resource: Resource) {
+        let schema = ColorSchema.schemaFor(model.theme)
+        let view = ResourceViewModel(model: resource, color: schema.resources, borderColor: schema.resourcesBorder)
+        view.eventsPublisher = eventsPublisher
+        resources.append(view)
+    }
+    
+    private func handleResourceRemoving(_ resource: Resource) {
+        resources.removeAll { $0.model == resource }
     }
 }
 

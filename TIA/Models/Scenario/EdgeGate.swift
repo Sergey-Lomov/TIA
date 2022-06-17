@@ -33,7 +33,9 @@ class EdgeGate: ObservableObject, IdEqutable {
     init(requirement: EdgeGateRequirement, edgeStatePublisher: EdgeStatePublisher) {
         self.requirement = requirement
         subscriptions.sink(edgeStatePublisher) { [weak self] state in
-            self?.handleEdgeState(state)
+            DispatchQueue.main.async {
+                self?.handleEdgeState(state)
+            }
         }
     }
     

@@ -13,7 +13,7 @@ struct DrawingProgressModifier: AnimatableModifier {
     var drawingProgress: CGFloat
     var animatableData: CGFloat {
         get { drawingProgress }
-        set { drawingProgress = newValue }
+        set { drawingProgress = newValue  }
     }
     
     func body(content: Content) -> some View {

@@ -72,4 +72,10 @@ class Vertex: ObservableObject, IdEqutable {
         guard case .active(_, let transfer) = state else { return }
         state = .active(visit: visit, layerTransfer: transfer)
     }
+    
+    func mergeWith(_ vertex: Vertex) {
+        actions.append(contentsOf: vertex.actions)
+        onVisit = vertex.onVisit
+        initialResources = vertex.initialResources
+    }
 }

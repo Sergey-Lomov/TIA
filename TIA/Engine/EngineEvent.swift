@@ -19,4 +19,6 @@ protocol EngineEventsListener {
 }
 
 enum EngineEvent {
+    case resourceAdded(resource: Resource)
+    case resourceRemoved(resource: Resource)
 }

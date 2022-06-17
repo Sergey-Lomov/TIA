@@ -55,7 +55,9 @@ struct ResourceWrapper: View {
         switch resource.metastate {
         case .abscent:
             return false
-        case .vertex(let vertex, _, _):
+        case .vertex(let vertex, _, _),
+                .vertexIdle(let vertex, _, _),
+                .vertexRestoring(let vertex, _, _):
             return vertex.state.isGrowed
         default:
             return true

@@ -13,9 +13,7 @@ final class AdventureDescriptor: ObservableObject {
     var theme: AdventureTheme
     @Published var state: AdventureState = .planed
     
-    init(id: String,
-         index: Int,
-         theme: AdventureTheme) {
+    init(id: String, index: Int, theme: AdventureTheme) {
         self.id = id
         self.index = index
         self.theme = theme

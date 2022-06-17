@@ -59,9 +59,6 @@ extension ResourceState {
             case .restoring:
                 return .vertexRestoring(vertex: vertex, index: index, total: total)
             }
-            
-        case .deletion:
-            return .abscent
         
         case .gate(let gate, let edge, let vertex, let index, let state, _):
             switch state {

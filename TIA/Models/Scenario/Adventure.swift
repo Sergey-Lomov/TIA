@@ -37,13 +37,12 @@ class Adventure: ObservableObject {
         layers.flatMap { $0.edges }
     }
     
-    init(id: String, index: Int, theme: AdventureTheme, vertices: [Vertex], edges: [Edge], entrance: Vertex) {
+    init(id: String, index: Int, theme: AdventureTheme, initialLayer: AdventureLayer) {
         self.id = id
         self.index = index
         self.theme = theme
         
-        let layer = AdventureLayer(type: .initial, state: .growing, vertices: vertices, edges: edges, entrance: entrance)
-        self.layers = [layer]
-        self.currentLayer = layer
+        self.layers = [initialLayer]
+        self.currentLayer = initialLayer
     }
 }

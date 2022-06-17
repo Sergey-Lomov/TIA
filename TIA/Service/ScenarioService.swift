@@ -32,18 +32,34 @@ final class ScenarioService {
                                    theme: protoAdventure.theme)
     }
     
-    func adventureFor(_ descriptor: AdventureDescriptor, layout: AdventureLayout) -> Adventure {
-        let protoAdventure = JSONDecoder.decodeAdventure(id: descriptor.id)
+    func layerFor(_ descriptor: AdventureDescriptor, layout: AdventureLayout, forcedEntrance: Vertex? = nil) -> AdventureLayer {
+        return layerFor(descriptor.id, layout: layout, forcedEntrance: forcedEntrance)
+    }
         
-        var entrance: Vertex?
-        let vertices: [Vertex] = protoAdventure.vertices.map {
-            let state: VertexState = $0.role == .entrance ? .active() : .seed
-            let point = layout.vertices[$0.id] ?? .zero
-            let vertex = Vertex(id: $0.id, state: state, point: point, resources: $0.resources)
-            if $0.role == .entrance { entrance = vertex }
+    
+    func layerFor(_ id: String, layout: AdventureLayout, forcedEntrance: Vertex? = nil) -> AdventureLayer {
+        var protoAdventure = JSONDecoder.decodeAdventure(id: id)
+        let protoEntrance = protoAdventure.vertices.first { $0.role == .entrance }
+        guard let protoEntrance = protoEntrance else {
+            fatalError("Layout have no entrance")
+        }
+        let protoEntrancePoint = layout.vertices[protoEntrance.id] ?? .zero
+        let pointDelta = forcedEntrance?.point.translated(by: protoEntrancePoint.scaled(-1)) ?? .zero
+        layout.translate(by: pointDelta)
+        
+        var vertices: [Vertex] = protoAdventure.vertices.compactMap {
+            guard $0.role != .entrance else { return nil }
+            let vertex = vertexFor($0, layout: layout)
+            protoAdventure.updateVertexId($0.id, to: vertex.id)
             return vertex
         }
 
+        let defaultEntrance = vertexFor(protoEntrance, layout: layout)
+        forcedEntrance?.mergeWith(defaultEntrance)
+        let entrance = forcedEntrance ?? defaultEntrance
+        vertices.append(entrance)
+        protoAdventure.updateVertexId(protoEntrance.id, to: entrance.id)
+        
         let edges: [Edge] = protoAdventure.edges.map {
             guard let from = vertices.firstById($0.from),
                   let to = vertices.firstById($0.to) else {
@@ -53,18 +69,26 @@ final class ScenarioService {
             let p1 = layout.edges[$0.id]?.p1 ?? from.point
             let p2 = layout.edges[$0.id]?.p2 ?? to.point
             let curve = BezierCurve(points: [from.point, p1, p2, to.point])
-            let edge = Edge(id: $0.id,
-                            from: from,
-                            to: to,
-                            price: $0.price,
-                            growOnStart: $0.growOnStart,
-                            curve: curve)
-            
+            let id = $0.id + UUID().uuidString
+            let edge = Edge(id: id, from: from, to: to, price: $0.price, growOnStart: $0.growOnStart, curve: curve)
             return edge
         }
         
-        guard let entrance = entrance else { fatalError("Layout have no entrance") }
-        return Adventure(id: protoAdventure.id, index: protoAdventure.index, theme: protoAdventure.theme, vertices: vertices, edges: edges, entrance: entrance)
+        return AdventureLayer(type: .initial, state: .growing, vertices: vertices, edges: edges, entrance: entrance)
+    }
+    
+    func adventureFor(_ descriptor: AdventureDescriptor, layout: AdventureLayout) -> Adventure {
+        let protoAdventure = JSONDecoder.decodeAdventure(id: descriptor.id)
+        let layer = layerFor(descriptor, layout: layout, forcedEntrance: nil)
+        return Adventure(id: protoAdventure.id, index: protoAdventure.index, theme: protoAdventure.theme, initialLayer: layer)
+    }
+    
+    private func vertexFor(_ proto: VertexPrototype, layout: AdventureLayout) -> Vertex {
+        let state: VertexState = proto.role == .entrance ? .active() : .seed
+        let point = (layout.vertices[proto.id] ?? .zero)
+        let id = proto.id + UUID().uuidString
+        let vertex = Vertex(id: id, state: state, point: point, resources: proto.resources)
+        return vertex
     }
 
 // MARK: Codable prototypes
@@ -76,15 +100,15 @@ final class ScenarioService {
     }
     
     struct VertexPrototype: Codable {
-        let id: String
+        var id: String
         let role: VertexRole
         let resources: [ResourceType]
     }
     
     struct EdgePrototype: Codable {
         let id: String
-        let from: String
-        let to: String
+        var from: String
+        var to: String
         let price: [ResourceType]
         let growOnStart: Bool
     }
@@ -93,8 +117,18 @@ final class ScenarioService {
         let id: String
         let index: Int
         let theme: AdventureTheme
-        let vertices: [VertexPrototype]
-        let edges: [EdgePrototype]
+        var vertices: [VertexPrototype]
+        var edges: [EdgePrototype]
+        
+        mutating func updateVertexId(_ id: String, to newId: String) {
+            for i in 0..<vertices.count {
+                if vertices[i].id == id { vertices[i].id = newId }
+            }
+            for i in 0..<edges.count {
+                if edges[i].from == id { edges[i].from = newId }
+                if edges[i].to == id { edges[i].to = newId }
+            }
+        }
     }
     
     struct ScenarioPrototype: Codable {

@@ -18,7 +18,7 @@ enum AdventureLayerState: Equatable {
     case presenting
     case growing
     case shown
-    case ungrowing(exit: Vertex)
+    case ungrowing(exit: Vertex?)
     case hiding(next: AdventureLayer?)
     
     // TODO: Remove test code
@@ -40,7 +40,7 @@ enum AdventureLayerState: Equatable {
     }
 }
 
-class AdventureLayer : ObservableObject, IdEqutable {
+class AdventureLayer : ObservableObject, IdEqutable, Hashable {
     let id: String = UUID().uuidString
     let type: AdventureLayerType
     @Published var state: AdventureLayerState
@@ -55,6 +55,10 @@ class AdventureLayer : ObservableObject, IdEqutable {
         self.vertices = vertices
         self.edges = edges
         self.entrance = entrance
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
     
     func outcome(_ vertex: Vertex) -> [Edge] {

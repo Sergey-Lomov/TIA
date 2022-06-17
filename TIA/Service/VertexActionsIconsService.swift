@@ -63,6 +63,8 @@ class VertexActionsIconsService {
             return Elements.exit
         case .restart:
             return Elements.restart
+        case .finishAdventure:
+            return nil
         }
     }
 }

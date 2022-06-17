@@ -78,4 +78,8 @@ extension ResourceViewModel {
             break
         }
     }
+    
+    func movingOutFinished() {
+        eventsPublisher?.send(.resourceMovedOut(resource: model))
+    }
 }

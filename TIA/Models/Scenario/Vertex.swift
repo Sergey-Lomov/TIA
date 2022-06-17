@@ -10,6 +10,7 @@ import CoreGraphics
 import Combine
 
 enum VertexAction {
+    case finishAdventure
     case exit
     case restart
 }

@@ -90,6 +90,8 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
                 let onCurrent = player.isOnLayer(model.currentLayer)
                 let layerIsCurrent = layer.model == model.currentLayer
                 return onLayer && (!onCurrent || layerIsCurrent)
+            case .moveOut(let from, _, _):
+                return layer.vertices.contains { $0.model == from }
             }
         }
     }

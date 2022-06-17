@@ -21,7 +21,7 @@ enum AdventureLayerState: Equatable {
     case ungrowing(exit: Vertex?)
     case hiding(next: AdventureLayer?)
     
-    // TODO: Remove test code
+    // TODO: Mark by debug code notation
     var short: String {
         switch self {
         case .preparing:

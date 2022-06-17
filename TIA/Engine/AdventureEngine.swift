@@ -130,21 +130,23 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         case .vertex(let vertex):
             let visit = VertexVisit(visitor: player, phase: .onVertex)
             vertex.updateVisitInfo(visit)
-            handle(vertex.onVisit, at: vertex)
+            icomeToAction(vertex.onVisit, at: vertex)
         case .edge(let edge, let status, let direction):
             switch status {
             case .compressing:
                 unfreshPlayerResources(player)
-                let vertex = direction.startVertex(edge)
+                let startVertex = direction.startVertex(edge)
+                let endVertex = direction.endVertex(edge)
                 let visit = VertexVisit(visitor: player, phase: .outcome)
-                vertex.updateVisitInfo(visit)
+                startVertex.updateVisitInfo(visit)
+                startCompressing(atVertex: startVertex, targetActyion: endVertex.onVisit)
             case .moving:
                 let endVertex = direction.endVertex(edge)
                 addPlayerResources(vertexResources(endVertex))
                 let endVisit = VertexVisit(visitor: player, phase: .income(edge: edge))
                 endVertex.updateVisitInfo(endVisit)
                 direction.startVertex(edge).updateVisitInfo(nil)
-                prepareTo(endVertex.onVisit)
+                startMovingToAction(endVertex.onVisit)
             case .expanding:
                 applyEstimated(playerResources(player))
                 recloseGates(edge: edge)
@@ -219,6 +221,8 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
             handleResourceFinishIdle(resource)
         case .resourceIdleRestored(let resource):
             handleResourceIdleRestored(resource)
+        case .resourceMovedOut(let resource):
+            handleResourceMovedOut(resource)
         }
     }
     
@@ -418,8 +422,24 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         gate.state = .open
     }
     
+    private func handleResourceMovedOut(_ resource: Resource) {
+        removeResources([resource])
+    }
+    
     // MARK: Vertices actions handling
-    private func prepareTo(_ action: VertexAction?) {
+    private func startCompressing(atVertex vertex: Vertex, targetActyion action: VertexAction?) {
+        switch action {
+        case .restart:
+            playerResources(player).forEach {
+                guard case .inventory(_, let index, _, let total, _) = $0.state else { return }
+                $0.state = .moveOut(from: vertex, index: index, total: total)
+            }
+        default:
+            break
+        }
+    }
+    
+    private func startMovingToAction(_ action: VertexAction?) {
         switch action {
         case .restart:
             let layers = adventure.layers.filter { $0.type != .menu }
@@ -429,7 +449,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         }
     }
     
-    private func handle(_ action: VertexAction?, at vertex: Vertex) {
+    private func icomeToAction(_ action: VertexAction?, at vertex: Vertex) {
         switch action {
         case .restart:
             restartAdventure(vertex: vertex)
@@ -461,7 +481,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         adventure.layers.remove(layer)
         resources.forEach { resource in
             guard case .vertex(let vertex, _, _, _) = resource.state else { return }
-            let hasOwner = adventure.layers.allSatisfy { $0.vertices.contains(vertex) }
+            let hasOwner = adventure.layers.contains { $0.vertices.contains(vertex) }
             if !hasOwner { resources.remove(resource) }
         }
     }

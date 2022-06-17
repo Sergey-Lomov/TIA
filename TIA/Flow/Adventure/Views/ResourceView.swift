@@ -76,6 +76,8 @@ struct ResourceWrapper: View {
             resource.moveFromGateFinished()
         case .failedNear:
             resource.moveNearGateFinished()
+        case .moveOut:
+            resource.movingOutFinished()
         default:
             break
         }
@@ -100,7 +102,7 @@ struct ResourceWrapper: View {
             return LayoutService.inventoryResourceSize(geometry)
         case .vertex, .vertexIdle, .vertexRestoring:
             return LayoutService.vertexResourceSize(geometry)
-        case .abscent:
+        case .abscent, .moveOut:
             return .zero
         }
     }
@@ -154,6 +156,8 @@ struct ResourceWrapper: View {
             case .presenting: return AnimationService.shared.presentLayer
             case .hiding: return AnimationService.shared.hideLayer
             }
+        case .moveOut(_, let index, let total):
+            return .movingOut(index: index, total: total)
             
         default:
             return nil
@@ -192,9 +196,27 @@ struct ResourceWrapper: View {
             return .onePoint(point)
         case .failedNear(let gate, let edge, let fromVertex, let fromIndex, _):
             return failNearGateCurve(geometry, gate: gate, edge: edge, vertex: fromVertex, slot: fromIndex)
+        case .moveOut(let from, let index, _):
+            return moveOutCurve(vertex: from, index: index, geometry: geometry)
         default:
             return .zero
         }
+    }
+    
+    private func moveOutCurve(vertex: Vertex, index: Int, geometry: GeometryProxy) -> ComplexCurve {
+
+        let scaledVertex = vertex.point.scaled(geometry)
+        var source = resourceSlot(geometry: geometry, vertex: vertex, index: index)
+        source = source.translated(by: scaledVertex)
+        
+        let angle = Math.angle(p1: source, p2: scaledVertex)
+        let radius: CGFloat = 200
+        let target = CGPoint(center: scaledVertex, angle: angle, radius: radius)
+        
+        let radiusRange = FloatRange(from: radius / 4, to: radius / 2)
+        let angleRange =  FloatRange(from: .hpi / 4, to: .hpi / 2)
+        let curve = Math.randomCurve(from: source, to: target, controlRadius: radiusRange, controlAngle: angleRange)
+        return .init(curve)
     }
     
     private func alongEdgeCurve(edge: Edge, forward: Bool, fromIndex: Int, toIndex: Int, geometry: GeometryProxy) -> ComplexCurve {
@@ -299,7 +321,7 @@ struct ResourceView: View {
     }
 }
 
-// TODO: Should be removed if became unused after adding different idle animations for resources based on vertex personality.
+// TODO: Should be moved to AnimationService
 private extension Animation {
     static var groupRotation: Animation {
         linear(duration: 40)
@@ -322,5 +344,11 @@ private extension Animation {
     static func positioning(_ geometry: GeometryProxy, playerLength: CGFloat, resourceLength: CGFloat, index: Int, total: Int) -> Animation {
         let timing = AnimationService.shared.resourceMovingTiming(geometry, playerLength: playerLength, resourceLength: resourceLength, index: index, total: total)
         return .easeInOut(duration: timing.duration).delay(timing.delay)
+    }
+    
+    static func movingOut(index: Int, total: Int) -> Animation {
+        let step = total > 1 ? 1 / CGFloat(total - 1) : 0
+        let delay = CGFloat(index) * step
+        return .easeInOut(duration: 2).delay(delay)
     }
 }

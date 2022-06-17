@@ -22,6 +22,7 @@ enum ResourceMetastate {
     case fromGate(gate: EdgeGate, edge: Edge, toVertex: Vertex, toIndex: Int)
     case prelayerChanging(vertex: Vertex, index: Int, oldLayer: AdventureLayer)
     case layerChanging(vertex: Vertex, index: Int, newLayer: AdventureLayer, type: LayerChangeType)
+    case moveOut(from: Vertex, index: Int, total: Int)
 
     var positionAnimated: Bool {
         switch self {
@@ -105,6 +106,9 @@ extension ResourceState {
                 let vertex = forward ? edge.from : edge.to
                 return .failedNear(gate: gate, edge: edge, vertex: vertex, index: index, total: total)
             }
+            
+        case .moveOut(let from, let index, let total):
+            return .moveOut(from: from, index: index, total: total)
         }
     }
 }

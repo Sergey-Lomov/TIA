@@ -63,6 +63,16 @@ struct LayerContentView: View {
             ForEach(layer.vertices, id:\.model.id) { vertex in
                 VertexWrapper(vertex: vertex)
             }
+        }.opacity(opacity)
+            .animation(AnimationService.shared.hideLayer, value: opacity)
+    }
+    
+    private var opacity: CGFloat {
+        switch layer.state {
+        case .hiding(let next):
+            return next == nil ? 0: 1
+        default:
+            return 1
         }
     }
 }

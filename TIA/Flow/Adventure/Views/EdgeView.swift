@@ -78,6 +78,7 @@ struct EdgePathView: View {
                     .animation(animation, value: fromConnectorData(geometry))
                     .foregroundColor(edge.color)
                     .offset(geometry.size.half)
+                    .transition(.identity)
             }
             
             if edge.metastate.toConnectorVisible {
@@ -89,6 +90,7 @@ struct EdgePathView: View {
                     .animation(animation, value: connectorData)
                     .foregroundColor(edge.color)
                     .offset(geometry.size.half)
+                    .transition(.identity)
             }
         }
     }

@@ -22,6 +22,11 @@ enum ResourceOnGateState {
     case outcoming
 }
 
+enum ResourceMoveOutState {
+    case preparing
+    case moving
+}
+
 enum VertexIdleState {
     case none
     case rotation
@@ -32,15 +37,15 @@ indirect enum ResourceState {
     case vertex(vertex: Vertex, index: Int, total: Int, idle: VertexIdleState)
     case inventory(player: Player, index: Int, estimatedIndex: Int, total: Int, isFresh: Bool) // "Fresh" means gathered at last turn
     case gate(gate: EdgeGate, edge: Edge, fromVertex: Vertex, fromIndex: Int, state: ResourceOnGateState, prestate: ResourceState)
-    case moveOut(from: Vertex, index: Int, total: Int)
-    
+    case destroying(from: Vertex, index: Int, total: Int, state: ResourceMoveOutState)
+        
     // TODO: Mark by debug code notation
     var short: String {
         switch self {
         case .inventory: return "i"
         case .gate: return "g"
         case .vertex: return "v"
-        case .moveOut: return "o"
+        case .destroying: return "o"
         }
     }
 }

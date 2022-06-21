@@ -39,7 +39,8 @@ enum ViewEvent {
     case edgeUngrowed(edge: Edge)
     
     case resourceMovedToGate(resource: Resource)
-    case resourceMovedOut(resource: Resource)
+    case resourceDestroyingPrepared(resource: Resource)
+    case resourceDestroyed(resource: Resource)
     case resourcePresented(resource: Resource)
     case resourceIdleFinished(resource: Resource)
     case resourceIdleRestored(resource: Resource)

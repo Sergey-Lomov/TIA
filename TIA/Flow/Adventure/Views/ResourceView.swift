@@ -9,10 +9,11 @@ import SwiftUI
 
 struct ResourceWrapper: View {
     private let transition = AnyTransition.opacity.animation(.easeInOut(duration: 2))
+    // TODO: Check is it possible to simplify randomization code by using new methods from Math
     private let controlsRandomization: CGFloat = 100
     private let toGateRandomizationRange = CGFloat(50)...CGFloat(100)
-    private let failedMovingRandomiztion: CGFloat = 100
     private let failedMovingGap: CGFloat = 0.1
+    private let destroyingRadius: CGFloat = 0.5
     
     static let colors: [Color] = [.yellow, .red, .green, .blue]
     static var colorIndex = 0
@@ -43,10 +44,10 @@ struct ResourceWrapper: View {
                         resource.presentationFinished()
                     }
                 
-                let testCurve = positionCurve.scaled(x: 1 / geometry.size.width, y: 1 / geometry.size.height)
-                ComplexCurveShape(curve: testCurve)
-                    .stroke(Self.getColor(), lineWidth: 2)
-                    .frame(geometry: geometry)
+//                let testCurve = positionCurve.scaled(x: 1 / geometry.size.width, y: 1 / geometry.size.height)
+//                ComplexCurveShape(curve: testCurve)
+//                    .stroke(Self.getColor(), lineWidth: 2)
+//                    .frame(geometry: geometry)
             }
         }
     }
@@ -64,6 +65,15 @@ struct ResourceWrapper: View {
         }
     }
     
+    private var opacity: CGFloat {
+        switch resource.metastate {
+        case .abscent, .destroying:
+            return 0
+        default:
+            return 1
+        }
+    }
+    
     private func handlePositioningFinish() {
         switch resource.metastate {
         case .vertexIdle:
@@ -76,18 +86,22 @@ struct ResourceWrapper: View {
             resource.moveFromGateFinished()
         case .failedNear:
             resource.moveNearGateFinished()
-        case .moveOut:
-            resource.movingOutFinished()
+        case .predestroying:
+            resource.resourceDestroyingPrepared()
+        case .destroying:
+            resource.destoryingFinished()
         default:
             break
         }
     }
     
     // MARK: Transform calculation
+    // TODO: Try to move transform calcualtions into the modifier
     private func transform(_ geometry: GeometryProxy) -> ResourceStateTransform {
         .init(localOffset: localOffset(geometry),
               localAngle: localRotation,
               size: size(geometry),
+              opacity: opacity,
               positioning: resource.positioningStep)
     }
     
@@ -98,11 +112,11 @@ struct ResourceWrapper: View {
                 .fromGate(let gate, _, _, _):
             let fullSize = LayoutService.gateResourceSize(geometry)
             return gate.state == .open ? .zero : fullSize
-        case .inventoryAtVertex, .successMoving, .failedNear, .outFromVertex, .prelayerChanging, .layerChanging:
+        case .inventoryAtVertex, .successMoving, .failedNear, .outFromVertex, .prelayerChanging, .layerChanging, .destroying, .predestroying:
             return LayoutService.inventoryResourceSize(geometry)
         case .vertex, .vertexIdle, .vertexRestoring:
             return LayoutService.vertexResourceSize(geometry)
-        case .abscent, .moveOut:
+        case .abscent:
             return .zero
         }
     }
@@ -138,7 +152,7 @@ struct ResourceWrapper: View {
         switch resource.metastate {
         case .vertexIdle(_, _, let total):
             return total == 1 ? .soloRotation : .groupRotation
-        case .vertexRestoring:
+        case .vertexRestoring, .predestroying:
             return .linear(duration: 0)
         case .outFromVertex(_, _, let edge):
             return .vertexOut(edgeLength: edge.length(geometry))
@@ -156,9 +170,8 @@ struct ResourceWrapper: View {
             case .presenting: return AnimationService.shared.presentLayer
             case .hiding: return AnimationService.shared.hideLayer
             }
-        case .moveOut(_, let index, let total):
-            return .movingOut(index: index, total: total)
-            
+        case .destroying(_, let index, let total):
+            return .destroying(index: index, total: total)
         default:
             return nil
         }
@@ -196,21 +209,26 @@ struct ResourceWrapper: View {
             return .onePoint(point)
         case .failedNear(let gate, let edge, let fromVertex, let fromIndex, _):
             return failNearGateCurve(geometry, gate: gate, edge: edge, vertex: fromVertex, slot: fromIndex)
-        case .moveOut(let from, let index, _):
-            return moveOutCurve(vertex: from, index: index, geometry: geometry)
+        case .predestroying(let vertex, let index):
+            let scaledVertex = vertex.point.scaled(geometry)
+            var source = resourceSlot(geometry: geometry, vertex: vertex, index: index)
+            source = source.translated(by: scaledVertex)
+            return .onePoint(source)
+        case .destroying(let from, let index, _):
+            return destroyingCurve(vertex: from, index: index, geometry: geometry)
         default:
             return .zero
         }
     }
     
-    private func moveOutCurve(vertex: Vertex, index: Int, geometry: GeometryProxy) -> ComplexCurve {
+    private func destroyingCurve(vertex: Vertex, index: Int, geometry: GeometryProxy) -> ComplexCurve {
 
         let scaledVertex = vertex.point.scaled(geometry)
         var source = resourceSlot(geometry: geometry, vertex: vertex, index: index)
         source = source.translated(by: scaledVertex)
         
         let angle = Math.angle(p1: source, p2: scaledVertex)
-        let radius: CGFloat = 200
+        let radius: CGFloat = destroyingRadius * geometry.minSize
         let target = CGPoint(center: scaledVertex, angle: angle, radius: radius)
         
         let radiusRange = FloatRange(from: radius / 4, to: radius / 2)
@@ -305,11 +323,12 @@ struct ResourceView: View {
     
     var body: some View {
         CenteredGeometryReader { geometry in
-            
-            ResourceShape(type: resource.type)
-                .fill(resource.color)
-            ResourceShape(type: resource.type)
-                .stroke(resource.borderColor, lineWidth: 2)
+            if let type = resource.type {
+                ResourceShape(type: type)
+                    .fill(resource.color)
+                ResourceShape(type: type)
+                    .stroke(resource.borderColor, lineWidth: 2)
+            }
         }
     }
     
@@ -346,9 +365,9 @@ private extension Animation {
         return .easeInOut(duration: timing.duration).delay(timing.delay)
     }
     
-    static func movingOut(index: Int, total: Int) -> Animation {
+    static func destroying(index: Int, total: Int) -> Animation {
         let step = total > 1 ? 1 / CGFloat(total - 1) : 0
         let delay = CGFloat(index) * step
-        return .easeInOut(duration: 2).delay(delay)
+        return .easeInOut(duration: 1).delay(delay)
     }
 }

@@ -50,6 +50,7 @@ struct ResourceStateHandler: AnimatableModifier  {
                 .offset(point: transform.localOffset)
                 .rotationEffect(Angle(radians: transform.localAngle))
                 .frame(size: transform.size)
+                .opacity(transform.opacity)
                 .offset(point: point)
 //                .animation(nil, value: point)
         }

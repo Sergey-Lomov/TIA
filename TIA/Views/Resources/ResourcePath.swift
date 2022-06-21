@@ -28,7 +28,6 @@ extension Path {
             CGPoint(x: .cos90, y: .sin90),
             CGPoint(x: .cos210, y: .sin210),
             CGPoint(x: .cos330, y: .sin330)
-
         ])
     }
     

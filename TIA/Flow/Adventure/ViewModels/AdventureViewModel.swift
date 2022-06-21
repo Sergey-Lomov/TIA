@@ -90,8 +90,10 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
                 let onCurrent = player.isOnLayer(model.currentLayer)
                 let layerIsCurrent = layer.model == model.currentLayer
                 return onLayer && (!onCurrent || layerIsCurrent)
-            case .moveOut(let from, _, _):
+            case .destroying(let from, _, _, _):
                 return layer.vertices.contains { $0.model == from }
+            case .none:
+                 return false
             }
         }
     }
@@ -172,13 +174,19 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
     
     private func handleResourceAdding(_ resource: Resource) {
         let schema = ColorSchema.schemaFor(model.theme)
-        let view = ResourceViewModel(model: resource, color: schema.resources, borderColor: schema.resourcesBorder)
-        view.eventsPublisher = eventsPublisher
-        resources.append(view)
+        let emptyView = resources.first { $0.isEmpty }
+        if let emptyView = emptyView {
+            emptyView.attachModel(resource, color: schema.resources, borderColor: schema.resourcesBorder)
+        } else {
+            let view = ResourceViewModel(model: resource, color: schema.resources, borderColor: schema.resourcesBorder)
+            view.eventsPublisher = eventsPublisher
+            resources.append(view)
+        }
     }
     
     private func handleResourceRemoving(_ resource: Resource) {
-        resources.removeAll { $0.model == resource }
+        let viewModel = resources.first { $0.model == resource }
+        viewModel?.detachModel()
     }
 }
 

@@ -221,8 +221,10 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
             handleResourceFinishIdle(resource)
         case .resourceIdleRestored(let resource):
             handleResourceIdleRestored(resource)
-        case .resourceMovedOut(let resource):
-            handleResourceMovedOut(resource)
+        case .resourceDestroyingPrepared(let resource):
+            handleResourceDestroingPrepared(resource)
+        case .resourceDestroyed(let resource):
+            handleResourceDestroyed(resource)
         }
     }
     
@@ -422,7 +424,12 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         gate.state = .open
     }
     
-    private func handleResourceMovedOut(_ resource: Resource) {
+    private func handleResourceDestroingPrepared(_ resource: Resource) {
+        guard case .destroying(let from, let index, let total, _) = resource.state else { return }
+        resource.state = .destroying(from: from, index: index, total: total, state: .moving)
+    }
+    
+    private func handleResourceDestroyed(_ resource: Resource) {
         removeResources([resource])
     }
     
@@ -432,7 +439,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         case .restart:
             playerResources(player).forEach {
                 guard case .inventory(_, let index, _, let total, _) = $0.state else { return }
-                $0.state = .moveOut(from: vertex, index: index, total: total)
+                $0.state = .destroying(from: vertex, index: index, total: total, state: .preparing)
             }
         default:
             break

@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class AdventureDescriptor: ObservableObject {
+final class AdventureDescriptor: ObservableObject, IdEqutable {
     let id: String
     let index: Int
     var theme: AdventureTheme

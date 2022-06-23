@@ -51,6 +51,10 @@
 		677C31232811C80E0014BECD /* AnimatableModifierWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677C31222811C80E0014BECD /* AnimatableModifierWrapper.swift */; };
 		677D6988282B28EB00124486 /* ResourceViewMetastate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677D6987282B28EB00124486 /* ResourceViewMetastate.swift */; };
 		6780F47128296D2800FF95FE /* ObservableObjectPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6780F47028296D2800FF95FE /* ObservableObjectPublisher.swift */; };
+		67811B882862712E00861ADA /* CameraModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67811B872862712E00861ADA /* CameraModifier.swift */; };
+		67811B8A28633A1400861ADA /* MainMenuViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67811B8928633A1400861ADA /* MainMenuViewModel.swift */; };
+		67811B8C2863486700861ADA /* Closures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67811B8B2863486700861ADA /* Closures.swift */; };
+		67811B8E28639CCC00861ADA /* UIScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67811B8D28639CCC00861ADA /* UIScreen.swift */; };
 		67834856282A9C36002D9ABA /* ResourceStateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67834855282A9C36002D9ABA /* ResourceStateHandler.swift */; };
 		67834858282A9C44002D9ABA /* ResourceStateTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67834857282A9C44002D9ABA /* ResourceStateTransform.swift */; };
 		678DE68828129D850084006F /* EyeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678DE68728129D840084006F /* EyeViewModel.swift */; };
@@ -157,6 +161,10 @@
 		677C31222811C80E0014BECD /* AnimatableModifierWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatableModifierWrapper.swift; sourceTree = "<group>"; };
 		677D6987282B28EB00124486 /* ResourceViewMetastate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceViewMetastate.swift; sourceTree = "<group>"; };
 		6780F47028296D2800FF95FE /* ObservableObjectPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableObjectPublisher.swift; sourceTree = "<group>"; };
+		67811B872862712E00861ADA /* CameraModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraModifier.swift; sourceTree = "<group>"; };
+		67811B8928633A1400861ADA /* MainMenuViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuViewModel.swift; sourceTree = "<group>"; };
+		67811B8B2863486700861ADA /* Closures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Closures.swift; sourceTree = "<group>"; };
+		67811B8D28639CCC00861ADA /* UIScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScreen.swift; sourceTree = "<group>"; };
 		67834855282A9C36002D9ABA /* ResourceStateHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceStateHandler.swift; sourceTree = "<group>"; };
 		67834857282A9C44002D9ABA /* ResourceStateTransform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceStateTransform.swift; sourceTree = "<group>"; };
 		678DE68728129D840084006F /* EyeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeViewModel.swift; sourceTree = "<group>"; };
@@ -264,6 +272,7 @@
 				67BDE960281833D5005B0194 /* LayoutConstants.swift */,
 				67EDAC6628214FD600EA41CF /* IdEqutable.swift */,
 				679E372A2836C08800D9EE41 /* AnimatableTrio.swift */,
+				67811B8B2863486700861ADA /* Closures.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -352,6 +361,7 @@
 			isa = PBXGroup;
 			children = (
 				6793A98427FCF4FD002198E9 /* MainMenuView.swift */,
+				67811B8928633A1400861ADA /* MainMenuViewModel.swift */,
 				6793A98627FCF50E002198E9 /* WorldPickerView.swift */,
 				67B5336728009BD200EA959A /* AdventureIconView.swift */,
 			);
@@ -384,6 +394,7 @@
 				67B5337A28036F0700EA959A /* CGPoint.swift */,
 				675E2756280DB77F00FB5783 /* CGSize.swift */,
 				67B07B322842E47900EAC03D /* CGRect.swift */,
+				67811B8D28639CCC00861ADA /* UIScreen.swift */,
 				67B5338228038D8C00EA959A /* Comparable.swift */,
 				672792312806073B00FEE07E /* Data.swift */,
 				67B533952804EC6000EA959A /* Array.swift */,
@@ -471,6 +482,7 @@
 				67B07B2E2841577500EAC03D /* AnimationCompletionObserverModifier.swift */,
 				6771F8DA2851677500D7B742 /* ViewRedrawHandlerModifier.swift */,
 				6771F8F42857E2BA00D7B742 /* DrawingProgressModifier.swift */,
+				67811B872862712E00861ADA /* CameraModifier.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -655,7 +667,9 @@
 				675E2750280C8C2F00FB5783 /* PointerWrapper.swift in Sources */,
 				675E276E280F39B500FB5783 /* CenteredGeometryReader.swift in Sources */,
 				67EDAC632820448200EA41CF /* EdgeGate.swift in Sources */,
+				67811B8A28633A1400861ADA /* MainMenuViewModel.swift in Sources */,
 				6771F8E12855021B00D7B742 /* DrawableCurvesView.swift in Sources */,
+				67811B8C2863486700861ADA /* Closures.swift in Sources */,
 				6793A98727FCF50E002198E9 /* WorldPickerView.swift in Sources */,
 				67EDAC6728214FD600EA41CF /* IdEqutable.swift in Sources */,
 				67B5338B2804CC4500EA959A /* VertexView.swift in Sources */,
@@ -671,6 +685,7 @@
 				67B07B2B28410FA600EAC03D /* ClosedRange.swift in Sources */,
 				675E2764280E3C1200FB5783 /* Shape.swift in Sources */,
 				67B07B25283FA55800EAC03D /* AdventureLayerViewModel.swift in Sources */,
+				67811B882862712E00861ADA /* CameraModifier.swift in Sources */,
 				6771F8F52857E2BA00D7B742 /* DrawingProgressModifier.swift in Sources */,
 				67B5337B28036F0700EA959A /* CGPoint.swift in Sources */,
 				67B5339A2805B2B400EA959A /* AdventureLayout.swift in Sources */,
@@ -691,6 +706,7 @@
 				6771F8FA285A8F1900D7B742 /* VertexViewMetastate.swift in Sources */,
 				67EDAC5F281F3E2200EA41CF /* AnimationService.swift in Sources */,
 				67EDAC652820625500EA41CF /* LayoutService.swift in Sources */,
+				67811B8E28639CCC00861ADA /* UIScreen.swift in Sources */,
 				679E37222831928700D9EE41 /* EdgeConnectorShape.swift in Sources */,
 				675E2749280B502900FB5783 /* AdventureDescriptor.swift in Sources */,
 				677C31232811C80E0014BECD /* AnimatableModifierWrapper.swift in Sources */,

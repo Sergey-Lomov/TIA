@@ -13,12 +13,12 @@ struct BezierPositioning: AnimatableModifier  {
     
     private let curve: ComplexCurve
     private let ratios: [CGFloat]
-    private let onFinish: (() -> Void)?
+    private let onFinish: (Action)?
     private var progress: CGFloat
     private var targetProgress: CGFloat
     private var deltaT: CGFloat
     
-    init(curve: ComplexCurve, onFinish: (() -> Void)?, progress: CGFloat, targetProgress: CGFloat = 1, deltaT: CGFloat = 0, lengthSteps: Int = defaultLengthSteps) {
+    init(curve: ComplexCurve, onFinish: (Action)?, progress: CGFloat, targetProgress: CGFloat = 1, deltaT: CGFloat = 0, lengthSteps: Int = defaultLengthSteps) {
         self.curve = curve
         self.onFinish = onFinish
         self.progress = progress

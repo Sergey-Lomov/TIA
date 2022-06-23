@@ -7,30 +7,43 @@
 
 import SwiftUI
 
+struct SelectedAdventuerePreferenceKey: PreferenceKey {
+    static var defaultValue: AdventureDescriptor?
+
+    static func reduce(value: inout AdventureDescriptor?, nextValue: () -> AdventureDescriptor?) {
+        value = nextValue() ?? value
+    }
+}
+
 struct MainMenuView: View {
     
-    @ObservedObject var game: GameState
-    @State var progress: CGFloat = 0
+    @ObservedObject var model: MainMenuViewModel
     
     var body: some View {
         ZStack() {
             Color.yellow
-            WorldPickerView(scenario: game.scenario)
-                .frame(width: 200, height: 200)
-
-            Button("Done dark1") {
-                GameEngine.shared.doneCurrentAdventure(theme: .dark)
-            }.offset(x: 0, y: 150)
-
-            Button("Start dark") {
-                GameEngine.shared.startAdventure(theme: .dark)
-            }.offset(x: 0, y: 180)
-        }.edgesIgnoringSafeArea(.all)
-    }
-}
-
-struct MainMenuView_Previews: PreviewProvider {
-    static var previews: some View {
-        MainMenuView(game: GameState())
+                .edgesIgnoringSafeArea(.all)
+            
+            WorldPickerView(scenario: model.game.scenario)
+                .frame(size: Layout.MainMenu.pickerSize)
+//
+//            Button("Done dark1") {
+//                GameEngine.shared.doneCurrentAdventure(theme: .dark)
+//            }.offset(x: 0, y: 150)
+//
+//            Button("Start dark") {
+//                let descriptor = AdventureDescriptor(id: "dark1", index: 1, theme: .dark)
+//                descriptor.state = .planed
+//                GameEngine.shared.startAdventure(descriptor)
+//            }.offset(x: 0, y: 180)
+        }
+        .applyCamera(model.camera) {
+            model.cameraApplied()
+        }
+        .onPreferenceChange(SelectedAdventuerePreferenceKey.self) { descriptor in
+            if let descriptor = descriptor {
+                model.adventureSelected(descriptor)
+            }
+        }
     }
 }

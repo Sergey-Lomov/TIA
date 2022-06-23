@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct ViewRedrawHandlerModifier: ViewModifier  {
-    init(handler: @escaping () -> Void) {
+    init(handler: @escaping Action) {
         DispatchQueue.main.async {
             handler()
         }

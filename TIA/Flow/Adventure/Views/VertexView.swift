@@ -65,7 +65,7 @@ struct VertexView: View {
     private var scale: CGFloat {
         switch vertex.metastate {
         case .seed, .ungrowing:
-            return .minUnsingular
+            return .unsingularZero
         default:
             return 1
         }

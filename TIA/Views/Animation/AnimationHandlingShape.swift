@@ -13,7 +13,7 @@ struct AnimationHandlingShape<T: Shape>: Shape {
     
     var content: T
     var target: T.AnimatableData
-    var handler: (() -> Void)?
+    var handler: (Action)?
     
     var animatableData: T.AnimatableData {
         get { content.animatableData }
@@ -27,7 +27,7 @@ struct AnimationHandlingShape<T: Shape>: Shape {
     }
     
     init(content: T, target: T.AnimatableData, handler:
-    @escaping () -> Void) {
+    @escaping Action) {
         self.content = content
         self.target = target
         self.handler = handler

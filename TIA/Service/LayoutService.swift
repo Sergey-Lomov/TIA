@@ -10,6 +10,17 @@ import SwiftUI
 
 final class LayoutService {
     
+    static func currentAdventureIconPosition(theme: AdventureTheme) -> CGPoint {
+        switch theme {
+        case .dark:
+            return CGPoint(x: 0, y: -1 * Layout.MainMenu.currentIconY)
+        case .light:
+            return CGPoint(x: 0, y: Layout.MainMenu.currentIconY)
+        case .truth:
+            return .zero
+        }
+    }
+    
     static func gateProgress(_ geometry: GeometryProxy, gate: EdgeGate, edge: Edge) -> CGFloat {
         guard let index = edge.gates.firstIndex(of: gate) else { return .zero }
         let curve = edge.curve.scaled(geometry)

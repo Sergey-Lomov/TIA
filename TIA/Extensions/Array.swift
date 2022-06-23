@@ -76,7 +76,7 @@ extension Array where Element == AnyCancellable {
         self.append(subscription)
     }
     
-    mutating func sink<P: Publisher>(_ publisher: P, handler: @escaping () -> Void) where P.Failure == Never {
+    mutating func sink<P: Publisher>(_ publisher: P, handler: @escaping Action) where P.Failure == Never {
         let subscription = publisher.sink { _ in handler() }
         self.append(subscription)
     }

@@ -63,8 +63,9 @@ struct LayerContentView: View {
             ForEach(layer.vertices, id:\.model.id) { vertex in
                 VertexWrapper(vertex: vertex)
             }
-        }.opacity(opacity)
-            .animation(AnimationService.shared.hideLayer, value: opacity)
+        }
+        .opacity(opacity)
+        .animation(AnimationService.shared.hideLayer, value: opacity)
     }
     
     private var opacity: CGFloat {
@@ -73,23 +74,6 @@ struct LayerContentView: View {
             return next == nil ? 0: 1
         default:
             return 1
-        }
-    }
-}
-
-private extension View {
-    func applyCamera(_ camera: CameraStatus) -> some View {
-        let point = camera.state.center.scaled(-1)
-        return self.offset(point: point)
-            .animation(animation(camera), value: point)
-            .scaleEffect(camera.state.zoom)
-            .animation(animation(camera), value: camera.state.zoom)
-    }
-    
-    func animation(_ camera: CameraStatus) -> Animation? {
-        switch camera {
-        case .fixed: return nil
-        case .transition(_, let animation): return animation
         }
     }
 }

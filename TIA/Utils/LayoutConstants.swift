@@ -10,6 +10,12 @@ import CoreGraphics
 
 /// This struct constains all layout constants. Constants was moved out of related views because many of it related to each other.
 struct Layout {
+    struct MainMenu {
+        static let pickerSize: CGFloat = 200
+        static let currentIconY: CGFloat = 0.25
+        static let currentIconSize: CGFloat = 0.15
+    }
+    
     struct Menu {
         static let zoom: CGFloat = 1
         static let gap: CGFloat = 0.1

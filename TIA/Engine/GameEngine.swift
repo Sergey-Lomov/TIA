@@ -26,10 +26,7 @@ final class GameEngine {
         adventureEngine = nil
     }
     
-    func startAdventure(theme: AdventureTheme) {
-        let current = state.scenario.currentAdventure(theme: theme)
-        guard let descriptor = current else { return }
-        
+    func startAdventure(_ descriptor: AdventureDescriptor) {
         let layout = AdventureLayout.random(for: descriptor.id)
         let adventure = ScenarioService.shared.adventureFor(descriptor, layout: layout)
         

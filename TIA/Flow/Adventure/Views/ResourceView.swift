@@ -335,7 +335,7 @@ struct ResourceView: View {
     func handleState(transform: ResourceStateTransform,
                      positionCurve: ComplexCurve,
                      targetPositioning: CGFloat,
-                     onFinish: (() -> Void)?) -> some View {
+                     onFinish: (Action)?) -> some View {
         self.modifier(ResourceStateHandler(transform: transform, positionCurve: positionCurve, onFinish: onFinish, targetPositioning: targetPositioning, deltaPositioning: targetPositioning - 1))
     }
 }

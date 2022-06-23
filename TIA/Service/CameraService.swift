@@ -25,8 +25,15 @@ enum CameraStatus {
 struct CameraState {
     let center: CGPoint
     let zoom: CGFloat
+    let angle: CGFloat
     
-    static var `default` = CameraState(center: .zero, zoom: 1)
+    init (center: CGPoint, zoom: CGFloat = 1, angle: CGFloat = 0) {
+        self.center = center
+        self.zoom = zoom
+        self.angle = angle
+    }
+    
+    static var `default` = CameraState(center: .zero)
 }
 
 final class CameraService {
@@ -53,7 +60,14 @@ final class CameraService {
         let availableFrame = CGRect(origin: layerFrame.origin, size: availableSize)
         let origin = availableFrame.nearestPoint(to: focusFrame.origin)
         let center = origin.translated(by: screenSize.half)
-        return .init(center: center, zoom: 1)
+        return .init(center: center)
+    }
+    
+    func currentAdventureIcon(_ theme: AdventureTheme) -> CameraState {
+        var center = LayoutService.currentAdventureIconPosition(theme: theme)
+        center = center.scaled(Layout.MainMenu.pickerSize)
+        let zoom = UIScreen.maxSize
+        return .init(center: center, zoom: zoom)
     }
     
     // TODO: Cash layer frame calculations

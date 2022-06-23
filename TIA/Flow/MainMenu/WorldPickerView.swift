@@ -31,7 +31,7 @@ struct WorldPickerView_Previews: PreviewProvider {
         let scenario = GameState().scenario
         Group {
             WorldPickerView(scenario: scenario)
-                .frame(width: 200, height: 200)
+                .frame(size: Layout.MainMenu.pickerSize)
         }
     }
 }

@@ -10,14 +10,15 @@ import SwiftUI
 
 struct AdventureIconWrapper: View {
     @ObservedObject var adventure: AdventureDescriptor
+    @State var isSelected: Bool = false
     
     private let moveDuration: TimeInterval = 2
     private let scaleDuration: TimeInterval = 2
     
     // TODO: Move to BezierCurve extension
-    private enum Layout {
+    private enum Curves {
         static let currentToDone = [
-            CGPoint(x: 0, y: -0.25),
+            LayoutService.currentAdventureIconPosition(theme: .dark),
             CGPoint(x: -0.25, y: -0.25),
             CGPoint(x: -0.4375, y: 0),
             CGPoint(x: -0.345, y: 0.25)
@@ -26,22 +27,11 @@ struct AdventureIconWrapper: View {
             CGPoint(x: 0, y: 0.075),
             CGPoint(x: 0, y: 0.1),
             CGPoint(x: 0, y: -0.25),
-            CGPoint(x: -0, y: -0.25)
+            LayoutService.currentAdventureIconPosition(theme: .dark)
         ]
     }
     
-    var scale: CGFloat {
-        switch adventure.state {
-        case .planed:
-            // TODO: Remove hotfix uses new states approach
-            return 0.0001
-        case .current:
-            return 0.15
-        default:
-            return 0.1
-        }
-    }
-    
+    // TODO: Remove custom init
     init(adventure: AdventureDescriptor) {
         self.adventure = adventure
     }
@@ -49,21 +39,53 @@ struct AdventureIconWrapper: View {
     var body: some View {
         CenteredGeometryReader { geometry in
             AdventureIconView(adventure: adventure)
-                .frame(geometry: geometry)
-                .scaleEffect(scale)
-                .animation(.easeInOut(duration: scaleDuration),
-                           value: adventure.state)
+                .offset(point: offset.scaled(geometry))
+                .frame(size: geometry.minSize * scale)
+//                .scaleEffect(scale)
+//                .animation(.easeInOut(duration: scaleDuration),
+//                           value: adventure.state)
                 // TODO: Use View extension metyhod
-                .modifier(bezierSteps(size: geometry.size))
-                .animation(.easeInOut(duration: moveDuration),
-                           value: adventure.state)
+//                .modifier(bezierSteps(size: geometry.size))
+//                .animation(.easeInOut(duration: moveDuration),
+//                           value: adventure.state)
+                .onTapGesture {
+                    isSelected = true
+                }
+            
+            if isSelected {
+                Color.clear.preference(key: SelectedAdventuerePreferenceKey.self, value: adventure)
+            }
+        }
+    }
+    
+    var offset: CGPoint {
+        LayoutService.currentAdventureIconPosition(theme: adventure.theme)
+    }
+    
+    var scale: CGFloat {
+        if isSelected {
+            let pickerSize = Layout.MainMenu.pickerSize
+            let minScreenSize = UIScreen.main.bounds.size.minSize
+            let ratio = minScreenSize * Layout.Vertex.diameter / (pickerSize * Layout.MainMenu.currentIconSize)
+            return ratio / Layout.MainMenu.selectionZoom
+        }
+        
+        switch adventure.state {
+        case .planed:
+            // TODO: Remove hotfix uses new states approach
+            // TODO: Move constants to Layout constants or service
+            return .unsingularZero
+        case .current:
+            return Layout.MainMenu.currentIconSize
+        default:
+            return 0.1
         }
     }
 
     private func bezierSteps(size: CGSize) -> BezierStepsPositioning {
         let curves = [
-            curveForPoints(Layout.planedToCurrent, size: size),
-            curveForPoints(Layout.currentToDone, size: size),
+            curveForPoints(Curves.planedToCurrent, size: size),
+            curveForPoints(Curves.currentToDone, size: size),
         ]
         
         switch adventure.state {

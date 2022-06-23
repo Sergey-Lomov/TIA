@@ -41,7 +41,7 @@ extension View {
     func bezierPositioning(curve: BezierCurve,
                            progress: CGFloat = 0,
                            target: CGFloat = 1,
-                           onFinish: @escaping (() -> Void)) -> some View {
+                           onFinish: @escaping Action) -> some View {
         bezierPositioning(curve: ComplexCurve(curve), progress: progress, target: target, onFinish: onFinish)
     }
     
@@ -49,7 +49,7 @@ extension View {
                            progress: CGFloat = 0,
                            target: CGFloat = 1,
                            deltaT: CGFloat = 0,
-                           onFinish: @escaping (() -> Void)) -> some View {
+                           onFinish: @escaping Action) -> some View {
         modifier(BezierPositioning(curve: curve, onFinish: onFinish, progress: progress, targetProgress: target, deltaT: deltaT))
     }
     
@@ -73,16 +73,20 @@ extension View {
         )
     }
     
-    func onRedraw(closure: @escaping () -> Void) -> some View {
+    func onRedraw(closure: @escaping Action) -> some View {
         modifier(ViewRedrawHandlerModifier(handler: closure))
     }
     
-    func onAnimationCompleted<Value: VectorArithmetic>(for value: Value, completion: @escaping () -> Void) -> ModifiedContent<Self, AnimationCompletionObserverModifier<Value>> {
-        return modifier(AnimationCompletionObserverModifier(observedValue: value, completion: completion))
+    func onAnimationCompleted<Value: VectorArithmetic>(for value: Value, completion: Action?) -> ModifiedContent<Self, AnimationCompletionObserverModifier<Value>> {
+        return modifier(AnimationCompletionObserverModifier(observedValue: value, completion: completion ?? emptyAction))
     }
     
     func drawingProgress(_ value: CGFloat) -> some View {
         modifier(DrawingProgressModifier(drawingProgress: value))
+    }
+    
+    func applyCamera(_ camera: CameraStatus, completion: Action? = nil) -> some View {
+        modifier(CameraModifier(camera: camera, completion: completion))
     }
 
     // TODO: It was a try to wrap mofidifers into views. Remove if still be unsused.

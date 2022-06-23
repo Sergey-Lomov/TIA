@@ -7,17 +7,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "6CBABE7F-2003-4305-8A3D-CFE5A6D7E2FC"
+            uuid = "2B886338-5493-4B7F-A658-3F9A77F483C8"
             shouldBeEnabled = "No"
-            condition = "resource.type == .despair"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "TIA/Flow/Adventure/Views/ResourceView.swift"
+            filePath = "TIA/Flow/MainMenu/AdventureIconView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "36"
-            endingLineNumber = "36"
-            landmarkName = "body"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
+            landmarkName = "offset"
             landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>

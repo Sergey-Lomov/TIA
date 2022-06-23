@@ -59,6 +59,14 @@ final class AnimationService {
         .opened: [.closed:  { .easeIn(duration: $0) }],
     ]
     
+    var fromAdventure: Animation {
+        .easeOut(duration: 1)
+    }
+    
+    var toAdventure: Animation {
+        .easeOut(duration: 1)
+    }
+    
     var presentLayer: Animation {
         .easeOut(duration: Const.Layer.transitionDuration)
     }

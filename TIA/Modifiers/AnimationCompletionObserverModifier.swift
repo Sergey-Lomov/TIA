@@ -17,9 +17,9 @@ struct AnimationCompletionObserverModifier<Value>: AnimatableModifier where Valu
     }
 
     private var targetValue: Value
-    private var completion: () -> Void
+    private var completion: Action
 
-    init(observedValue: Value, completion: @escaping () -> Void) {
+    init(observedValue: Value, completion: @escaping Action) {
         self.completion = completion
         self.animatableData = observedValue
         targetValue = observedValue

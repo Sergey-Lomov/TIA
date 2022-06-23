@@ -18,7 +18,7 @@ protocol ViewModelsProvider: AnyObject {
 final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEventsListener {
     
     private var subscriptions: [AnyCancellable] = []
-    private var layerSubscriptions: [AnyCancellable] = []
+    private var currentLayerSubscriptions: [AnyCancellable] = []
     let eventsPublisher: ViewEventsPublisher
     
     private var cameraService: CameraService
@@ -99,8 +99,8 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
     }
     
     private func handleCurrentLayerChange(_ layer: AdventureLayer) {
-        layerSubscriptions.removeAll()
-        layerSubscriptions.sink(layer.$state) { [weak self] state in
+        currentLayerSubscriptions.removeAll()
+        currentLayerSubscriptions.sink(layer.$state) { [weak self] state in
             self?.handleLayer(layer, newState: state)
         }
     }

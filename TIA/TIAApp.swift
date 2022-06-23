@@ -17,24 +17,33 @@ struct TIAApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if let adventure = game.activeAdventure,
-               let player = GameEngine.shared.player,
-               let resources = GameEngine.shared.resources {
-                CenteredGeometryReader {geometry in
-                    let cameraService = CameraService(size: geometry.size)
-                    let viewModel = AdventureViewModel(
-                        adventure,
-                        cameraService: cameraService,
-                        player: player,
-                        resources: resources,
-                        listener: GameEngine.shared.adventureEngine,
-                        eventsSource: GameEngine.shared.adventureEngine)
-
+            CenteredGeometryReader { geometry in
+                let cameraService = CameraService(size: geometry.size)
+                if let viewModel = adventureViewModel(cameraService) {
                     AdventureView(adventure: viewModel)
+                } else {
+                    MainMenuView(model: menuViewModel(cameraService))
                 }
-            } else {
-                MainMenuView(game: game)
             }
         }
+    }
+    
+    func menuViewModel(_ cameraService: CameraService) -> MainMenuViewModel {
+        .init(game: game, cameraService: cameraService)
+    }
+    
+    func adventureViewModel(_ cameraService: CameraService) -> AdventureViewModel? {
+        guard let adventure = game.activeAdventure,
+           let player = GameEngine.shared.player,
+           let resources = GameEngine.shared.resources else {
+               return nil
+           }
+            
+        return .init(adventure,
+                     cameraService: cameraService,
+                     player: player,
+                     resources: resources,
+                     listener: GameEngine.shared.adventureEngine,
+                     eventsSource: GameEngine.shared.adventureEngine)
     }
 }

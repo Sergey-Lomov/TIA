@@ -10,7 +10,7 @@ import SwiftUI
 
 extension Shape {
     func onReach(_ value: AnimatableData,
-                 handler: @escaping () -> Void) -> some Shape {
+                 handler: @escaping Action) -> some Shape {
         AnimationHandlingShape(content: self, target: value, handler: handler)
     }
 }

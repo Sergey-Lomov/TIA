@@ -10,16 +10,8 @@ import SwiftUI
 
 enum CameraStatus {
     case fixed(state: CameraState)
+    case pretransition(from: CameraState, to: CameraState, animation: Animation?)
     case transition(to: CameraState, animation: Animation?)
-    
-    var state: CameraState {
-        switch self {
-        case .fixed(let state):
-            return state
-        case .transition(let to, _):
-            return to
-        }
-    }
 }
 
 struct CameraState {
@@ -63,11 +55,17 @@ final class CameraService {
         return .init(center: center)
     }
     
-    func currentAdventureIcon(_ theme: AdventureTheme) -> CameraState {
+    func focusOnAdventureZoom() -> CGFloat {
+        let size = Math.rectSize(ratio: screenSize.ratio, circumscribedRadius: Layout.MainMenu.pickerSize / 4)
+        let xScale = screenSize.width / size.width
+        let yScale = screenSize.height / size.height
+        return max(xScale, yScale)
+    }
+    
+    func focusOnCurrentAdventure(_ theme: AdventureTheme) -> CameraState {
         var center = LayoutService.currentAdventureIconPosition(theme: theme)
         center = center.scaled(Layout.MainMenu.pickerSize)
-        let zoom = UIScreen.maxSize
-        return .init(center: center, zoom: zoom)
+        return .init(center: center, zoom: focusOnAdventureZoom(), angle: .dpi)
     }
     
     // TODO: Cash layer frame calculations
@@ -89,15 +87,4 @@ final class CameraService {
         
         return frame.insetBy(dx: -1 * border, dy: -1 * border)
     }
-//
-//    func showMenu(from: Vertex) -> CameraStatus {
-//        let animation = AnimationService.shared.showMenu
-//        return centrateVertex(from, zoom: Layout.Menu.zoom, animation: animation)
-//    }
-//
-//    func centrateVertex(_ vertex: Vertex, zoom: CGFloat, animation: Animation?) -> CameraStatus {
-//        let center = vertex.point.scaled(screenSize).mirrored()
-//        let state = CameraState(center: center, zoom: zoom)
-//        return .transition(to: state, animation: animation)
-//    }
 }

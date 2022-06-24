@@ -72,6 +72,11 @@ final class Math {
         return BezierCurve(points: [from, c1, c2, to])
     }
 
+    static func rectSize(ratio: CGFloat, circumscribedRadius: CGFloat) -> CGSize {
+        let width = 2 / sqrt(1 + ratio * ratio) * circumscribedRadius
+        let height = 2 * ratio / sqrt(1 + ratio * ratio) * circumscribedRadius
+        return CGSize(width: width, height: height)
+    }
 }
 
 extension VectorArithmetic {

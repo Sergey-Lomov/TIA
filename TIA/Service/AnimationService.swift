@@ -60,11 +60,11 @@ final class AnimationService {
     ]
     
     var fromAdventure: Animation {
-        .easeOut(duration: 1)
+        .easeOut(duration: 3)
     }
     
     var toAdventure: Animation {
-        .easeOut(duration: 1)
+        .easeOut(duration: 3)
     }
     
     var presentLayer: Animation {

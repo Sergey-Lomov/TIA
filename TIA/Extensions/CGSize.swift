@@ -10,13 +10,10 @@ import SwiftUI
 
 extension CGSize {
     
-    var minSize: CGFloat {
-        min(width, height)
-    }
-    
-    var half: CGSize {
-        scaled(0.5)
-    }
+    var minSize: CGFloat { min(width, height) }
+    var maxSize: CGFloat { max(width, height) }
+    var ratio: CGFloat { width / height }
+    var half: CGSize { scaled(0.5) }
     
     init(_ size: CGFloat) {
         self.init(width: size, height: size)

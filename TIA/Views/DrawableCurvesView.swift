@@ -7,33 +7,6 @@
 
 import SwiftUI
 
-struct DrawingProgressKey: EnvironmentKey {
-    static var defaultValue: CGFloat = 0
-}
-
-struct DrawingStyleKey: EnvironmentKey {
-    static var defaultValue: CGFloat = 0
-}
-
-extension EnvironmentValues {
-    var drawingProgress: CGFloat {
-        get { self[DrawingProgressKey.self] }
-        set { self[DrawingProgressKey.self] = newValue }
-    }
-}
-
-// TODO: Try to use standard stroke width
-struct DrawingWidthKey: EnvironmentKey {
-    static var defaultValue: CGFloat = 1
-}
-
-extension EnvironmentValues {
-    var drawingWidth: CGFloat {
-        get { self[DrawingWidthKey.self] }
-        set { self[DrawingWidthKey.self] = newValue }
-    }
-}
-
 struct DrawableCurvesView: View {
     
     let elements: [DrawableCurve]

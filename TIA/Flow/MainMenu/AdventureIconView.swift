@@ -9,8 +9,10 @@ import Foundation
 import SwiftUI
 
 struct AdventureIconWrapper: View {
+    
     @ObservedObject var adventure: AdventureDescriptor
     @State var isSelected: Bool = false
+    @Environment(\.cameraService) var cameraService
     
     private let moveDuration: TimeInterval = 2
     private let scaleDuration: TimeInterval = 2
@@ -38,9 +40,11 @@ struct AdventureIconWrapper: View {
     
     var body: some View {
         CenteredGeometryReader { geometry in
+            let size = size(geometry)
             AdventureIconView(adventure: adventure)
                 .offset(point: offset.scaled(geometry))
-                .frame(size: geometry.minSize * scale)
+                .frame(size: size)
+                .animation(animation, value: size)
 //                .scaleEffect(scale)
 //                .animation(.easeInOut(duration: scaleDuration),
 //                           value: adventure.state)
@@ -62,12 +66,14 @@ struct AdventureIconWrapper: View {
         LayoutService.currentAdventureIconPosition(theme: adventure.theme)
     }
     
-    var scale: CGFloat {
+    func size(_ geometry: GeometryProxy) -> CGFloat {
         if isSelected {
             let pickerSize = Layout.MainMenu.pickerSize
             let minScreenSize = UIScreen.main.bounds.size.minSize
             let ratio = minScreenSize * Layout.Vertex.diameter / (pickerSize * Layout.MainMenu.currentIconSize)
-            return ratio / Layout.MainMenu.selectionZoom
+            let screenZoom = cameraService.focusOnAdventureZoom()
+            let scale = Layout.MainMenu.currentIconSize * ratio / screenZoom
+            return round(scale * geometry.minSize)
         }
         
         switch adventure.state {
@@ -76,9 +82,9 @@ struct AdventureIconWrapper: View {
             // TODO: Move constants to Layout constants or service
             return .unsingularZero
         case .current:
-            return Layout.MainMenu.currentIconSize
+            return Layout.MainMenu.currentIconSize * geometry.minSize
         default:
-            return 0.1
+            return 0.1 * geometry.minSize
         }
     }
 
@@ -114,6 +120,10 @@ struct AdventureIconWrapper: View {
 
         return BezierCurve(points: scaledPoints)
     }
+    
+    var animation: Animation? {
+        isSelected ? AnimationService.shared.toAdventure : nil
+    }
 }
 
 struct AdventureIconView: View {
@@ -121,7 +131,8 @@ struct AdventureIconView: View {
     
     var body: some View {
         ZStack {
-            CircleShape()
+            ComplexCurveShape(curve: .circle(radius: 0.5))
+            //Circle()
                 .fill(color)
         }
     }

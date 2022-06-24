@@ -55,6 +55,7 @@
 		67811B8A28633A1400861ADA /* MainMenuViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67811B8928633A1400861ADA /* MainMenuViewModel.swift */; };
 		67811B8C2863486700861ADA /* Closures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67811B8B2863486700861ADA /* Closures.swift */; };
 		67811B8E28639CCC00861ADA /* UIScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67811B8D28639CCC00861ADA /* UIScreen.swift */; };
+		67811B932864D8BC00861ADA /* EnvironmentKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67811B922864D8BC00861ADA /* EnvironmentKeys.swift */; };
 		67834856282A9C36002D9ABA /* ResourceStateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67834855282A9C36002D9ABA /* ResourceStateHandler.swift */; };
 		67834858282A9C44002D9ABA /* ResourceStateTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67834857282A9C44002D9ABA /* ResourceStateTransform.swift */; };
 		678DE68828129D850084006F /* EyeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 678DE68728129D840084006F /* EyeViewModel.swift */; };
@@ -165,6 +166,7 @@
 		67811B8928633A1400861ADA /* MainMenuViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuViewModel.swift; sourceTree = "<group>"; };
 		67811B8B2863486700861ADA /* Closures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Closures.swift; sourceTree = "<group>"; };
 		67811B8D28639CCC00861ADA /* UIScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScreen.swift; sourceTree = "<group>"; };
+		67811B922864D8BC00861ADA /* EnvironmentKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentKeys.swift; sourceTree = "<group>"; };
 		67834855282A9C36002D9ABA /* ResourceStateHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceStateHandler.swift; sourceTree = "<group>"; };
 		67834857282A9C44002D9ABA /* ResourceStateTransform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceStateTransform.swift; sourceTree = "<group>"; };
 		678DE68728129D840084006F /* EyeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeViewModel.swift; sourceTree = "<group>"; };
@@ -267,6 +269,7 @@
 			isa = PBXGroup;
 			children = (
 				675E274F280C8C2F00FB5783 /* PointerWrapper.swift */,
+				67811B922864D8BC00861ADA /* EnvironmentKeys.swift */,
 				675E2751280CE33100FB5783 /* HandleableAnimationData.swift */,
 				675E276F280F6F0400FB5783 /* ColorSchema.swift */,
 				67BDE960281833D5005B0194 /* LayoutConstants.swift */,
@@ -637,6 +640,7 @@
 				67B533892804CB8E00EA959A /* AdventureView.swift in Sources */,
 				675E2747280B4BD100FB5783 /* VertexViewModel.swift in Sources */,
 				675E275D280E22CC00FB5783 /* GeometryProxy.swift in Sources */,
+				67811B932864D8BC00861ADA /* EnvironmentKeys.swift in Sources */,
 				6771F8E62855242000D7B742 /* VertexActionsIconsService.swift in Sources */,
 				679E37242832616D00D9EE41 /* EdgeViewMetastate.swift in Sources */,
 				6793A98B27FD1936002198E9 /* Colors.swift in Sources */,

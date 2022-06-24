@@ -7,9 +7,10 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
-enum MainMenuState {
-    case fromAdventure(adventure: AdventureDescriptor, preparing: Bool)
+enum MainMenuState: Equatable {
+    case fromAdventure(adventure: AdventureDescriptor)
     case toAdventure(adventure: AdventureDescriptor)
     case regular
 }
@@ -17,31 +18,13 @@ enum MainMenuState {
 final class MainMenuViewModel: ObservableObject {
     
     private var subscriptions: [AnyCancellable] = []
-    private var cameraService: CameraService
-    
+
     @Published var game: GameState
     @Published var state = MainMenuState.regular
+    @Published var camera: CameraStatus = .fixed(state: .default)
+    var cameraService: CameraService
     
     private var regularCameraState: CameraState { .default }
-    
-    var camera: CameraStatus {
-        switch state {
-        case .fromAdventure(let adventure, let preparing):
-            let state = cameraService.currentAdventureIcon(adventure.theme)
-            if preparing {
-                return .fixed(state: state)
-            } else {
-                let animation = AnimationService.shared.fromAdventure
-                return .transition(to: regularCameraState, animation: animation)
-            }
-        case .toAdventure(let adventure):
-            let state = cameraService.currentAdventureIcon(adventure.theme)
-            let animation = AnimationService.shared.toAdventure
-            return .transition(to: state, animation: animation)
-        case .regular:
-            return .fixed(state: regularCameraState)
-        }
-    }
 
     init(game: GameState, cameraService: CameraService) {
         self.game = game
@@ -51,6 +34,40 @@ final class MainMenuViewModel: ObservableObject {
         subscriptions.sink(game.objectWillChange) { [weak self] in
             self?.objectWillChange.sendOnMain()
         }
+        
+        subscriptions.sink($state) { [weak self] newState in
+            guard let state = self?.state else { return }
+            self?.handleStateSwitch(from: state, to: newState)
+        }
+    }
+    
+    private func handleStateSwitch(from oldState: MainMenuState, to newState: MainMenuState) {
+        guard newState != .regular else { return }
+        
+        let old = cameraState(for: oldState)
+        let new = cameraState(for: newState)
+        let animation = cameraAnimation(newState)
+        camera = .pretransition(from: old, to: new, animation: animation)
+    }
+    
+    private func cameraState(for state: MainMenuState) -> CameraState {
+        switch state {
+        case .fromAdventure(let adventure), .toAdventure(let adventure):
+            return cameraService.focusOnCurrentAdventure(adventure.theme)
+        case .regular:
+            return regularCameraState
+        }
+    }
+    
+    private func cameraAnimation(_ state: MainMenuState) -> Animation? {
+        switch state {
+        case .fromAdventure:
+            return AnimationService.shared.fromAdventure
+        case .toAdventure:
+            return AnimationService.shared.toAdventure
+        case .regular:
+            return nil
+        }
     }
 }
 
@@ -58,12 +75,8 @@ final class MainMenuViewModel: ObservableObject {
 extension MainMenuViewModel {
     func cameraApplied() {
         switch state {
-        case .fromAdventure(let adventure, let preparing):
-            if preparing {
-                state = .fromAdventure(adventure: adventure, preparing: false)
-            } else {
-                state = .regular
-            }
+        case .fromAdventure:
+            state = .regular
         case .toAdventure(let adventure):
             GameEngine.shared.startAdventure(adventure)
         default:

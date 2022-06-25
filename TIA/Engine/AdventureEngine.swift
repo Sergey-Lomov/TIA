@@ -20,8 +20,8 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     private enum Timing {
         // TODO: Remove when view-engine interaction will be finished
         static let queue = DispatchQueue.main
-        static let edgeGrowing: TimeInterval = 1.5 * 0.3
-        static let vertexGrowing: TimeInterval = 0.3 * 0.3
+        static let edgeGrowing: TimeInterval = 1.5 //* 0.3
+        static let vertexGrowing: TimeInterval = 0.3// * 0.3
     }
     
     private static let menuVertexId = "menu_vertex"

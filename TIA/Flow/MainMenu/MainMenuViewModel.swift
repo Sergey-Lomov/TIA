@@ -78,7 +78,9 @@ extension MainMenuViewModel {
         case .fromAdventure:
             state = .regular
         case .toAdventure(let adventure):
-            GameEngine.shared.startAdventure(adventure)
+            if game.activeAdventure == nil {
+                GameEngine.shared.startAdventure(adventure)
+            }
         default:
             break
         }

@@ -12,6 +12,7 @@ extension CGSize {
     
     var minSize: CGFloat { min(width, height) }
     var maxSize: CGFloat { max(width, height) }
+    /// Ratio width to height
     var ratio: CGFloat { width / height }
     var half: CGSize { scaled(0.5) }
     

@@ -88,6 +88,7 @@ struct AdventureIconWrapper: View {
         }
     }
 
+    // TODO: May became unused
     private func bezierSteps(size: CGSize) -> BezierStepsPositioning {
         let curves = [
             curveForPoints(Curves.planedToCurrent, size: size),
@@ -105,6 +106,7 @@ struct AdventureIconWrapper: View {
         }
     }
     
+    // TODO: May became unused
     private func curveForPoints(_ points: [CGPoint],
                                 size: CGSize) -> BezierCurve {
         var xMult = size.width
@@ -132,7 +134,6 @@ struct AdventureIconView: View {
     var body: some View {
         ZStack {
             ComplexCurveShape(curve: .circle(radius: 0.5))
-            //Circle()
                 .fill(color)
         }
     }

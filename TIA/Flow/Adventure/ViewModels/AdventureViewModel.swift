@@ -46,8 +46,12 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
                                       movingColor: schema.edge)
         self.background = schema.background
         self.cameraService = cameraService
-        self.camera = cameraService.initial(adventure: adventure)
         self.eventsPublisher = publisher
+        
+        let entrance = adventure.currentLayer.entrance
+        let transState = cameraService.focusOnVertex(entrance)
+        let initState = cameraService.forLayer(adventure.currentLayer, focusPoint: entrance.point)//cameraService.initial(adventure: adventure)
+        self.camera = .pretransition(from: transState, to: initState, animation: .easeOut(duration: 2))
         
         self.layers = adventure.layers.map {
             AdventureLayerViewModel(model: $0, schema: schema, eventsPublisher: publisher)
@@ -107,6 +111,7 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
     
     private func handleLayer(_ layer: AdventureLayer, newState state: AdventureLayerState) {
         guard state != .preparing else { return }
+        guard !(state == .growing && layer.type == .initial) else { return }
         
         var targetLayer: AdventureLayer? = layer
         if case .hiding(let nextLayer) = state {

@@ -6,19 +6,18 @@
 //
 
 import SwiftUI
+import UIKit
 
 @main
 struct TIAApp: App {
     @ObservedObject var game = GameEngine.shared.state
     
     @Namespace var wrapper: Namespace.ID
-    @State var testBool = false
-    let randomPoint = CGPoint.zero.randomPoint(maxDelta: 300)
-    
+
     var body: some Scene {
         WindowGroup {
             CenteredGeometryReader { geometry in
-                let cameraService = CameraService(size: geometry.size)
+                let cameraService = CameraService(size: UIScreen.size)
                 if let viewModel = adventureViewModel(cameraService) {
                     AdventureView(adventure: viewModel)
                 } else {

@@ -37,8 +37,8 @@ final class CameraService {
         self.screenSize = size
     }
     
-    func initial(adventure: Adventure) -> CameraStatus {
-        return .fixed(state: .default)
+    func initial(adventure: Adventure) -> CameraState {
+        return .default
     }
     
     func forLayer(_ layer: AdventureLayer, focusPoint: CGPoint) -> CameraState {
@@ -65,7 +65,12 @@ final class CameraService {
     func focusOnCurrentAdventure(_ theme: AdventureTheme) -> CameraState {
         var center = LayoutService.currentAdventureIconPosition(theme: theme)
         center = center.scaled(Layout.MainMenu.pickerSize)
-        return .init(center: center, zoom: focusOnAdventureZoom(), angle: .dpi)
+        return .init(center: center, zoom: focusOnAdventureZoom(), angle: .hpi)
+    }
+    
+    func focusOnVertex(_ vertex: Vertex) -> CameraState {
+        let center = vertex.point.scaled(screenSize)
+        return .init(center: center)
     }
     
     // TODO: Cash layer frame calculations

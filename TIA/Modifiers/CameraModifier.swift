@@ -25,6 +25,8 @@ struct CameraStateManagerModifier: ViewModifier {
     
     private func handleRedraw() {
         switch camera {
+        case .fixed:
+            completion?()
         case .pretransition(_, let to, let animation):
             camera = .transition(to: to, animation: animation)
         default:
@@ -33,10 +35,7 @@ struct CameraStateManagerModifier: ViewModifier {
     }
     
     private func handleAnimationCompletion() {
-//        completion?()
         switch camera {
-        case .fixed:
-            completion?()
         case .transition(let to, _):
             camera = .fixed(state: to)
         default:
@@ -58,8 +57,8 @@ struct CameraModifier: ViewModifier {
                 .scaleEffect(zoom, anchor: anchor(geometry))
                 .offset(point: offset)
                 // TODO: Test in case, when rotation and zoom is valuable, but offset is zero. Change to state animation.
-                .animation(animation, value: offset)
                 .onAnimationCompleted(for: offset, completion: completion)
+                .animation(animation, value: offset)
         }
     }
     

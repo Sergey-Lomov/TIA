@@ -73,7 +73,7 @@ extension ComplexCurve: VectorArithmetic {
 
 extension ComplexCurve {
     
-    static func circle(radius: CGFloat, componentsCount: Int = 2) -> ComplexCurve {
+    static func circle(radius: CGFloat, componentsCount: Int = 4) -> ComplexCurve {
         var components: [BezierCurve] = []
         let step = CGFloat.dpi / CGFloat(componentsCount)
         for i in 0..<componentsCount {

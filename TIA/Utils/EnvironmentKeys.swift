@@ -19,7 +19,7 @@ extension EnvironmentValues {
 }
 
 struct CameraServiceKey: EnvironmentKey {
-    static var defaultValue = CameraService(size: .zero)
+    static var defaultValue = CameraService(safe: .zero, full: .zero)
 }
 
 extension EnvironmentValues {

@@ -17,7 +17,7 @@ struct TIAApp: App {
     var body: some Scene {
         WindowGroup {
             CenteredGeometryReader { geometry in
-                let cameraService = CameraService(size: UIScreen.size)
+                let cameraService = CameraService(safe: geometry.size, full: UIScreen.size)
                 if let viewModel = adventureViewModel(cameraService) {
                     AdventureView(adventure: viewModel)
                 } else {

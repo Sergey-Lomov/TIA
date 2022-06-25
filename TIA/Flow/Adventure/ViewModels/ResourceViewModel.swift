@@ -35,9 +35,11 @@ class ResourceViewModel: ObservableObject, IdEqutable {
     
     func attachModel(_ model: Resource, color: Color, borderColor: Color) {
         self.model = model
-        self.color = color
-        self.borderColor = borderColor
-        setupSubscriptions()
+        self.setupSubscriptions()
+        DispatchQueue.main.async {
+            self.color = color
+            self.borderColor = borderColor
+        }
     }
     
     func detachModel() {

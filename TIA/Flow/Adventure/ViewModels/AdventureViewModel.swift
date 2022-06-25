@@ -111,7 +111,7 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
     
     private func handleLayer(_ layer: AdventureLayer, newState state: AdventureLayerState) {
         guard state != .preparing else { return }
-        guard !(state == .growing && layer.type == .initial) else { return }
+        guard GameEngine.shared.adventureEngine?.lifestate != .initiation else { return }
         
         var targetLayer: AdventureLayer? = layer
         if case .hiding(let nextLayer) = state {

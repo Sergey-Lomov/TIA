@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 enum AdventureLifecycle {
-    case initiation
+    case initializing
     case gameplay
     case menu
     case finalizing
@@ -31,7 +31,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     var eventsPublisher = EngineEventsPublisher()
     
     var adventure: Adventure
-    var lifestate: AdventureLifecycle = .initiation
+    var lifestate: AdventureLifecycle = .initializing
     var player: Player
     var resources: [Resource]
     
@@ -130,7 +130,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         case .vertex(let vertex):
             let visit = VertexVisit(visitor: player, phase: .onVertex)
             vertex.updateVisitInfo(visit)
-            icomeToAction(vertex.onVisit, at: vertex)
+            incomeToAction(vertex.onVisit, at: vertex)
         case .edge(let edge, let status, let direction):
             switch status {
             case .compressing:
@@ -139,7 +139,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
                 let endVertex = direction.endVertex(edge)
                 let visit = VertexVisit(visitor: player, phase: .outcome)
                 startVertex.updateVisitInfo(visit)
-                startCompressing(atVertex: startVertex, targetActyion: endVertex.onVisit)
+                startCompressing(atVertex: startVertex, targetAction: endVertex.onVisit)
             case .moving:
                 let endVertex = direction.endVertex(edge)
                 addPlayerResources(vertexResources(endVertex))
@@ -434,13 +434,10 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     }
     
     // MARK: Vertices actions handling
-    private func startCompressing(atVertex vertex: Vertex, targetActyion action: VertexAction?) {
+    private func startCompressing(atVertex vertex: Vertex, targetAction action: VertexAction?) {
         switch action {
-        case .restart:
-            playerResources(player).forEach {
-                guard case .inventory(_, let index, _, let total, _) = $0.state else { return }
-                $0.state = .destroying(from: vertex, index: index, total: total, state: .preparing)
-            }
+        case .restart, .exit:
+            releasePlayerResources(player)
         default:
             break
         }
@@ -448,7 +445,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     
     private func startMovingToAction(_ action: VertexAction?) {
         switch action {
-        case .restart:
+        case .restart, .exit:
             let layers = adventure.layers.filter { $0.type != .menu }
             layers.forEach { startUngrowing($0, exit: nil) }
         default:
@@ -456,21 +453,31 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         }
     }
     
-    private func icomeToAction(_ action: VertexAction?, at vertex: Vertex) {
+    private func incomeToAction(_ action: VertexAction?, at vertex: Vertex) {
         switch action {
         case .restart:
-            restartAdventure(vertex: vertex)
+            restartAdventure(vertex)
+        case .exit:
+            exitFromAdventure(vertex)
         default:
             break
         }
     }
     
-    private func restartAdventure(vertex: Vertex) {
+    private func restartAdventure(_ vertex: Vertex) {
         let layout = AdventureLayout.random(for: adventure.id)
         let layer = ScenarioService.shared.layerFor(adventure.id, layout: layout, forcedEntrance: vertex)
         layer.state = .preparing
         startLayerPresenting(layer, from: vertex)
         lifestate = .gameplay
+    }
+    
+    private func exitFromAdventure(_ vertex: Vertex) {
+        let menuLayer = adventure.layers.first { $0.type == .menu }
+        guard let menuLayer = menuLayer else { return }
+        lifestate = .finalizing
+        eventsPublisher.send(.adventureFinalizing(exit: vertex))
+        startUngrowing(menuLayer, exit: vertex)
     }
     
     // MARK: Layers handling
@@ -515,11 +522,17 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         }
         
         if seedsDone && verticesDone {
-            if layer == adventure.currentLayer {
-                hideCurrentLayer()
-            } else {
-                layer.state = .hiding(next: nil)
-            }
+            handleLayerUngrowedCompleted(layer)
+        }
+    }
+    
+    private func handleLayerUngrowedCompleted(_ layer: AdventureLayer) {
+        if lifestate == .finalizing {
+            GameEngine.shared.finalizeAdenture(adventure)
+        } else if layer == adventure.currentLayer {
+            hideCurrentLayer()
+        } else {
+            layer.state = .hiding(next: nil)
         }
     }
     
@@ -630,6 +643,23 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
             eventsPublisher.send(.resourceRemoved(resource: $0))
         }
         resources.removeAll { removingResources.contains($0) }
+    }
+    
+    private func releasePlayerResources(_ player: Player) {
+        var vertex: Vertex = adventure.currentLayer.entrance
+        switch player.position {
+        case .abscent:
+            break
+        case .edge(let edge, _, let direction):
+            vertex = direction.endVertex(edge)
+        case .vertex(let positionVertex):
+            vertex = positionVertex
+        }
+        
+        playerResources(player).forEach {
+            guard case .inventory(_, let index, _, let total, _) = $0.state else { return }
+            $0.state = .destroying(from: vertex, index: index, total: total, state: .preparing)
+        }
     }
 }
 

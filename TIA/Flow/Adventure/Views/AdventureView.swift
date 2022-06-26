@@ -35,7 +35,7 @@ struct AdventureView: View {
                 }
                 
                 PlayerWrapperView(player: adventure.player)
-                    .applyAutostateCamera($adventure.camera)
+                    .applyCamera(adventure.camera)
             }
         }
         .onAppear {

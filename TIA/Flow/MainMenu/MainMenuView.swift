@@ -27,15 +27,22 @@ struct MainMenuView: View {
             WorldPickerView(scenario: model.game.scenario)
                 .frame(size: Layout.MainMenu.pickerSize)
                 .environment(\.cameraService, model.cameraService)
+                .environment(\.finalizedAdventure, finalizedAdventure)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .applyAutostateCamera($model.camera) {
-            model.cameraApplied()
-        }
+        .applyCamera(model.camera)
         .onPreferenceChange(SelectedAdventuerePreferenceKey.self) { descriptor in
             if let descriptor = descriptor {
                 model.adventureSelected(descriptor)
             }
+        }
+    }
+    
+    var finalizedAdventure: AdventureDescriptor? {
+        if let adventure = model.game.finalizedAdventure {
+            return AdventureDescriptor(adventure)
+        } else {
+            return nil
         }
     }
 }

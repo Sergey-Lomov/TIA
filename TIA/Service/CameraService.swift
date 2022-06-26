@@ -8,26 +8,6 @@
 import Foundation
 import SwiftUI
 
-enum CameraStatus {
-    case fixed(state: CameraState)
-    case pretransition(from: CameraState, to: CameraState, animation: Animation?)
-    case transition(to: CameraState, animation: Animation?)
-}
-
-struct CameraState {
-    let center: CGPoint
-    let zoom: CGFloat
-    let angle: CGFloat
-    
-    init (center: CGPoint, zoom: CGFloat = 1, angle: CGFloat = 0) {
-        self.center = center
-        self.zoom = zoom
-        self.angle = angle
-    }
-    
-    static var `default` = CameraState(center: .zero)
-}
-
 final class CameraService {
     let fullSize: CGSize
     let safeSize: CGSize

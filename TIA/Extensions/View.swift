@@ -85,12 +85,9 @@ extension View {
         modifier(DrawingProgressModifier(drawingProgress: value))
     }
     
-    func applyCamera(_ camera: CameraStatus, completion: Action? = nil) -> some View {
-        modifier(CameraModifier(camera: camera, completion: completion))
-    }
-    
-    func applyAutostateCamera(_ camera: Binding<CameraStatus>, completion: Action? = nil) -> some View {
-        modifier(CameraStateManagerModifier(camera: camera, completion: completion))
+    func applyCamera(_ camera: CameraViewModel, completion: Action? = nil) -> some View {
+        if let completion = completion { camera.completion = completion }
+        return modifier(CameraModifier(camera: camera	))
     }
 
     // TODO: It was a try to wrap mofidifers into views. Remove if still be unsused.

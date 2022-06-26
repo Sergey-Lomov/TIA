@@ -13,6 +13,7 @@ struct AdventureIconWrapper: View {
     @ObservedObject var adventure: AdventureDescriptor
     @State var isSelected: Bool = false
     @Environment(\.cameraService) var cameraService
+    @Environment(\.finalizedAdventure) var finalized
     
     private let moveDuration: TimeInterval = 2
     private let scaleDuration: TimeInterval = 2
@@ -67,7 +68,7 @@ struct AdventureIconWrapper: View {
     }
     
     func size(_ geometry: GeometryProxy) -> CGFloat {
-        if isSelected {
+        if isSelected || finalized == adventure {
             let pickerSize = Layout.MainMenu.pickerSize
             let minScreenSize = UIScreen.main.bounds.size.minSize
             let ratio = minScreenSize * Layout.Vertex.diameter / (pickerSize * Layout.MainMenu.currentIconSize)
@@ -124,7 +125,7 @@ struct AdventureIconWrapper: View {
     }
     
     var animation: Animation? {
-        isSelected ? AnimationService.shared.toAdventure : nil
+        isSelected ? AnimationService.shared.toAdventure : AnimationService.shared.fromAdventure
     }
 }
 

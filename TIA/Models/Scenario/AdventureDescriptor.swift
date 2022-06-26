@@ -18,4 +18,10 @@ final class AdventureDescriptor: ObservableObject, IdEqutable {
         self.index = index
         self.theme = theme
     }
+    
+    init(_ adventure: Adventure) {
+        self.id = adventure.id
+        self.index = adventure.index
+        self.theme = adventure.theme
+    }
 }

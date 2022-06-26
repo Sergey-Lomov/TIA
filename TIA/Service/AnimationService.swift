@@ -62,6 +62,10 @@ final class AnimationService {
     var fromAdventure: Animation { .linear(duration: 2) }
     var toAdventure: Animation { .linear(duration: 2) }
     var adventureInitial: Animation { .easeOut(duration: 1.5) }
+    var adventureFinal: Animation {
+        let duration = Const.Edge.elementsUngrowingDuration + Const.Edge.pathUngrowingDuration
+        return .linear(duration: duration)
+    }
     
     var presentLayer: Animation {
         .easeOut(duration: Const.Layer.transitionDuration)

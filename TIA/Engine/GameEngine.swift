@@ -21,6 +21,12 @@ final class GameEngine {
         self.state = state
     }
     
+    func finalizeAdenture(_ adventure: Adventure) {
+        adventureEngine = nil
+        state.finalizedAdventure = adventure
+        state.activeAdventure = nil
+    }
+    
     func doneCurrentAdventure(theme: AdventureTheme) {
         state.scenario.doneCurrentAdventure(theme: theme)
         adventureEngine = nil

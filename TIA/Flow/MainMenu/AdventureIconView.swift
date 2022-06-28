@@ -10,13 +10,10 @@ import SwiftUI
 
 struct AdventureIconWrapper: View {
     
-    @ObservedObject var adventure: AdventureDescriptor
-    @State var isSelected: Bool = false
+    @ObservedObject var model: AdventureIconViewModel
+    // TODO: Use EnvironmentObject instead
     @Environment(\.cameraService) var cameraService
-    @Environment(\.finalizedAdventure) var finalized
-    
-    private let moveDuration: TimeInterval = 2
-    private let scaleDuration: TimeInterval = 2
+    @State var isSelected = false
     
     // TODO: Move to BezierCurve extension
     private enum Curves {
@@ -34,18 +31,13 @@ struct AdventureIconWrapper: View {
         ]
     }
     
-    // TODO: Remove custom init
-    init(adventure: AdventureDescriptor) {
-        self.adventure = adventure
-    }
-    
     var body: some View {
         CenteredGeometryReader { geometry in
             let size = size(geometry)
-            AdventureIconView(adventure: adventure)
+            AdventureIconView(model: model)
                 .offset(point: offset.scaled(geometry))
                 .frame(size: size)
-                .animation(animation, value: size)
+                .animation(model.animation, value: size)
 //                .scaleEffect(scale)
 //                .animation(.easeInOut(duration: scaleDuration),
 //                           value: adventure.state)
@@ -58,17 +50,17 @@ struct AdventureIconWrapper: View {
                 }
             
             if isSelected {
-                Color.clear.preference(key: SelectedAdventuerePreferenceKey.self, value: adventure)
+                Color.clear.preference(key: SelectedAdventurePreferenceKey.self, value: model.adventure)
             }
         }
     }
     
     var offset: CGPoint {
-        LayoutService.currentAdventureIconPosition(theme: adventure.theme)
+        LayoutService.currentAdventureIconPosition(theme: model.adventure.theme)
     }
     
     func size(_ geometry: GeometryProxy) -> CGFloat {
-        if isSelected || finalized == adventure {
+        if model.minimized {
             let pickerSize = Layout.MainMenu.pickerSize
             let minScreenSize = UIScreen.main.bounds.size.minSize
             let ratio = minScreenSize * Layout.Vertex.diameter / (pickerSize * Layout.MainMenu.currentIconSize)
@@ -77,7 +69,7 @@ struct AdventureIconWrapper: View {
             return round(scale * geometry.minSize)
         }
         
-        switch adventure.state {
+        switch model.adventure.state {
         case .planed:
             // TODO: Remove hotfix uses new states approach
             // TODO: Move constants to Layout constants or service
@@ -96,7 +88,7 @@ struct AdventureIconWrapper: View {
             curveForPoints(Curves.currentToDone, size: size),
         ]
         
-        switch adventure.state {
+        switch model.adventure.state {
         case .planed:
             return BezierStepsPositioning(step: 0, curves: curves)
         case .current:
@@ -112,7 +104,7 @@ struct AdventureIconWrapper: View {
                                 size: CGSize) -> BezierCurve {
         var xMult = size.width
         var yMult = size.height
-        if case .light = adventure.theme {
+        if case .light = model.adventure.theme {
             xMult = xMult * -1
             yMult = yMult * -1
         }
@@ -123,14 +115,10 @@ struct AdventureIconWrapper: View {
 
         return BezierCurve(points: scaledPoints)
     }
-    
-    var animation: Animation? {
-        isSelected ? AnimationService.shared.toAdventure : AnimationService.shared.fromAdventure
-    }
 }
 
 struct AdventureIconView: View {
-    @StateObject var adventure: AdventureDescriptor
+    @StateObject var model: AdventureIconViewModel
     
     var body: some View {
         ZStack {
@@ -140,13 +128,6 @@ struct AdventureIconView: View {
     }
     
     var color: Color {
-        switch adventure.theme {
-        case .dark:
-            return Color.softWhite
-        case .light:
-            return Color.softBlack
-        case .truth:
-            return Color.yellow
-        }
+        ColorSchema.schemaFor(model.adventure.theme).vertex
     }
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct WorldPickerView: View {
-    @StateObject var scenario: Scenario
+    @StateObject var model: MainMenuViewModel
     
     var body: some View {
         CenteredGeometryReader {
@@ -20,32 +20,21 @@ struct WorldPickerView: View {
             
             let themes = AdventureTheme.allCases
             ForEach(themes.indices, id: \.self) { index in
-                ThemeAdventuresView(scenario: scenario, theme: themes[index])
+                if let models = model.icons[themes[index]] {
+                    ThemeAdventuresView(models: models)
+                }
             }
         }
     }
 }
 
-struct WorldPickerView_Previews: PreviewProvider {
-    static var previews: some View {
-        let scenario = GameState().scenario
-        Group {
-            WorldPickerView(scenario: scenario)
-                .frame(size: Layout.MainMenu.pickerSize)
-        }
-    }
-}
-
 struct ThemeAdventuresView: View {
-    @ObservedObject var scenario: Scenario
-    let theme: AdventureTheme
+    var models: [AdventureIconViewModel]
     
     var body: some View {
         CenteredGeometryReader { geometry in
-            let adventures = scenario.adventures[theme] ?? []
-            ForEach(adventures.indices, id: \.self) { index in
-                let adventure = adventures[index]
-                AdventureIconWrapper(adventure: adventure)
+            ForEach(models, id: \.id) { model in
+                AdventureIconWrapper(model: model)
                     .frame(geometry: geometry)
             }
         }

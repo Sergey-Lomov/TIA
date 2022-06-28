@@ -20,10 +20,6 @@ struct CameraServiceKey: EnvironmentKey {
     static var defaultValue = CameraService(safe: .zero, full: .zero)
 }
 
-struct FinalizedAdventureKey: EnvironmentKey {
-    static var defaultValue: AdventureDescriptor? = nil
-}
-
 extension EnvironmentValues {
     var drawingWidth: CGFloat {
         get { self[DrawingWidthKey.self] }
@@ -38,10 +34,5 @@ extension EnvironmentValues {
     var cameraService: CameraService {
         get { self[CameraServiceKey.self] }
         set { self[CameraServiceKey.self] = newValue }
-    }
-    
-    var finalizedAdventure: AdventureDescriptor? {
-        get { self[FinalizedAdventureKey.self] }
-        set { self[FinalizedAdventureKey.self] = newValue }
     }
 }

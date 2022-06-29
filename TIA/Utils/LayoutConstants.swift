@@ -14,6 +14,9 @@ struct Layout {
         static let pickerSize: CGFloat = 200
         static let currentIconY: CGFloat = 0.25
         static let currentIconSize: CGFloat = 0.15
+        static let doneIconSize: CGFloat = 0.125
+        static let doneIconsInteritem: CGFloat = 15
+        static let doneIconsGap: CGFloat = 10
     }
     
     struct Menu {

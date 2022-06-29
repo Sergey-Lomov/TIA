@@ -25,7 +25,7 @@ struct EyeView: View {
     @Binding var eye: EyeViewModel
     
     var color: Color
-    var onAnimationFinish: (Action)?
+    var onAnimationFinish: Action?
 
     var body: some View {
         return GeometryReader { geometry in

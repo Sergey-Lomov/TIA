@@ -10,18 +10,14 @@ import Foundation
 final class AdventureDescriptor: ObservableObject, IdEqutable {
     let id: String
     let index: Int
-    var theme: AdventureTheme
+    let theme: AdventureTheme
+    let doneShape: AdventureDoneShape
     @Published var state: AdventureState = .planed
     
-    init(id: String, index: Int, theme: AdventureTheme) {
+    init(id: String, index: Int, theme: AdventureTheme, doneShape: AdventureDoneShape) {
         self.id = id
         self.index = index
         self.theme = theme
-    }
-    
-    init(_ adventure: Adventure) {
-        self.id = adventure.id
-        self.index = adventure.index
-        self.theme = adventure.theme
+        self.doneShape = doneShape
     }
 }

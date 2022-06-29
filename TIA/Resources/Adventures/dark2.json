@@ -1,7 +1,8 @@
 {
     "id": "dark2",
     "theme": "dark",
-    "index": 2,
+    "index": 5,
+    "done_shape": "poly7",
     "vertices": [],
     "edges": []
 }

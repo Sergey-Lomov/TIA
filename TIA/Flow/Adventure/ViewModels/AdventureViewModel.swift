@@ -53,7 +53,7 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
         }
         
         self.resources = resources.map {
-            ResourceViewModel(model: $0, color: schema.resources, borderColor: schema.resourcesBorder)
+            ResourceViewModel(model: $0, color: schema.resources, borderColor: schema.borders)
         }
         
         // Camera setup
@@ -189,9 +189,9 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
         let schema = ColorSchema.schemaFor(model.theme)
         let emptyView = resources.first { $0.isEmpty }
         if let emptyView = emptyView {
-            emptyView.attachModel(resource, color: schema.resources, borderColor: schema.resourcesBorder)
+            emptyView.attachModel(resource, color: schema.resources, borderColor: schema.borders)
         } else {
-            let view = ResourceViewModel(model: resource, color: schema.resources, borderColor: schema.resourcesBorder)
+            let view = ResourceViewModel(model: resource, color: schema.resources, borderColor: schema.borders)
             view.eventsPublisher = eventsPublisher
             resources.append(view)
         }

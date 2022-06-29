@@ -33,20 +33,17 @@ struct AdventureIconWrapper: View {
     
     var body: some View {
         CenteredGeometryReader { geometry in
-            let size = size(geometry)
+            let transform = transform(geometry)
             AdventureIconView(model: model)
-                .offset(point: offset.scaled(geometry))
-                .frame(size: size)
-                .animation(model.animation, value: size)
-//                .scaleEffect(scale)
-//                .animation(.easeInOut(duration: scaleDuration),
-//                           value: adventure.state)
-                // TODO: Use View extension metyhod
-//                .modifier(bezierSteps(size: geometry.size))
-//                .animation(.easeInOut(duration: moveDuration),
-//                           value: adventure.state)
+                .applyTransform(transform)
+                .onAnimationCompleted(for: transform) {
+                    model.animationCompleted()
+                }
+                .animation(animation, value: transform)
                 .onTapGesture {
-                    isSelected = true
+                    if model.state == .current {
+                        isSelected = true
+                    }
                 }
             
             if isSelected {
@@ -55,65 +52,68 @@ struct AdventureIconWrapper: View {
         }
     }
     
-    var offset: CGPoint {
-        LayoutService.currentAdventureIconPosition(theme: model.adventure.theme)
+    private func transform(_ geometry: GeometryProxy) -> AdventureIconStateTransform {
+        .init(size: size(geometry), angle: angle(geometry), offset: offset(geometry))
     }
     
-    func size(_ geometry: GeometryProxy) -> CGFloat {
-        if model.minimized {
-            let pickerSize = Layout.MainMenu.pickerSize
-            let minScreenSize = UIScreen.main.bounds.size.minSize
-            let ratio = minScreenSize * Layout.Vertex.diameter / (pickerSize * Layout.MainMenu.currentIconSize)
-            let screenZoom = cameraService.focusOnAdventureZoom()
-            let scale = Layout.MainMenu.currentIconSize * ratio / screenZoom
-            return round(scale * geometry.minSize)
-        }
-        
-        switch model.adventure.state {
+    private func offset(_ geometry: GeometryProxy) -> CGPoint {
+        switch model.state {
+        case .opening, .becameCurrent, .current, .preclosing, .closing:
+            return LayoutService.currentAdventureIconPosition(theme: model.adventure.theme).scaled(geometry)
         case .planed:
-            // TODO: Remove hotfix uses new states approach
-            // TODO: Move constants to Layout constants or service
-            return .unsingularZero
-        case .current:
-            return Layout.MainMenu.currentIconSize * geometry.minSize
+            return .zero
+        case .becameDone, .done:
+            var y = geometry.minSize / 2 + size(geometry) / 2 + Layout.MainMenu.doneIconsGap
+            y = model.adventure.theme == .dark ? y * -1 : y
+            return CGPoint(x: 0, y: y)
+        }
+    }
+    
+    private func angle(_ geometry: GeometryProxy) -> CGFloat {
+        switch model.state {
+        case .done(let slot), .becameDone(let slot):
+            let size = size(geometry) + Layout.MainMenu.doneIconsInteritem
+            let radius = offset(geometry).distanceTo(.zero)
+            return -1 * size / radius * CGFloat(slot)
         default:
-            return 0.1 * geometry.minSize
-        }
-    }
-
-    // TODO: May became unused
-    private func bezierSteps(size: CGSize) -> BezierStepsPositioning {
-        let curves = [
-            curveForPoints(Curves.planedToCurrent, size: size),
-            curveForPoints(Curves.currentToDone, size: size),
-        ]
-        
-        switch model.adventure.state {
-        case .planed:
-            return BezierStepsPositioning(step: 0, curves: curves)
-        case .current:
-            return BezierStepsPositioning(step: 1, curves: curves)
-        case .done:
-            // FIXME: Here is a crash - step 2, but only 2 curves
-            return BezierStepsPositioning(step: 2, curves: curves)
+            return .zero
         }
     }
     
-    // TODO: May became unused
-    private func curveForPoints(_ points: [CGPoint],
-                                size: CGSize) -> BezierCurve {
-        var xMult = size.width
-        var yMult = size.height
-        if case .light = model.adventure.theme {
-            xMult = xMult * -1
-            yMult = yMult * -1
+    private func size(_ geometry: GeometryProxy) -> CGFloat {
+        switch model.state {
+        case .planed:
+            return 0
+        case .opening, .preclosing:
+            return zoomCompensationSize(geometry)
+        case .current, .becameCurrent, .closing:
+            return Layout.MainMenu.currentIconSize * geometry.minSize
+        case .done, .becameDone:
+            return Layout.MainMenu.doneIconSize * geometry.minSize
         }
-        
-        let scaledPoints = points.map {
-            $0.scaled(x: xMult, y: yMult)
+    }
+    
+    var animation: Animation? {
+        switch model.state {
+        case .planed, .preclosing, .current:
+            return nil
+        case .opening:
+            return AnimationService.shared.toAdventure
+        case .closing:
+            return AnimationService.shared.fromAdventure
+        case .done, .becameDone, .becameCurrent:
+            return AnimationService.shared.switchAdventure
         }
+    }
 
-        return BezierCurve(points: scaledPoints)
+    // MARK: Calculations
+    private func zoomCompensationSize(_ geometry: GeometryProxy) -> CGFloat {
+        let pickerSize = Layout.MainMenu.pickerSize
+        let minScreenSize = UIScreen.main.bounds.size.minSize
+        let ratio = minScreenSize * Layout.Vertex.diameter / (pickerSize * Layout.MainMenu.currentIconSize)
+        let screenZoom = cameraService.focusOnAdventureZoom()
+        let scale = Layout.MainMenu.currentIconSize * ratio / screenZoom
+        return round(scale * geometry.minSize)
     }
 }
 
@@ -122,12 +122,40 @@ struct AdventureIconView: View {
     
     var body: some View {
         ZStack {
-            ComplexCurveShape(curve: .circle(radius: 0.5))
+            let schema = ColorSchema.schemaFor(model.adventure.theme)
+            ComplexCurveShape(curve: curve)
                 .fill(color)
+                .animation(.linear(duration: 1), value: color)
+            ComplexCurveShape(curve: curve)
+                .stroke(schema.borders)
         }
     }
     
     var color: Color {
-        ColorSchema.schemaFor(model.adventure.theme).vertex
+        let schema = ColorSchema.schemaFor(model.adventure.theme)
+        switch model.state {
+        case .done:
+            return schema.borders
+        default:
+            return schema.vertex
+        }
+    }
+    
+    var curve: ComplexCurve {
+        switch model.state {
+        case .preclosing:
+            let doneShape = model.adventure.doneShape
+            let curve = AdventuresIconsService.curveFor(doneShape)
+            return .circle(radius: 0.5, componentsCount: curve.components.count)
+        case .closing, .done, .becameDone:
+            let doneShape = model.adventure.doneShape
+            return AdventuresIconsService.curveFor(doneShape)
+        default:
+            return .circle(radius: 0.5)
+        }
+    }
+    
+    func applyTransform(_ transform: AdventureIconStateTransform) -> ModifiedContent<Self, AdventureIconStateHandler> {
+        modifier(AdventureIconStateHandler(transform: transform))
     }
 }

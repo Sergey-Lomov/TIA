@@ -26,10 +26,8 @@ final class ScenarioService {
     }
     
     private func adventureDescriptor(id: String) -> AdventureDescriptor {
-        let protoAdventure = JSONDecoder.decodeAdventure(id: id)
-        return AdventureDescriptor(id: protoAdventure.id,
-                                   index: protoAdventure.index,
-                                   theme: protoAdventure.theme)
+        let prototype = JSONDecoder.decodeAdventure(id: id)
+        return AdventureDescriptor(id: prototype.id, index: prototype.index, theme: prototype.theme, doneShape: prototype.doneShape)
     }
     
     func layerFor(_ descriptor: AdventureDescriptor, layout: AdventureLayout, forcedEntrance: Vertex? = nil) -> AdventureLayer {
@@ -51,6 +49,7 @@ final class ScenarioService {
             guard $0.role != .entrance else { return nil }
             let vertex = vertexFor($0, layout: layout)
             protoAdventure.updateVertexId($0.id, to: vertex.id)
+            if $0.role == .exit { vertex.onVisit = .completeAdventure }
             return vertex
         }
 
@@ -78,9 +77,9 @@ final class ScenarioService {
     }
     
     func adventureFor(_ descriptor: AdventureDescriptor, layout: AdventureLayout) -> Adventure {
-        let protoAdventure = JSONDecoder.decodeAdventure(id: descriptor.id)
+        let prototype = JSONDecoder.decodeAdventure(id: descriptor.id)
         let layer = layerFor(descriptor, layout: layout, forcedEntrance: nil)
-        return Adventure(id: protoAdventure.id, index: protoAdventure.index, theme: protoAdventure.theme, initialLayer: layer)
+        return Adventure(id: prototype.id, index: prototype.index, theme: prototype.theme, initialLayer: layer, doneShape: prototype.doneShape)
     }
     
     private func vertexFor(_ proto: VertexPrototype, layout: AdventureLayout) -> Vertex {
@@ -117,6 +116,7 @@ final class ScenarioService {
         let id: String
         let index: Int
         let theme: AdventureTheme
+        let doneShape: AdventureDoneShape
         var vertices: [VertexPrototype]
         var edges: [EdgePrototype]
         

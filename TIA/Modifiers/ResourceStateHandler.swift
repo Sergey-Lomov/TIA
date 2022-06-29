@@ -16,7 +16,7 @@ struct ResourceStateHandler: AnimatableModifier  {
     private let targetPositioning: CGFloat
     private let deltaPositioning: CGFloat
     private let ratios: [CGFloat]
-    private var onFinish: (Action)?
+    private var onFinish: Action?
     private var transform: ResourceStateTransform
     
     public var animatableData: ResourceStateTransform {
@@ -29,7 +29,7 @@ struct ResourceStateHandler: AnimatableModifier  {
         }
     }
     
-    init(transform: ResourceStateTransform, positionCurve: ComplexCurve, onFinish: (Action)?, targetPositioning: CGFloat = 1, deltaPositioning: CGFloat = 0, lengthSteps: Int = defaultLengthSteps) {
+    init(transform: ResourceStateTransform, positionCurve: ComplexCurve, onFinish: Action?, targetPositioning: CGFloat = 1, deltaPositioning: CGFloat = 0, lengthSteps: Int = defaultLengthSteps) {
         self.transform = transform
         self.positionCurve = positionCurve
         self.onFinish = onFinish
@@ -52,7 +52,6 @@ struct ResourceStateHandler: AnimatableModifier  {
                 .frame(size: transform.size)
                 .opacity(transform.opacity)
                 .offset(point: point)
-//                .animation(nil, value: point)
         }
     }
     

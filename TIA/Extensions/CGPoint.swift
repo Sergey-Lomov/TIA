@@ -16,7 +16,7 @@ extension CGPoint {
         return CGPoint(x: x, y: y)
     }
     
-    init(center: CGPoint, angle: CGFloat, radius: CGFloat = 1) {
+    init(center: CGPoint = .zero, angle: CGFloat, radius: CGFloat = 1) {
         let x = center.x + cos(angle) * radius
         let y = center.y - sin(angle) * radius // Due to inveted Y axis
         self.init(x: x, y: y)

@@ -18,6 +18,10 @@ extension Array {
         return self[index]
     }
     
+    func count(where validator: (Element) -> Bool) -> Int {
+        filter({ validator($0) }).count
+    }
+    
     public func merged(with: Array<Element>,
                        stub: Element,
                        merger: (Element, Element) -> Element) -> Array<Element> {

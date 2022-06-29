@@ -2,6 +2,7 @@
     "id": "truth1",
     "theme": "truth",
     "index": 1,
+    "done_shape": "star8",
     "vertices": [],
     "edges": []
 }

@@ -55,6 +55,34 @@ class VertexActionsIconsService {
                 .init(curve: p2, startAt: 1.0, finishAt: 1.0, widthMult: 2),
                 ].scaled(0.5)
         }()
+        
+        static let finish: [DrawableCurve] = {
+            let c1 = BezierCurve.arc(from: .pi * 0.5, to: .pi * 1.5, radius: 0.6).reversed()
+            let c2 = BezierCurve.arc(from: .pi * -0.5, to: .pi * 0.5, radius: 0.6).reversed()
+            
+            func ray(_ angle: CGFloat) -> BezierCurve {
+                let p1 = CGPoint(center: .zero, angle: angle, radius: 0.6)
+                let p2 = CGPoint(center: .zero, angle: angle, radius: 1)
+                return .line(from: p1, to: p2)
+            }
+            
+            let raysCount = 7
+            var rays: [DrawableCurve] = []
+            for i in 0..<raysCount {
+                let angle = -1 * CGFloat(i) * CGFloat.dpi / CGFloat(raysCount) - .hpi
+                let start = 1.0 / CGFloat(raysCount) * CGFloat(i)
+                let finish = 1.0 / CGFloat(raysCount) * CGFloat(i + 1)
+                rays.append(.init(curve: ray(angle), startAt: start, finishAt: 1, widthMult: 0.5))
+            }
+            
+            let curveTime = 1.0 - 1.0 / CGFloat(raysCount)
+            var result: [DrawableCurve] = [
+                .init(curve: c1, startAt: 0, finishAt: curveTime / 2, widthMult: 0.5),
+                .init(curve: c2, startAt: curveTime / 2, finishAt: curveTime, widthMult: 0.5)
+            ]
+            result.append(contentsOf: rays)
+            return result.scaled(0.5)
+        }()
     }
     
     static func elements(_ item: VertexAction) -> [DrawableCurve]? {
@@ -63,8 +91,8 @@ class VertexActionsIconsService {
             return Elements.exit
         case .restart:
             return Elements.restart
-        case .finishAdventure:
-            return nil
+        case .completeAdventure:
+            return Elements.finish
         }
     }
 }

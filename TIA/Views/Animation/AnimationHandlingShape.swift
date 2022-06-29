@@ -13,7 +13,7 @@ struct AnimationHandlingShape<T: Shape>: Shape {
     
     var content: T
     var target: T.AnimatableData
-    var handler: (Action)?
+    var handler: Action?
     
     var animatableData: T.AnimatableData {
         get { content.animatableData }

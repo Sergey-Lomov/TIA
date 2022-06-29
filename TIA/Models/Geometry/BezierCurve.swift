@@ -35,10 +35,10 @@ struct BezierCurve {
         .init(points: [from, from, to, to])
     }
     
-    static func arc(from: CGFloat, to: CGFloat) -> BezierCurve {
-        let p0 = CGPoint(center: .zero, angle: from, radius: 1)
-        let p3 = CGPoint(center: .zero, angle: to, radius: 1)
-        let controlRadius = 4 / 3 * tan((to - from) / 4)
+    static func arc(from: CGFloat, to: CGFloat, radius: CGFloat = 1) -> BezierCurve {
+        let p0 = CGPoint(center: .zero, angle: from, radius: radius)
+        let p3 = CGPoint(center: .zero, angle: to, radius: radius)
+        let controlRadius = 4 / 3 * tan((to - from) / 4) * radius
         let p1 = CGPoint(center: p0, angle: from + .hpi, radius: controlRadius)
         let p2 = CGPoint(center: p3, angle: to - .hpi, radius: controlRadius)
         return .init(points: [p0, p1, p2, p3])

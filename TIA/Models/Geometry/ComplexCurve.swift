@@ -16,7 +16,39 @@ struct ComplexCurve {
     var components: [BezierCurve]
     
     static func onePoint(_ point: CGPoint) -> ComplexCurve {
-        return .init([.onePoint(point)])
+        .init(.onePoint(point))
+    }
+    
+    static func line(from: CGPoint, to: CGPoint) -> ComplexCurve {
+        .init(.line(from: from, to: to))
+    }
+    
+    static func poly(_ sides: Int) -> ComplexCurve {
+        var components: [BezierCurve] = []
+        for i in 0..<sides {
+            let a1 = CGFloat(i) * .dpi / CGFloat(sides)
+            let a2 = CGFloat(i + 1) * .dpi / CGFloat(sides)
+            let p1 = CGPoint(angle: a1)
+            let p2 = CGPoint(angle: a2)
+            components.append(.line(from: p1, to: p2))
+        }
+        return .init(components).scaled(0.5)
+    }
+    
+    static func start(_ rays: Int, deep: CGFloat, rayAlignment: Bool = true) -> ComplexCurve {
+        var components: [BezierCurve] = []
+        for i in 0..<rays {
+            let delta = rayAlignment ? .pi / CGFloat(rays) : 0
+            let a1 = CGFloat(i) * .dpi / CGFloat(rays) + delta
+            let a2 = CGFloat(i + 1) * .dpi / CGFloat(rays) + delta
+            let ma = (a1 + a2) / 2
+            let p1 = CGPoint(angle: a1, radius: 1 - deep)
+            let mp = CGPoint(angle: ma)
+            let p2 = CGPoint(angle: a2, radius: 1 - deep)
+            components.append(.line(from: p1, to: mp))
+            components.append(.line(from: mp, to: p2))
+        }
+        return .init(components).scaled(0.5)
     }
     
     init(_ components: [BezierCurve]) {
@@ -29,6 +61,10 @@ struct ComplexCurve {
     
     init(points: [CGPoint]) {
         self.components = [.init(points: points)]
+    }
+    
+    func scaled(_ scale: CGFloat) -> ComplexCurve {
+        return scaled(x: scale, y: scale)
     }
     
     func scaled(x: CGFloat, y: CGFloat) -> ComplexCurve {

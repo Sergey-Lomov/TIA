@@ -31,10 +31,14 @@ final class MainMenuViewModel: ObservableObject {
         self.cameraService = cameraService
                 
         if let finalized = game.finalizedAdventure {
-            let descriptor = AdventureDescriptor(finalized)
+            let descriptor = game.scenario.descriptorFor(finalized)
+            guard let descriptor = descriptor else {
+                fatalError("Finalized adventure missed in scenario")
+            }
             self.state = .initAfterFinish(descriptor)
             let cameraState = cameraService.focusOnCurrentAdventure(finalized.theme)
             self.camera = .init(state: cameraState)
+            iconFor(descriptor)?.state = .preclosing
             self.camera.completion = { [weak self] in
                 self?.initedAfterFinish(descriptor)
             }
@@ -48,9 +52,9 @@ final class MainMenuViewModel: ObservableObject {
         }
         
         // Combine setup
-        subscriptions.sink(game.objectWillChange) { [weak self] in
-            self?.updateIcons()
-        }
+//        subscriptions.sink(game.objectWillChange) { [weak self] in
+//            self?.updateIcons()
+//        }
         
         subscriptions.sink(camera.objectWillChange) { [weak self] in
             self?.objectWillChange.sendOnMain()
@@ -59,57 +63,85 @@ final class MainMenuViewModel: ObservableObject {
     
     private func initedAfterFinish(_ adventure: AdventureDescriptor) {
         state = .closing(adventure)
+        iconFor(adventure)?.state = .closing
         let animation = AnimationService.shared.fromAdventure
-        iconFor(adventure)?.minimized = false
-        iconFor(adventure)?.animation = animation
         camera.transferTo(.default, animation: animation) { [weak self] in
-            self?.state = .common
+            self?.closingFinished(adventure)
         }
     }
     
-    private func updateIcons() {
-        AdventureTheme.allCases.forEach { theme in
-            icons[theme]?.forEach { icon in
-                icon.minimized = isMinimized(icon.adventure)
-                icon.animation = iconAnimation(icon.adventure)
-            }
+    private func closingFinished(_ adventure: AdventureDescriptor) {
+        guard adventure.state == .done else {
+            iconFor(adventure)?.state = .current
+            state = .common
+            return
+        }
+        
+        guard let icon = iconFor(adventure) else { return }
+        icon.state = .becameDone(slot: 0)
+        let adventures = game.scenario.adventures[adventure.theme]
+        let filtered = adventures?.filter { $0.state == .done && $0 != adventure }
+        filtered?.forEach {
+            let slot = icon.adventure.index - $0.index
+            iconFor($0)?.state = .done(slot: slot)
+        }
+        if let next = game.scenario.currentAdventure(theme: adventure.theme) {
+            iconFor(next)?.state = .becameCurrent
         }
     }
     
     private func icons(_ theme: AdventureTheme) -> [AdventureIconViewModel] {
-        let icons = game.scenario.adventures[theme]?.map {
-            AdventureIconViewModel(adventure: $0, minimized: isMinimized($0), animation: iconAnimation($0))
-        }
-        return icons ?? []
-    }
-    
-    private func isMinimized(_ adventure: AdventureDescriptor) -> Bool {
-        switch state {
-        case .opening(let associated),
-                .initAfterFinish(let associated):
-            return associated.id == adventure.id
-        default:
-            return false
+        let adventures = game.scenario.adventures[theme] ?? []
+        return adventures.map {
+            AdventureIconViewModel(adventure: $0, state: stateFor($0))
         }
     }
     
-    private func iconAnimation(_ adventure: AdventureDescriptor) -> Animation? {
+    private func stateFor(_ adventure: AdventureDescriptor) -> AdventureIconState {
         switch state {
+        case .common:
+            return stableStateFor(adventure)
         case .opening(let associated):
-            if associated.id == adventure.id {
-                return AnimationService.shared.toAdventure
+            return associated == adventure ? .opening : stableStateFor(adventure)
+        case .initAfterFinish(let associated):
+            if associated == adventure {
+                return .preclosing
+            } else if associated.theme == adventure.theme {
+                return adventure.state == .current ? .planed : stableStateFor(adventure)
+            } else {
+                return stableStateFor(adventure)
             }
         case .closing(let associated):
-            if associated.id == adventure.id {
-                return AnimationService.shared.fromAdventure
-            }
-        default:
-            break
+            return associated == adventure ? .closing : stableStateFor(adventure)
         }
-        
-        return nil
     }
-    
+
+    private func stableStateFor(_ adventure: AdventureDescriptor) -> AdventureIconState {
+        switch adventure.state {
+        case .planed:
+            return .planed
+        case .current:
+            return .current
+        case .done:
+            guard let adventures = game.scenario.adventures[adventure.theme] else {
+                return .done(slot: 0)
+            }
+            var maxDone = adventures.filter({ $0.state == .done }).count
+            
+            switch state {
+            case .initAfterFinish(let associated), .closing(let associated):
+                if associated.theme == adventure.theme {
+                    maxDone = maxDone - 1
+                }
+            default:
+                break
+            }
+            
+            let slot = maxDone - adventure.index
+            return .done(slot: slot)
+        }
+    }
+
     private func iconFor(_ adventure: AdventureDescriptor) -> AdventureIconViewModel? {
         icons[adventure.theme]?.first { $0.adventure == adventure }
     }
@@ -119,12 +151,10 @@ final class MainMenuViewModel: ObservableObject {
 extension MainMenuViewModel {
     func adventureSelected(_ adventure: AdventureDescriptor) {
         state = .opening(adventure)
-        
-        let animation = AnimationService.shared.toAdventure
-        iconFor(adventure)?.minimized = true
-        iconFor(adventure)?.animation = animation
+        iconFor(adventure)?.state = .opening
         
         let to = cameraService.focusOnCurrentAdventure(adventure.theme)
+        let animation = AnimationService.shared.toAdventure
         camera.transferTo(to, animation: animation, anchorAnimation: .final) { [weak self] in
             if self?.game.activeAdventure == nil {
                 GameEngine.shared.startAdventure(adventure)

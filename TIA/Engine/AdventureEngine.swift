@@ -436,7 +436,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     // MARK: Vertices actions handling
     private func startCompressing(atVertex vertex: Vertex, targetAction action: VertexAction?) {
         switch action {
-        case .restart, .exit:
+        case .restart, .exit, .completeAdventure:
             releasePlayerResources(player)
         default:
             break
@@ -448,7 +448,10 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         case .restart, .exit:
             let layers = adventure.layers.filter { $0.type != .menu }
             layers.forEach { startUngrowing($0, exit: nil) }
-        default:
+        case .completeAdventure:
+            let layers = adventure.layers.filter { $0 != adventure.currentLayer }
+            layers.forEach { startUngrowing($0, exit: nil) }
+        case .none:
             break
         }
     }
@@ -459,7 +462,9 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
             restartAdventure(vertex)
         case .exit:
             exitFromAdventure(vertex)
-        default:
+        case .completeAdventure:
+            completeAdventure(vertex)
+        case .none:
             break
         }
     }
@@ -478,6 +483,15 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         lifestate = .finalizing
         eventsPublisher.send(.adventureFinalizing(exit: vertex))
         startUngrowing(menuLayer, exit: vertex)
+    }
+    
+    private func completeAdventure(_ vertex: Vertex) {
+        adventure.layers.forEach {
+            let exit = $0.vertices.contains(vertex) ? vertex : nil
+            startUngrowing($0, exit: exit)
+        }
+        lifestate = .finalizing
+        eventsPublisher.send(.adventureFinalizing(exit: vertex))
     }
     
     // MARK: Layers handling
@@ -528,7 +542,8 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     
     private func handleLayerUngrowedCompleted(_ layer: AdventureLayer) {
         if lifestate == .finalizing {
-            GameEngine.shared.finalizeAdenture(adventure)
+            let done = player.position.currentVertex?.onVisit == .completeAdventure
+            GameEngine.shared.finalizeAdenture(adventure, isDone: done)
         } else if layer == adventure.currentLayer {
             hideCurrentLayer()
         } else {

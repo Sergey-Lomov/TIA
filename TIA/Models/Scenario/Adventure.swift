@@ -19,13 +19,19 @@ enum AdventureState {
     case planed
 }
 
+enum AdventureDoneShape: String, Codable {
+    case star8
+    case poly7
+}
+
 class Adventure: ObservableObject {
     
     private static let menuEdgePrefix = "menu_edge_"
 
     let id: String
     let index: Int
-    var theme: AdventureTheme
+    let theme: AdventureTheme
+    let doneShape: AdventureDoneShape
     @Published var layers: [AdventureLayer]
     @Published var currentLayer: AdventureLayer
     
@@ -37,10 +43,11 @@ class Adventure: ObservableObject {
         layers.flatMap { $0.edges }
     }
     
-    init(id: String, index: Int, theme: AdventureTheme, initialLayer: AdventureLayer) {
+    init(id: String, index: Int, theme: AdventureTheme, initialLayer: AdventureLayer, doneShape: AdventureDoneShape) {
         self.id = id
         self.index = index
         self.theme = theme
+        self.doneShape = doneShape
         
         self.layers = [initialLayer]
         self.currentLayer = initialLayer

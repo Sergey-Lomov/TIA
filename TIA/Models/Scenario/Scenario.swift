@@ -22,13 +22,15 @@ class Scenario: ObservableObject {
         return adventures[theme]?.first { $0.state == .current }
     }
     
-    func doneCurrentAdventure(theme: AdventureTheme) {
-        guard let current = currentAdventure(theme: theme) else { return }
-        
-        current.state = .done
-        let next = adventures[theme]?.first { $0.index == current.index + 1 }
-        if let next = next {
-            next.state = .current
-        }
+    func doneAdventure(_ adventure: Adventure) {
+        guard let descriptor = descriptorFor(adventure) else { return }
+        descriptor.state = .done
+        let sorted = adventures[adventure.theme]?.sorted { $0.index < $1.index }
+        let next = sorted?.first { $0.state == .planed }
+        next?.state = .current
+    }
+    
+    func descriptorFor(_ adventure: Adventure) -> AdventureDescriptor? {
+        adventures[adventure.theme]?.first { $0.id == adventure.id }
     }
 }

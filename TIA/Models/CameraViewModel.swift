@@ -82,8 +82,10 @@ class CameraViewModel: ObservableObject {
     private func executeNextStep() {
         guard let next = steps.first else {
             transferInProgress = false
+            // Following trick with completion fixed case, when inside completion calls new transform with new completion
+            let completion = self.completion
+            self.completion = nil
             completion?()
-            completion = nil
             return
         }
         

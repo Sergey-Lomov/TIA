@@ -35,10 +35,7 @@ private struct TransferStep {
 }
 
 class CameraViewModel: ObservableObject {
-    
-    // TODO: remove test code
-    var testId: String = UUID().uuidString
-    
+
     @Published var state: CameraState
     @Published var anchorState: CameraState
     @Published var animation: Animation = .none

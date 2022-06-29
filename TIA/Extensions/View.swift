@@ -90,12 +90,6 @@ extension View {
         return modifier(CameraModifier(camera: camera	))
     }
 
-    // TODO: It was a try to wrap mofidifers into views. Remove if still be unsused.
-//    func wrappedModifier<M>(_ modifier: M)  -> AnimatableModifierWrapper<M> where M: Animatable & ViewModifier, M.Content == Self {
-//        AnimatableModifierWrapper(content: self, modifier: modifier)
-//    }
-}
-
 extension View where Self: Animatable {
     func animate(builder: (inout [AnimationState<AnimatableData>]) -> Void) -> StatesAnimationView<Self> {
         var states = [AnimationState<AnimatableData>]()

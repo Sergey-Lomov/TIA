@@ -12,14 +12,14 @@ enum EdgeViewMetastate {
     case preextendedSeed
     case extendedSeed
     case pregrowing
-    case growPath(duration: TimeInterval)
+    case growPath
     case waitingVertex
     case pregrowingElements
-    case growElements(duration: TimeInterval)
+    case growElements
     case active
     case preungrowing
-    case ungrowElements(duration: TimeInterval)
-    case ungrowPath(duration: TimeInterval)
+    case ungrowElements
+    case ungrowPath
     
     static func forState(_ state: EdgeState) -> EdgeViewMetastate {
         switch state {
@@ -36,14 +36,14 @@ enum EdgeViewMetastate {
             switch phase {
             case .preparing:
                 return .pregrowing
-            case .pathGrowing(let duration):
-                return .growPath(duration: duration)
+            case .pathGrowing:
+                return .growPath
             case .waitingDestinationVertex:
                 return .waitingVertex
             case .preparingElements:
                 return .pregrowingElements
-            case .elementsGrowing(let duration):
-                return .growElements(duration: duration)
+            case .elementsGrowing:
+                return .growElements
             }
         case .active:
             return .active
@@ -51,10 +51,10 @@ enum EdgeViewMetastate {
             switch phase {
             case .preparing:
                 return .preungrowing
-            case .elementsUngrowing(let duration):
-                return .ungrowElements(duration: duration)
-            case .pathUngrowing(let duration):
-                return .ungrowPath(duration: duration)
+            case .elementsUngrowing:
+                return .ungrowElements
+            case .pathUngrowing:
+                return .ungrowPath
             }
         }
     }

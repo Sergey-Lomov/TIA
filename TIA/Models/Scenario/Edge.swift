@@ -12,16 +12,16 @@ import SwiftUI
 // In scope of phases enums elements means counter connector and gates
 enum EdgeGrowingPhase: Equatable {
     case preparing
-    case pathGrowing(duration: TimeInterval)
+    case pathGrowing
     case waitingDestinationVertex
     case preparingElements
-    case elementsGrowing(duration: TimeInterval)
+    case elementsGrowing
 }
 
 enum EdgeUngrowingPhase: Equatable {
     case preparing
-    case elementsUngrowing(duration: TimeInterval)
-    case pathUngrowing(duration: TimeInterval)
+    case elementsUngrowing
+    case pathUngrowing
 }
 
 enum EdgeSeedPhase {

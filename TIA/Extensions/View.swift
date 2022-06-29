@@ -89,6 +89,7 @@ extension View {
         if let completion = completion { camera.completion = completion }
         return modifier(CameraModifier(camera: camera	))
     }
+}
 
 extension View where Self: Animatable {
     func animate(builder: (inout [AnimationState<AnimatableData>]) -> Void) -> StatesAnimationView<Self> {

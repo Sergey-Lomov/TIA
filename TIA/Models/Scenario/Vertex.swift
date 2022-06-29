@@ -39,9 +39,9 @@ struct VertexLayerTransfer: Equatable {
 
 enum VertexState: Equatable {
     case seed
-    case growing(duration: TimeInterval)
+    case growing
     case active(visit: VertexVisit? = nil, layerTransfer: VertexLayerTransfer? = nil)
-    case ungrowing(duration: TimeInterval)
+    case ungrowing
     
     var isGrowed: Bool {
         switch self {

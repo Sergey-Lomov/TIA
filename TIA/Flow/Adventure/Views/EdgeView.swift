@@ -147,13 +147,17 @@ struct EdgePathView: View {
     private var animation: Animation? {
         switch edge.metastate {
         case .preextendedSeed, .pregrowing, .pregrowingElements:
-            return .linear(duration: 0)
+            return Animation.none
         case .extendedSeed:
             return AnimationService.shared.menuSeedExtension
-        case .growPath(let duration), .growElements(let duration):
-            return .easeOut(duration: duration)
-        case .ungrowPath(let duration), .ungrowElements(let duration):
-            return .easeIn(duration: duration)
+        case .growPath:
+            return AnimationService.shared.edgePathGrowing(length: edge.model.length())
+        case .growElements:
+            return AnimationService.shared.edgeElementsGrowing
+        case .ungrowPath:
+            return AnimationService.shared.edgePathUngrowing
+        case .ungrowElements:
+            return AnimationService.shared.edgeElementsUngrowing
         default:
             return nil
         }

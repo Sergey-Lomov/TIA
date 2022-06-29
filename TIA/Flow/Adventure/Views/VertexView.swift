@@ -74,10 +74,10 @@ struct VertexView: View {
     // TODO: Move animation to AnimationService. In onVisitAnimation also.
     private var animation: Animation? {
         switch vertex.metastate {
-        case .growing(let duration):
-            return .easeOut(duration: duration)
-        case .ungrowing(let duration):
-            return .easeIn(duration: duration)
+        case .growing:
+            return AnimationService.shared.vertexGrowing
+        case .ungrowing:
+            return AnimationService.shared.vertexUngrowing
         default:
             return nil
         }
@@ -94,13 +94,13 @@ struct VertexView: View {
     
     private func onVisitAnimation(_ geometry: GeometryProxy) -> Animation? {
         switch vertex.metastate {
-case .active:
+        case .active:
             return AnimationService.shared.vertexElementsGrowing
         case .playerIncome(let edge):
             let length = edge.curve.scaled(geometry).length()
             return AnimationService.shared.onVisitHiding(incomeLength: length)
-        case .ungrowing(let duration):
-            return .easeIn(duration: duration)
+        case .ungrowing:
+            return AnimationService.shared.vertexUngrowing
         default:
             return nil
         }

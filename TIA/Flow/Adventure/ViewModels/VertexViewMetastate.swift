@@ -10,8 +10,8 @@ import CoreGraphics
 
 enum VertexViewMetastate {
     case seed
-    case growing(duration: CGFloat)
-    case ungrowing(duration: CGFloat)
+    case growing
+    case ungrowing
     case active
     case playerIncome(edge: Edge)
     case occupied
@@ -24,10 +24,10 @@ extension VertexState {
         switch self {
         case .seed:
             return .seed
-        case .growing(let duration):
-            return .growing(duration: duration)
-        case .ungrowing(let duration):
-            return .ungrowing(duration: duration)
+        case .growing:
+            return .growing
+        case .ungrowing:
+            return .ungrowing
         case .active(let visit, let layerTransfer):
             if let transfer = layerTransfer {
                 return .layerTransfer(info: transfer)

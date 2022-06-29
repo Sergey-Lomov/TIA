@@ -17,13 +17,6 @@ enum AdventureLifecycle {
 
 final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     
-    private enum Timing {
-        // TODO: Remove when view-engine interaction will be finished
-        static let queue = DispatchQueue.main
-        static let edgeGrowing: TimeInterval = 1.5 //* 0.3
-        static let vertexGrowing: TimeInterval = 0.3// * 0.3
-    }
-    
     private static let menuVertexId = "menu_vertex"
     private static let menuEdgeId = "menu_edge"
     
@@ -79,7 +72,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     private func growVertex(_ vertex: Vertex) {
         switch vertex.state {
         case .seed:
-            vertex.state = .growing(duration: Timing.vertexGrowing)
+            vertex.state = .growing
         default:
             break
         }
@@ -197,13 +190,11 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         case .edgeSeedExtensionPrepared(let edge):
             edge.state = .seed(phase: .extended)
         case .edgeGrowingPrepared(let edge):
-            let duration = Timing.edgeGrowing * edge.length()
-            edge.state = .growing(phase: .pathGrowing(duration: duration))
+            edge.state = .growing(phase: .pathGrowing)
         case .edgePathGrowed(let edge):
             handleEdgePathGrowed(edge)
         case .edgeElementsPrepared(let edge):
-            let duration = Timing.edgeGrowing * edge.length()
-            edge.state = .growing(phase: .elementsGrowing(duration: duration))
+            edge.state = .growing(phase: .elementsGrowing)
         case .edgeElementsGrowed(let edge):
             handleEdgeCounterConnectorGrowed(edge)
         case .edgeUngrowingPrepared(let edge):
@@ -303,15 +294,11 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     }
     
     private func handleEdgeUngrowingPrepared(_ edge: Edge) {
-        // TODO: Duration should be moved to view instead state associated value
-        let duration = AnimationService.Const.Edge.elementsUngrowingDuration
-        edge.state = .ungrowing(phase: .elementsUngrowing(duration: duration))
+        edge.state = .ungrowing(phase: .elementsUngrowing)
     }
     
     private func handleEdgeElementsUngrowed(_ edge: Edge) {
-        // TODO: Duration should be moved to view instead state associated value
-        let duration = AnimationService.Const.Edge.pathUngrowingDuration
-        edge.state = .ungrowing(phase: .pathUngrowing(duration: duration))
+        edge.state = .ungrowing(phase: .pathUngrowing)
         startUngrowingIfReady(edge.to)
     }
     
@@ -339,9 +326,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         let edges = adventure.layers.flatMap { $0.edges(of: vertex) }
         let readyToUngrowing = edges.allSatisfy { !edgeBlockVertex($0) }
         if readyToUngrowing && vertex.state.isGrowed {
-            // TODO: Move duration to view layer
-            let duration = AnimationService.Const.Vertex.ungrowingDuration
-            vertex.state = .ungrowing(duration: duration)
+            vertex.state = .ungrowing
         }
     }
     

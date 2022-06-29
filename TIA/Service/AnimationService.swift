@@ -25,13 +25,14 @@ final class AnimationService {
         }
         
         enum Vertex {
+            static let growingDuration: CGFloat = 0.5
             static let ungrowingDuration: CGFloat = 0.5
             static let elementsGrowingDuration: CGFloat = 1
         }
         
         enum Edge {
-            // TODO: After edge animations refactoring this constant shoiuld be used to control counter connector growing duration
-            static let elementsGrowingDuration: CGFloat = 0.5
+            static let pathGrowing: CGFloat = 1.5
+            static let elementsGrowingDuration: CGFloat = 1.0
             static let elementsUngrowingDuration: CGFloat = 0.3
             static let pathUngrowingDuration: CGFloat = 0.7
         }
@@ -75,8 +76,33 @@ final class AnimationService {
         .easeIn(duration: Const.Layer.transitionDuration)
     }
     
+    var vertexGrowing: Animation {
+        .easeOut(duration: Const.Vertex.growingDuration)
+    }
+    
+    var vertexUngrowing: Animation {
+        .easeIn(duration: Const.Vertex.ungrowingDuration)
+    }
+    
     var vertexElementsGrowing: Animation {
         .linear(duration: Const.Vertex.elementsGrowingDuration)
+    }
+    
+    func edgePathGrowing(length: CGFloat) -> Animation {
+        let duration = Const.Edge.pathGrowing * length
+        return .easeOut(duration: duration)
+    }
+    
+    var edgeElementsGrowing: Animation {
+        .easeOut(duration: Const.Edge.elementsGrowingDuration)
+    }
+    
+    var edgePathUngrowing: Animation {
+        .easeIn(duration: Const.Edge.pathUngrowingDuration)
+    }
+    
+    var edgeElementsUngrowing: Animation {
+        .easeIn(duration: Const.Edge.elementsUngrowingDuration)
     }
 
     var growingGate: Animation {

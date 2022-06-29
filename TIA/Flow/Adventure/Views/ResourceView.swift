@@ -153,7 +153,7 @@ struct ResourceWrapper: View {
         case .vertexIdle(_, _, let total):
             return total == 1 ? .soloRotation : .groupRotation
         case .vertexRestoring, .predestroying:
-            return .linear(duration: 0)
+            return Animation.none
         case .outFromVertex(_, _, let edge):
             return .vertexOut(edgeLength: edge.length(geometry))
         case .successMoving(let edge, _, _, let toIndex, let total):

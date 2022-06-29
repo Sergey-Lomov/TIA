@@ -122,22 +122,22 @@ struct AdventureIconView: View {
     
     var body: some View {
         ZStack {
-            let schema = ColorSchema.schemaFor(model.adventure.theme)
+            let palette = ColorPalette.paletteFor(model.adventure.theme)
             ComplexCurveShape(curve: curve)
                 .fill(color)
                 .animation(.linear(duration: 1), value: color)
             ComplexCurveShape(curve: curve)
-                .stroke(schema.borders)
+                .stroke(palette.borders)
         }
     }
     
     var color: Color {
-        let schema = ColorSchema.schemaFor(model.adventure.theme)
+        let palette = ColorPalette.paletteFor(model.adventure.theme)
         switch model.state {
         case .done:
-            return schema.borders
+            return palette.borders
         default:
-            return schema.vertex
+            return palette.vertex
         }
     }
     

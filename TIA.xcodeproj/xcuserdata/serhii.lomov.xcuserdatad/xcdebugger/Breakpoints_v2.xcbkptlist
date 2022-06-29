@@ -3,32 +3,4 @@
    uuid = "E9F79C49-4129-4A53-888E-D00B02D1FE70"
    type = "1"
    version = "2.0">
-   <Breakpoints>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "7935AB53-91DA-4040-92F1-2A4223041F99"
-            shouldBeEnabled = "Yes"
-            condition = "model.id == &quot;dark1&quot;"
-            ignoreCount = "0"
-            continueAfterRunningActions = "Yes"
-            filePath = "TIA/Flow/MainMenu/AdventureIconView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "34"
-            endingLineNumber = "34"
-            landmarkName = "body"
-            landmarkType = "24">
-            <Actions>
-               <BreakpointActionProxy
-                  ActionExtensionID = "Xcode.BreakpointAction.Log">
-                  <ActionContent
-                     message = "State: @model.state@"
-                     conveyanceType = "0">
-                  </ActionContent>
-               </BreakpointActionProxy>
-            </Actions>
-         </BreakpointContent>
-      </BreakpointProxy>
-   </Breakpoints>
 </Bucket>

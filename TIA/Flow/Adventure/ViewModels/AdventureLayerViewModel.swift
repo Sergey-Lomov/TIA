@@ -19,16 +19,16 @@ class AdventureLayerViewModel: ObservableObject {
     var id: String { model.id }
     var state: AdventureLayerState { model.state }
     
-    init(model: AdventureLayer, schema: ColorSchema, eventsPublisher: ViewEventsPublisher) {
+    init(model: AdventureLayer, palette: ColorPalette, eventsPublisher: ViewEventsPublisher) {
         self.model = model
         self.eventsPublisher = eventsPublisher
         
         self.vertices = model.vertices.map {
-            VertexViewModel(vertex: $0, color: schema.vertex, elementsColor: schema.vertexElements, eventsPublisher: eventsPublisher)
+            VertexViewModel(vertex: $0, color: palette.vertex, elementsColor: palette.vertexElements, eventsPublisher: eventsPublisher)
         }
         
         self.edges = model.edges.map {
-            EdgeViewModel(model: $0, color: schema.edge, borderColor: schema.background, eventsPublisher: eventsPublisher)
+            EdgeViewModel(model: $0, color: palette.edge, borderColor: palette.background, eventsPublisher: eventsPublisher)
         }
         
         subscriptions.sink(model.objectWillChange) { [weak self] in

@@ -1,5 +1,5 @@
 //
-//  ColorSchema.swift
+//  ColorPalette.swift
 //  TIA
 //
 //  Created by Serhii.Lomov on 20.04.2022.
@@ -8,7 +8,7 @@
 import SwiftUI
 
 // TODO: rename to avoid mismatch with SwiftUI ColorShemE type
-struct ColorSchema {
+struct ColorPalette {
     let background: Color
     let vertex: Color
     let vertexElements: Color
@@ -17,7 +17,7 @@ struct ColorSchema {
     let borders: Color
     let player: Color
     
-    static func schemaFor(_ theme: AdventureTheme) -> ColorSchema {
+    static func paletteFor(_ theme: AdventureTheme) -> ColorPalette {
         switch theme {
         case .dark:
             return dark
@@ -28,7 +28,7 @@ struct ColorSchema {
         }
     }
     
-    static let dark = ColorSchema(background: .softBlack,
+    static let dark = ColorPalette(background: .softBlack,
                                   vertex: .softWhite,
                                   vertexElements: .softBlack,
                                   edge: .softWhite,
@@ -36,7 +36,7 @@ struct ColorSchema {
                                   borders: .softBlack,
                                   player: .softBlack)
     
-    static let light = ColorSchema(background: .softWhite,
+    static let light = ColorPalette(background: .softWhite,
                                    vertex: .softBlack,
                                    vertexElements: .softWhite,
                                    edge: .softBlack,
@@ -44,7 +44,7 @@ struct ColorSchema {
                                    borders: .softWhite,
                                    player: .softWhite)
     
-    static let truth = ColorSchema(background: .softBlack,
+    static let truth = ColorPalette(background: .softBlack,
                                    vertex: .softWhite,
                                    vertexElements: .softBlack,
                                    edge: .softWhite,

@@ -37,23 +37,23 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
          resources: [Resource],
          listener: ViewEventsListener?,
          eventsSource: EngineEventsSource?) {
-        let schema = ColorSchema.schemaFor(adventure.theme)
+        let palette = ColorPalette.paletteFor(adventure.theme)
         let publisher = ViewEventsPublisher()
         
         self.model = adventure
         self.player = PlayerViewModel(player: player,
-                                      color: schema.player,
-                                      movingColor: schema.edge)
-        self.background = schema.background
+                                      color: palette.player,
+                                      movingColor: palette.edge)
+        self.background = palette.background
         self.cameraService = cameraService
         self.eventsPublisher = publisher
         
         self.layers = adventure.layers.map {
-            AdventureLayerViewModel(model: $0, schema: schema, eventsPublisher: publisher)
+            AdventureLayerViewModel(model: $0, palette: palette, eventsPublisher: publisher)
         }
         
         self.resources = resources.map {
-            ResourceViewModel(model: $0, color: schema.resources, borderColor: schema.borders)
+            ResourceViewModel(model: $0, color: palette.resources, borderColor: palette.borders)
         }
         
         // Camera setup
@@ -154,8 +154,8 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
             if let existView = existView {
                 newViews.append(existView)
             } else {
-                let schema = ColorSchema.schemaFor(self.model.theme)
-                let newView = AdventureLayerViewModel(model: model, schema: schema, eventsPublisher: eventsPublisher)
+                let palette = ColorPalette.paletteFor(self.model.theme)
+                let newView = AdventureLayerViewModel(model: model, palette: palette, eventsPublisher: eventsPublisher)
                 newViews.append(newView)
             }
         }
@@ -186,12 +186,12 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
     }
     
     private func handleResourceAdding(_ resource: Resource) {
-        let schema = ColorSchema.schemaFor(model.theme)
+        let palette = ColorPalette.paletteFor(model.theme)
         let emptyView = resources.first { $0.isEmpty }
         if let emptyView = emptyView {
-            emptyView.attachModel(resource, color: schema.resources, borderColor: schema.borders)
+            emptyView.attachModel(resource, color: palette.resources, borderColor: palette.borders)
         } else {
-            let view = ResourceViewModel(model: resource, color: schema.resources, borderColor: schema.borders)
+            let view = ResourceViewModel(model: resource, color: palette.resources, borderColor: palette.borders)
             view.eventsPublisher = eventsPublisher
             resources.append(view)
         }

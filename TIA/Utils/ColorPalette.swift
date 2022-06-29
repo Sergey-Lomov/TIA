@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// TODO: rename to avoid mismatch with SwiftUI ColorShemE type
 struct ColorPalette {
     let background: Color
     let vertex: Color

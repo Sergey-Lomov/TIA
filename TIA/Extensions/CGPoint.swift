@@ -70,12 +70,21 @@ extension CGPoint {
     }
     
     func mirroredByLine(_ l: Line) -> CGPoint {
-        let _c = y - l.b / l.a * x
-        let xm = -1 * (l.c + l.b * _c) / (l.a + l.b * l.b / l.a)
-        let ym = l.b / l.a * xm + _c
-        let xr = 2 * xm - x
-        let yr = 2 * ym - y
-        return CGPoint(x: xr, y: yr)
+        switch l.type {
+        case .common:
+            let _c = y - l.b / l.a * x
+            let xm = -1 * (l.c + l.b * _c) / (l.a + l.b * l.b / l.a)
+            let ym = l.b / l.a * xm + _c
+            let xr = 2 * xm - x
+            let yr = 2 * ym - y
+            return CGPoint(x: xr, y: yr)
+        case .horizontal(let ly):
+            let yr = 2 * ly - y
+            return CGPoint(x: x, y: yr)
+        case .vertical(let lx):
+            let xr = 2 * lx - x
+            return CGPoint(x: xr, y: y)
+        }
     }
     
     func distanceTo(_ point: CGPoint) -> CGFloat {

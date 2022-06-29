@@ -27,7 +27,6 @@
 		675E2749280B502900FB5783 /* AdventureDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E2748280B502900FB5783 /* AdventureDescriptor.swift */; };
 		675E274D280C5EF500FB5783 /* AnimationHandlingShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E274C280C5EF500FB5783 /* AnimationHandlingShape.swift */; };
 		675E2750280C8C2F00FB5783 /* PointerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E274F280C8C2F00FB5783 /* PointerWrapper.swift */; };
-		675E2752280CE33100FB5783 /* HandleableAnimationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E2751280CE33100FB5783 /* HandleableAnimationData.swift */; };
 		675E2755280DA0E600FB5783 /* EyeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E2754280DA0E600FB5783 /* EyeView.swift */; };
 		675E2757280DB77F00FB5783 /* CGSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E2756280DB77F00FB5783 /* CGSize.swift */; };
 		675E2759280DD96300FB5783 /* ComplexCurve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E2758280DD96300FB5783 /* ComplexCurve.swift */; };
@@ -150,7 +149,6 @@
 		675E2748280B502900FB5783 /* AdventureDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureDescriptor.swift; sourceTree = "<group>"; };
 		675E274C280C5EF500FB5783 /* AnimationHandlingShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationHandlingShape.swift; sourceTree = "<group>"; };
 		675E274F280C8C2F00FB5783 /* PointerWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointerWrapper.swift; sourceTree = "<group>"; };
-		675E2751280CE33100FB5783 /* HandleableAnimationData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandleableAnimationData.swift; sourceTree = "<group>"; };
 		675E2754280DA0E600FB5783 /* EyeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeView.swift; sourceTree = "<group>"; };
 		675E2756280DB77F00FB5783 /* CGSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGSize.swift; sourceTree = "<group>"; };
 		675E2758280DD96300FB5783 /* ComplexCurve.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplexCurve.swift; sourceTree = "<group>"; };
@@ -297,7 +295,6 @@
 			children = (
 				675E274F280C8C2F00FB5783 /* PointerWrapper.swift */,
 				67811B922864D8BC00861ADA /* EnvironmentKeys.swift */,
-				675E2751280CE33100FB5783 /* HandleableAnimationData.swift */,
 				675E276F280F6F0400FB5783 /* ColorPalette.swift */,
 				67BDE960281833D5005B0194 /* LayoutConstants.swift */,
 				67EDAC6628214FD600EA41CF /* IdEqutable.swift */,
@@ -739,7 +736,6 @@
 				6771F8F52857E2BA00D7B742 /* DrawingProgressModifier.swift in Sources */,
 				67B5337B28036F0700EA959A /* CGPoint.swift in Sources */,
 				67B5339A2805B2B400EA959A /* AdventureLayout.swift in Sources */,
-				675E2752280CE33100FB5783 /* HandleableAnimationData.swift in Sources */,
 				67B5336828009BD200EA959A /* AdventureIconView.swift in Sources */,
 				675E2762280E313900FB5783 /* ViewEvent.swift in Sources */,
 				675E2740280A1E7100FB5783 /* Line.swift in Sources */,

@@ -114,54 +114,26 @@ private struct EyeballView: View {
 }
 
 private extension BezierCurve {
-    // TODO: Change bottom eyelid curves from predefined valus to calculated. To convert top eyelid to bottom should be used mirroring and reversing (change curve direction)
+
     private static let closedTopEyelid = BezierCurve(points: [
         CGPoint(x: -0.5, y: 0),
         CGPoint(x: -0.25, y: 0),
         CGPoint(x: 0.25, y: 0),
         CGPoint(x: 0.5, y: 0)
     ])
-    
-    private static let closedBottomEyelid = BezierCurve(points: [
-        CGPoint(x: 0.5, y: 0),
-        CGPoint(x: 0.25, y: 0),
-        CGPoint(x: -0.25, y: 0),
-        CGPoint(x: -0.5, y: 0),
-    ])
-    
+
     private static let topEyelid = BezierCurve(points: [
         CGPoint(x: -0.5, y: 0),
         CGPoint(x: -0.25, y: -0.375),
         CGPoint(x: 0.25, y: -0.375),
         CGPoint(x: 0.5, y: 0)
     ])
-    
-    private static let bottomEyelid = BezierCurve(points: [
-        CGPoint(x: 0.5, y: 0),
-        CGPoint(x: 0.25, y: 0.375),
-        CGPoint(x: -0.25, y: 0.375),
-        CGPoint(x: -0.5, y: 0),
-    ])
-    
+
     static func topEyelid(state: EyeState) -> BezierCurve {
         switch state {
-        case .compressed:
-            return .zero
-        case .closed:
-            return .closedTopEyelid
-        case .opened:
-            return .topEyelid
-        }
-    }
-    
-    static func bottomEyelid(state: EyeState) -> BezierCurve {
-        switch state {
-        case .compressed:
-            return .zero
-        case .closed:
-            return .closedBottomEyelid
-        case .opened:
-            return .bottomEyelid
+        case .compressed: return .zero
+        case .closed: return .closedTopEyelid
+        case .opened: return .topEyelid
         }
     }
 }
@@ -169,8 +141,8 @@ private extension BezierCurve {
 private extension ComplexCurve {
     static func eyelid(state: EyeState) -> ComplexCurve {
         return ComplexCurve([
-            BezierCurve.topEyelid(state: state),
-            BezierCurve.bottomEyelid(state: state)
+            .topEyelid(state: state),
+            .topEyelid(state: state).mirrored().reversed(),
         ])
     }
     

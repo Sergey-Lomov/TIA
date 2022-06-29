@@ -100,6 +100,7 @@ struct BezierCurve {
     }
     
     func mirrored() -> BezierCurve {
+        guard self != .zero else { return .zero }
         let p1m = p1.mirroredByLine(p1: p0, p2: p3)
         let p2m = p2.mirroredByLine(p1: p0, p2: p3)
         return BezierCurve(points: [p0, p1m, p2m, p3])

@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ResourceWrapper: View {
     private let transition = AnyTransition.opacity.animation(.easeInOut(duration: 2))
-    // TODO: Check is it possible to simplify randomization code by using new methods from Math
     private let controlsRandomization: CGFloat = 100
     private let toGateRandomizationRange = CGFloat(50)...CGFloat(100)
     private let failedMovingGap: CGFloat = 0.1
@@ -104,7 +103,7 @@ struct ResourceWrapper: View {
               opacity: opacity,
               positioning: resource.positioningStep)
     }
-    
+
     private func size(_ geometry: GeometryProxy) -> CGSize {
         switch resource.metastate {
         case .toGate(let gate, _, _, _),
@@ -137,7 +136,7 @@ struct ResourceWrapper: View {
             return .zero
         }
     }
-    
+
     private var localRotation: CGFloat {
         switch resource.metastate {
         case .vertexIdle:

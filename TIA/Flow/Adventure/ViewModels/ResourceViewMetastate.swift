@@ -7,7 +7,6 @@
 
 import Foundation
 
-// TODO: Check is this solution (flating nested switch) really useful or not
 enum ResourceMetastate {
     case abscent
     case vertex(vertex: Vertex, index: Int, total: Int)

@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// TODO: Try to use default stroke style modifier instead
 private struct StrokeWidthKey: EnvironmentKey {
     static var defaultValue: CGFloat = 1
 }

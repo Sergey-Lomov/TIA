@@ -52,6 +52,7 @@ struct EdgePathView: View {
     var body: some View {
         CenteredGeometryReader { geometry in
             let progress = progress(geometry)
+            let animation = animation(geometry)
             
             // Borders (underline)
             SingleCurveShape(curve: curve)
@@ -143,15 +144,15 @@ struct EdgePathView: View {
         }
     }
     
-    // TODO: Move all animations to AnimationsService
-    private var animation: Animation? {
+    private func animation(_ geometry: GeometryProxy) -> Animation? {
         switch edge.metastate {
         case .preextendedSeed, .pregrowing, .pregrowingElements:
             return Animation.none
         case .extendedSeed:
             return AnimationService.shared.menuSeedExtension
         case .growPath:
-            return AnimationService.shared.edgePathGrowing(length: edge.model.length())
+            let length = edge.model.length(geometry)
+            return AnimationService.shared.edgePathGrowing(length: length)
         case .growElements:
             return AnimationService.shared.edgeElementsGrowing
         case .ungrowPath:

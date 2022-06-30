@@ -31,7 +31,7 @@ final class AnimationService {
         }
         
         enum Edge {
-            static let pathGrowing: CGFloat = 1.5
+            static let pathGrowingMult: CGFloat = 0.005
             static let elementsGrowingDuration: CGFloat = 1.0
             static let elementsUngrowingDuration: CGFloat = 0.3
             static let pathUngrowingDuration: CGFloat = 0.7
@@ -89,7 +89,7 @@ final class AnimationService {
     }
     
     func edgePathGrowing(length: CGFloat) -> Animation {
-        let duration = Const.Edge.pathGrowing * length
+        let duration = Const.Edge.pathGrowingMult * length
         return .easeOut(duration: duration)
     }
     

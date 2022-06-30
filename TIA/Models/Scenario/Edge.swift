@@ -67,11 +67,6 @@ class Edge: ObservableObject, IdEqutable {
     var seedCurve: BezierCurve
     var curve: BezierCurve
     
-    // TODO: This method should be removed at further refactoring, because unscaled curve get no valid results (uses square coordinates insted of rectangle)
-    func length() -> CGFloat {
-        curve.length(stepsCount: curveLengthSteps)
-    }
-    
     func length(_ geometry: GeometryProxy) -> CGFloat {
         curve.scaled(geometry).length(stepsCount: curveLengthSteps)
     }

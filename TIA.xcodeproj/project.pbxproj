@@ -101,7 +101,6 @@
 		67B5337128032EAD00EA959A /* BezierPositioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5337028032EAD00EA959A /* BezierPositioning.swift */; };
 		67B53379280336A900EA959A /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B53378280336A900EA959A /* View.swift */; };
 		67B5337B28036F0700EA959A /* CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5337A28036F0700EA959A /* CGPoint.swift */; };
-		67B5337F2803787300EA959A /* BezierStepsPositioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5337E2803787300EA959A /* BezierStepsPositioning.swift */; };
 		67B533812803868500EA959A /* BezierCurve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B533802803868500EA959A /* BezierCurve.swift */; };
 		67B5338328038D8C00EA959A /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5338228038D8C00EA959A /* Comparable.swift */; };
 		67B533892804CB8E00EA959A /* AdventureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B533882804CB8E00EA959A /* AdventureView.swift */; };
@@ -222,7 +221,6 @@
 		67B5337028032EAD00EA959A /* BezierPositioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BezierPositioning.swift; sourceTree = "<group>"; };
 		67B53378280336A900EA959A /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		67B5337A28036F0700EA959A /* CGPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPoint.swift; sourceTree = "<group>"; };
-		67B5337E2803787300EA959A /* BezierStepsPositioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BezierStepsPositioning.swift; sourceTree = "<group>"; };
 		67B533802803868500EA959A /* BezierCurve.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BezierCurve.swift; sourceTree = "<group>"; };
 		67B5338228038D8C00EA959A /* Comparable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comparable.swift; sourceTree = "<group>"; };
 		67B533882804CB8E00EA959A /* AdventureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureView.swift; sourceTree = "<group>"; };
@@ -501,7 +499,6 @@
 			isa = PBXGroup;
 			children = (
 				67B5337028032EAD00EA959A /* BezierPositioning.swift */,
-				67B5337E2803787300EA959A /* BezierStepsPositioning.swift */,
 				67834855282A9C36002D9ABA /* ResourceStateHandler.swift */,
 				67834857282A9C44002D9ABA /* ResourceStateTransform.swift */,
 				6791A8F6286CC50300231BFA /* AdventureIconStateHandler.swift */,
@@ -715,7 +712,6 @@
 				67811BCE286A16F900861ADA /* AdventureIconViewModel.swift in Sources */,
 				67B533812803868500EA959A /* BezierCurve.swift in Sources */,
 				67BDE95B281712BC005B0194 /* ResourcePath.swift in Sources */,
-				67B5337F2803787300EA959A /* BezierStepsPositioning.swift in Sources */,
 				67B5335D27FFA24000EA959A /* Adventure.swift in Sources */,
 				6793A97627FCF3B7002198E9 /* TIAApp.swift in Sources */,
 				675E27F9281087E800FB5783 /* StatesAnimationView.swift in Sources */,

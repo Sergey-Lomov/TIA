@@ -52,11 +52,7 @@ extension View {
                            onFinish: @escaping Action) -> some View {
         modifier(BezierPositioning(curve: curve, onFinish: onFinish, progress: progress, targetProgress: target, deltaT: deltaT))
     }
-    
-    func bezierPositioning(step: Int, curves: [BezierCurve]) -> some View {
-        modifier(BezierStepsPositioning(step: step, curves: curves))
-    }
-    
+
     func offset(_ point: CGPoint, geomtery: GeometryProxy) -> some View {
         let x = point.x * geomtery.size.width
         let y = point.y * geomtery.size.height

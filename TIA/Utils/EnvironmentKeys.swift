@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// TODO: Try to use standard stroke width
 struct DrawingWidthKey: EnvironmentKey {
     static var defaultValue: CGFloat = 1
 }

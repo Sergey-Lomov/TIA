@@ -39,7 +39,7 @@ indirect enum ResourceState {
     case gate(gate: EdgeGate, edge: Edge, fromVertex: Vertex, fromIndex: Int, state: ResourceOnGateState, prestate: ResourceState)
     case destroying(from: Vertex, index: Int, total: Int, state: ResourceMoveOutState)
         
-    // TODO: Mark by debug code notation
+    #if DEBUG
     var short: String {
         switch self {
         case .inventory: return "i"
@@ -48,6 +48,7 @@ indirect enum ResourceState {
         case .destroying: return "o"
         }
     }
+    #endif
 }
 
 class Resource: ObservableObject, IdEqutable {

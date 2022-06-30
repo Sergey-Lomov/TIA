@@ -32,10 +32,7 @@ struct VertexView: View {
     
     var body: some View {
         CenteredGeometryReader { geometry in
-            ComplexCurveShape(curve: curve)
-                /*.onReach(curve) {
-                    handleMutatingFinished()
-                }*/
+            ComplexCurveShape(curve: .circle(radius: 0.5))
                 .scaleEffect(scale)
                 .frame(size: diameter)
                 .foregroundColor(vertex.color)
@@ -53,15 +50,6 @@ struct VertexView: View {
         }
     }
     
-    private var curve: ComplexCurve {
-//        switch vertex.model.state {
-//        case .seed, .ungrowing:
-//            return ComplexCurve.circle(radius: 0)
-//        default:
-            return ComplexCurve.circle(radius: 0.5)
-//        }
-    }
-    
     private var scale: CGFloat {
         switch vertex.metastate {
         case .seed, .ungrowing:
@@ -71,7 +59,6 @@ struct VertexView: View {
         }
     }
 
-    // TODO: Move animation to AnimationService. In onVisitAnimation also.
     private var animation: Animation? {
         switch vertex.metastate {
         case .growing:

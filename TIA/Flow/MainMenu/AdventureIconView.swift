@@ -11,7 +11,6 @@ import SwiftUI
 struct AdventureIconWrapper: View {
     
     @ObservedObject var model: AdventureIconViewModel
-    // TODO: Use EnvironmentObject instead
     @Environment(\.cameraService) var cameraService
     @State var isSelected = false
     

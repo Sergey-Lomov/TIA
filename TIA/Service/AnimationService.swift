@@ -47,7 +47,7 @@ final class AnimationService {
         }
     }
     
-    // TODO: Introduce player moving phases duration instead calculate durations each time based on eye transforamation durations. This will be clear concept instead current solution, which make many unrelated animations be based at yey transformation pahases.
+    // TODO: Introduce player moving phases duration instead calculate durations each time based on eye transforamation durations. This will be clear concept instead current solution, which make many unrelated animations be based at eye transformation pahases.
     private let eyeTransDuration: [EyeState: [EyeState: TimeInterval]] = [
         .closed: [.compressed: 0.5, .opened: 1],
         .compressed: [.closed: 0.5],

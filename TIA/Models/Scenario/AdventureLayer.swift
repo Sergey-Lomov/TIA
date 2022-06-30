@@ -21,7 +21,7 @@ enum AdventureLayerState: Equatable {
     case ungrowing(exit: Vertex?)
     case hiding(next: AdventureLayer?)
     
-    // TODO: Mark by debug code notation
+    #if DEBUG
     var short: String {
         switch self {
         case .preparing:
@@ -38,6 +38,7 @@ enum AdventureLayerState: Equatable {
             return "u"
         }
     }
+    #endif
 }
 
 class AdventureLayer : ObservableObject, IdEqutable, Hashable {

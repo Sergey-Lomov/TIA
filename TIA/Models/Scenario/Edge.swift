@@ -64,7 +64,7 @@ class Edge: ObservableObject, IdEqutable {
     @Published var state: EdgeState
     
     // TODO: Change random seed curve to tension seed curve
-    var seedCurve: BezierCurve
+    var pregrowingCurve: BezierCurve
     var curve: BezierCurve
     
     func length(_ geometry: GeometryProxy) -> CGFloat {
@@ -85,7 +85,7 @@ class Edge: ObservableObject, IdEqutable {
         self.state = state
         self.curve = curve
         // TODO: For light theme seed curves should be equtable to main curves
-        self.seedCurve = curve.randomControlsCurve(maxDelta: seedCurveDelta)
+        self.pregrowingCurve = curve.randomControlsCurve(maxDelta: seedCurveDelta)
         self.gates = price.map {
             .init(requirement: .resource($0), edgeStatePublisher: $state)
         }

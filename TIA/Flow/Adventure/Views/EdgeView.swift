@@ -99,8 +99,7 @@ struct EdgePathView: View {
     private var curve: BezierCurve {
         switch edge.metastate {
         case .seed, .pregrowing, .ungrowPath:
-            // TODO: Rename seed curve to consistent name (pregrowingCurve)
-            return edge.model.seedCurve
+            return edge.model.pregrowingCurve
         default:
             return edge.curve
         }

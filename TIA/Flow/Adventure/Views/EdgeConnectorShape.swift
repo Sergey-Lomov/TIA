@@ -12,9 +12,8 @@ typealias EdgeConnectorData = AnimatableTrio<BezierCurve, CGFloat, CGFloat>
 
 struct EdgeConnectorShape: Shape {
 
-    // TODO: Think about changing absolute connect width value to relative
-    static private let connectWidth: CGFloat = 20
-    static private let blobingSize: CGFloat = connectWidth * 0.5
+    static private let connectWidth: CGFloat = 0.06
+    static private let blobingSize: CGFloat = 0.5
     static private let intersectionAccuracy: CGFloat = 5
     static private let connectLength: CGFloat = 0.05
     static private let length: CGFloat = 0.1
@@ -44,8 +43,9 @@ struct EdgeConnectorShape: Shape {
         let intersection = curve.getPoint(t: initialT)
         let midAngle = Math.angle(p1: intersection, p2: center)
         
-        let a0_1 = midAngle - (Self.connectWidth / 2 / radius)
-        let a3_2 = midAngle + (Self.connectWidth / 2 / radius)
+        let connectWidth = Layout.Vertex.diameter * rect.size.minSize * .dpi * Self.connectWidth
+        let a0_1 = midAngle - (connectWidth / 2 / radius)
+        let a3_2 = midAngle + (connectWidth / 2 / radius)
         let p0_1 = CGPoint(center: center, angle: a0_1, radius: radius)
         let p3_2 = CGPoint(center: center, angle: a3_2, radius: radius)
         
@@ -58,7 +58,7 @@ struct EdgeConnectorShape: Shape {
         
         let curvePoint = curve.getPoint(t: t)
         let targetAngle = Math.angle(p1: curvePoint, p2: center)
-        let blobSize = blobing * Self.blobingSize
+        let blobSize = blobing * Self.blobingSize * connectWidth
         let targetDistance = center.distanceTo(curvePoint) + blobSize
         let target = CGPoint(center: center, angle: targetAngle, radius: targetDistance)
         
@@ -85,8 +85,8 @@ struct EdgeConnectorShape: Shape {
         let nb_a2_2 = a3_2 > midAngle ? a3_2 - .hpi : a3_2 + .hpi
         let nb_p1_1 = CGPoint(center: p0_1, angle: nb_a1_1, radius: controlRadius)
         let nb_p2_2 = CGPoint(center: p3_2, angle: nb_a2_2, radius: controlRadius)
-        let b_p1_1 = CGPoint(center: p0_1, angle: midAngle, radius: Self.blobingSize)
-        let b_p2_2 = CGPoint(center: p3_2, angle: midAngle, radius: Self.blobingSize)
+        let b_p1_1 = CGPoint(center: p0_1, angle: midAngle, radius: Self.blobingSize * connectWidth)
+        let b_p2_2 = CGPoint(center: p3_2, angle: midAngle, radius: Self.blobingSize * connectWidth)
         let p1_1 = CGPoint.from(nb_p1_1, to: b_p1_1, t: blobing)
         let p2_2 = CGPoint.from(nb_p2_2, to: b_p2_2, t: blobing)
         

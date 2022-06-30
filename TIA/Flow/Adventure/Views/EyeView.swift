@@ -55,10 +55,10 @@ private struct EyeSocketView: View {
     
     var body: some View {
         ComplexCurveShape(curve: curve)
-            .onReach(curve) {
+            .foregroundColor(.black)
+            .onAnimationCompleted(for: curve) {
                 eye.transitionFinished()
             }
-            .foregroundColor(.black)
             .animation(animation, value: curve)
     }
 }

@@ -64,12 +64,12 @@ struct EdgePathView: View {
             // Line
             let metastate = edge.metastate
             SingleCurveShape(curve: curve)
-                .onReach(curve) {
+                .trim(from: 0, to: progress)
+                .stroke(lineWidth: Layout.Edge.curveWidth)
+                .onAnimationCompleted(for: curve) {
                     // Finished mutating for initial metastate, not for current. So metastate should be stored in separate var to avoid updating.
                     handleMutatingFinished(metastate: metastate)
                 }
-                .trim(from: 0, to: progress)
-                .stroke(lineWidth: Layout.Edge.curveWidth)
                 .animation(animation, value: progress)
                 .foregroundColor(edge.color)
             
@@ -85,7 +85,7 @@ struct EdgePathView: View {
             if edge.metastate.toConnectorVisible {
                 let connectorData = toConnectorData(geometry)
                 toConnectorShape(geometry)
-                    .onReach(connectorData) {
+                    .onAnimationCompleted(for: connectorData) {
                         handleMutatingFinished(metastate: metastate)
                     }
                     .animation(animation, value: connectorData)

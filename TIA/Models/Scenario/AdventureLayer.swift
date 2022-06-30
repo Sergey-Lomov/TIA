@@ -45,7 +45,6 @@ class AdventureLayer : ObservableObject, IdEqutable, Hashable {
     let id: String = UUID().uuidString
     let type: AdventureLayerType
     @Published var state: AdventureLayerState
-    // TODO: Mark all vars which should be sette only from own class by 'private(set)' to avoid unexpected changes
     var vertices: [Vertex]
     var edges: [Edge]
     var entrance: Vertex

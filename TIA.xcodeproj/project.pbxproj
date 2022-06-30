@@ -34,7 +34,6 @@
 		675E275D280E22CC00FB5783 /* GeometryProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E275C280E22CC00FB5783 /* GeometryProxy.swift */; };
 		675E2760280E2FC500FB5783 /* EngineEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E275F280E2FC500FB5783 /* EngineEvent.swift */; };
 		675E2762280E313900FB5783 /* ViewEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E2761280E313900FB5783 /* ViewEvent.swift */; };
-		675E2764280E3C1200FB5783 /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E2763280E3C1200FB5783 /* Shape.swift */; };
 		675E2768280F064500FB5783 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E2767280F064400FB5783 /* PlayerView.swift */; };
 		675E276A280F066800FB5783 /* PlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E2769280F066800FB5783 /* PlayerViewModel.swift */; };
 		675E276E280F39B500FB5783 /* CenteredGeometryReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E276D280F39B500FB5783 /* CenteredGeometryReader.swift */; };
@@ -155,7 +154,6 @@
 		675E275C280E22CC00FB5783 /* GeometryProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryProxy.swift; sourceTree = "<group>"; };
 		675E275F280E2FC500FB5783 /* EngineEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngineEvent.swift; sourceTree = "<group>"; };
 		675E2761280E313900FB5783 /* ViewEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewEvent.swift; sourceTree = "<group>"; };
-		675E2763280E3C1200FB5783 /* Shape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = "<group>"; };
 		675E2767280F064400FB5783 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		675E2769280F066800FB5783 /* PlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewModel.swift; sourceTree = "<group>"; };
 		675E276D280F39B500FB5783 /* CenteredGeometryReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteredGeometryReader.swift; sourceTree = "<group>"; };
@@ -414,7 +412,6 @@
 				6793A98A27FD1936002198E9 /* Colors.swift */,
 				67B5336B28009DC100EA959A /* Path.swift */,
 				67B53378280336A900EA959A /* View.swift */,
-				675E2763280E3C1200FB5783 /* Shape.swift */,
 				675E2741280A2C4D00FB5783 /* CGFloat.swift */,
 				67B5337A28036F0700EA959A /* CGPoint.swift */,
 				675E2756280DB77F00FB5783 /* CGSize.swift */,
@@ -727,7 +724,6 @@
 				675E273A2809CD7A00FB5783 /* AdventureEngine.swift in Sources */,
 				67B07B2B28410FA600EAC03D /* ClosedRange.swift in Sources */,
 				6791A8F5286CC3FE00231BFA /* AdventureIconStateTransform.swift in Sources */,
-				675E2764280E3C1200FB5783 /* Shape.swift in Sources */,
 				67B07B25283FA55800EAC03D /* AdventureLayerViewModel.swift in Sources */,
 				67811B882862712E00861ADA /* CameraModifier.swift in Sources */,
 				6771F8F52857E2BA00D7B742 /* DrawingProgressModifier.swift in Sources */,

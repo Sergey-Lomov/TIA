@@ -25,7 +25,6 @@
 		675E2745280B4BC000FB5783 /* EdgeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E2744280B4BC000FB5783 /* EdgeViewModel.swift */; };
 		675E2747280B4BD100FB5783 /* VertexViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E2746280B4BD100FB5783 /* VertexViewModel.swift */; };
 		675E2749280B502900FB5783 /* AdventureDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E2748280B502900FB5783 /* AdventureDescriptor.swift */; };
-		675E274D280C5EF500FB5783 /* AnimationHandlingShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E274C280C5EF500FB5783 /* AnimationHandlingShape.swift */; };
 		675E2750280C8C2F00FB5783 /* PointerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E274F280C8C2F00FB5783 /* PointerWrapper.swift */; };
 		675E2755280DA0E600FB5783 /* EyeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E2754280DA0E600FB5783 /* EyeView.swift */; };
 		675E2757280DB77F00FB5783 /* CGSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E2756280DB77F00FB5783 /* CGSize.swift */; };
@@ -144,7 +143,6 @@
 		675E2744280B4BC000FB5783 /* EdgeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeViewModel.swift; sourceTree = "<group>"; };
 		675E2746280B4BD100FB5783 /* VertexViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexViewModel.swift; sourceTree = "<group>"; };
 		675E2748280B502900FB5783 /* AdventureDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureDescriptor.swift; sourceTree = "<group>"; };
-		675E274C280C5EF500FB5783 /* AnimationHandlingShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationHandlingShape.swift; sourceTree = "<group>"; };
 		675E274F280C8C2F00FB5783 /* PointerWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointerWrapper.swift; sourceTree = "<group>"; };
 		675E2754280DA0E600FB5783 /* EyeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeView.swift; sourceTree = "<group>"; };
 		675E2756280DB77F00FB5783 /* CGSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGSize.swift; sourceTree = "<group>"; };
@@ -327,7 +325,6 @@
 		677C30FE281098BD0014BECD /* Animation */ = {
 			isa = PBXGroup;
 			children = (
-				675E274C280C5EF500FB5783 /* AnimationHandlingShape.swift */,
 				675E27F8281087E800FB5783 /* StatesAnimationView.swift */,
 				677C30FF281099500014BECD /* AnimationState.swift */,
 			);
@@ -675,7 +672,6 @@
 				6771F8E62855242000D7B742 /* VertexActionsIconsService.swift in Sources */,
 				679E37242832616D00D9EE41 /* EdgeViewMetastate.swift in Sources */,
 				6793A98B27FD1936002198E9 /* Colors.swift in Sources */,
-				675E274D280C5EF500FB5783 /* AnimationHandlingShape.swift in Sources */,
 				677C3100281099500014BECD /* AnimationState.swift in Sources */,
 				67BDE95D2817E841005B0194 /* ResourceView.swift in Sources */,
 				67B533982804ED6D00EA959A /* TIAPrototypingError.swift in Sources */,

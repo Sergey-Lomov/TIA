@@ -129,7 +129,7 @@ final class MainMenuViewModel: ObservableObject {
             switch state {
             case .initAfterFinish(let associated), .closing(let associated):
                 if associated.theme == adventure.theme {
-                    maxDone = maxDone - 1
+                    maxDone -= 1
                 }
             default:
                 break

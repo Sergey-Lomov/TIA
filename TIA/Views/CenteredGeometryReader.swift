@@ -10,13 +10,11 @@ import SwiftUI
 struct CenteredGeometryReader<Content>: View where Content: View {
     private var content: (GeometryProxy) -> Content
 
-    init(@ViewBuilder content: @escaping (GeometryProxy) -> Content)
-    {
+    init(@ViewBuilder content: @escaping (GeometryProxy) -> Content) {
         self.content = content
     }
     
-    init(@ViewBuilder content: @escaping () -> Content)
-    {
+    init(@ViewBuilder content: @escaping () -> Content) {
         self.content = { _ in content() }
     }
 

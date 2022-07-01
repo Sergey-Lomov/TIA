@@ -88,8 +88,7 @@ class Edge: ObservableObject, IdEqutable {
         
         if theme == .light {
             self.pregrowingCurve = curve
-        }
-        else {
+        } else {
             self.pregrowingCurve = curve.randomControlsCurve(maxDelta: seedCurveDelta)
         }
         

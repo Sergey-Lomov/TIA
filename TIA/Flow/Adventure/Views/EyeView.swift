@@ -141,7 +141,7 @@ private extension ComplexCurve {
     static func eyelid(state: EyeState) -> ComplexCurve {
         return ComplexCurve([
             .topEyelid(state: state),
-            .topEyelid(state: state).mirrored().reversed(),
+            .topEyelid(state: state).mirrored().reversed()
         ])
     }
     

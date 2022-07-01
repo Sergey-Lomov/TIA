@@ -35,7 +35,7 @@ class VertexActionsIconsService {
                 .init(curve: body1, startAt: 0, finishAt: 0.35),
                 .init(curve: body2, startAt: 0.35, finishAt: 0.7),
                 .init(curve: leftArrow, startAt: 0.7, finishAt: 1),
-                .init(curve: rightArrow, startAt: 0.7, finishAt: 1),
+                .init(curve: rightArrow, startAt: 0.7, finishAt: 1)
             ].scaled(0.5 * compactisation)
         }()
         
@@ -52,7 +52,7 @@ class VertexActionsIconsService {
                 .init(curve: c3, startAt: 0.5, finishAt: 0.65),
                 .init(curve: c4, startAt: 0.65, finishAt: 0.8),
                 .init(curve: p1, startAt: 0.9, finishAt: 0.9, widthMult: 2),
-                .init(curve: p2, startAt: 1.0, finishAt: 1.0, widthMult: 2),
+                .init(curve: p2, startAt: 1.0, finishAt: 1.0, widthMult: 2)
                 ].scaled(0.5)
         }()
         

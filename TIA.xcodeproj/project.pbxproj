@@ -70,6 +70,7 @@
 		6791A906286E58B000231BFA /* light1_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 6791A905286E58B000231BFA /* light1_1.json */; };
 		6791A908286F4C3C00231BFA /* EdgeGateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6791A907286F4C3C00231BFA /* EdgeGateViewModel.swift */; };
 		6791A90A286F4DE600231BFA /* EdgeGateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6791A909286F4DE600231BFA /* EdgeGateView.swift */; };
+		6791A90D286F5D6400231BFA /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 6791A90C286F5D6400231BFA /* .swiftlint.yml */; };
 		6793A97627FCF3B7002198E9 /* TIAApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6793A97527FCF3B7002198E9 /* TIAApp.swift */; };
 		6793A97A27FCF3B9002198E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6793A97927FCF3B9002198E9 /* Assets.xcassets */; };
 		6793A97D27FCF3B9002198E9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6793A97C27FCF3B9002198E9 /* Preview Assets.xcassets */; };
@@ -190,6 +191,7 @@
 		6791A905286E58B000231BFA /* light1_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = light1_1.json; sourceTree = "<group>"; };
 		6791A907286F4C3C00231BFA /* EdgeGateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeGateViewModel.swift; sourceTree = "<group>"; };
 		6791A909286F4DE600231BFA /* EdgeGateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeGateView.swift; sourceTree = "<group>"; };
+		6791A90C286F5D6400231BFA /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; name = .swiftlint.yml; path = TIA/.swiftlint.yml; sourceTree = SOURCE_ROOT; };
 		6793A97227FCF3B7002198E9 /* TIA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TIA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6793A97527FCF3B7002198E9 /* TIAApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIAApp.swift; sourceTree = "<group>"; };
 		6793A97927FCF3B9002198E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -536,9 +538,10 @@
 		67B5339B2805B49500EA959A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				6791A90C286F5D6400231BFA /* .swiftlint.yml */,
+				6727922B2805C2C000FEE07E /* scenario.json */,
 				67B5339E2805BBD600EA959A /* Adventures */,
 				67279235280615A600FEE07E /* Layouts */,
-				6727922B2805C2C000FEE07E /* scenario.json */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -576,6 +579,7 @@
 				6793A96E27FCF3B7002198E9 /* Sources */,
 				6793A96F27FCF3B7002198E9 /* Frameworks */,
 				6793A97027FCF3B7002198E9 /* Resources */,
+				6791A90B286F5C5C00231BFA /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -624,6 +628,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6791A90D286F5D6400231BFA /* .swiftlint.yml in Resources */,
 				6727923F280632B900FEE07E /* dark2.json in Resources */,
 				6727922C2805C2C000FEE07E /* scenario.json in Resources */,
 				6791A8EB286CAEA100231BFA /* sd1.json in Resources */,
@@ -643,6 +648,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		6791A90B286F5C5C00231BFA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint does not exist, download it from https://github.com/realm/SwiftLint\"\n  exit 1\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		6793A96E27FCF3B7002198E9 /* Sources */ = {

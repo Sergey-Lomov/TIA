@@ -12,8 +12,8 @@ import Combine
 enum EdgeGateState {
     case seed
     case growing
-    case open   //This state means gate is open to moving cross it, so gate shoiuld be invisible
-    case close  //This state means gate is closed, so gate shoiuld br presented in full size
+    case open   // This state means gate is open to moving cross it, so gate shoiuld be invisible
+    case close  // This state means gate is closed, so gate shoiuld br presented in full size
     case ungrowing
 }
 

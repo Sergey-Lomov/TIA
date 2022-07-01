@@ -41,7 +41,6 @@ struct VertexView: View {
                 }
                 .animation(animation, value: scale)
             
-            
             onVisitView()
                 .scaleEffect(scale)
                 .frame(size: diameter * Layout.Vertex.onVisitIcon)

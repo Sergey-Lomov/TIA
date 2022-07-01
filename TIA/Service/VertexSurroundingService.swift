@@ -38,7 +38,7 @@ final class VertexSurroundingService {
     
     var size: CGSize
     
-    init(screenSize size:CGSize) {
+    init(screenSize size: CGSize) {
         self.size = size
     }
 
@@ -113,7 +113,7 @@ final class VertexSurroundingService {
                 let slot = CGPoint(center: .zero, angle: cursor, radius: radius)
                 slots.append(slot)
                 if slots.count >= count { break }
-                cursor = cursor - cursorStep
+                cursor -= cursorStep
             }
             
             if slots.count >= count { break }

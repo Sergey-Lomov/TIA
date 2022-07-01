@@ -23,8 +23,7 @@ struct StatesAnimationView<Content>: View, Animatable where Content: View & Anim
         set { progress = newValue }
     }
 
-    init(content: Content, states: [State])
-    {
+    init(content: Content, states: [State]) {
         self.content = content
         self.states = StatesContainer(states: states)
     }

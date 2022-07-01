@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AdventureIconStateHandler: AnimatableModifier  {
+struct AdventureIconStateHandler: AnimatableModifier {
     
     private var transform: AdventureIconStateTransform
 
@@ -27,4 +27,3 @@ struct AdventureIconStateHandler: AnimatableModifier  {
             .rotationEffect(Angle(radians: transform.angle))
     }
 }
-

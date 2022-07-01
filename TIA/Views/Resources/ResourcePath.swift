@@ -36,7 +36,7 @@ extension Path {
             CGPoint(x: .cos45, y: .sin45),
             CGPoint(x: .cos135, y: .sin135),
             CGPoint(x: .cos225, y: .sin225),
-            CGPoint(x: .cos315, y: .sin315),
+            CGPoint(x: .cos315, y: .sin315)
         ])
     }
     
@@ -49,7 +49,7 @@ extension Path {
             CGPoint(x: .cos180, y: .sin180),
             CGPoint(x: .cos225 / 2, y: .sin225 / 2),
             CGPoint(x: .cos270, y: .sin270),
-            CGPoint(x: .cos315 / 2, y: .sin315 / 2),
+            CGPoint(x: .cos315 / 2, y: .sin315 / 2)
         ])
     }
 }

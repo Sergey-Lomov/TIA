@@ -18,7 +18,7 @@ struct AdventureView: View {
                 .edgesIgnoringSafeArea(.all)
 
             ZStack {
-                ForEach(adventure.layers, id:\.id) { layer in
+                ForEach(adventure.layers, id: \.id) { layer in
                     AdventureLayerBackground(layer: layer, theme: adventure.model.theme)
                         .edgesIgnoringSafeArea(.all)
                     
@@ -29,7 +29,7 @@ struct AdventureView: View {
                         }
                     
                     let resources = adventure.layerResources(layer)
-                    ForEach(resources, id:\.id) { resource in
+                    ForEach(resources, id: \.id) { resource in
                         ResourceWrapper(resource: resource, layer: layer.model)
                     }.applyCamera(adventure.camera)
                 }
@@ -56,11 +56,11 @@ struct LayerContentView: View {
     
     var body: some View {
         ZStack {
-            ForEach(layer.edges, id:\.model.id) { edge in
+            ForEach(layer.edges, id: \.model.id) { edge in
                 EdgeWrapper(edge: edge)
             }
 
-            ForEach(layer.vertices, id:\.model.id) { vertex in
+            ForEach(layer.vertices, id: \.model.id) { vertex in
                 VertexWrapper(vertex: vertex)
             }
         }

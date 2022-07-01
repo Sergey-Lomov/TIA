@@ -145,7 +145,6 @@ struct ResourceWrapper: View {
         }
     }
     
-    // MARK: Animation
     private func stateAnimation(_ geometry: GeometryProxy) -> Animation? {
         switch resource.metastate {
         case .vertexIdle(_, _, let total):
@@ -176,7 +175,7 @@ struct ResourceWrapper: View {
             return nil
         }
     }
-    
+
     private func failNearGateAnimation(_ geometry: GeometryProxy, gate: EdgeGate, edge: Edge, vertex: Vertex, slot: Int, total: Int) -> Animation? {
         guard let gateIndex = edge.gates.firstIndex(of: gate) else { return nil }
         let ratio = CGFloat(gateIndex + 1) / CGFloat(edge.gates.count + 1)
@@ -186,7 +185,6 @@ struct ResourceWrapper: View {
         return .positioning(geometry, playerLength: playerLength, resourceLength: curve.length(), index: slot, total: total)
     }
 
-    // MARK: Positioning curve
     private func positionCurve(_ geometry: GeometryProxy) -> ComplexCurve {
         switch resource.metastate {
         case .vertex(let vertex, _, _),
@@ -220,25 +218,28 @@ struct ResourceWrapper: View {
             return .zero
         }
     }
-    
+}
+
+// MARK: Positions and curves calculations
+extension ResourceWrapper {
     private func destroyingCurve(vertex: Vertex, index: Int, geometry: GeometryProxy) -> ComplexCurve {
 
         let scaledVertex = vertex.point.scaled(geometry)
         var source = resourceSlot(geometry: geometry, vertex: vertex, index: index)
         source = source.translated(by: scaledVertex)
-        
+
         let angle = Math.angle(p1: source, p2: scaledVertex)
         let radius: CGFloat = destroyingRadius * geometry.minSize
         let target = CGPoint(center: scaledVertex, angle: angle, radius: radius)
-        
+
         let radiusRange = FloatRange(from: radius / 4, to: radius / 2)
         let angleRange =  FloatRange(from: .hpi / 4, to: .hpi / 2)
         let curve = Math.randomCurve(from: source, to: target, controlRadius: radiusRange, controlAngle: angleRange)
         return .init(curve)
     }
-    
+
     private func alongEdgeCurve(edge: Edge, forward: Bool, fromIndex: Int, toIndex: Int, geometry: GeometryProxy) -> ComplexCurve {
-        
+
         let from = forward ? edge.from : edge.to
         let rawP1 = forward ? edge.curve.p1 : edge.curve.p2
         let rawP2 = forward ? edge.curve.p2 : edge.curve.p1
@@ -250,10 +251,10 @@ struct ResourceWrapper: View {
         target = target.translated(by: to.point.scaled(geometry))
         let p1 = rawP1.scaled(geometry)
         let p2 = rawP2.scaled(geometry)
-        
+
         return .init(points: [source, p1, p2, target])
     }
-    
+
     private func toGateCurve(gate: EdgeGate, edge: Edge, fromVertex: Vertex, fromIndex: Int, geometry: GeometryProxy) -> ComplexCurve {
         let delta = resourceSlot(geometry: geometry, vertex: fromVertex, index: fromIndex)
         let from = fromVertex.point.scaled(geometry).translated(by: delta)
@@ -266,46 +267,46 @@ struct ResourceWrapper: View {
     }
 
     private func failNearGateCurve(_ geometry: GeometryProxy, gate: EdgeGate, edge: Edge, vertex: Vertex, slot: Int) -> ComplexCurve {
-        
+
         let delta = resourceSlot(geometry: geometry, vertex: vertex, index: slot)
         let p0 = vertex.point.scaled(geometry).translated(by: delta)
         let controls = failNearGateControls(geometry, gate: gate, edge: edge, vertex: vertex, slot: slot)
-        
+
         let to = BezierCurve(points: [p0, controls[0], controls[1], controls[2]])
         let from = BezierCurve(points: [controls[2], controls[3], controls[4], p0])
-        
+
         return .init([to, from])
     }
-    
+
     private func failNearGateControls(_ geometry: GeometryProxy, gate: EdgeGate, edge: Edge, vertex: Vertex, slot: Int) -> [CGPoint] {
         let cachedControls = GeometryCacheService.shared.failNearGate(gate: gate, vertex: vertex)
         if let cached = cachedControls { return cached }
-        
+
         let gateT = LayoutService.gateProgress(geometry, gate: gate, edge: edge)
         let t = edge.from == vertex ? gateT + failedMovingGap : gateT - failedMovingGap
         let nearGate = edge.curve.scaled(geometry).getPoint(t: t)
-        
+
         let mid = vertex.point.scaled(geometry).average(with: nearGate)
         let c1p1 = mid.randomPoint(maxDelta: controlsRandomization)
         let c2p2 = mid.randomPoint(maxDelta: controlsRandomization)
-        
+
         let distance = CGFloat.random(in: toGateRandomizationRange)
         let angle = edge.curve.scaled(geometry).getNormalAngle(t: t)
         let c1p2 = CGPoint(center: nearGate, angle: angle, radius: distance)
         let c2p1 = CGPoint(center: nearGate, angle: angle + .pi, radius: distance)
-        
+
         let result = [c1p1, c1p2, nearGate, c2p1, c2p2]
         GeometryCacheService.shared.setFailNearGate(gate: gate, vertex: vertex, controls: result)
         return result
     }
-    
+
     private func resourceSlot(geometry: GeometryProxy, vertex: Vertex, index: Int, forcedLayer: AdventureLayer? = nil) -> CGPoint {
         let service = VertexSurroundingService(screenSize: geometry.size)
         let layer = forcedLayer ?? layer
         let surrounding = service.surroundingFor(vertex, layer: layer, slotsCount: index + 1)
         return surrounding.slots.last ?? .zero
     }
-    
+
     private func inVertextResourcePosition(index: Int, total: Int) -> CGPoint {
         if total == 1 {
             return .zero
@@ -322,7 +323,7 @@ struct ResourceView: View {
     @ObservedObject var resource: ResourceViewModel
     
     var body: some View {
-        CenteredGeometryReader { geometry in
+        CenteredGeometryReader {
             if let type = resource.type {
                 ResourceShape(type: type)
                     .fill(resource.color)

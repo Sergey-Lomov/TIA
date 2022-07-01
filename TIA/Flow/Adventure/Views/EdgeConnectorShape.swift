@@ -35,6 +35,7 @@ struct EdgeConnectorShape: Shape {
         }
     }
 
+    // swiftlint:disable function_body_length
     func path(in rect: CGRect) -> Path {
         // In code below uses many postfixes in format x_y. This postfix means, variable are related to point number X in curve number Y. Names "p" is short for point, "a" - for angles, "nb" - no blobing calculations, "fb" - full blobing calculations.
         
@@ -99,4 +100,6 @@ struct EdgeConnectorShape: Shape {
         path.addCurve(curve2)
         return path
     }
+
+    // swiftlint:enable function_body_length
 }

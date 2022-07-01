@@ -62,7 +62,7 @@ class PlayerViewModel: ObservableObject {
         let from = viewModelsProvider?.vertexViewModel(for: edge.from)
         let to = viewModelsProvider?.vertexViewModel(for: edge.to)
         
-        return [from, to].compactMap{ $0 }
+        return [from, to].compactMap { $0 }
     }
     
     private func handlePositionUpdate(_ position: PlayerPosition) {

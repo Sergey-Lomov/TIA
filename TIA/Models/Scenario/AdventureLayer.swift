@@ -41,7 +41,7 @@ enum AdventureLayerState: Equatable {
     #endif
 }
 
-class AdventureLayer : ObservableObject, IdEqutable, Hashable {
+class AdventureLayer: ObservableObject, IdEqutable, Hashable {
     let id: String = UUID().uuidString
     let type: AdventureLayerType
     @Published var state: AdventureLayerState

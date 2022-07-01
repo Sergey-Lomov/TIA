@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct BezierPositioning: AnimatableModifier  {
+struct BezierPositioning: AnimatableModifier {
     
     static private let defaultLengthSteps = 100
     

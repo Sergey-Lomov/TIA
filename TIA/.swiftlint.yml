@@ -1,0 +1,13 @@
+disabled_rules:
+    - identifier_name
+    - line_length
+    - todo
+    - trailing_whitespace
+    - nesting
+
+cyclomatic_complexity:
+    ignores_case_statements: true
+
+function_parameter_count:
+    warning: 6
+    error: 8

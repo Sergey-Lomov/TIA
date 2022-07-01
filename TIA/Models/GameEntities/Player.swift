@@ -13,7 +13,6 @@ enum EdgeMovingStatus {
     case expanding
 }
 
-
 enum EdgeMovingDirection {
     case forward
     case backward

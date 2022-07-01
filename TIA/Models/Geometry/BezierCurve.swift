@@ -48,7 +48,7 @@ struct BezierCurve {
         self.init(points: [from, control1, control2, to])
     }
     
-    init(points:[CGPoint]) {
+    init(points: [CGPoint]) {
         p0 = points[0]
         p1 = points[1]
         p2 = points[2]
@@ -62,7 +62,7 @@ struct BezierCurve {
         for step in 1...stepsCount {
             let t = CGFloat(step) / CGFloat(stepsCount)
             let point = CGPoint(x: getX(t: t), y: getY(t: t))
-            lenght = lenght + point.distanceTo(prevPoint)
+            lenght += point.distanceTo(prevPoint)
             prevPoint = point
         }
         
@@ -214,7 +214,7 @@ extension BezierCurve: VectorArithmetic {
             lhs.p0 + rhs.p0,
             lhs.p1 + rhs.p1,
             lhs.p2 + rhs.p2,
-            lhs.p3 + rhs.p3,
+            lhs.p3 + rhs.p3
         ])
     }
     
@@ -223,7 +223,7 @@ extension BezierCurve: VectorArithmetic {
             lhs.p0 - rhs.p0,
             lhs.p1 - rhs.p1,
             lhs.p2 - rhs.p2,
-            lhs.p3 - rhs.p3,
+            lhs.p3 - rhs.p3
         ])
     }
 }

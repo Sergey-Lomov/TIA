@@ -149,7 +149,7 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
     private func handleLayersUpdate(_ updatedModels: [AdventureLayer]) {
         var newViews: [AdventureLayerViewModel] = []
         for model in updatedModels {
-            let existView = layers.first{ $0.model == model }
+            let existView = layers.first { $0.model == model }
             if let existView = existView {
                 newViews.append(existView)
             } else {

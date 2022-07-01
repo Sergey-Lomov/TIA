@@ -101,8 +101,8 @@ extension CGPoint {
 extension CGPoint: VectorArithmetic {
 
     public mutating func scale(by rhs: Double) {
-        x = x * CGFloat(rhs)
-        y = y * CGFloat(rhs)
+        x *= CGFloat(rhs)
+        y *= CGFloat(rhs)
     }
     
     public var magnitudeSquared: Double {

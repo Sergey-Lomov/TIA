@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol IdEqutable : Equatable {
+protocol IdEqutable: Equatable {
     var id: String { get }
 }
 

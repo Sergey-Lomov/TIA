@@ -88,8 +88,7 @@ fileprivate extension View {
     func maskToCurrentEdgeVertices(player: PlayerViewModel, size: CGSize) -> some View {
         invertedMask(size: size,
             ZStack {
-                ForEach(player.currentEdgeVertices(), id: \.model.id) {
-                    viewModel in
+                ForEach(player.currentEdgeVertices(), id: \.model.id) { viewModel in
                     VertexWrapper(vertex: viewModel)
                 }
             }.frame(size: size)
@@ -103,7 +102,7 @@ struct PlayerView: View {
     var superSize: CGSize
 
     var body: some View {
-        CenteredGeometryReader { geometry in
+        CenteredGeometryReader {
             if player.position.currentEdge != nil {
                 ComplexCurveShape(curve: .circle(radius: 0.5))
                     .frame(width: 16, height: 16)

@@ -51,13 +51,13 @@ final class AnimationService {
     private let eyeTransDuration: [EyeState: [EyeState: TimeInterval]] = [
         .closed: [.compressed: 0.5, .opened: 1],
         .compressed: [.closed: 0.5],
-        .opened: [.closed:  1],
+        .opened: [.closed: 1]
     ]
     private let eyeTransBulder: [EyeState: [EyeState: AnimBuilder]] = [
         .closed: [.compressed: { .easeIn(duration: $0) },
                   .opened: { .easeOut(duration: $0) }],
         .compressed: [.closed: { .easeIn(duration: $0) }],
-        .opened: [.closed:  { .easeIn(duration: $0) }],
+        .opened: [.closed: { .easeIn(duration: $0) }]
     ]
     
     var fromAdventure: Animation { .linear(duration: 2) }

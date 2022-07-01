@@ -5,6 +5,8 @@
 //  Created by Serhii.Lomov on 15.04.2022.
 //
 
+// swiftlint:disable file_length
+
 import Foundation
 import Combine
 
@@ -15,7 +17,8 @@ enum AdventureLifecycle {
     case finalizing
 }
 
-final class AdventureEngine: ViewEventsListener, EngineEventsSource {
+// swiftlint:disable type_body_length
+final class AdventureEngine: EngineEventsSource {
     
     private static let menuVertexId = "menu_vertex"
     private static let menuEdgeId = "menu_edge"
@@ -48,8 +51,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
     }
     
     func subscribeTo(_ publisher: ViewEventsPublisher) {
-        subscriptions.sink(publisher) {
-            [weak self] event in
+        subscriptions.sink(publisher) { [weak self] event in
             self?.handleViewEvent(event)
         }
     }
@@ -160,203 +162,14 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
             }
         }
     }
-    
-    // MARK: View events handling
-
-    private func handleViewEvent(_ event: ViewEvent) {
-        switch event {
-        case .viewInitFinished:
-            growFromVertex(adventure.currentLayer.entrance)
-            
-        case .layerPrepared(let layer):
-            layer.state = .presenting
-        case .layerPresented(let layer):
-            handleLayerPresented(layer)
-        case .layerWasHidden(let layer):
-            handleLayerWasHidden(layer)
-            
-        case .vertexGrowingFinished(let vertex):
-            handleVertexGrowed(vertex)
-        case .vertexUngrowingFinished(let vertex):
-            handleVertexUngrowed(vertex)
-        case .vertexSelected(let vertex):
-            handleVertexSelection(vertex)
         
-        case .edgeSeedExtensionPrepared(let edge):
-            edge.state = .seed(phase: .extended)
-        case .edgeGrowingPrepared(let edge):
-            edge.state = .growing(phase: .pathGrowing)
-        case .edgePathGrowed(let edge):
-            handleEdgePathGrowed(edge)
-        case .edgeElementsPrepared(let edge):
-            edge.state = .growing(phase: .elementsGrowing)
-        case .edgeElementsGrowed(let edge):
-            handleEdgeCounterConnectorGrowed(edge)
-        case .edgeUngrowingPrepared(let edge):
-            handleEdgeUngrowingPrepared(edge)
-        case .edgeElementsUngrowed(let edge):
-            handleEdgeElementsUngrowed(edge)
-        case .edgeUngrowed(let edge):
-            handleEdgeUngrowed(edge)
-            
-        case .gateClosed(let gate):
-            handleGateClosed(gate)
-            
-        case .resourceMovedToGate(let resource):
-            handleResourceMovedToGate(resource)
-        case .resourcePresented(let resource):
-            handleResourcePresented(resource)
-        case .resourceIdleFinished(let resource):
-            handleResourceFinishIdle(resource)
-        case .resourceIdleRestored(let resource):
-            handleResourceIdleRestored(resource)
-        case .resourceDestroyingPrepared(let resource):
-            handleResourceDestroingPrepared(resource)
-        case .resourceDestroyed(let resource):
-            handleResourceDestroyed(resource)
-        }
-    }
-    
-    private func handleInitGrowingCompletion() {
-        lifestate = .gameplay
-        let entrance = adventure.currentLayer.entrance
-        player.position = .vertex(vertex: entrance)
-    }
-    
-    private func handleLayerPresented(_ layer: AdventureLayer) {
-        layer.state = .growing
-        let visit = VertexVisit(visitor: player, phase: .onVertex)
-        layer.entrance.state = .active(visit: visit)
-        growFromVertex(layer.entrance)
-        
-        // Hide menu after restart
-        if layer.type == .initial {
-            let menuLayers = adventure.layers.filter { $0.type == .menu }
-            menuLayers.forEach { startUngrowing($0, exit: layer.entrance) }
-        }
-    }
-    
-    private func handleLayerWasHidden(_ layer: AdventureLayer) {
-        guard case .hiding(let next) = layer.state else { return }
-        if layer.type == .menu {
-            lifestate = .gameplay
-        }
-        if let next = next {
-            adventure.currentLayer = next
-        }
-        removeLayer(layer)
-    }
-                                                     
-    private func handleVertexGrowed(_ vertex: Vertex) {
-        vertex.state = .active()
-        growFromVertex(vertex)
-        checkLayerGrowingCompletion()
-    }
-    
-    private func handleVertexUngrowed(_ vertex: Vertex) {
-        vertex.state = .seed
-        let layers = adventure.layers.filter { $0.vertices.contains(vertex) }
-        layers.forEach { checkLayerUngrowingCompletion($0) }
-    }
-    
-    private func handleVertexSelection(_ newVertex: Vertex) {
-        guard case .vertex(let oldVertex) = player.position else { return }
-        guard case .shown = adventure.currentLayer.state else { return }
-        
-        if oldVertex == newVertex {
-            switch lifestate {
-            case .gameplay:
-                showMenu(from: oldVertex)
-            case .menu:
-                hideMenu(to: oldVertex)
-            default:
-                break
-            }
-        } else {
-            tryMove(player: player, fromVertex: oldVertex, toVertex: newVertex)
-        }
-    }
-    
-    private func handleEdgePathGrowed(_ edge: Edge) {
-        if edge.to.state.isGrowed {
-            edge.state = .growing(phase: .preparingElements)
-        } else {
-            edge.state = .growing(phase: .waitingDestinationVertex)
-            growVertex(edge.to)
-        }
-    }
-    
-    private func handleEdgeCounterConnectorGrowed(_ edge: Edge) {
-        edge.state = .active
-        checkLayerGrowingCompletion()
-    }
-    
-    private func handleEdgeUngrowingPrepared(_ edge: Edge) {
-        edge.state = .ungrowing(phase: .elementsUngrowing)
-    }
-    
-    private func handleEdgeElementsUngrowed(_ edge: Edge) {
-        edge.state = .ungrowing(phase: .pathUngrowing)
-        startUngrowingIfReady(edge.to)
-    }
-    
-    private func handleEdgeUngrowed(_ edge: Edge) {
-        edge.state = .seed(phase: .compressed)
-        startUngrowingIfReady(edge.from)
-        let layers = adventure.layers.filter { $0.edges.contains(edge) }
-        layers.forEach { checkLayerUngrowingCompletion($0) }
-    }
-    
-    private func handleGateClosed(_ gate: EdgeGate) {
-        gateResources(gate).forEach {
-            guard case .gate(let gate, let edge, let vertex, let index, _, let prestate) = $0.state else { return }
-            $0.state = .gate(gate: gate, edge: edge, fromVertex: vertex, fromIndex: index, state: .outcoming, prestate: prestate)
-        }
-    }
-    
-    private func startUngrowingIfReady(_ vertex: Vertex) {
-        let layers = adventure.layers.filter { $0.vertices.contains(vertex) }
-        let notExit = layers.allSatisfy {
-            guard case .ungrowing(let exit) = $0.state else { return true }
-            return exit != vertex
-        }
-        guard notExit else { return }
-
-        let edgeBlockVertex: (Edge) -> Bool = { edge in
-            if edge.to == vertex { return edge.state.blocksToUngrowing }
-            if edge.from == vertex { return edge.state.blocksFromUngrowing }
-            return false
-        }
-        
-        let edges = adventure.layers.flatMap { $0.edges(of: vertex) }
-        let readyToUngrowing = edges.allSatisfy { !edgeBlockVertex($0) }
-        if readyToUngrowing && vertex.state.isGrowed {
-            vertex.state = .ungrowing
-        }
-    }
-    
-    private func handleResourcePresented(_ resource: Resource) {
-        guard case .vertex(let vertex, let index, let total, _) = resource.state else { return }
-        resource.state = .vertex(vertex: vertex, index: index, total: total, idle: .rotation)
-    }
-    
-    private func handleResourceFinishIdle(_ resource: Resource) {
-        guard case .vertex(let vertex, let index, let total, _) = resource.state else { return }
-        resource.state = .vertex(vertex: vertex, index: index, total: total, idle: .restoring)
-    }
-    
-    private func handleResourceIdleRestored(_ resource: Resource) {
-        guard case .vertex(let vertex, let index, let total, _) = resource.state else { return }
-        resource.state = .vertex(vertex: vertex, index: index, total: total, idle: .rotation)
-    }
-    
     private func hideMenu(to: Vertex) {
         let menuLayer = adventure.layers[adventure.layers.count - 1]
         startUngrowing(menuLayer, exit: to)
     }
     
     private func showMenu(from: Vertex) {
-        guard case .active(_, _) = from.state else { return }
+        guard case .active = from.state else { return }
         
         lifestate = .menu
         let menuLayer = IngameMenuService.menuLayer(from: from, theme: adventure.theme)
@@ -374,7 +187,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         let range = forward ? Array(0..<count) : (0..<count).reversed()
         let fromVertex = forward ? edge.from : edge.to
         
-        var failIndex: Int? = nil
+        var failIndex: Int?
         for i in range {
             let gate = edge.gates[i]
             
@@ -405,22 +218,6 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
                 reindexPlayerResources(player)
             }
         }
-    }
-    
-    private func handleResourceMovedToGate(_ resource: Resource) {
-        guard case .gate(let gate, let edge, let vertex, let index, let status, let prestate) = resource.state else { return }
-        guard status == .incoming else { return }
-        resource.state = .gate(gate: gate, edge: edge, fromVertex: vertex, fromIndex: index, state: .stay, prestate: prestate)
-        gate.state = .open
-    }
-    
-    private func handleResourceDestroingPrepared(_ resource: Resource) {
-        guard case .destroying(let from, let index, let total, _) = resource.state else { return }
-        resource.state = .destroying(from: from, index: index, total: total, state: .moving)
-    }
-    
-    private func handleResourceDestroyed(_ resource: Resource) {
-        removeResources([resource])
     }
     
     // MARK: Vertices actions handling
@@ -555,7 +352,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         guard case .ungrowing(let exit) = adventure.currentLayer.state,
             let exit = exit else { return }
         
-        var nextLayer: AdventureLayer? = nil
+        var nextLayer: AdventureLayer?
         if adventure.layers.count > 1 {
             guard case .active(let visit, _) = exit.state else { return }
             let prelayer = adventure.layers[adventure.layers.count - 2]
@@ -581,7 +378,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         }
     }
     
-    private func playerResources(_ player: Player) -> [Resource]  {
+    private func playerResources(_ player: Player) -> [Resource] {
         resources.filter {
             guard case .inventory(let resPlayer, _, _, _, _) = $0.state else { return false }
             return resPlayer == player
@@ -600,7 +397,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         let total = oldResources.count + resources.count
         oldResources.forEach {
             guard case .inventory(_, let index, let estimated, _, let isFresh) = $0.state else { return }
-            $0.state = .inventory(player: player, index: index, estimatedIndex: estimated ,total: total, isFresh: isFresh)
+            $0.state = .inventory(player: player, index: index, estimatedIndex: estimated, total: total, isFresh: isFresh)
         }
         
         var index = oldResources.count
@@ -692,5 +489,214 @@ private extension EdgeState {
         default:
             return true
         }
+    }
+}
+
+// MARK: View events handling
+extension AdventureEngine: ViewEventsListener {
+
+    // swiftlint:disable function_body_length
+    private func handleViewEvent(_ event: ViewEvent) {
+        switch event {
+        case .viewInitFinished:
+            growFromVertex(adventure.currentLayer.entrance)
+            
+        case .layerPrepared(let layer):
+            layer.state = .presenting
+        case .layerPresented(let layer):
+            handleLayerPresented(layer)
+        case .layerWasHidden(let layer):
+            handleLayerWasHidden(layer)
+            
+        case .vertexGrowingFinished(let vertex):
+            handleVertexGrowed(vertex)
+        case .vertexUngrowingFinished(let vertex):
+            handleVertexUngrowed(vertex)
+        case .vertexSelected(let vertex):
+            handleVertexSelection(vertex)
+        
+        case .edgeSeedExtensionPrepared(let edge):
+            edge.state = .seed(phase: .extended)
+        case .edgeGrowingPrepared(let edge):
+            edge.state = .growing(phase: .pathGrowing)
+        case .edgePathGrowed(let edge):
+            handleEdgePathGrowed(edge)
+        case .edgeElementsPrepared(let edge):
+            edge.state = .growing(phase: .elementsGrowing)
+        case .edgeElementsGrowed(let edge):
+            handleEdgeCounterConnectorGrowed(edge)
+        case .edgeUngrowingPrepared(let edge):
+            handleEdgeUngrowingPrepared(edge)
+        case .edgeElementsUngrowed(let edge):
+            handleEdgeElementsUngrowed(edge)
+        case .edgeUngrowed(let edge):
+            handleEdgeUngrowed(edge)
+            
+        case .gateClosed(let gate):
+            handleGateClosed(gate)
+            
+        case .resourceMovedToGate(let resource):
+            handleResourceMovedToGate(resource)
+        case .resourcePresented(let resource):
+            handleResourcePresented(resource)
+        case .resourceIdleFinished(let resource):
+            handleResourceFinishIdle(resource)
+        case .resourceIdleRestored(let resource):
+            handleResourceIdleRestored(resource)
+        case .resourceDestroyingPrepared(let resource):
+            handleResourceDestroingPrepared(resource)
+        case .resourceDestroyed(let resource):
+            handleResourceDestroyed(resource)
+        }
+    }
+    // swiftlint:enable function_body_length
+    
+    private func handleInitGrowingCompletion() {
+        lifestate = .gameplay
+        let entrance = adventure.currentLayer.entrance
+        player.position = .vertex(vertex: entrance)
+    }
+    
+    private func handleLayerPresented(_ layer: AdventureLayer) {
+        layer.state = .growing
+        let visit = VertexVisit(visitor: player, phase: .onVertex)
+        layer.entrance.state = .active(visit: visit)
+        growFromVertex(layer.entrance)
+        
+        // Hide menu after restart
+        if layer.type == .initial {
+            let menuLayers = adventure.layers.filter { $0.type == .menu }
+            menuLayers.forEach { startUngrowing($0, exit: layer.entrance) }
+        }
+    }
+    
+    private func handleLayerWasHidden(_ layer: AdventureLayer) {
+        guard case .hiding(let next) = layer.state else { return }
+        if layer.type == .menu {
+            lifestate = .gameplay
+        }
+        if let next = next {
+            adventure.currentLayer = next
+        }
+        removeLayer(layer)
+    }
+                                                     
+    private func handleVertexGrowed(_ vertex: Vertex) {
+        vertex.state = .active()
+        growFromVertex(vertex)
+        checkLayerGrowingCompletion()
+    }
+    
+    private func handleVertexUngrowed(_ vertex: Vertex) {
+        vertex.state = .seed
+        let layers = adventure.layers.filter { $0.vertices.contains(vertex) }
+        layers.forEach { checkLayerUngrowingCompletion($0) }
+    }
+    
+    private func handleVertexSelection(_ newVertex: Vertex) {
+        guard case .vertex(let oldVertex) = player.position else { return }
+        guard case .shown = adventure.currentLayer.state else { return }
+        
+        if oldVertex == newVertex {
+            switch lifestate {
+            case .gameplay:
+                showMenu(from: oldVertex)
+            case .menu:
+                hideMenu(to: oldVertex)
+            default:
+                break
+            }
+        } else {
+            tryMove(player: player, fromVertex: oldVertex, toVertex: newVertex)
+        }
+    }
+    
+    private func handleEdgePathGrowed(_ edge: Edge) {
+        if edge.to.state.isGrowed {
+            edge.state = .growing(phase: .preparingElements)
+        } else {
+            edge.state = .growing(phase: .waitingDestinationVertex)
+            growVertex(edge.to)
+        }
+    }
+    
+    private func handleEdgeCounterConnectorGrowed(_ edge: Edge) {
+        edge.state = .active
+        checkLayerGrowingCompletion()
+    }
+    
+    private func handleEdgeUngrowingPrepared(_ edge: Edge) {
+        edge.state = .ungrowing(phase: .elementsUngrowing)
+    }
+    
+    private func handleEdgeElementsUngrowed(_ edge: Edge) {
+        edge.state = .ungrowing(phase: .pathUngrowing)
+        startUngrowingIfReady(edge.to)
+    }
+    
+    private func handleEdgeUngrowed(_ edge: Edge) {
+        edge.state = .seed(phase: .compressed)
+        startUngrowingIfReady(edge.from)
+        let layers = adventure.layers.filter { $0.edges.contains(edge) }
+        layers.forEach { checkLayerUngrowingCompletion($0) }
+    }
+    
+    private func handleGateClosed(_ gate: EdgeGate) {
+        gateResources(gate).forEach {
+            guard case .gate(let gate, let edge, let vertex, let index, _, let prestate) = $0.state else { return }
+            $0.state = .gate(gate: gate, edge: edge, fromVertex: vertex, fromIndex: index, state: .outcoming, prestate: prestate)
+        }
+    }
+    
+    private func startUngrowingIfReady(_ vertex: Vertex) {
+        let layers = adventure.layers.filter { $0.vertices.contains(vertex) }
+        let notExit = layers.allSatisfy {
+            guard case .ungrowing(let exit) = $0.state else { return true }
+            return exit != vertex
+        }
+        guard notExit else { return }
+
+        let edgeBlockVertex: (Edge) -> Bool = { edge in
+            if edge.to == vertex { return edge.state.blocksToUngrowing }
+            if edge.from == vertex { return edge.state.blocksFromUngrowing }
+            return false
+        }
+        
+        let edges = adventure.layers.flatMap { $0.edges(of: vertex) }
+        let readyToUngrowing = edges.allSatisfy { !edgeBlockVertex($0) }
+        if readyToUngrowing && vertex.state.isGrowed {
+            vertex.state = .ungrowing
+        }
+    }
+    
+    private func handleResourcePresented(_ resource: Resource) {
+        guard case .vertex(let vertex, let index, let total, _) = resource.state else { return }
+        resource.state = .vertex(vertex: vertex, index: index, total: total, idle: .rotation)
+    }
+    
+    private func handleResourceFinishIdle(_ resource: Resource) {
+        guard case .vertex(let vertex, let index, let total, _) = resource.state else { return }
+        resource.state = .vertex(vertex: vertex, index: index, total: total, idle: .restoring)
+    }
+    
+    private func handleResourceIdleRestored(_ resource: Resource) {
+        guard case .vertex(let vertex, let index, let total, _) = resource.state else { return }
+        resource.state = .vertex(vertex: vertex, index: index, total: total, idle: .rotation)
+    }
+
+    private func handleResourceMovedToGate(_ resource: Resource) {
+        guard case .gate(let gate, let edge, let vertex, let index, let status, let prestate) = resource.state else { return }
+        guard status == .incoming else { return }
+        resource.state = .gate(gate: gate, edge: edge, fromVertex: vertex, fromIndex: index, state: .stay, prestate: prestate)
+        gate.state = .open
+    }
+
+    private func handleResourceDestroingPrepared(_ resource: Resource) {
+        guard case .destroying(let from, let index, let total, _) = resource.state else { return }
+        resource.state = .destroying(from: from, index: index, total: total, state: .moving)
+    }
+
+    private func handleResourceDestroyed(_ resource: Resource) {
+        removeResources([resource])
     }
 }

@@ -93,7 +93,7 @@ extension Array where Element: AnimationStateProtocol {
         return normalized.sorted {$0.progress < $1.progress}
     }
     
-    mutating func add(_ progress: CGFloat,_ value: Element.Value, _ timing: BezierCurve = .linearTiming) {
+    mutating func add(_ progress: CGFloat, _ value: Element.Value, _ timing: BezierCurve = .linearTiming) {
         append(Element(progress: progress, value: value, timing: timing))
     }
 }

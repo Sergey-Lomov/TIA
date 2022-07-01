@@ -34,7 +34,6 @@ final class ScenarioService {
         return layerFor(descriptor.id, layout: layout, forcedEntrance: forcedEntrance)
     }
         
-    
     func layerFor(_ id: String, layout: AdventureLayout, forcedEntrance: Vertex? = nil) -> AdventureLayer {
         var protoAdventure = JSONDecoder.decodeAdventure(id: id)
         let protoEntrance = protoAdventure.vertices.first { $0.role == .entrance }
@@ -121,8 +120,8 @@ final class ScenarioService {
         var edges: [EdgePrototype]
         
         mutating func updateVertexId(_ id: String, to newId: String) {
-            for i in 0..<vertices.count {
-                if vertices[i].id == id { vertices[i].id = newId }
+            for i in 0..<vertices.count where vertices[i].id == id {
+                vertices[i].id = newId
             }
             for i in 0..<edges.count {
                 if edges[i].from == id { edges[i].from = newId }

@@ -22,9 +22,9 @@ extension Array {
         filter({ validator($0) }).count
     }
     
-    public func merged(with: Array<Element>,
+    public func merged(with: [Element],
                        stub: Element,
-                       merger: (Element, Element) -> Element) -> Array<Element> {
+                       merger: (Element, Element) -> Element) -> [Element] {
         var result = [Element]()
         let count = Swift.max(self.count, with.count)
         for i in 0..<count {
@@ -44,19 +44,19 @@ extension Array {
 }
 
 extension Array where Element: Equatable & Hashable {
-    func intersection(_ array: Array<Element>) -> Array<Element> {
+    func intersection(_ array: [Element]) -> [Element] {
         return Array(Set(self).intersection(Set(array)))
     }
 }
 
 extension Array where Element: AdditiveArithmetic {
     
-    public func merged(with: Array<Element>,
-                       merger: (Element, Element) -> Element) -> Array<Element> {
+    public func merged(with: [Element],
+                       merger: (Element, Element) -> Element) -> [Element] {
         return merged(with: with, stub: .zero, merger: merger)
     }
 
-    public static var zero: Array<Element> {
+    public static var zero: [Element] {
         return [Element]()
     }
 }
@@ -69,7 +69,7 @@ extension Array where Element: VectorArithmetic {
     }
     
     public var magnitudeSquared: Double {
-        let magnitudes = map{ $0.magnitudeSquared }
+        let magnitudes = map { $0.magnitudeSquared }
         return magnitudes.reduce(into: 0) { $0 = $0 + $1}
     }
 }

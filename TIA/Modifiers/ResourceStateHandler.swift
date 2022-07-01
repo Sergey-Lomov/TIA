@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ResourceStateHandler: AnimatableModifier  {
+struct ResourceStateHandler: AnimatableModifier {
     
     static private let defaultLengthSteps = 100
     

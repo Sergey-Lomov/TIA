@@ -12,9 +12,9 @@ struct WorldPickerView: View {
     
     var body: some View {
         CenteredGeometryReader {
-            DropShape()
+            ComplexCurveShape(curve: .yinYangDrop())
                 .fill(Color.softBlack)
-            DropShape()
+            ComplexCurveShape(curve: .yinYangDrop())
                 .fill(Color.softWhite)
                 .rotationEffect(.radians(Double.pi))
             
@@ -41,35 +41,16 @@ struct ThemeAdventuresView: View {
     }
 }
 
-struct DropShape: Shape {
-    private let cirleControlCoefficient: CGFloat = 0.66666
-    
-    // TODO: Think of changing calculations to constants or using new 'arc' func in BezierCurve
-    func path(in rect: CGRect) -> Path {
-        
-        let center = CGPoint(x:rect.midX, y: rect.midY)
-        let bottom = CGPoint(x: rect.midX, y: rect.height)
-        let top = CGPoint(x: rect.midX, y: 0)
-        
-        // Draw circle border
-        
-        let controlX = -1 * rect.width * ( cirleControlCoefficient - 0.5)
-        let control1 = CGPoint(x: controlX, y: rect.height)
-        let control2 = CGPoint(x: controlX, y: 0)
-        
-        var path = Path()
-        path.move(to: bottom)
-        path.addCurve(to: top, control1: control1, control2: control2)
-        
-        // Draw separator
-        let smallControlX = rect.midX * cirleControlCoefficient
-        let control3 = CGPoint(x: rect.midX + smallControlX, y: 0)
-        let control4 = CGPoint(x: rect.midX  + smallControlX, y: rect.midY)
-        let control5 = CGPoint(x: rect.midX - smallControlX, y: rect.midY)
-        let control6 = CGPoint(x: rect.midX - smallControlX, y: rect.height)
-        
-        path.addCurve(to: center, control1: control3, control2: control4)
-        path.addCurve(to: bottom, control1: control5, control2: control6)
-        return path
+extension ComplexCurve {
+    static func yinYangDrop() -> ComplexCurve {
+        let outer = BezierCurve.arc(from: .hpi, to: 3 * .hpi, radius: 0.5)
+        let inner1 = BezierCurve
+            .arc(from: .hpi, to: 3 * .hpi, radius: 0.25)
+            .translated(x: 0, y: 0.25)
+            .reversed()
+        let inner2 = BezierCurve
+            .arc(from: -1 * .hpi, to: .hpi, radius: 0.25)
+            .translated(x: 0, y: -0.25)
+        return .init([outer, inner1, inner2])
     }
 }

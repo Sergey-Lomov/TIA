@@ -9,7 +9,6 @@ import Foundation
 import UIKit
 import SwiftUI
 
-// TODO: Remove if still be unused
 struct VisualEffectView: UIViewRepresentable {
     var effect: UIVisualEffect?
     func makeUIView(context: UIViewRepresentableContext<Self>) -> UIVisualEffectView { UIVisualEffectView() }

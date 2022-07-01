@@ -54,7 +54,7 @@ struct Layout {
             static let sizeRatio: CGFloat = 0.3
             static let radius: CGFloat = Layout.Vertex.diameter * sizeRatio
             // 6 is coefficient based on full formula: (half of vertex radius - resource radius) / 3 + half of resource radius. By this calculations, distance between vertex's resources is same like a distance between each resource edge and vertex edge
-            static let angleScale = (Layout.Vertex.diameter + radius) / 6
+            static let offsetScale = (Layout.Vertex.diameter + radius) / 6
         }
         
         struct Player {

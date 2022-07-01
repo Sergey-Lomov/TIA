@@ -125,7 +125,7 @@ struct ResourceWrapper: View {
         case .vertex(_, let index, let total),
                 .vertexIdle(_, let index, let total),
                 .vertexRestoring(_, let index, let total):
-            return inVertextResourcePosition(index: index, total: total).scaled(geometry)
+            return inVertextResourcePosition(index: index, total: total).scaled(geometry.minSize)
         case .inventoryAtVertex(let vertex, let index),
                 .outFromVertex(let vertex, let index, _):
             return resourceSlot(geometry: geometry, vertex: vertex, index: index)
@@ -311,7 +311,7 @@ struct ResourceWrapper: View {
         } else {
             let angle = CGFloat.dpi / CGFloat(total) * CGFloat(index)
             var delta = CGPoint(x: cos(angle), y: sin(angle))
-            delta.scale(by: Layout.Resources.Vertex.angleScale)
+            delta.scale(by: Layout.Resources.Vertex.offsetScale)
             return delta
         }
     }

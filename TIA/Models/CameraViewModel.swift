@@ -88,7 +88,6 @@ class CameraViewModel: ObservableObject {
         
         transferInProgress = true
         steps.removeFirst()
-        // TODO: Here may be a problem - request to published without wrap to main async
         state = next.state
         anchorState = next.anchorState
         animation = next.animation

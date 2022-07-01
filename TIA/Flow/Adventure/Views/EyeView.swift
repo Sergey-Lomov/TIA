@@ -103,10 +103,10 @@ private struct EyeballView: View {
             let pupilSize = size.scaled(pupilSize)
             let eyeballSize = size.scaled(eyeballSize)
             
-            CircleShape()
+            ComplexCurveShape(curve: .circle(radius: 0.5))
                 .stroke(lineWidth: strokeWidth)
                 .frame(size: eyeballSize)
-            CircleShape()
+            ComplexCurveShape(curve: .circle(radius: 0.5))
                 .frame(size: pupilSize)
         }.frame(size: size)
     }

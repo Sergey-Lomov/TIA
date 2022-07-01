@@ -15,7 +15,7 @@ struct EdgeGateView: View {
     var body: some View {
         CenteredGeometryReader { geometry in
             let size = circleSize(geometry)
-            CircleShape()
+            ComplexCurveShape(curve: .circle(radius: 0.5))
                 .frame(size: size)
                 .onAnimationCompleted(for: size) {
                     handleAnimationFinish()

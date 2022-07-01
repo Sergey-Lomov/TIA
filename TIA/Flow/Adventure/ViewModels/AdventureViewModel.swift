@@ -16,20 +16,20 @@ protocol ViewModelsProvider: AnyObject {
 }
 
 final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEventsListener {
-    
+
     private var subscriptions: [AnyCancellable] = []
     private var currentLayerSubscriptions: [AnyCancellable] = []
     let eventsPublisher: ViewEventsPublisher
-    
+
     private var cameraService: CameraService
-    
+
     var model: Adventure
     var player: PlayerViewModel
     @Published var layers: [AdventureLayerViewModel]
     @Published var resources: [ResourceViewModel]
     @Published var background: Color
     @Published var camera: CameraViewModel
-    
+
     init(_ adventure: Adventure,
          cameraService: CameraService,
          player: Player,
@@ -38,7 +38,7 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
          eventsSource: EngineEventsSource?) {
         let palette = ColorPalette.paletteFor(adventure.theme)
         let publisher = ViewEventsPublisher()
-        
+
         self.model = adventure
         self.player = PlayerViewModel(player: player,
                                       color: palette.player,
@@ -46,34 +46,34 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
         self.background = palette.background
         self.cameraService = cameraService
         self.eventsPublisher = publisher
-        
+
         self.layers = adventure.layers.map {
             AdventureLayerViewModel(model: $0, palette: palette, eventsPublisher: publisher)
         }
-        
+
         self.resources = resources.map {
             ResourceViewModel(model: $0, color: palette.resources, borderColor: palette.borders)
         }
-        
+
         // Camera setup
         let entrance = adventure.currentLayer.entrance
         let transState = cameraService.focusOnVertex(entrance)
         let initState = cameraService.forLayer(adventure.currentLayer, focusPoint: entrance.point)
         self.camera = CameraViewModel(state: transState)
         self.camera.transferTo(initState, animation: AnimationService.shared.adventureInitial)
-        
+
         self.player.viewModelsProvider = self
-        
+
         // Combine setup
         listener?.subscribeTo(eventsPublisher)
         if let source = eventsSource {
             subscribeTo(source.eventsPublisher)
         }
-       
+
         self.resources.forEach { resource in
             resource.eventsPublisher = eventsPublisher
         }
-        
+
         subscriptions.sink(camera.objectWillChange) { [weak self] in
             self?.objectWillChange.sendOnMain()
         }
@@ -84,7 +84,7 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
             self?.handleCurrentLayerChange(layer)
         }
     }
-    
+
     func layerResources(_ layer: AdventureLayerViewModel) -> [ResourceViewModel] {
         resources.filter {
             switch $0.state {
@@ -105,36 +105,36 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
             }
         }
     }
-    
+
     private func handleCurrentLayerChange(_ layer: AdventureLayer) {
         currentLayerSubscriptions.removeAll()
         currentLayerSubscriptions.sink(layer.$state) { [weak self] state in
             self?.handleCurrentLayer(layer, newState: state)
         }
     }
-    
+
     private func handleCurrentLayer(_ layer: AdventureLayer, newState state: AdventureLayerState) {
         let lifestate = GameEngine.shared.adventureEngine?.lifestate
         guard state != .preparing else { return }
         guard lifestate != .initializing && lifestate != .finalizing else { return }
-        
+
         var targetLayer: AdventureLayer? = layer
         if case .hiding(let nextLayer) = state {
             targetLayer = nextLayer
         }
-        
+
         let focus = player.position.currentVertex ?? layer.entrance
         var cameraState = CameraState.default
         if let targetLayer = targetLayer {
             cameraState = cameraService.forLayer(targetLayer, focusPoint: focus.point)
         }
-        
+
         let animation = cameraAnimation(layerState: state)
         DispatchQueue.main.async {
             self.camera.transferTo(cameraState, animation: animation)
         }
     }
-    
+
     private func cameraAnimation(layerState: AdventureLayerState) -> Animation {
         switch layerState {
         case .presenting:
@@ -145,7 +145,7 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
             return .none
         }
     }
-    
+
     private func handleLayersUpdate(_ updatedModels: [AdventureLayer]) {
         var newViews: [AdventureLayerViewModel] = []
         for model in updatedModels {
@@ -158,19 +158,19 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
                 newViews.append(newView)
             }
         }
-        
+
         DispatchQueue.main.async {
             self.layers = newViews
         }
     }
-    
+
     // MARK: Engine events handler
     func subscribeTo(_ publisher: EngineEventsPublisher) {
         subscriptions.sink(publisher) { [self] event in
             handleEngineEvent(event)
         }
     }
-    
+
     private func handleEngineEvent(_ event: EngineEvent) {
         switch event {
         case .resourceAdded(let resource):
@@ -181,7 +181,7 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
             handleAdventureFinalizing(exit: exit)
         }
     }
-    
+
     private func handleResourceAdding(_ resource: Resource) {
         let palette = ColorPalette.paletteFor(model.theme)
         let emptyView = resources.first { $0.isEmpty }
@@ -193,12 +193,12 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
             resources.append(view)
         }
     }
-    
+
     private func handleResourceRemoving(_ resource: Resource) {
         let viewModel = resources.first { $0.model == resource }
         viewModel?.detachModel()
     }
-    
+
     private func handleAdventureFinalizing(exit: Vertex) {
         let cameraState = cameraService.focusOnVertex(exit)
         DispatchQueue.main.async {
@@ -213,7 +213,7 @@ extension AdventureViewModel: ViewModelsProvider {
         let edges = layers.flatMap { $0.edges }
         return edges.first { $0.model == edge }
     }
-    
+
     func vertexViewModel(for vertex: Vertex) -> VertexViewModel? {
         let vertices = layers.flatMap { $0.vertices }
         return vertices.first { $0.model == vertex }

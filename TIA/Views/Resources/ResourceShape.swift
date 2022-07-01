@@ -10,12 +10,12 @@ import SwiftUI
 
 struct ResourceShape: Shape {
     let type: ResourceType
-    
+
     func path(in rect: CGRect) -> Path {
         let halfSize = rect.size.half
         var transform = CGAffineTransform(scaleX: halfSize.width, y: halfSize.height)
         transform = transform.translatedBy(x: 1, y: 1)
-        
+
         switch type {
         case .despair:
             return Path.despair().applying(transform)

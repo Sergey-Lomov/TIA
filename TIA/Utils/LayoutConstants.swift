@@ -18,23 +18,23 @@ struct Layout {
         static let doneIconsInteritem: CGFloat = 15
         static let doneIconsGap: CGFloat = 10
     }
-    
+
     struct Menu {
         static let zoom: CGFloat = 1
         static let gap: CGFloat = 0.1
         static let radius: CGFloat = (1 - gap * 2 - Vertex.diameter) / zoom / 2
     }
-    
+
     struct Adventure {
         static let border: CGFloat = 0.05
     }
-    
+
     struct Vertex {
         /// Vertex diamtere ration to screen size
         static let diameter: CGFloat = 0.15
         static let onVisitIcon: CGFloat = 0.75
     }
-    
+
     struct Edge {
         static let curveWidth: CGFloat = 4
         static let borderWidth: CGFloat = 2
@@ -43,12 +43,12 @@ struct Layout {
         static let undrelineWidth = curveWidth + borderWidth * 2
         static let outSpacing: CGFloat = curveWidth + borderWidth * 6
     }
-    
+
     struct EdgeGate {
         static let sizeRatio: CGFloat = 0.05
         static let symbolRatio: CGFloat = 0.75
     }
-    
+
     struct Resources {
         struct Vertex {
             static let sizeRatio: CGFloat = 0.3
@@ -56,7 +56,7 @@ struct Layout {
             // 6 is coefficient based on full formula: (half of vertex radius - resource radius) / 3 + half of resource radius. By this calculations, distance between vertex's resources is same like a distance between each resource edge and vertex edge
             static let offsetScale = (Layout.Vertex.diameter + radius) / 6
         }
-        
+
         struct Player {
             static let sizeRatio: CGFloat = 0.3
             static let vertexGap: CGFloat = 0.15 // Ratio of first radius gap to vertex size

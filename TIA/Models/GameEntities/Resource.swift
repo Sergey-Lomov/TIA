@@ -38,7 +38,7 @@ indirect enum ResourceState {
     case inventory(player: Player, index: Int, estimatedIndex: Int, total: Int, isFresh: Bool) // "Fresh" means gathered at last turn
     case gate(gate: EdgeGate, edge: Edge, fromVertex: Vertex, fromIndex: Int, state: ResourceOnGateState, prestate: ResourceState)
     case destroying(from: Vertex, index: Int, total: Int, state: ResourceMoveOutState)
-        
+
     #if DEBUG
     var short: String {
         switch self {
@@ -55,7 +55,7 @@ class Resource: ObservableObject, IdEqutable {
     let id = UUID().uuidString
     var type: ResourceType
     @Published var state: ResourceState
-    
+
     init(type: ResourceType, state: ResourceState) {
         self.type = type
         self.state = state

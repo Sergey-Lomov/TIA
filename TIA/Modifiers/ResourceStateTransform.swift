@@ -18,7 +18,7 @@ struct ResourceStateTransform {
 }
 
 extension ResourceStateTransform: VectorArithmetic {
-    
+
     static var zero = ResourceStateTransform(localOffset: .zero, localAngle: .zero, size: .zero, opacity: .zero, positioning: .zero)
 
     mutating func scale(by rhs: Double) {
@@ -32,7 +32,7 @@ extension ResourceStateTransform: VectorArithmetic {
     var magnitudeSquared: Double {
         localOffset.magnitudeSquared * localOffset.magnitudeSquared + localAngle.magnitudeSquared * localAngle.magnitudeSquared + size.magnitudeSquared * size.magnitudeSquared + opacity.magnitudeSquared * opacity.magnitudeSquared + positioning.magnitudeSquared * positioning.magnitudeSquared
     }
-    
+
     static func + (lhs: ResourceStateTransform, rhs: ResourceStateTransform) -> ResourceStateTransform {
         .init(localOffset: lhs.localOffset + rhs.localOffset,
               localAngle: lhs.localAngle + rhs.localAngle,
@@ -40,7 +40,7 @@ extension ResourceStateTransform: VectorArithmetic {
               opacity: lhs.opacity + rhs.opacity,
               positioning: lhs.positioning + rhs.positioning)
     }
-    
+
     static func - (lhs: ResourceStateTransform, rhs: ResourceStateTransform) -> ResourceStateTransform {
         .init(localOffset: lhs.localOffset - rhs.localOffset,
               localAngle: lhs.localAngle - rhs.localAngle,

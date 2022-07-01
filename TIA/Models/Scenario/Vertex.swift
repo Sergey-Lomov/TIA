@@ -42,7 +42,7 @@ enum VertexState: Equatable {
     case growing
     case active(visit: VertexVisit? = nil, layerTransfer: VertexLayerTransfer? = nil)
     case ungrowing
-    
+
     var isGrowed: Bool {
         switch self {
         case .seed, .growing, .ungrowing:
@@ -57,23 +57,23 @@ class Vertex: ObservableObject, IdEqutable {
     var id: String
     var onVisit: VertexAction?
     var actions: [VertexAction] = []
-    
+
     @Published var state: VertexState
     var point: CGPoint
     var initialResources: [ResourceType]
-    
+
     init(id: String, state: VertexState = .seed, point: CGPoint = .zero, resources: [ResourceType] = []) {
         self.id = id
         self.state = state
         self.point = point
         self.initialResources = resources
     }
-    
+
     func updateVisitInfo(_ visit: VertexVisit?) {
         guard case .active(_, let transfer) = state else { return }
         state = .active(visit: visit, layerTransfer: transfer)
     }
-    
+
     func mergeWith(_ vertex: Vertex) {
         actions.append(contentsOf: vertex.actions)
         onVisit = vertex.onVisit

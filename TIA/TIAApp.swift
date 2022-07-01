@@ -11,7 +11,7 @@ import UIKit
 @main
 struct TIAApp: App {
     @ObservedObject var game = GameEngine.shared.state
-    
+
     @Namespace var wrapper: Namespace.ID
 
     var body: some Scene {
@@ -26,18 +26,18 @@ struct TIAApp: App {
             }
         }
     }
-    
+
     func menuViewModel(_ cameraService: CameraService) -> MainMenuViewModel {
         .init(game: game, cameraService: cameraService)
     }
-    
+
     func adventureViewModel(_ cameraService: CameraService) -> AdventureViewModel? {
         guard let adventure = game.activeAdventure,
            let player = GameEngine.shared.player,
            let resources = GameEngine.shared.resources else {
                return nil
            }
-            
+
         return .init(adventure,
                      cameraService: cameraService,
                      player: player,

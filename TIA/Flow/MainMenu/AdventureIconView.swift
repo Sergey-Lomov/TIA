@@ -9,11 +9,11 @@ import Foundation
 import SwiftUI
 
 struct AdventureIconWrapper: View {
-    
+
     @ObservedObject var model: AdventureIconViewModel
     @Environment(\.cameraService) var cameraService
     @State var isSelected = false
-        
+
     var body: some View {
         CenteredGeometryReader { geometry in
             let transform = transform(geometry)
@@ -28,17 +28,17 @@ struct AdventureIconWrapper: View {
                         isSelected = true
                     }
                 }
-            
+
             if isSelected {
                 Color.clear.preference(key: SelectedAdventurePreferenceKey.self, value: model.adventure)
             }
         }
     }
-    
+
     private func transform(_ geometry: GeometryProxy) -> AdventureIconStateTransform {
         .init(size: size(geometry), angle: angle(geometry), offset: offset(geometry))
     }
-    
+
     private func offset(_ geometry: GeometryProxy) -> CGPoint {
         switch model.state {
         case .opening, .becameCurrent, .current, .preclosing, .closing:
@@ -51,7 +51,7 @@ struct AdventureIconWrapper: View {
             return CGPoint(x: 0, y: y)
         }
     }
-    
+
     private func angle(_ geometry: GeometryProxy) -> CGFloat {
         switch model.state {
         case .done(let slot), .becameDone(let slot):
@@ -62,7 +62,7 @@ struct AdventureIconWrapper: View {
             return .zero
         }
     }
-    
+
     private func size(_ geometry: GeometryProxy) -> CGFloat {
         switch model.state {
         case .planed:
@@ -75,7 +75,7 @@ struct AdventureIconWrapper: View {
             return Layout.MainMenu.doneIconSize * geometry.minSize
         }
     }
-    
+
     var animation: Animation? {
         switch model.state {
         case .planed, .preclosing, .current:
@@ -102,7 +102,7 @@ struct AdventureIconWrapper: View {
 
 struct AdventureIconView: View {
     @StateObject var model: AdventureIconViewModel
-    
+
     var body: some View {
         ZStack {
             let palette = ColorPalette.paletteFor(model.adventure.theme)
@@ -113,7 +113,7 @@ struct AdventureIconView: View {
                 .stroke(palette.borders)
         }
     }
-    
+
     var color: Color {
         let palette = ColorPalette.paletteFor(model.adventure.theme)
         switch model.state {
@@ -123,11 +123,11 @@ struct AdventureIconView: View {
             return palette.vertex
         }
     }
-    
+
     var shapeCurve: ComplexCurve {
         shapeFor(model.state)
     }
-    
+
     private func shapeFor(_ state: AdventureIconState) -> ComplexCurve {
         switch state {
         case .closing(let willBeDone):
@@ -141,7 +141,7 @@ struct AdventureIconView: View {
             return .circle(radius: 0.5, componentsCount: curve.components.count)
         }
     }
-    
+
     func applyTransform(_ transform: AdventureIconStateTransform) -> ModifiedContent<Self, AdventureIconStateHandler> {
         modifier(AdventureIconStateHandler(transform: transform))
     }

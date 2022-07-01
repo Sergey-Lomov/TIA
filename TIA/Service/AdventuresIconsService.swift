@@ -10,7 +10,7 @@ import CoreGraphics
 final class AdventuresIconsService {
 
     private static let starsDeep: CGFloat = 0.5
-    
+
     static func curveFor(_ shape: AdventureDoneShape) -> ComplexCurve {
         switch shape {
         case .star8:

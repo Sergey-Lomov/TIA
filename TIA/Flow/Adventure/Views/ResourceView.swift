@@ -13,24 +13,24 @@ struct ResourceWrapper: View {
     private let toGateRandomizationRange = CGFloat(50)...CGFloat(100)
     private let failedMovingGap: CGFloat = 0.1
     private let destroyingRadius: CGFloat = 0.5
-    
+
     static let colors: [Color] = [.yellow, .red, .green, .blue]
     static var colorIndex = 0
     static func getColor() -> Color {
         colorIndex = colorIndex < colors.count - 1 ? colorIndex + 1 : 0
         return colors[colorIndex]
     }
-    
+
     @ObservedObject var resource: ResourceViewModel
     var layer: AdventureLayer
-    
+
     var body: some View {
         return CenteredGeometryReader { geometry in
             if isVisible {
                 let positionCurve = positionCurve(geometry)
                 let transform = transform(geometry)
                 let animation = stateAnimation(geometry)
-                
+
                 ResourceView(resource: resource)
                     .handleState(transform: transform,
                                  positionCurve: positionCurve,
@@ -42,7 +42,7 @@ struct ResourceWrapper: View {
                     .onAppear {
                         resource.presentationFinished()
                     }
-                
+
 //                let testCurve = positionCurve.scaled(x: 1 / geometry.size.width, y: 1 / geometry.size.height)
 //                ComplexCurveShape(curve: testCurve)
 //                    .stroke(Self.getColor(), lineWidth: 2)
@@ -50,7 +50,7 @@ struct ResourceWrapper: View {
             }
         }
     }
-    
+
     private var isVisible: Bool {
         switch resource.metastate {
         case .abscent:
@@ -63,7 +63,7 @@ struct ResourceWrapper: View {
             return true
         }
     }
-    
+
     private var opacity: CGFloat {
         switch resource.metastate {
         case .abscent, .destroying:
@@ -72,7 +72,7 @@ struct ResourceWrapper: View {
             return 1
         }
     }
-    
+
     private func handlePositioningFinish() {
         switch resource.metastate {
         case .vertexIdle:
@@ -93,7 +93,7 @@ struct ResourceWrapper: View {
             break
         }
     }
-    
+
     // MARK: Transform calculation
     // TODO: Try to move transform calcualtions into the modifier
     private func transform(_ geometry: GeometryProxy) -> ResourceStateTransform {
@@ -144,7 +144,7 @@ struct ResourceWrapper: View {
             return 0
         }
     }
-    
+
     private func stateAnimation(_ geometry: GeometryProxy) -> Animation? {
         switch resource.metastate {
         case .vertexIdle(_, _, let total):
@@ -321,7 +321,7 @@ extension ResourceWrapper {
 
 struct ResourceView: View {
     @ObservedObject var resource: ResourceViewModel
-    
+
     var body: some View {
         CenteredGeometryReader {
             if let type = resource.type {
@@ -332,7 +332,7 @@ struct ResourceView: View {
             }
         }
     }
-    
+
     func handleState(transform: ResourceStateTransform,
                      positionCurve: ComplexCurve,
                      targetPositioning: CGFloat,
@@ -346,26 +346,26 @@ private extension Animation {
     static var groupRotation: Animation {
         linear(duration: 40)
     }
-    
+
     static var soloRotation: Animation {
         linear(duration: 15)
     }
-    
+
     static var toGate: Animation {
         let duration = AnimationService.shared.resToGateDuration()
         return .easeInOut(duration: duration)
     }
-    
+
     static func vertexOut(edgeLength: CGFloat) -> Animation {
         let duration = AnimationService.shared.playerMovingDuration(length: edgeLength)
         return .easeOut(duration: duration)
     }
-    
+
     static func positioning(_ geometry: GeometryProxy, playerLength: CGFloat, resourceLength: CGFloat, index: Int, total: Int) -> Animation {
         let timing = AnimationService.shared.resourceMovingTiming(geometry, playerLength: playerLength, resourceLength: resourceLength, index: index, total: total)
         return .easeInOut(duration: timing.duration).delay(timing.delay)
     }
-    
+
     static func destroying(index: Int, total: Int) -> Animation {
         let step = total > 1 ? 1 / CGFloat(total - 1) : 0
         let delay = CGFloat(index) * step

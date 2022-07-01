@@ -48,7 +48,7 @@ extension ResourceState {
             return false
         }
     }
-    
+
     var metastate: ResourceMetastate {
         switch self {
         case .vertex(let vertex, let index, let total, let idleState):
@@ -60,7 +60,7 @@ extension ResourceState {
             case .restoring:
                 return .vertexRestoring(vertex: vertex, index: index, total: total)
             }
-        
+
         case .gate(let gate, let edge, let vertex, let index, let state, _):
             switch state {
             case .incoming:
@@ -70,13 +70,13 @@ extension ResourceState {
             case .outcoming:
                 return .fromGate(gate: gate, edge: edge, toVertex: vertex, toIndex: index)
             }
-        
+
         case .inventory(let player, let index, let estimated, let total, let isFresh):
             switch player.metastate {
-            
+
             case .abscent:
                 return .abscent
-            
+
             case .vertex(let vertex),
                     .compressing(let vertex),
                     .expanding(let vertex):
@@ -90,7 +90,7 @@ extension ResourceState {
                 default:
                     return .inventoryAtVertex(vertex: vertex, index: index)
                 }
-           
+
             case .moving(let edge, let forward):
                 if isFresh {
                     let vertex = forward ? edge.to : edge.from
@@ -98,7 +98,7 @@ extension ResourceState {
                 } else {
                     return .successMoving(edge: edge, forward: forward, fromIndex: index, toIndex: estimated, total: total)
                 }
-            
+
             case .movingToGate(let gate, let edge, let forward):
                 let vertex = forward ? edge.from : edge.to
                 return .failedNear(gate: gate, edge: edge, vertex: vertex, index: index, total: total)
@@ -106,7 +106,7 @@ extension ResourceState {
                 let vertex = forward ? edge.from : edge.to
                 return .failedNear(gate: gate, edge: edge, vertex: vertex, index: index, total: total)
             }
-            
+
         case .destroying(let from, let index, let total, let phase):
             switch phase {
             case .preparing:

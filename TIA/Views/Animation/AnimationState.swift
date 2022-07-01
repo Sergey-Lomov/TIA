@@ -11,11 +11,11 @@ import SwiftUI
 
 protocol AnimationStateProtocol {
     associatedtype Value: VectorArithmetic
-    
+
     var progress: CGFloat { get }
     var value: Value { get }
     var timing: BezierCurve { get }
-    
+
     init(progress: CGFloat, value: Value, timing: BezierCurve)
     func normalized() -> Self
 }
@@ -24,7 +24,7 @@ struct AnimationState<Value>: AnimationStateProtocol where Value: VectorArithmet
     let progress: CGFloat
     let value: Value
     let timing: BezierCurve
-    
+
     func normalized() -> Self {
         let progress = progress.normalized(min: 0, max: 1)
         return Self(progress: progress, value: value, timing: timing)
@@ -33,19 +33,19 @@ struct AnimationState<Value>: AnimationStateProtocol where Value: VectorArithmet
 
 class AnimationStatesContainer<Value> where Value: VectorArithmetic {
     typealias State = AnimationState<Value>
-    
+
     let states: [State]
-    
+
     init(states: [State]) {
         self.states = states.normalized()
     }
-    
+
     func valueFor(_ progress: CGFloat) -> Value {
         for i in 0...(states.count - 2) {
             guard let localProgress = localProgress(index: i, global: progress) else {
                 continue
             }
-            
+
             let startValue = states[i].value
             let finishValue = states[i + 1].value
             let mult = states[i].timing.getY(t: localProgress)
@@ -53,19 +53,19 @@ class AnimationStatesContainer<Value> where Value: VectorArithmetic {
             apendix.scale(by: mult)
             return startValue + apendix
         }
-        
+
         return .zero
     }
-    
+
     private func localProgress(index i: Int, global: CGFloat) -> CGFloat? {
         guard i < states.count - 1 else { return nil } // Last state should be used only like an interval fnish, not start
-        
+
         let current = states[i].progress
         let next = states[i + 1].progress
         guard current <= global && next >= global else {
             return nil
         }
-        
+
         let delta = global - current
         return delta == 0 ? 0 : (next - current) / delta
     }
@@ -92,7 +92,7 @@ extension Array where Element: AnimationStateProtocol {
 
         return normalized.sorted {$0.progress < $1.progress}
     }
-    
+
     mutating func add(_ progress: CGFloat, _ value: Element.Value, _ timing: BezierCurve = .linearTiming) {
         append(Element(progress: progress, value: value, timing: timing))
     }

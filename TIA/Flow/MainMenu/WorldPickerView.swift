@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WorldPickerView: View {
     @StateObject var model: MainMenuViewModel
-    
+
     var body: some View {
         CenteredGeometryReader {
             ComplexCurveShape(curve: .yinYangDrop())
@@ -17,7 +17,7 @@ struct WorldPickerView: View {
             ComplexCurveShape(curve: .yinYangDrop())
                 .fill(Color.softWhite)
                 .rotationEffect(.radians(Double.pi))
-            
+
             let themes = AdventureTheme.allCases
             ForEach(themes.indices, id: \.self) { index in
                 if let models = model.icons[themes[index]] {
@@ -30,7 +30,7 @@ struct WorldPickerView: View {
 
 struct ThemeAdventuresView: View {
     var models: [AdventureIconViewModel]
-    
+
     var body: some View {
         CenteredGeometryReader { geometry in
             ForEach(models, id: \.id) { model in

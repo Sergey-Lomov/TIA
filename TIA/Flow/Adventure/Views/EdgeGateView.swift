@@ -11,7 +11,7 @@ struct EdgeGateView: View {
     @ObservedObject var gate: EdgeGateViewModel
     var backColor: Color
     var symbolColor: Color
-    
+
     var body: some View {
         CenteredGeometryReader { geometry in
             let size = circleSize(geometry)
@@ -22,7 +22,7 @@ struct EdgeGateView: View {
                 }
                 .animation(sizeAnimation, value: size)
                 .foregroundColor(backColor)
-            
+
             switch gate.model.requirement {
             case .resource(let type):
                 ResourceShape(type: type)
@@ -32,7 +32,7 @@ struct EdgeGateView: View {
             }
         }
     }
-    
+
     func circleSize(_ geometry: GeometryProxy) -> CGFloat {
         switch gate.state {
         case .open, .seed, .ungrowing:
@@ -41,11 +41,11 @@ struct EdgeGateView: View {
             return geometry.minSize * Layout.EdgeGate.sizeRatio
         }
     }
-    
+
     func symbolSize(_ geometry: GeometryProxy) -> CGFloat {
         return circleSize(geometry) * Layout.EdgeGate.symbolRatio
     }
-    
+
     private var sizeAnimation: Animation? {
         switch gate.state {
         case .growing:
@@ -60,7 +60,7 @@ struct EdgeGateView: View {
             return nil
         }
     }
-    
+
     func handleAnimationFinish() {
         switch gate.state {
         case .close:

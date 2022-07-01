@@ -16,13 +16,13 @@ struct SelectedAdventurePreferenceKey: PreferenceKey {
 }
 
 struct MainMenuView: View {
-    
+
     @ObservedObject var model: MainMenuViewModel
 
     var body: some View {
         Color.yellow
             .edgesIgnoringSafeArea(.all)
-        
+
         ZStack {
             WorldPickerView(model: model)
                 .frame(size: Layout.MainMenu.pickerSize)

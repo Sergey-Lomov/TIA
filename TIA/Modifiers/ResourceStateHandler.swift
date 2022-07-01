@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct ResourceStateHandler: AnimatableModifier {
-    
+
     static private let defaultLengthSteps = 100
-    
+
     private let id = UUID().uuidString
     private let positionCurve: ComplexCurve
     private let targetPositioning: CGFloat
@@ -18,7 +18,7 @@ struct ResourceStateHandler: AnimatableModifier {
     private let ratios: [CGFloat]
     private var onFinish: Action?
     private var transform: ResourceStateTransform
-    
+
     public var animatableData: ResourceStateTransform {
         get { transform }
         set { transform = newValue
@@ -28,21 +28,21 @@ struct ResourceStateHandler: AnimatableModifier {
             }
         }
     }
-    
+
     init(transform: ResourceStateTransform, positionCurve: ComplexCurve, onFinish: Action?, targetPositioning: CGFloat = 1, deltaPositioning: CGFloat = 0, lengthSteps: Int = defaultLengthSteps) {
         self.transform = transform
         self.positionCurve = positionCurve
         self.onFinish = onFinish
         self.targetPositioning = targetPositioning
         self.deltaPositioning = deltaPositioning
-        
+
         let lengths = positionCurve.components.map {
             $0.length(stepsCount: lengthSteps)
         }
         let total = lengths.reduce(0, +)
         self.ratios = lengths.map { Math.divide($0, total) }
     }
-    
+
     func body(content: Content) -> some View {
         CenteredGeometryReader {
             let point = getPoint(t: transform.positioning - deltaPositioning)
@@ -54,10 +54,10 @@ struct ResourceStateHandler: AnimatableModifier {
                 .offset(point: point)
         }
     }
-    
+
     private func getPoint(t: CGFloat) -> CGPoint {
         guard !positionCurve.components.isEmpty else { return .zero }
-        
+
         var left = t
         var index = 0
         while index < ratios.count - 1 && ratios[index] < left {

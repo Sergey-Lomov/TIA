@@ -17,19 +17,19 @@ private enum MainMenuState {
 }
 
 final class MainMenuViewModel: ObservableObject {
-    
+
     private var subscriptions: [AnyCancellable] = []
-    
+
     private var state: MainMenuState
     private var game: GameState
     @Published var camera: CameraViewModel
     @Published var icons: [AdventureTheme: [AdventureIconViewModel]] = [:]
     var cameraService: CameraService
-    
+
     init(game: GameState, cameraService: CameraService) {
         self.game = game
         self.cameraService = cameraService
-                
+
         if let finalized = game.finalizedAdventure {
             let descriptor = game.scenario.descriptorFor(finalized)
             guard let descriptor = descriptor else {
@@ -46,17 +46,17 @@ final class MainMenuViewModel: ObservableObject {
             self.state = .common
             self.camera = .init(state: .default)
         }
-        
+
         AdventureTheme.allCases.forEach {
             self.icons[$0] = icons($0)
         }
-        
+
         // Combine setup
         subscriptions.sink(camera.objectWillChange) { [weak self] in
             self?.objectWillChange.sendOnMain()
         }
     }
-    
+
     private func initedAfterFinish(_ adventure: AdventureDescriptor) {
         state = .closing(adventure)
         let willBeDone = adventure.state == .done
@@ -66,14 +66,14 @@ final class MainMenuViewModel: ObservableObject {
             self?.closingFinished(adventure)
         }
     }
-    
+
     private func closingFinished(_ adventure: AdventureDescriptor) {
         guard adventure.state == .done else {
             iconFor(adventure)?.state = .current
             state = .common
             return
         }
-        
+
         guard let icon = iconFor(adventure) else { return }
         icon.state = .becameDone(slot: 0)
         let adventures = game.scenario.adventures[adventure.theme]
@@ -86,14 +86,14 @@ final class MainMenuViewModel: ObservableObject {
             iconFor(next)?.state = .becameCurrent
         }
     }
-    
+
     private func icons(_ theme: AdventureTheme) -> [AdventureIconViewModel] {
         let adventures = game.scenario.adventures[theme] ?? []
         return adventures.map {
             AdventureIconViewModel(adventure: $0, state: stateFor($0))
         }
     }
-    
+
     private func stateFor(_ adventure: AdventureDescriptor) -> AdventureIconState {
         switch state {
         case .common:
@@ -125,7 +125,7 @@ final class MainMenuViewModel: ObservableObject {
                 return .done(slot: 0)
             }
             var maxDone = adventures.filter({ $0.state == .done }).count
-            
+
             switch state {
             case .initAfterFinish(let associated), .closing(let associated):
                 if associated.theme == adventure.theme {
@@ -134,7 +134,7 @@ final class MainMenuViewModel: ObservableObject {
             default:
                 break
             }
-            
+
             let slot = maxDone - adventure.index
             return .done(slot: slot)
         }
@@ -150,7 +150,7 @@ extension MainMenuViewModel {
     func adventureSelected(_ adventure: AdventureDescriptor) {
         state = .opening(adventure)
         iconFor(adventure)?.state = .opening
-        
+
         let to = cameraService.focusOnCurrentAdventure(adventure.theme)
         let animation = AnimationService.shared.toAdventure
         camera.transferTo(to, animation: animation, anchorAnimation: .final) { [weak self] in

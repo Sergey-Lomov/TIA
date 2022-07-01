@@ -19,7 +19,7 @@ enum VertexViewMetastate {
 }
 
 extension VertexState {
-    
+
     var metastate: VertexViewMetastate {
         switch self {
         case .seed:

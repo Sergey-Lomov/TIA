@@ -15,7 +15,7 @@ struct DrawingProgressModifier: AnimatableModifier {
         get { drawingProgress }
         set { drawingProgress = newValue  }
     }
-    
+
     func body(content: Content) -> some View {
         content
             .environment(\.drawingProgress, drawingProgress)

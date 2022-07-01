@@ -14,7 +14,7 @@ struct ViewRedrawHandlerModifier: ViewModifier {
             handler()
         }
     }
-    
+
     func body(content: Content) -> some View {
         content
     }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DrawableCurvesView: View {
-    
+
     let elements: [DrawableCurve]
     var lineCap: CGLineCap = .round
     @Environment(\.drawingProgress) var drawingProgress
@@ -29,7 +29,7 @@ struct DrawableCurvesView: View {
         let relative = (drawingProgress - element.startAt) / length
         return relative.normalized(min: 0, max: 1)
     }
-    
+
     private func strokeStyle(_ element: DrawableCurve) -> StrokeStyle {
         let width = element.widthMult * drawingWidth
         return StrokeStyle(lineWidth: width, lineCap: lineCap)

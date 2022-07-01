@@ -8,7 +8,7 @@
 import Foundation
 
 final class GameState: ObservableObject {
-    
+
     @Published var scenario = ScenarioService.shared.restoreScenario()
     @Published var activeAdventure: Adventure?
     var finalizedAdventure: Adventure?

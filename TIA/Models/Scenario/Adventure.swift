@@ -25,7 +25,7 @@ enum AdventureDoneShape: String, Codable {
 }
 
 class Adventure: ObservableObject {
-    
+
     private static let menuEdgePrefix = "menu_edge_"
 
     let id: String
@@ -34,21 +34,21 @@ class Adventure: ObservableObject {
     let doneShape: AdventureDoneShape
     @Published var layers: [AdventureLayer]
     @Published var currentLayer: AdventureLayer
-    
+
     var allVertices: [Vertex] {
         layers.flatMap { $0.vertices }
     }
-    
+
     var allEdges: [Edge] {
         layers.flatMap { $0.edges }
     }
-    
+
     init(id: String, index: Int, theme: AdventureTheme, initialLayer: AdventureLayer, doneShape: AdventureDoneShape) {
         self.id = id
         self.index = index
         self.theme = theme
         self.doneShape = doneShape
-        
+
         self.layers = [initialLayer]
         self.currentLayer = initialLayer
     }

@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct VertexWrapper: View {
-    
+
     @ObservedObject var vertex: VertexViewModel
-    
+
     var body: some View {
         CenteredGeometryReader { geometry in
 
             let diameter = geometry.minSize * Layout.Vertex.diameter
-        
+
             VertexView(vertex: vertex, diameter: diameter)
                 .offset(point: vertex.point, geometry: geometry)
                 .onTapGesture {
@@ -26,10 +26,10 @@ struct VertexWrapper: View {
 }
 
 struct VertexView: View {
-    
+
     @ObservedObject var vertex: VertexViewModel
     var diameter: CGFloat
-    
+
     var body: some View {
         CenteredGeometryReader { geometry in
             ComplexCurveShape(curve: .circle(radius: 0.5))
@@ -40,7 +40,7 @@ struct VertexView: View {
                     handleMutatingFinished()
                 }
                 .animation(animation, value: scale)
-            
+
             onVisitView()
                 .scaleEffect(scale)
                 .frame(size: diameter * Layout.Vertex.onVisitIcon)
@@ -48,7 +48,7 @@ struct VertexView: View {
                 .foregroundColor(vertex.elementsColor)
         }
     }
-    
+
     private var scale: CGFloat {
         switch vertex.metastate {
         case .seed, .ungrowing:
@@ -68,7 +68,7 @@ struct VertexView: View {
             return nil
         }
     }
-    
+
     var onVisitProgress: CGFloat {
         switch vertex.metastate {
         case .active:
@@ -77,7 +77,7 @@ struct VertexView: View {
             return 0
         }
     }
-    
+
     private func onVisitAnimation(_ geometry: GeometryProxy) -> Animation? {
         switch vertex.metastate {
         case .active:
@@ -91,7 +91,7 @@ struct VertexView: View {
             return nil
         }
     }
-    
+
     private func handleMutatingFinished() {
         switch vertex.state {
         case .growing:
@@ -102,7 +102,7 @@ struct VertexView: View {
             break
         }
     }
-    
+
     @ViewBuilder
     private func onVisitView() -> some View {
         if let action = vertex.model.onVisit,

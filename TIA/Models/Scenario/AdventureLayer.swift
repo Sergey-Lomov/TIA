@@ -20,7 +20,7 @@ enum AdventureLayerState: Equatable {
     case shown
     case ungrowing(exit: Vertex?)
     case hiding(next: AdventureLayer?)
-    
+
     #if DEBUG
     var short: String {
         switch self {
@@ -48,7 +48,7 @@ class AdventureLayer: ObservableObject, IdEqutable, Hashable {
     var vertices: [Vertex]
     var edges: [Edge]
     var entrance: Vertex
-    
+
     init(type: AdventureLayerType, state: AdventureLayerState, vertices: [Vertex], edges: [Edge], entrance: Vertex) {
         self.type = type
         self.state = state
@@ -56,29 +56,29 @@ class AdventureLayer: ObservableObject, IdEqutable, Hashable {
         self.edges = edges
         self.entrance = entrance
     }
-    
+
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
-    
+
     func outcome(_ vertex: Vertex) -> [Edge] {
         return edges.filter { $0.from == vertex }
     }
-    
+
     func income(_ vertex: Vertex) -> [Edge] {
         return edges.filter { $0.to == vertex }
     }
-    
+
     func edges(of vertex: Vertex) -> [Edge] {
         var edges = outcome(vertex)
         edges.append(contentsOf: income(vertex))
         return Array(Set(edges))
     }
-    
+
     func edgesBetween(v1: Vertex, v2: Vertex) -> [Edge] {
         edges.filter { ($0.from == v1 && $0.to == v2) || ($0.to == v1 && $0.from == v2) }
     }
-    
+
     func isInitialGrowingFinished() -> Bool {
         switch state {
         case .preparing, .presenting: return false
@@ -86,14 +86,14 @@ class AdventureLayer: ObservableObject, IdEqutable, Hashable {
         case .growing: return calculateInitialGrowing()
         }
     }
-        
+
     private func calculateInitialGrowing() -> Bool {
         let growingChecker: (Edge) -> Bool = { edge in
             edge.state.isGrowed && edge.from.state.isGrowed && edge.to.state.isGrowed
         }
         return !edges.contains { $0.growOnStart && !growingChecker($0)}
     }
-    
+
 //    func menuEdge(from: Vertex) -> Edge? {
 //        return edges.firstById(Self.menuEdgePrefix + from.id)
 //    }

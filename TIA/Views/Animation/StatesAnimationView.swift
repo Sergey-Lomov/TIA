@@ -11,13 +11,13 @@ struct StatesAnimationView<Content>: View, Animatable where Content: View & Anim
 
     typealias State = AnimationState<Content.AnimatableData>
     typealias StatesContainer = AnimationStatesContainer<Content.AnimatableData>
-    
+
     private var content: Content
     private var states: StatesContainer
     private var progress: CGFloat = 0 {
         didSet { content.animatableData = states.valueFor(progress) }
     }
-    
+
     var animatableData: CGFloat {
         get { progress }
         set { progress = newValue }
@@ -27,7 +27,7 @@ struct StatesAnimationView<Content>: View, Animatable where Content: View & Anim
         self.content = content
         self.states = StatesContainer(states: states)
     }
-    
+
     var body: some View {
         content
     }

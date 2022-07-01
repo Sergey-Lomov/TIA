@@ -36,12 +36,12 @@ enum EdgeState: Equatable {
     case growing(phase: EdgeGrowingPhase)
     case active
     case ungrowing(phase: EdgeUngrowingPhase)
-    
+
     // TODO: After handling another TODOs this bool may became unnecessary if all associated values will be removed
     var isSeed: Bool {
         if case .seed = self { return true } else { return false }
     }
-    
+
     var isGrowed: Bool {
         switch self {
         case .seed, .growing, .ungrowing:
@@ -55,22 +55,22 @@ enum EdgeState: Equatable {
 class Edge: ObservableObject, IdEqutable {
     private let curveLengthSteps: Int = 100
     private let seedCurveDelta: CGFloat = 0.1
-    
+
     let id: String
     var from: Vertex
     var to: Vertex
     var gates: [EdgeGate] = []
     var growOnStart: Bool
     @Published var state: EdgeState
-    
+
     // TODO: Change random seed curve to tension seed curve
     var pregrowingCurve: BezierCurve
     var curve: BezierCurve
-    
+
     func length(_ geometry: GeometryProxy) -> CGFloat {
         curve.scaled(geometry).length(stepsCount: curveLengthSteps)
     }
-  
+
     init(id: String,
          from: Vertex,
          to: Vertex,
@@ -85,13 +85,13 @@ class Edge: ObservableObject, IdEqutable {
         self.growOnStart = growOnStart
         self.state = state
         self.curve = curve
-        
+
         if theme == .light {
             self.pregrowingCurve = curve
         } else {
             self.pregrowingCurve = curve.randomControlsCurve(maxDelta: seedCurveDelta)
         }
-        
+
         self.gates = price.map {
             .init(requirement: .resource($0), edgeStatePublisher: $state)
         }
@@ -99,7 +99,7 @@ class Edge: ObservableObject, IdEqutable {
 }
 
 extension Edge: Hashable {
-    
+
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }

@@ -11,7 +11,7 @@ import CoreGraphics
 enum IngameMenuItem: String {
     case exit
     case restart
-    
+
     var onVisit: VertexAction? {
         switch self {
         case .exit:
@@ -20,7 +20,7 @@ enum IngameMenuItem: String {
             return .restart
         }
     }
-    
+
     var actions: [VertexAction] {
         return []
     }
@@ -29,10 +29,10 @@ enum IngameMenuItem: String {
 final class IngameMenuService {
     private static let vertexIdPrefix = "menu_"
     private static let edgeIdPrefix = "edge_to_"
-    
+
     static func menuLayer(from source: Vertex, theme: AdventureTheme) -> AdventureLayer {
         let items = GameEngine.shared.availableIngameMenuItems()
-        
+
         var vertices: [Vertex] = []
         var angle: CGFloat = 0
         let radius = Layout.Menu.radius
@@ -43,10 +43,10 @@ final class IngameMenuService {
             vertex.actions = item.actions
             vertex.onVisit = item.onVisit
             vertices.append(vertex)
-            
+
             angle += .dpi / CGFloat(items.count)
         }
-        
+
         let radiusRange = FloatRange(from: radius / 4, to: radius / 2)
         let angleRange =  FloatRange(from: .hpi / 4, to: .hpi / 2)
         var edges: [Edge] = []
@@ -58,7 +58,7 @@ final class IngameMenuService {
             let edge = Edge(id: id, from: source, to: vertex, growOnStart: true, curve: edgeCurve, theme: theme)
             edges.append(edge)
         }
-        
+
         vertices.append(source)
         return AdventureLayer(type: .menu, state: .preparing, vertices: vertices, edges: edges, entrance: source)
     }

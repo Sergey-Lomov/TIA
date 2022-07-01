@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct PlayerWrapperView: View {
-    
+
     @ObservedObject var player: PlayerViewModel
     @State var positionProgress: CGFloat = 0
-    
+
     var body: some View {
         CenteredGeometryReader { geometry in
             if isVisible {
@@ -26,7 +26,7 @@ struct PlayerWrapperView: View {
             }
         }
     }
-    
+
     private var isVisible: Bool {
         switch player.model.metastate {
         case .abscent:
@@ -35,7 +35,7 @@ struct PlayerWrapperView: View {
             return true
         }
     }
-    
+
     private func targetPositionProgress(_ geometry: GeometryProxy) -> CGFloat {
         switch player.model.metastate {
         case .moving:
@@ -64,7 +64,7 @@ struct PlayerWrapperView: View {
             return .onePoint(point)
         }
     }
-    
+
     private func positionAnimation(_ geometry: GeometryProxy) -> Animation? {
         switch player.model.metastate {
         case .abscent, .vertex, .compressing, .expanding:
@@ -110,12 +110,12 @@ struct PlayerView: View {
                     .maskToCurrentEdgeVertices(player: player, size: superSize)
                     .transition(.identity)
             }
-            
+
             EyeView(eye: $player.eye, color: player.color)
                 .frame(width: 40, height: 40)
         }
     }
-    
+
     var edgeBlobColor: Color {
         return player.currentEdgeColor()
     }

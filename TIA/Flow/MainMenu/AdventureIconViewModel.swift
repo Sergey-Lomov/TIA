@@ -22,22 +22,22 @@ enum AdventureIconState: Equatable {
 // TODO: Check all view models is final. Investigate other case, where final may be actual (services?). Try to setup SwiftLint.
 final class AdventureIconViewModel: ObservableObject, IdEqutable {
     private var subscriptions: [AnyCancellable] = []
-    
+
     var adventure: AdventureDescriptor
     @Published var state: AdventureIconState
-    
+
     var id: String { adventure.id }
-    
+
     init(adventure: AdventureDescriptor, state: AdventureIconState) {
         self.adventure = adventure
         self.state = state
-        
+
         // TODO: Move this common case to custom property wrapper Transpublished
         subscriptions.sink(adventure.objectWillChange) { [weak self] in
             self?.objectWillChange.sendOnMain()
         }
     }
-    
+
     func animationCompleted() {
         switch state {
         case .becameCurrent:

@@ -8,18 +8,18 @@
 import SwiftUI
 
 struct AdventureIconStateHandler: AnimatableModifier {
-    
+
     private var transform: AdventureIconStateTransform
 
     public var animatableData: AdventureIconStateTransform {
         get { transform }
         set { transform = newValue }
     }
-    
+
     init(transform: AdventureIconStateTransform) {
         self.transform = transform
     }
-    
+
     func body(content: Content) -> some View {
         content
             .frame(size: transform.size)

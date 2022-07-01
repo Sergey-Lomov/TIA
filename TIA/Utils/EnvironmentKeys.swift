@@ -24,12 +24,12 @@ extension EnvironmentValues {
         get { self[DrawingWidthKey.self] }
         set { self[DrawingWidthKey.self] = newValue }
     }
-    
+
     var drawingProgress: CGFloat {
         get { self[DrawingProgressKey.self] }
         set { self[DrawingProgressKey.self] = newValue }
     }
-    
+
     var cameraService: CameraService {
         get { self[CameraServiceKey.self] }
         set { self[CameraServiceKey.self] = newValue }

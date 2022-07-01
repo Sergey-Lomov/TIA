@@ -20,9 +20,9 @@ private extension EnvironmentValues {
 
 struct EyeView: View {
     private let strokeRatio = 0.05
-    
+
     @Binding var eye: EyeViewModel
-    
+
     var color: Color
     var onAnimationFinish: Action?
 
@@ -34,7 +34,7 @@ struct EyeView: View {
                     .mask(
                         EyeSocketView(eye: $eye)
                     )
-                    
+
             }
             .foregroundColor(color)
             .frame(geometry: geometry)
@@ -46,12 +46,12 @@ struct EyeView: View {
 }
 
 private struct EyeSocketView: View {
-    
+
     @Binding var eye: EyeViewModel
-    
+
     var curve: ComplexCurve { ComplexCurve.eyelid(status: eye.status) }
     var animation: Animation? { Animation.forStatus(eye.status) }
-    
+
     var body: some View {
         ComplexCurveShape(curve: curve)
             .foregroundColor(.black)
@@ -65,13 +65,13 @@ private struct EyeSocketView: View {
 private struct EyelidView: View {
 
     private let compressedMult: CGFloat = 4
-    
+
     @Environment(\.strokeWidth) var strokeWidth
     @Binding var status: EyeStatus
-    
+
     var curve: ComplexCurve { ComplexCurve.eyelid(status: status) }
     var animation: Animation? { Animation.forStatus(status) }
-    
+
     var body: some View {
         ComplexCurveShape(curve: curve, close: true)
             .stroke(style: style)
@@ -86,7 +86,7 @@ private struct EyelidView: View {
         default:
             width = strokeWidth
         }
-        
+
         return StrokeStyle(lineWidth: width, lineCap: .round, lineJoin: .round)
     }
 }
@@ -94,15 +94,15 @@ private struct EyelidView: View {
 private struct EyeballView: View {
     private let pupilSize: CGFloat = 0.2
     private let eyeballSize: CGFloat = 0.4
-    
+
     @Environment(\.strokeWidth) var strokeWidth
     var size: CGSize
-    
+
     var body: some View {
         ZStack {
             let pupilSize = size.scaled(pupilSize)
             let eyeballSize = size.scaled(eyeballSize)
-            
+
             ComplexCurveShape(curve: .circle(radius: 0.5))
                 .stroke(lineWidth: strokeWidth)
                 .frame(size: eyeballSize)
@@ -144,7 +144,7 @@ private extension ComplexCurve {
             .topEyelid(state: state).mirrored().reversed()
         ])
     }
-    
+
     static func eyelid(status: EyeStatus) -> ComplexCurve {
         switch status {
         case .state(let state):

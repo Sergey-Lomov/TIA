@@ -15,7 +15,7 @@ struct ColorPalette {
     let resources: Color
     let borders: Color
     let player: Color
-    
+
     static func paletteFor(_ theme: AdventureTheme) -> ColorPalette {
         switch theme {
         case .dark:
@@ -26,7 +26,7 @@ struct ColorPalette {
             return truth
         }
     }
-    
+
     static let dark = ColorPalette(background: .softBlack,
                                   vertex: .softWhite,
                                   vertexElements: .softBlack,
@@ -34,7 +34,7 @@ struct ColorPalette {
                                   resources: .softWhite,
                                   borders: .softBlack,
                                   player: .softBlack)
-    
+
     static let light = ColorPalette(background: .softWhite,
                                    vertex: .softBlack,
                                    vertexElements: .softWhite,
@@ -42,7 +42,7 @@ struct ColorPalette {
                                    resources: .softBlack,
                                    borders: .softWhite,
                                    player: .softWhite)
-    
+
     static let truth = ColorPalette(background: .softBlack,
                                    vertex: .softWhite,
                                    vertexElements: .softBlack,

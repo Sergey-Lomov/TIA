@@ -11,7 +11,7 @@ import SwiftUI
 struct CameraModifier: ViewModifier {
 
     @ObservedObject var camera: CameraViewModel
-    
+
     func body(content: Content) -> some View {
         CenteredGeometryReader { geometry in
             content
@@ -30,12 +30,12 @@ struct CameraModifier: ViewModifier {
                 }
         }
     }
-    
+
     private var zoom: CGFloat { camera.state.zoom }
     private var offset: CGPoint { camera.state.center.scaled(-1) }
     private var angle: Angle { Angle(radians: camera.state.angle) }
     private var animation: Animation { camera.animation }
-    
+
     private func anchor(_ geometry: GeometryProxy) -> UnitPoint {
         let point = camera.anchorState.center.scaled(-1)
         let unitX = 0.5 - point.x / geometry.size.width

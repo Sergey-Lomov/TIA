@@ -20,7 +20,7 @@ enum EdgeViewMetastate {
     case preungrowing
     case ungrowElements
     case ungrowPath
-    
+
     static func forState(_ state: EdgeState) -> EdgeViewMetastate {
         switch state {
         case .seed(let phase):
@@ -58,7 +58,7 @@ enum EdgeViewMetastate {
             }
         }
     }
-    
+
     var fromConnectorVisible: Bool {
         switch self {
         case .seed:
@@ -67,7 +67,7 @@ enum EdgeViewMetastate {
             return true
         }
     }
-    
+
     var toConnectorVisible: Bool {
         switch self {
         case .seed, .preextendedSeed, .extendedSeed, .pregrowing, .growPath, .waitingVertex, .ungrowPath:

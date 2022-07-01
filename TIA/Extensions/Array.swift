@@ -17,11 +17,11 @@ extension Array {
 
         return self[index]
     }
-    
+
     func count(where validator: (Element) -> Bool) -> Int {
         filter({ validator($0) }).count
     }
-    
+
     public func merged(with: [Element],
                        stub: Element,
                        merger: (Element, Element) -> Element) -> [Element] {
@@ -34,7 +34,7 @@ extension Array {
         }
         return result
     }
-    
+
     func allSatisfy(validator: (Element) -> Bool) -> Bool {
         for element in self {
             if !validator(element) { return false }
@@ -50,7 +50,7 @@ extension Array where Element: Equatable & Hashable {
 }
 
 extension Array where Element: AdditiveArithmetic {
-    
+
     public func merged(with: [Element],
                        merger: (Element, Element) -> Element) -> [Element] {
         return merged(with: with, stub: .zero, merger: merger)
@@ -67,7 +67,7 @@ extension Array where Element: VectorArithmetic {
             self[i].scale(by: rhs)
         }
     }
-    
+
     public var magnitudeSquared: Double {
         let magnitudes = map { $0.magnitudeSquared }
         return magnitudes.reduce(into: 0) { $0 = $0 + $1}
@@ -79,7 +79,7 @@ extension Array where Element == AnyCancellable {
         let subscription = publisher.sink { handler($0) }
         self.append(subscription)
     }
-    
+
     mutating func sink<P: Publisher>(_ publisher: P, handler: @escaping Action) where P.Failure == Never {
         let subscription = publisher.sink { _ in handler() }
         self.append(subscription)

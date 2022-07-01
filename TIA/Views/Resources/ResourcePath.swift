@@ -9,20 +9,20 @@ import Foundation
 import SwiftUI
 
 extension Path {
-    
+
     static func polygon(points: [CGPoint]) -> Path {
         var path = Path()
         guard let first = points.first else { return path }
-        
+
         path.move(to: first)
         for i in 1...(points.count - 1) {
             path.addLine(to: points[i])
         }
-        
+
         path.closeSubpath()
         return path
     }
-    
+
     static func despair() -> Path {
         return polygon(points: [
             CGPoint(x: .cos90, y: .sin90),
@@ -30,7 +30,7 @@ extension Path {
             CGPoint(x: .cos330, y: .sin330)
         ])
     }
-    
+
     static func anger() -> Path {
         return polygon(points: [
             CGPoint(x: .cos45, y: .sin45),
@@ -39,7 +39,7 @@ extension Path {
             CGPoint(x: .cos315, y: .sin315)
         ])
     }
-    
+
     static func yearning() -> Path {
         return polygon(points: [
             CGPoint(x: .cos0, y: .sin0),

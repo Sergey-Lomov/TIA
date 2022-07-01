@@ -16,7 +16,7 @@ struct SingleCurveShape: Shape {
         get { curve }
         set { curve = newValue }
     }
-    
+
     func path(in rect: CGRect) -> Path {
         return Path(curve: curve, size: rect.size)
     }

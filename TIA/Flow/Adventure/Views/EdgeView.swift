@@ -9,7 +9,7 @@ import SwiftUI
 
 struct EdgeWrapper: View {
     @ObservedObject var edge: EdgeViewModel
-    
+
     var body: some View {
         let metastate = edge.metastate
         CenteredGeometryReader { geometry in
@@ -17,7 +17,7 @@ struct EdgeWrapper: View {
 
             ForEach(edge.gates, id: \.id) { gate in
                 let position = LayoutService.gatePosition(geometry, gate: gate.model, edge: edge.model)
-                
+
                 EdgeGateView(gate: gate, backColor: edge.color, symbolColor: edge.borderColor)
                     .offset(point: position)
             }
@@ -26,7 +26,7 @@ struct EdgeWrapper: View {
             handleViewRedraw(metastate)
         }
     }
-    
+
     private func handleViewRedraw(_ metastate: EdgeViewMetastate) {
         switch metastate {
         case .preextendedSeed:
@@ -45,21 +45,21 @@ struct EdgeWrapper: View {
 
 struct EdgePathView: View {
     private static let intersectionAccuracy: CGFloat = 5
-    
+
     @ObservedObject var edge: EdgeViewModel
-    
+
     var body: some View {
         CenteredGeometryReader { geometry in
             let progress = progress(geometry)
             let animation = animation(geometry)
-            
+
             // Borders (underline)
             SingleCurveShape(curve: curve)
                 .trim(from: 0, to: progress)
                 .stroke(lineWidth: Layout.Edge.undrelineWidth)
                 .animation(animation, value: progress)
                 .foregroundColor(edge.borderColor)
-            
+
             // Line
             let metastate = edge.metastate
             SingleCurveShape(curve: curve)
@@ -71,7 +71,7 @@ struct EdgePathView: View {
                 }
                 .animation(animation, value: progress)
                 .foregroundColor(edge.color)
-            
+
             // Connectors
             if edge.metastate.fromConnectorVisible {
                 fromConnectorShape(geometry)
@@ -80,7 +80,7 @@ struct EdgePathView: View {
                     .offset(geometry.size.half)
                     .transition(.identity)
             }
-            
+
             if edge.metastate.toConnectorVisible {
                 let connectorData = toConnectorData(geometry)
                 toConnectorShape(geometry)
@@ -94,7 +94,7 @@ struct EdgePathView: View {
             }
         }
     }
-    
+
     private var curve: BezierCurve {
         switch edge.metastate {
         case .seed, .pregrowing, .ungrowPath:
@@ -103,7 +103,7 @@ struct EdgePathView: View {
             return edge.curve
         }
     }
-    
+
     private func progress(_ geometry: GeometryProxy) -> CGFloat {
         switch edge.metastate {
         case .seed, .preextendedSeed, .extendedSeed:
@@ -118,7 +118,7 @@ struct EdgePathView: View {
             return 1
         }
     }
-    
+
     private func counterConnectorProgress(_ geometry: GeometryProxy) -> CGFloat {
         switch edge.metastate {
         case .seed, .preextendedSeed, .extendedSeed, .pregrowing, .growPath, .waitingVertex, .ungrowPath, .ungrowElements:
@@ -132,7 +132,7 @@ struct EdgePathView: View {
             return 1
         }
     }
-    
+
     private var blobing: CGFloat {
         switch edge.metastate {
         case .extendedSeed:
@@ -141,7 +141,7 @@ struct EdgePathView: View {
             return 0
         }
     }
-    
+
     private func animation(_ geometry: GeometryProxy) -> Animation? {
         switch edge.metastate {
         case .preextendedSeed, .pregrowing, .pregrowingElements:
@@ -176,19 +176,19 @@ struct EdgePathView: View {
             break
         }
     }
-    
+
     private func fromConnectorShape(_ geometry: GeometryProxy) -> EdgeConnectorShape {
         let curve = curve.scaled(geometry)
         let radius = Layout.Vertex.diameter / 2 * geometry.minSize
         let center = edge.model.from.point.scaled(geometry)
         return .init(curve: curve, progress: progress(geometry), blobing: blobing, center: center, radius: radius)
     }
-    
+
     private func fromConnectorData(_ geometry: GeometryProxy) -> EdgeConnectorData {
         let curve = curve.scaled(geometry)
         return .init(curve, progress(geometry), blobing)
     }
-    
+
     private func toConnectorShape(_ geometry: GeometryProxy) -> EdgeConnectorShape {
         let curve = curve.reversed().scaled(geometry)
         let radius = Layout.Vertex.diameter / 2 * geometry.minSize
@@ -196,7 +196,7 @@ struct EdgePathView: View {
         let progress = counterConnectorProgress(geometry)
         return .init(curve: curve, progress: progress, blobing: 0, center: center, radius: radius)
     }
-    
+
     private func toConnectorData(_ geometry: GeometryProxy) -> EdgeConnectorData {
         let curve = curve.reversed().scaled(geometry)
         let progress = counterConnectorProgress(geometry)

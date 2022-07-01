@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension View {
-    
+
     @ViewBuilder func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
         if condition {
             transform(self)
@@ -16,35 +16,35 @@ extension View {
             self
         }
     }
-    
+
     func frame(geometry: GeometryProxy) -> some View {
         frame(size: geometry.size)
     }
-    
+
     func frame(size: CGSize) -> some View {
         frame(width: size.width, height: size.height)
     }
-    
+
     func frame(size: CGFloat) -> some View {
         frame(width: size, height: size)
     }
-    
+
     func offset(point: CGPoint) -> some View {
         return offset(x: point.x, y: point.y)
     }
-    
+
     func offset(point: CGPoint, geometry: GeometryProxy) -> some View {
         let scaled = point.scaled(geometry)
         return offset(x: scaled.x, y: scaled.y)
     }
-    
+
     func bezierPositioning(curve: BezierCurve,
                            progress: CGFloat = 0,
                            target: CGFloat = 1,
                            onFinish: @escaping Action) -> some View {
         bezierPositioning(curve: ComplexCurve(curve), progress: progress, target: target, onFinish: onFinish)
     }
-    
+
     func bezierPositioning(curve: ComplexCurve,
                            progress: CGFloat = 0,
                            target: CGFloat = 1,
@@ -58,7 +58,7 @@ extension View {
         let y = point.y * geomtery.size.height
         return offset(x: x, y: y)
     }
-    
+
     func invertedMask<Mask>(size: CGSize, _ mask: Mask) -> some View where Mask: View {
         self.mask(
             ZStack {
@@ -68,19 +68,19 @@ extension View {
             }.frame(size: size)
         )
     }
-    
+
     func onRedraw(closure: @escaping Action) -> some View {
         modifier(ViewRedrawHandlerModifier(handler: closure))
     }
-    
+
     func onAnimationCompleted<Value: VectorArithmetic>(for value: Value, completion: Action?) -> ModifiedContent<Self, AnimationCompletionObserverModifier<Value>> {
         return modifier(AnimationCompletionObserverModifier(observedValue: value, completion: completion ?? emptyAction))
     }
-    
+
     func drawingProgress(_ value: CGFloat) -> some View {
         modifier(DrawingProgressModifier(drawingProgress: value))
     }
-    
+
     func applyCamera(_ camera: CameraViewModel, completion: Action? = nil) -> some View {
         if let completion = completion { camera.completion = completion }
         return modifier(CameraModifier(camera: camera	))

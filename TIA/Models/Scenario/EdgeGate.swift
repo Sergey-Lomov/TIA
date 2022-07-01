@@ -26,10 +26,10 @@ typealias EdgeStatePublisher = Published<EdgeState>.Publisher
 class EdgeGate: ObservableObject, IdEqutable {
     let id = UUID().uuidString
     let requirement: EdgeGateRequirement
-    
+
     private var subscriptions: [AnyCancellable] = []
     @Published var state: EdgeGateState = .seed
-    
+
     init(requirement: EdgeGateRequirement, edgeStatePublisher: EdgeStatePublisher) {
         self.requirement = requirement
         subscriptions.sink(edgeStatePublisher) { [weak self] state in
@@ -38,7 +38,7 @@ class EdgeGate: ObservableObject, IdEqutable {
             }
         }
     }
-    
+
     private func handleEdgeState(_ edgeState: EdgeState) {
         switch edgeState {
         case .seed:

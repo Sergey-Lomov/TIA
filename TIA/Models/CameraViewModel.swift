@@ -18,13 +18,13 @@ struct CameraState {
     let center: CGPoint
     let zoom: CGFloat
     let angle: CGFloat
-    
+
     init (center: CGPoint, zoom: CGFloat = 1, angle: CGFloat = 0) {
         self.center = center
         self.zoom = zoom
         self.angle = angle
     }
-    
+
     static var `default` = CameraState(center: .zero)
 }
 
@@ -40,33 +40,33 @@ class CameraViewModel: ObservableObject {
     @Published var anchorState: CameraState
     @Published var animation: Animation = .none
     var completion: Action?
-    
+
     private var transferInProgress: Bool = true
     private var steps: [TransferStep] = []
-    
+
     init(state: CameraState) {
         self.state = state
         self.anchorState = state
     }
-    
+
     func transferTo(_ targetState: CameraState,
                     animation: Animation = .none,
                     anchorAnimation: AnchorAnimation = .dynamic,
                     completion: Action? = nil) {
         self.completion = completion
         steps = []
-        
+
         if anchorAnimation == .final {
             steps.append(state: state, anchor: targetState)
         }
-        
+
         let anchor = anchorAnimation == .initial ? state : targetState
         steps.append(state: targetState, anchor: anchor, animation: animation)
-        
+
         if anchorAnimation == .initial {
             steps.append(state: targetState, anchor: targetState)
         }
-        
+
         if !transferInProgress {
             executeNextStep()
         }
@@ -75,7 +75,7 @@ class CameraViewModel: ObservableObject {
     func stepApplied() {
         executeNextStep()
     }
-    
+
     private func executeNextStep() {
         guard let next = steps.first else {
             transferInProgress = false
@@ -85,7 +85,7 @@ class CameraViewModel: ObservableObject {
             completion?()
             return
         }
-        
+
         transferInProgress = true
         steps.removeFirst()
         state = next.state

@@ -13,7 +13,7 @@ struct CenteredGeometryReader<Content>: View where Content: View {
     init(@ViewBuilder content: @escaping (GeometryProxy) -> Content) {
         self.content = content
     }
-    
+
     init(@ViewBuilder content: @escaping () -> Content) {
         self.content = { _ in content() }
     }

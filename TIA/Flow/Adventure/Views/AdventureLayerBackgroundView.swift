@@ -9,10 +9,10 @@ import Foundation
 import SwiftUI
 
 struct AdventureLayerBackground: View {
-    
+
     @ObservedObject var layer: AdventureLayerViewModel
     var theme: AdventureTheme
-    
+
     var body: some View {
         VisualEffectView(effect: effect)
             .opacity(opacity)
@@ -21,7 +21,7 @@ struct AdventureLayerBackground: View {
             }
             .animation(animation, value: opacity)
     }
-    
+
     private var effect: UIVisualEffect {
         switch theme {
         case .dark:
@@ -32,7 +32,7 @@ struct AdventureLayerBackground: View {
             return UIBlurEffect(style: .dark)
         }
     }
-    
+
     private var opacity: CGFloat {
         switch layer.state {
         case .hiding, .preparing:
@@ -41,7 +41,7 @@ struct AdventureLayerBackground: View {
             return 0.99
         }
     }
-    
+
     private var animation: Animation? {
         switch layer.state {
         case .presenting: return AnimationService.shared.presentLayer
@@ -49,7 +49,7 @@ struct AdventureLayerBackground: View {
         default: return nil
         }
     }
-    
+
     private func handleAnimationCompletion() {
         switch layer.state {
         case .presenting:

@@ -77,15 +77,22 @@ class Edge: ObservableObject, IdEqutable {
          price: [ResourceType] = [],
          growOnStart: Bool,
          state: EdgeState = .seed(phase: .compressed),
-         curve: BezierCurve) {
+         curve: BezierCurve,
+         theme: AdventureTheme) {
         self.id = id
         self.from = from
         self.to = to
         self.growOnStart = growOnStart
         self.state = state
         self.curve = curve
-        // TODO: For light theme seed curves should be equtable to main curves
-        self.pregrowingCurve = curve.randomControlsCurve(maxDelta: seedCurveDelta)
+        
+        if theme == .light {
+            self.pregrowingCurve = curve
+        }
+        else {
+            self.pregrowingCurve = curve.randomControlsCurve(maxDelta: seedCurveDelta)
+        }
+        
         self.gates = price.map {
             .init(requirement: .resource($0), edgeStatePublisher: $state)
         }

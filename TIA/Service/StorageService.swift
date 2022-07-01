@@ -12,6 +12,6 @@ final class StorageService {
     static let shared = StorageService()
     
     func getAdventuresStates() -> [String: AdventureState] {
-        return ["sd1": .current, "light1": .current]
+        return ["dark1": .current, "light1": .current]
     }
 }

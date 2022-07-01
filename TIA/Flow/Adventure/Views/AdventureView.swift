@@ -19,7 +19,7 @@ struct AdventureView: View {
 
             ZStack {
                 ForEach(adventure.layers, id:\.id) { layer in
-                    AdventureLayerBackground(layer: layer)
+                    AdventureLayerBackground(layer: layer, theme: adventure.model.theme)
                         .edgesIgnoringSafeArea(.all)
                     
                     LayerContentView(layer: layer)

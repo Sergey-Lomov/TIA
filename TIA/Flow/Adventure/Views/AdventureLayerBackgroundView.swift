@@ -11,14 +11,26 @@ import SwiftUI
 struct AdventureLayerBackground: View {
     
     @ObservedObject var layer: AdventureLayerViewModel
+    var theme: AdventureTheme
     
     var body: some View {
-        VisualEffectView(effect: UIBlurEffect(style: .dark))
+        VisualEffectView(effect: effect)
             .opacity(opacity)
             .onAnimationCompleted(for: opacity) {
                 handleAnimationCompletion()
             }
             .animation(animation, value: opacity)
+    }
+    
+    private var effect: UIVisualEffect {
+        switch theme {
+        case .dark:
+            return UIBlurEffect(style: .dark)
+        case .light:
+            return UIBlurEffect(style: .light)
+        case .truth:
+            return UIBlurEffect(style: .dark)
+        }
     }
     
     private var opacity: CGFloat {

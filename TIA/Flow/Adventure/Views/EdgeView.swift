@@ -66,7 +66,7 @@ struct EdgePathView: View {
             SingleCurveShape(curve: curve)
                 .trim(from: 0, to: progress)
                 .stroke(lineWidth: Layout.Edge.curveWidth)
-                .onAnimationCompleted(for: curve) {
+                .onAnimationCompleted(for: progress) {
                     // Finished mutating for initial metastate, not for current. So metastate should be stored in separate var to avoid updating.
                     handleMutatingFinished(metastate: metastate)
                 }

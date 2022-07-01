@@ -108,7 +108,6 @@ struct EdgePathView: View {
         switch edge.metastate {
         case .seed, .preextendedSeed, .extendedSeed:
             return 0
-        // TODO: Think is it necessary to do same preparation in "preungrowing" state
         case .pregrowing, .ungrowPath:
             let curve = edge.curve.scaled(geometry)
             let center = edge.model.from.point.scaled(geometry)

@@ -7,8 +7,6 @@
 
 import Foundation
 
-// TODO: many code inside this view model related to handle complex eye animation with few possbile states and transition between it. Very possible same kind of logic will be useful. In this case solution should be implemented like a separate system (state-machine)
-
 enum EyeState: Int {
     case compressed
     case closed

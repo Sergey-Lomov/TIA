@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-class AdventureLayerViewModel: ObservableObject {
+class AdventureLayerViewModel: ObservableObject, IdEqutable {
     private var subscriptions: [AnyCancellable] = []
     var eventsPublisher: ViewEventsPublisher
     

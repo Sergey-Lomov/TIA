@@ -69,7 +69,7 @@ final class ScenarioService {
             let p2 = layout.edges[$0.id]?.p2 ?? to.point
             let curve = BezierCurve(points: [from.point, p1, p2, to.point])
             let id = $0.id + UUID().uuidString
-            let edge = Edge(id: id, from: from, to: to, price: $0.price, growOnStart: $0.growOnStart, curve: curve)
+            let edge = Edge(id: id, from: from, to: to, price: $0.price, growOnStart: $0.growOnStart, curve: curve, theme: protoAdventure.theme)
             return edge
         }
         

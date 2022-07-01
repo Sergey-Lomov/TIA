@@ -7,7 +7,6 @@
 
 import Foundation
 
-// TODO: this may be part of view model, not part of core model
 enum EdgeMovingStatus {
     case compressing
     case moving

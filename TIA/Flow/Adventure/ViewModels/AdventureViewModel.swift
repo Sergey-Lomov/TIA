@@ -30,7 +30,6 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
     @Published var background: Color
     @Published var camera: CameraViewModel
     
-    
     init(_ adventure: Adventure,
          cameraService: CameraService,
          player: Player,
@@ -110,11 +109,11 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
     private func handleCurrentLayerChange(_ layer: AdventureLayer) {
         currentLayerSubscriptions.removeAll()
         currentLayerSubscriptions.sink(layer.$state) { [weak self] state in
-            self?.handleLayer(layer, newState: state)
+            self?.handleCurrentLayer(layer, newState: state)
         }
     }
     
-    private func handleLayer(_ layer: AdventureLayer, newState state: AdventureLayerState) {
+    private func handleCurrentLayer(_ layer: AdventureLayer, newState state: AdventureLayerState) {
         let lifestate = GameEngine.shared.adventureEngine?.lifestate
         guard state != .preparing else { return }
         guard lifestate != .initializing && lifestate != .finalizing else { return }
@@ -165,15 +164,13 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
         }
     }
     
-    // TODO: Remove engine to view publisher system if still be unused
+    // MARK: Engine events handler
     func subscribeTo(_ publisher: EngineEventsPublisher) {
         subscriptions.sink(publisher) { [self] event in
             handleEngineEvent(event)
         }
     }
     
-    // TODO: May be removed if still be unused
-    // MARK: Engine events handler
     private func handleEngineEvent(_ event: EngineEvent) {
         switch event {
         case .resourceAdded(let resource):
@@ -204,7 +201,6 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
     
     private func handleAdventureFinalizing(exit: Vertex) {
         let cameraState = cameraService.focusOnVertex(exit)
-//        let eyeStatus = EyeStatus.transiotion(from: .opened, to: .compressed)
         DispatchQueue.main.async {
             self.camera.transferTo(cameraState, animation: AnimationService.shared.adventureFinal)
             self.player.eye.compress()

@@ -13,12 +13,21 @@ struct AdventureLayerBackground: View {
     @ObservedObject var layer: AdventureLayerViewModel
     
     var body: some View {
-        VisualEffectView(effect: UIBlurEffect(style: .dark))
+        VisualEffectView(effect: UIBlurEffect(style: .systemMaterial))
             .opacity(opacity)
             .onAnimationCompleted(for: opacity) {
                 handleAnimationCompletion()
             }
             .animation(animation, value: opacity)
+    }
+    
+    private var visible: Bool {
+        switch layer.state {
+        case .hiding, .preparing:
+            return false
+        default:
+            return true
+        }
     }
     
     private var opacity: CGFloat {

@@ -30,7 +30,7 @@ final class IngameMenuService {
     private static let vertexIdPrefix = "menu_"
     private static let edgeIdPrefix = "edge_to_"
     
-    static func menuLayer(from source: Vertex) -> AdventureLayer {
+    static func menuLayer(from source: Vertex, theme: AdventureTheme) -> AdventureLayer {
         let items = GameEngine.shared.availableIngameMenuItems()
         
         var vertices: [Vertex] = []
@@ -51,10 +51,11 @@ final class IngameMenuService {
         let angleRange =  FloatRange(from: .hpi / 4, to: .hpi / 2)
         var edges: [Edge] = []
         for vertex in vertices {
-            // TODO: For light theme shoudl be used straight edges
             let curve = Math.randomCurve(from: source.point, to: vertex.point, controlRadius: radiusRange, controlAngle: angleRange)
+            let line = BezierCurve.line(from: source.point, to: vertex.point)
+            let edgeCurve = theme == .light ? line : curve
             let id = edgeIdPrefix + vertex.id
-            let edge = Edge(id: id, from: source, to: vertex, growOnStart: true, curve: curve)
+            let edge = Edge(id: id, from: source, to: vertex, growOnStart: true, curve: edgeCurve, theme: theme)
             edges.append(edge)
         }
         

@@ -67,6 +67,7 @@
 		6791A8F3286CAEAF00231BFA /* sd1_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 6791A8F0286CAEAF00231BFA /* sd1_1.json */; };
 		6791A8F5286CC3FE00231BFA /* AdventureIconStateTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6791A8F4286CC3FE00231BFA /* AdventureIconStateTransform.swift */; };
 		6791A8F7286CC50300231BFA /* AdventureIconStateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6791A8F6286CC50300231BFA /* AdventureIconStateHandler.swift */; };
+		6791A906286E58B000231BFA /* light1_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 6791A905286E58B000231BFA /* light1_1.json */; };
 		6793A97627FCF3B7002198E9 /* TIAApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6793A97527FCF3B7002198E9 /* TIAApp.swift */; };
 		6793A97A27FCF3B9002198E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6793A97927FCF3B9002198E9 /* Assets.xcassets */; };
 		6793A97D27FCF3B9002198E9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6793A97C27FCF3B9002198E9 /* Preview Assets.xcassets */; };
@@ -185,6 +186,7 @@
 		6791A8F0286CAEAF00231BFA /* sd1_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sd1_1.json; sourceTree = "<group>"; };
 		6791A8F4286CC3FE00231BFA /* AdventureIconStateTransform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureIconStateTransform.swift; sourceTree = "<group>"; };
 		6791A8F6286CC50300231BFA /* AdventureIconStateHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureIconStateHandler.swift; sourceTree = "<group>"; };
+		6791A905286E58B000231BFA /* light1_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = light1_1.json; sourceTree = "<group>"; };
 		6793A97227FCF3B7002198E9 /* TIA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TIA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6793A97527FCF3B7002198E9 /* TIAApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIAApp.swift; sourceTree = "<group>"; };
 		6793A97927FCF3B9002198E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -261,6 +263,7 @@
 				6791A8EE286CAEAF00231BFA /* sd2_1.json */,
 				6791A8EF286CAEAF00231BFA /* sd3_1.json */,
 				67B533A02805BC0400EA959A /* dark1_1.json */,
+				6791A905286E58B000231BFA /* light1_1.json */,
 			);
 			path = Layouts;
 			sourceTree = "<group>";
@@ -623,6 +626,7 @@
 				6791A8EB286CAEA100231BFA /* sd1.json in Resources */,
 				6791A8EC286CAEA100231BFA /* sd2.json in Resources */,
 				6791A8ED286CAEA100231BFA /* sd3.json in Resources */,
+				6791A906286E58B000231BFA /* light1_1.json in Resources */,
 				67B5339D2805B5E200EA959A /* dark1.json in Resources */,
 				6793A97D27FCF3B9002198E9 /* Preview Assets.xcassets in Resources */,
 				6791A8F1286CAEAF00231BFA /* sd2_1.json in Resources */,

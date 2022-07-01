@@ -354,7 +354,7 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         guard case .active(_, _) = from.state else { return }
         
         lifestate = .menu
-        let menuLayer = IngameMenuService.menuLayer(from: from)
+        let menuLayer = IngameMenuService.menuLayer(from: from, theme: adventure.theme)
         startLayerPresenting(menuLayer, from: from)
     }
     

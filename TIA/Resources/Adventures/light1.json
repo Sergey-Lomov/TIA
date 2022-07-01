@@ -2,7 +2,102 @@
     "id": "light1",
     "theme": "light",
     "index": 1,
-    "done_shape": "star8",
-    "vertices": [],
-    "edges": []
+    "done_shape": "poly7",
+    "vertices": [
+        {
+            "id": "v1",
+            "role": "entrance",
+            "resources": []
+        },
+        {
+            "id": "v2",
+            "role": "common",
+            "resources": ["anger"]
+        },
+        {
+            "id": "v3",
+            "role": "common",
+            "resources": ["yearning", "yearning", "anger", "despair"]
+        },
+        {
+            "id": "v4",
+            "role": "common",
+            "resources": ["yearning","yearning"]
+        },
+        {
+            "id": "v5",
+            "role": "common",
+            "resources": []
+        },
+        {
+            "id": "v6",
+            "role": "exit",
+            "resources": []
+        }
+    ],
+    "edges": [
+        {
+            "id": "e1",
+            "from": "v1",
+            "to": "v2",
+            "grow_on_start": true,
+            "price": []
+        },
+        {
+            "id": "e2",
+            "from": "v1",
+            "to": "v3",
+            "grow_on_start": true,
+            "price": []
+        },
+        {
+            "id": "e3",
+            "from": "v2",
+            "to": "v3",
+            "grow_on_start": true,
+            "price": []
+        },
+        {
+            "id": "e4",
+            "from": "v3",
+            "to": "v4",
+            "grow_on_start": true,
+            "price": ["despair"]
+        },
+        {
+            "id": "e5",
+            "from": "v2",
+            "to": "v4",
+            "grow_on_start": true,
+            "price": ["anger"]
+        },
+        {
+            "id": "e6",
+            "from": "v4",
+            "to": "v6",
+            "grow_on_start": true,
+            "price": ["despair"]
+        },
+        {
+            "id": "e7",
+            "from": "v2",
+            "to": "v5",
+            "grow_on_start": true,
+            "price": ["anger"]
+        },
+        {
+            "id": "e8",
+            "from": "v3",
+            "to": "v5",
+            "grow_on_start": true,
+            "price": ["yearning", "despair"]
+        },
+        {
+            "id": "e9",
+            "from": "v5",
+            "to": "v6",
+            "grow_on_start": true,
+            "price": ["yearning"]
+        }
+    ]
 }

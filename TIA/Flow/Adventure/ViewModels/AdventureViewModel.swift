@@ -9,7 +9,6 @@ import Foundation
 import SwiftUI
 import Combine
 
-// TODO: Investigate possibility to change provide protocol to Combine concept (provider)
 protocol ViewModelsProvider: AnyObject {
     func edgeViewModel(for edge: Edge) -> EdgeViewModel?
     func vertexViewModel(for vertex: Vertex) -> VertexViewModel?

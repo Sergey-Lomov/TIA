@@ -19,7 +19,6 @@ enum AdventureIconState: Equatable {
     case done(slot: Int)
 }
 
-// TODO: Check all view models is final. Investigate other case, where final may be actual (services?). Try to setup SwiftLint.
 final class AdventureIconViewModel: ObservableObject, IdEqutable {
     private var subscriptions: [AnyCancellable] = []
 

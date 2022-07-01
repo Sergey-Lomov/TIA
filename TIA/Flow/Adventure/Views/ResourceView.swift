@@ -96,7 +96,6 @@ struct ResourceWrapper: View {
     }
 
     // MARK: Transform calculation
-    // TODO: Try to move transform calcualtions into the modifier
     private func transform(_ geometry: GeometryProxy) -> ResourceStateTransform {
         .init(localOffset: localOffset(geometry),
               localAngle: localRotation,

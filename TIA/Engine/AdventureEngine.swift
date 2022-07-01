@@ -116,7 +116,7 @@ final class AdventureEngine: EngineEventsSource {
 
     private func handlePlayerPositionUpdate(_ newValue: PlayerPosition) {
         playerResources(player).forEach { resource in
-            resource.objectWillChange.send()
+            resource.objectWillChange.sendOnMain()
         }
 
         switch newValue {
@@ -150,7 +150,7 @@ final class AdventureEngine: EngineEventsSource {
     }
 
     private func handleGateStateUpdate(_ gate: EdgeGate) {
-        gateResources(gate).forEach { $0.objectWillChange.send() }
+        gateResources(gate).forEach { $0.objectWillChange.sendOnMain() }
     }
 
     private func recloseGates(edge: Edge) {

@@ -46,3 +46,10 @@ custom_rules:
         regex: "(?<!final )class [a-zA-Z]*(ViewModel|Service)"
         message: "ViewModels, Models and Services classes should be final"
         severity: warning
+
+    update_on_main:
+        included: ".*.swift"
+        name: "Update on main"
+        regex: "objectWillChange.send\\(\\)"
+        message: "Objects should update on main thread. Please use sendOnMain() instead"
+        severity: warning

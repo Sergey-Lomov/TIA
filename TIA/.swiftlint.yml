@@ -3,7 +3,6 @@ disabled_rules:
     - line_length
     - todo
     - trailing_whitespace
-    - nesting
 
 cyclomatic_complexity:
     ignores_case_statements: true
@@ -11,3 +10,11 @@ cyclomatic_complexity:
 function_parameter_count:
     warning: 6
     error: 8
+
+nesting:
+    type_level:
+        warning: 3
+        error: 6
+    statement_level:
+        warning: 5
+        error: 10

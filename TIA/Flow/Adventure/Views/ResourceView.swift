@@ -107,11 +107,10 @@ struct ResourceWrapper: View {
     private func size(_ geometry: GeometryProxy) -> CGSize {
         switch resource.metastate {
         case .toGate(let gate, _, _, _),
-                .onGate(let gate, _),
-                .fromGate(let gate, _, _, _):
+                .onGate(let gate, _):
             let fullSize = LayoutService.gateResourceSize(geometry)
             return gate.state == .open ? .zero : fullSize
-        case .inventoryAtVertex, .successMoving, .failedNear, .outFromVertex, .prelayerChanging, .layerChanging, .destroying, .predestroying:
+        case .inventoryAtVertex, .successMoving, .failedNear, .outFromVertex, .prelayerChanging, .layerChanging, .destroying, .predestroying, .fromGate:
             return LayoutService.inventoryResourceSize(geometry)
         case .vertex, .vertexIdle, .vertexRestoring:
             return LayoutService.vertexResourceSize(geometry)
@@ -158,8 +157,10 @@ struct ResourceWrapper: View {
         case .successMoving(let edge, _, _, let toIndex, let total):
             let length = edge.length(geometry)
             return .positioning(geometry, playerLength: length, resourceLength: length, index: toIndex, total: total)
-        case .toGate, .fromGate:
-            return .gateMoving
+        case .toGate:
+            return .toGate
+        case .fromGate:
+            return AnimationService.shared.resourceFromGate
         case .onGate(let gate, _):
             return gate.state == .open ? AnimationService.shared.closeGate : AnimationService.shared.openGate
         case .failedNear(let gate, let edge, let vertex, let index, let total):
@@ -349,7 +350,7 @@ private extension Animation {
         linear(duration: 15)
     }
     
-    static var gateMoving: Animation {
+    static var toGate: Animation {
         let duration = AnimationService.shared.resToGateDuration()
         return .easeInOut(duration: duration)
     }

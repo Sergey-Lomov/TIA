@@ -17,7 +17,7 @@
         {
             "id": "v3",
             "role": "common",
-            "resources": ["yearning", "yearning", "anger", "despair"]
+            "resources": ["yearning", "yearning", "anger"]
         },
         {
             "id": "v4",

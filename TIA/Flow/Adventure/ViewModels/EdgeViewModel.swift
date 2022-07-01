@@ -12,6 +12,7 @@ import Combine
 class EdgeViewModel: ObservableObject, IdEqutable {
 
     var model: Edge
+    var gates: [EdgeGateViewModel]
     @Published var color: Color
     @Published var borderColor: Color
     
@@ -22,11 +23,15 @@ class EdgeViewModel: ObservableObject, IdEqutable {
     var curve: BezierCurve { model.curve }
     var state: EdgeState { model.state }
     
-    init(model: Edge, color: Color, borderColor: Color, eventsPublisher: ViewEventsPublisher) {
+    init(model: Edge, color: Color, borderColor: Color, gateColor: Color, gateSymbolColor: Color, eventsPublisher: ViewEventsPublisher) {
         self.model = model
         self.color = color
         self.borderColor = borderColor
         self.eventsPublisher = eventsPublisher
+        
+        self.gates = model.gates.map {
+            EdgeGateViewModel(model: $0, color: gateColor, symbolColor: gateSymbolColor, eventsPublisher: eventsPublisher)
+        }
         
         subscriptions.sink(model.objectWillChange) { [weak self] in
             self?.objectWillChange.sendOnMain()

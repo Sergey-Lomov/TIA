@@ -157,11 +157,6 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
             gate.state = .close
             if wipeResources {
                 removeResources(gateResources(gate))
-            } else {
-                gateResources(gate).forEach {
-                    guard case .gate(let gate, let edge, let vertex, let index, _, let prestate) = $0.state else { return }
-                    $0.state = .gate(gate: gate, edge: edge, fromVertex: vertex, fromIndex: index, state: .outcoming, prestate: prestate)
-                }
             }
         }
     }
@@ -203,7 +198,10 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
             handleEdgeElementsUngrowed(edge)
         case .edgeUngrowed(let edge):
             handleEdgeUngrowed(edge)
-        
+            
+        case .gateClosed(let gate):
+            handleGateClosed(gate)
+            
         case .resourceMovedToGate(let resource):
             handleResourceMovedToGate(resource)
         case .resourcePresented(let resource):
@@ -307,6 +305,13 @@ final class AdventureEngine: ViewEventsListener, EngineEventsSource {
         startUngrowingIfReady(edge.from)
         let layers = adventure.layers.filter { $0.edges.contains(edge) }
         layers.forEach { checkLayerUngrowingCompletion($0) }
+    }
+    
+    private func handleGateClosed(_ gate: EdgeGate) {
+        gateResources(gate).forEach {
+            guard case .gate(let gate, let edge, let vertex, let index, _, let prestate) = $0.state else { return }
+            $0.state = .gate(gate: gate, edge: edge, fromVertex: vertex, fromIndex: index, state: .outcoming, prestate: prestate)
+        }
     }
     
     private func startUngrowingIfReady(_ vertex: Vertex) {

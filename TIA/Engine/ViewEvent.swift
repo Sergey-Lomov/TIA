@@ -44,4 +44,6 @@ enum ViewEvent {
     case resourcePresented(resource: Resource)
     case resourceIdleFinished(resource: Resource)
     case resourceIdleRestored(resource: Resource)
+    
+    case gateClosed(gate: EdgeGate)
 }

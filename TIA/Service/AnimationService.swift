@@ -118,6 +118,12 @@ final class AnimationService {
         .easeOut(duration: Const.Gate.resizeDuration)
     }
     
+    var resourceFromGate: Animation {
+        let uncompress = eyeTransDuration(from: .compressed, to: .closed) + eyeTransDuration(from: .closed, to: .opened)
+        let timeleft = uncompress - Const.Gate.resizeDuration
+        return .easeOut(duration: timeleft)
+    }
+    
     var menuSeedExtension: Animation {
         let duration = eyeTransDuration(from: .compressed, to: .closed) + eyeTransDuration(from: .closed, to: .opened)
         return .easeOut(duration: duration * 10)

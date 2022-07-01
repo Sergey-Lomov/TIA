@@ -52,10 +52,6 @@ final class MainMenuViewModel: ObservableObject {
         }
         
         // Combine setup
-//        subscriptions.sink(game.objectWillChange) { [weak self] in
-//            self?.updateIcons()
-//        }
-        
         subscriptions.sink(camera.objectWillChange) { [weak self] in
             self?.objectWillChange.sendOnMain()
         }

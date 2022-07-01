@@ -28,7 +28,7 @@ class AdventureLayerViewModel: ObservableObject, IdEqutable {
         }
         
         self.edges = model.edges.map {
-            EdgeViewModel(model: $0, color: palette.edge, borderColor: palette.background, eventsPublisher: eventsPublisher)
+            EdgeViewModel(model: $0, color: palette.edge, borderColor: palette.background, gateColor: palette.edge, gateSymbolColor: palette.borders, eventsPublisher: eventsPublisher)
         }
         
         subscriptions.sink(model.objectWillChange) { [weak self] in

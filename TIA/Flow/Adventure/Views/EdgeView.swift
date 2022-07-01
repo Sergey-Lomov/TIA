@@ -15,9 +15,8 @@ struct EdgeWrapper: View {
         CenteredGeometryReader { geometry in
             EdgePathView(edge: edge)
 
-            ForEach(edge.model.gates.indices, id: \.self) { index in
-                let gate = edge.model.gates[index]
-                let position = LayoutService.gatePosition(geometry, gate: gate, edge: edge.model)
+            ForEach(edge.gates, id: \.id) { gate in
+                let position = LayoutService.gatePosition(geometry, gate: gate.model, edge: edge.model)
                 
                 EdgeGateView(gate: gate, backColor: edge.color, symbolColor: edge.borderColor)
                     .offset(point: position)
@@ -204,55 +203,3 @@ struct EdgePathView: View {
         return .init(curve, progress, blobing)
     }
 }
-
-struct EdgeGateView: View {
-    @ObservedObject var gate: EdgeGate
-    var backColor: Color
-    var symbolColor: Color
-    
-    var body: some View {
-        CenteredGeometryReader { geometry in
-            CircleShape()
-                .frame(size: circleSize(geometry))
-                .animation(sizeAnimation, value: circleSize(geometry))
-                .foregroundColor(backColor)
-            
-            switch gate.requirement {
-            case .resource(let type):
-                ResourceShape(type: type)
-                    .frame(size: symbolSize(geometry))
-                    .animation(sizeAnimation, value: symbolSize(geometry))
-                    .foregroundColor(symbolColor)
-            }
-        }
-    }
-    
-    func circleSize(_ geometry: GeometryProxy) -> CGFloat {
-        switch gate.state {
-        case .open, .seed, .ungrowing:
-            return 0
-        case .growing, .close:
-            return geometry.minSize * Layout.EdgeGate.sizeRatio
-        }
-    }
-    
-    func symbolSize(_ geometry: GeometryProxy) -> CGFloat {
-        return circleSize(geometry) * Layout.EdgeGate.symbolRatio
-    }
-    
-    private var sizeAnimation: Animation? {
-        switch gate.state {
-        case .growing:
-            return AnimationService.shared.growingGate
-        case .open:
-            return AnimationService.shared.openGate
-        case .close:
-            return AnimationService.shared.closeGate
-        case .ungrowing:
-            return AnimationService.shared.ungrowingGate
-        default:
-            return nil
-        }
-    }
-}
-

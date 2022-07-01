@@ -9,7 +9,6 @@ import CoreGraphics
 import Foundation
 import UIKit
 
-// TODO: If system with predefined layouts will be used at release, should be added unit tests for check scuccessfully parsing of all layouts for all adventures
 final class AdventureLayout {
     typealias Controls = (p1: CGPoint, p2: CGPoint)
 

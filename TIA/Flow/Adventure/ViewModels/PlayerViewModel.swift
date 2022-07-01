@@ -17,10 +17,7 @@ final class PlayerViewModel: ObservableObject {
 
     private var subscriptions: [AnyCancellable] = []
 
-    var position: PlayerPosition {
-        get { model.position }
-        set { model.position = newValue }
-    }
+    var position: PlayerPosition { model.position }
 
     init(player: Player, color: Color, movingColor: Color) {
         self.model = player

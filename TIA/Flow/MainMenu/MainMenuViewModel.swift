@@ -63,7 +63,8 @@ final class MainMenuViewModel: ObservableObject {
     
     private func initedAfterFinish(_ adventure: AdventureDescriptor) {
         state = .closing(adventure)
-        iconFor(adventure)?.state = .closing
+        let willBeDone = adventure.state == .done
+        iconFor(adventure)?.state = .closing(willBeDone: willBeDone)
         let animation = AnimationService.shared.fromAdventure
         camera.transferTo(.default, animation: animation) { [weak self] in
             self?.closingFinished(adventure)
@@ -112,7 +113,8 @@ final class MainMenuViewModel: ObservableObject {
                 return stableStateFor(adventure)
             }
         case .closing(let associated):
-            return associated == adventure ? .closing : stableStateFor(adventure)
+            let willBeDone = adventure.state == .done
+            return associated == adventure ? .closing(willBeDone: willBeDone) : stableStateFor(adventure)
         }
     }
 

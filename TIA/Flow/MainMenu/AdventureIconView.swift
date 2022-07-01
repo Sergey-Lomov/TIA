@@ -122,10 +122,10 @@ struct AdventureIconView: View {
     var body: some View {
         ZStack {
             let palette = ColorPalette.paletteFor(model.adventure.theme)
-            ComplexCurveShape(curve: curve)
+            ComplexCurveShape(curve: shapeCurve)
                 .fill(color)
                 .animation(.linear(duration: 1), value: color)
-            ComplexCurveShape(curve: curve)
+            ComplexCurveShape(curve: shapeCurve)
                 .stroke(palette.borders)
         }
     }
@@ -140,17 +140,21 @@ struct AdventureIconView: View {
         }
     }
     
-    var curve: ComplexCurve {
-        switch model.state {
-        case .preclosing:
-            let doneShape = model.adventure.doneShape
-            let curve = AdventuresIconsService.curveFor(doneShape)
-            return .circle(radius: 0.5, componentsCount: curve.components.count)
-        case .closing, .done, .becameDone:
+    var shapeCurve: ComplexCurve {
+        shapeFor(model.state)
+    }
+    
+    private func shapeFor(_ state: AdventureIconState) -> ComplexCurve {
+        switch state {
+        case .closing(let willBeDone):
+            return willBeDone ? shapeFor(.done(slot: 0)) : shapeFor(.current)
+        case .done, .becameDone:
             let doneShape = model.adventure.doneShape
             return AdventuresIconsService.curveFor(doneShape)
         default:
-            return .circle(radius: 0.5)
+            let doneShape = model.adventure.doneShape
+            let curve = AdventuresIconsService.curveFor(doneShape)
+            return .circle(radius: 0.5, componentsCount: curve.components.count)
         }
     }
     

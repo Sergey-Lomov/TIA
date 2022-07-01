@@ -14,7 +14,7 @@ enum AdventureIconState: Equatable {
     case current
     case opening
     case preclosing
-    case closing
+    case closing(willBeDone: Bool)
     case becameDone(slot: Int)
     case done(slot: Int)
 }

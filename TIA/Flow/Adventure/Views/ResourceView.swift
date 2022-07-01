@@ -10,7 +10,8 @@ import SwiftUI
 struct ResourceWrapper: View {
     private let transition = AnyTransition.opacity.animation(.easeInOut(duration: 2))
     private let controlsRandomization: CGFloat = 100
-    private let toGateRandomizationRange = CGFloat(50)...CGFloat(100)
+    // swiftlint:disable:next numbers_smell
+    private let toGateRandomizationRange = CGFloat.range(50, 100)
     private let failedMovingGap: CGFloat = 0.1
     private let destroyingRadius: CGFloat = 0.5
 
@@ -148,16 +149,20 @@ struct ResourceWrapper: View {
     private func stateAnimation(_ geometry: GeometryProxy) -> Animation? {
         switch resource.metastate {
         case .vertexIdle(_, _, let total):
-            return total == 1 ? .soloRotation : .groupRotation
+            if total == 1 {
+                return AnimationService.shared.resourceSoloRotation
+            } else {
+                return AnimationService.shared.resourceGroupRotation
+            }
         case .vertexRestoring, .predestroying:
             return Animation.none
         case .outFromVertex(_, _, let edge):
-            return .vertexOut(edgeLength: edge.length(geometry))
+            return AnimationService.shared.resourceVertexOut(edgeLength: edge.length(geometry))
         case .successMoving(let edge, _, _, let toIndex, let total):
             let length = edge.length(geometry)
-            return .positioning(geometry, playerLength: length, resourceLength: length, index: toIndex, total: total)
+            return AnimationService.shared.resourceMoving(geometry, playerLength: length, resourceLength: length, index: toIndex, total: total)
         case .toGate:
-            return .toGate
+            return AnimationService.shared.resourceToGate
         case .fromGate:
             return AnimationService.shared.resourceFromGate
         case .onGate(let gate, _):
@@ -170,7 +175,7 @@ struct ResourceWrapper: View {
             case .hiding: return AnimationService.shared.hideLayer
             }
         case .destroying(_, let index, let total):
-            return .destroying(index: index, total: total)
+            return AnimationService.shared.resourceDestroying(index: index, total: total)
         default:
             return nil
         }
@@ -182,7 +187,7 @@ struct ResourceWrapper: View {
         let multiplier = edge.from == vertex ? ratio : 1 - ratio
         let playerLength = edge.length(geometry) * multiplier * 2
         let curve = failNearGateCurve(geometry, gate: gate, edge: edge, vertex: vertex, slot: slot)
-        return .positioning(geometry, playerLength: playerLength, resourceLength: curve.length(), index: slot, total: total)
+        return AnimationService.shared.resourceMoving(geometry, playerLength: playerLength, resourceLength: curve.length(), index: slot, total: total)
     }
 
     private func positionCurve(_ geometry: GeometryProxy) -> ComplexCurve {
@@ -338,37 +343,5 @@ struct ResourceView: View {
                      targetPositioning: CGFloat,
                      onFinish: Action?) -> some View {
         self.modifier(ResourceStateHandler(transform: transform, positionCurve: positionCurve, onFinish: onFinish, targetPositioning: targetPositioning, deltaPositioning: targetPositioning - 1))
-    }
-}
-
-// TODO: Should be moved to AnimationService
-private extension Animation {
-    static var groupRotation: Animation {
-        linear(duration: 40)
-    }
-
-    static var soloRotation: Animation {
-        linear(duration: 15)
-    }
-
-    static var toGate: Animation {
-        let duration = AnimationService.shared.resToGateDuration()
-        return .easeInOut(duration: duration)
-    }
-
-    static func vertexOut(edgeLength: CGFloat) -> Animation {
-        let duration = AnimationService.shared.playerMovingDuration(length: edgeLength)
-        return .easeOut(duration: duration)
-    }
-
-    static func positioning(_ geometry: GeometryProxy, playerLength: CGFloat, resourceLength: CGFloat, index: Int, total: Int) -> Animation {
-        let timing = AnimationService.shared.resourceMovingTiming(geometry, playerLength: playerLength, resourceLength: resourceLength, index: index, total: total)
-        return .easeInOut(duration: timing.duration).delay(timing.delay)
-    }
-
-    static func destroying(index: Int, total: Int) -> Animation {
-        let step = total > 1 ? 1 / CGFloat(total - 1) : 0
-        let delay = CGFloat(index) * step
-        return .easeInOut(duration: 1).delay(delay)
     }
 }

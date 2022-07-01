@@ -25,6 +25,12 @@ struct Layout {
         static let radius: CGFloat = (1 - gap * 2 - Vertex.diameter) / zoom / 2
     }
 
+    struct Player {
+        static let strokeRatio: CGFloat = 0.05
+        static let blobSize: CGFloat = Vertex.diameter * 0.25
+        static let eyeSize: CGFloat = Vertex.diameter * 0.66
+    }
+
     struct Adventure {
         static let border: CGFloat = 0.05
     }

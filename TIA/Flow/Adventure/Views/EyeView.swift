@@ -19,8 +19,6 @@ private extension EnvironmentValues {
 }
 
 struct EyeView: View {
-    private let strokeRatio = 0.05
-
     @Binding var eye: EyeViewModel
 
     var color: Color
@@ -38,10 +36,14 @@ struct EyeView: View {
             }
             .foregroundColor(color)
             .frame(geometry: geometry)
-            .environment(\.strokeWidth, geometry.minSize * strokeRatio)
+            .environment(\.strokeWidth, strockeWidth(geometry))
         }.onAppear {
             eye.open()
         }
+    }
+
+    private func strockeWidth(_ geometry: GeometryProxy) -> CGFloat {
+        geometry.minSize * Layout.Player.strokeRatio
     }
 }
 

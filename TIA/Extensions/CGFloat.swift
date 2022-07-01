@@ -35,4 +35,8 @@ extension CGFloat {
     static var sin315: CGFloat = sqrt(2) / -2
     static var cos330: CGFloat = sqrt(3) / 2
     static var sin330: CGFloat = -0.5
+
+    static func range(_ from: CGFloat, _ to: CGFloat) -> ClosedRange<CGFloat> {
+        from...to
+    }
 }

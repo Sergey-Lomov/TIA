@@ -97,27 +97,34 @@ fileprivate extension View {
 }
 
 struct PlayerView: View {
-    @Namespace private var eye
     @ObservedObject var player: PlayerViewModel
     var superSize: CGSize
 
     var body: some View {
-        CenteredGeometryReader {
+        CenteredGeometryReader { geometry in
             if player.position.currentEdge != nil {
                 ComplexCurveShape(curve: .circle(radius: 0.5))
-                    .frame(width: 16, height: 16)
-                    .foregroundColor(edgeBlobColor)
+                    .frame(size: blobSize(geometry))
+                    .foregroundColor(blobColor)
                     .maskToCurrentEdgeVertices(player: player, size: superSize)
                     .transition(.identity)
             }
 
             EyeView(eye: $player.eye, color: player.color)
-                .frame(width: 40, height: 40)
+                .frame(size: eyeSize(geometry))
         }
     }
 
-    var edgeBlobColor: Color {
+    var blobColor: Color {
         return player.currentEdgeColor()
+    }
+
+    func blobSize(_ geometry: GeometryProxy) -> CGFloat {
+        geometry.minSize * Layout.Player.blobSize
+    }
+
+    func eyeSize(_ geometry: GeometryProxy) -> CGFloat {
+        geometry.minSize * Layout.Player.eyeSize
     }
 }
 

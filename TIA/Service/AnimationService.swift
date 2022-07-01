@@ -42,6 +42,8 @@ final class AnimationService {
         }
 
         enum Resource {
+            static let soloIdleDuration: CGFloat = 15
+            static let groupIdleDuration: CGFloat = 40
             static let movingGapRatio: CGFloat = 1
             static let startMaxRatio: CGFloat = 0.25
         }
@@ -118,12 +120,6 @@ final class AnimationService {
         .easeOut(duration: Const.Gate.resizeDuration)
     }
 
-    var resourceFromGate: Animation {
-        let uncompress = eyeTransDuration(from: .compressed, to: .closed) + eyeTransDuration(from: .closed, to: .opened)
-        let timeleft = uncompress - Const.Gate.resizeDuration
-        return .easeOut(duration: timeleft)
-    }
-
     var menuSeedExtension: Animation {
         let duration = eyeTransDuration(from: .compressed, to: .closed) + eyeTransDuration(from: .closed, to: .opened)
         return .easeOut(duration: duration * 10)
@@ -140,12 +136,6 @@ final class AnimationService {
         return builder(eyeTransDuration(from: from, to: to))
     }
 
-    func resToGateDuration() -> TimeInterval {
-        let closing = AnimationService.shared.eyeTransDuration(from: .opened, to: .closed)
-        let compression = AnimationService.shared.eyeTransDuration(from: .closed, to: .compressed)
-        return closing + compression
-    }
-
     func playerMovingDuration(length: CGFloat) -> TimeInterval {
         return length * Const.Player.lengthMult
     }
@@ -155,14 +145,27 @@ final class AnimationService {
         return .linear(duration: duration)
     }
 
-    func resourceMovingTiming(_ geometry: GeometryProxy,
-                              playerLength: CGFloat,
-                              resourceLength: CGFloat,
-                              index: Int,
-                              total: Int) -> (duration: CGFloat, delay: CGFloat) {
+    var resourceGroupRotation: Animation {
+        .linear(duration: Const.Resource.groupIdleDuration)
+    }
+
+    var resourceSoloRotation: Animation {
+        .linear(duration: Const.Resource.soloIdleDuration)
+    }
+
+    func resourceVertexOut(edgeLength: CGFloat) -> Animation {
+        let duration = AnimationService.shared.playerMovingDuration(length: edgeLength)
+        return .easeOut(duration: duration)
+    }
+
+    func resourceMoving(_ geometry: GeometryProxy,
+                        playerLength: CGFloat,
+                        resourceLength: CGFloat,
+                        index: Int,
+                        total: Int) -> Animation {
         let playerDuration = playerMovingDuration(length: playerLength)
         guard total > 1 else {
-            return (playerDuration, 0)
+            return .easeInOut(duration: playerDuration)
         }
 
         let size = LayoutService.inventoryResourceSize(geometry)
@@ -172,6 +175,25 @@ final class AnimationService {
         let start = min(startEstimated, startMax)
         let duration = playerDuration - start
         let delay = start / CGFloat(total - 1) * CGFloat(index)
-        return (duration, delay)
+
+        return .easeInOut(duration: duration).delay(delay)
+    }
+
+    var resourceFromGate: Animation {
+        let uncompress = eyeTransDuration(from: .compressed, to: .closed) + eyeTransDuration(from: .closed, to: .opened)
+        let timeleft = uncompress - Const.Gate.resizeDuration
+        return .easeOut(duration: timeleft)
+    }
+
+    var resourceToGate: Animation {
+        let closing = AnimationService.shared.eyeTransDuration(from: .opened, to: .closed)
+        let compression = AnimationService.shared.eyeTransDuration(from: .closed, to: .compressed)
+        return .easeInOut(duration: closing + compression)
+    }
+
+    func resourceDestroying(index: Int, total: Int) -> Animation {
+        let step = total > 1 ? 1 / CGFloat(total - 1) : 0
+        let delay = CGFloat(index) * step
+        return .easeInOut(duration: 1).delay(delay)
     }
 }

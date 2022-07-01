@@ -14,12 +14,11 @@ nesting:
     type_level:
         warning: 3
         error: 6
-    statement_level:
+    function_level:
         warning: 5
         error: 10
 
 custom_rules:
-
     already_true:
         regex: "== true"
         message: "Don't compare to true, just use the bool value."
@@ -44,6 +43,6 @@ custom_rules:
     final_classes:
         included: ".*.swift"
         name: "Final classes"
-        regex: "(?<!final )class [a-zA-Z]*(ViewModels|Service)"
+        regex: "(?<!final )class [a-zA-Z]*(ViewModel|Service)"
         message: "ViewModels, Models and Services classes should be final"
         severity: warning

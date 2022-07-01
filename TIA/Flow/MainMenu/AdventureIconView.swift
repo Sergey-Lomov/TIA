@@ -13,23 +13,7 @@ struct AdventureIconWrapper: View {
     @ObservedObject var model: AdventureIconViewModel
     @Environment(\.cameraService) var cameraService
     @State var isSelected = false
-    
-    // TODO: Move to BezierCurve extension
-    private enum Curves {
-        static let currentToDone = [
-            LayoutService.currentAdventureIconPosition(theme: .dark),
-            CGPoint(x: -0.25, y: -0.25),
-            CGPoint(x: -0.4375, y: 0),
-            CGPoint(x: -0.345, y: 0.25)
-        ]
-        static let planedToCurrent = [
-            CGPoint(x: 0, y: 0.075),
-            CGPoint(x: 0, y: 0.1),
-            CGPoint(x: 0, y: -0.25),
-            LayoutService.currentAdventureIconPosition(theme: .dark)
-        ]
-    }
-    
+        
     var body: some View {
         CenteredGeometryReader { geometry in
             let transform = transform(geometry)

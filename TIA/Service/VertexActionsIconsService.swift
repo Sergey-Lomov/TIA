@@ -9,7 +9,7 @@ import Foundation
 import CoreGraphics
 import SwiftUI
 
-class VertexActionsIconsService {
+final class VertexActionsIconsService {
     private enum Elements {
         static let restart: [DrawableCurve] = {
             let compactisation = 0.8

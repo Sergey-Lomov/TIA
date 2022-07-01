@@ -38,7 +38,7 @@ enum EyeStatus {
     }
 }
 
-class EyeViewModel: ObservableObject {
+final class EyeViewModel: ObservableObject {
     @Published var status: EyeStatus
     private(set) var targetState: EyeState?
 

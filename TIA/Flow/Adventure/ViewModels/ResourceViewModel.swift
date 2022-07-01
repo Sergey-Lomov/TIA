@@ -10,7 +10,7 @@ import SwiftUI
 import Combine
 
 // For resources implemented reusable view models solution. In general, this solution is same with reusable table view cells. This is required to prevent unnecessary UI update of all resources at one resource removing.
-class ResourceViewModel: ObservableObject, IdEqutable {
+final class ResourceViewModel: ObservableObject, IdEqutable {
 
     var viewId = UUID().uuidString
     var model: Resource?

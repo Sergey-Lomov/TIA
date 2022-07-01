@@ -8,7 +8,7 @@
 import SwiftUI
 import Combine
 
-class EdgeGateViewModel: ObservableObject, IdEqutable {
+final class EdgeGateViewModel: ObservableObject, IdEqutable {
 
     var model: EdgeGate
     @Published var color: Color

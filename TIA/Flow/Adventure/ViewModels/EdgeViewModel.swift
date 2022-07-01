@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import Combine
 
-class EdgeViewModel: ObservableObject, IdEqutable {
+final class EdgeViewModel: ObservableObject, IdEqutable {
 
     var model: Edge
     var gates: [EdgeGateViewModel]

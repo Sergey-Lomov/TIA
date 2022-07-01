@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import Combine
 
-class VertexViewModel: ObservableObject, IdEqutable {
+final class VertexViewModel: ObservableObject, IdEqutable {
     var eventsPublisher: ViewEventsPublisher
 
     @Published var model: Vertex

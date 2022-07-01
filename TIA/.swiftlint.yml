@@ -32,3 +32,18 @@ custom_rules:
         regex: '(return |case |\w\(|: |\?\? |\, |== |<=? |>=? |\+= |\-= |\/= |\*= |%= |\w\.\w+ = )\(*-?\d{2,}'
         message: "Numbers smell; define a constant instead."
         excluded: '.*Tests/'
+
+    non_weak_delegate_datasource:
+        included: ".*.swift"
+        name: "Retain Cycle"
+        regex: '^\ *var\ *(delegate)'
+        message: "Delegate/datasource may be weak."
+        severity: warning
+
+#Project-specific
+    final_classes:
+        included: ".*.swift"
+        name: "Final classes"
+        regex: "(?<!final )class [a-zA-Z]*(ViewModels|Service)"
+        message: "ViewModels, Models and Services classes should be final"
+        severity: warning

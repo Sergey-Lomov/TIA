@@ -8,7 +8,7 @@
 import SwiftUI
 import Combine
 
-class PlayerViewModel: ObservableObject {
+final class PlayerViewModel: ObservableObject {
     var model: Player
 
     // TODO: Think about changing old data source solution to combine-like solution

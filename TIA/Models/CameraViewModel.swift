@@ -34,7 +34,7 @@ private struct TransferStep {
     var animation: Animation = .none
 }
 
-class CameraViewModel: ObservableObject {
+final class CameraViewModel: ObservableObject {
 
     @Published var state: CameraState
     @Published var anchorState: CameraState

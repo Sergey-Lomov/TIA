@@ -170,11 +170,7 @@ final class AnimationService {
         return .easeOut(duration: duration)
     }
 
-    static func resourceMoving(_ geometry: GeometryProxy,
-                        playerLength: CGFloat,
-                        resourceLength: CGFloat,
-                        index: Int,
-                        total: Int) -> Animation {
+    static func resourceMoving(_ geometry: GeometryProxy, playerLength: CGFloat, resourceLength: CGFloat, index: Int, total: Int) -> Animation {
         let playerDuration = playerMovingDuration(length: playerLength)
         guard total > 1 else {
             return .easeInOut(duration: playerDuration)

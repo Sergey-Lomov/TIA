@@ -18,6 +18,10 @@ final class AnimationService {
         enum Player {
             // TODO: this value was decreased for development purposes, should be changed to more slow
             static let lengthMult: CGFloat = 0.005
+            static let premoveDuration: CGFloat = 1.5
+            static let postmoveDuration: CGFloat = 1.5
+            static let eyeCompressing: CGFloat = 0.33
+            static let eyeOpening: CGFloat = 0.33
         }
 
         enum Layer {
@@ -35,6 +39,7 @@ final class AnimationService {
             static let elementsGrowingDuration: CGFloat = 1.0
             static let elementsUngrowingDuration: CGFloat = 0.3
             static let pathUngrowingDuration: CGFloat = 0.7
+            static let seedExtensionMult: CGFloat = 10
         }
 
         enum Gate {
@@ -49,11 +54,17 @@ final class AnimationService {
         }
     }
 
-    // TODO: Introduce player moving phases duration instead calculate durations each time based on eye transforamation durations. This will be clear concept instead current solution, which make many unrelated animations be based at eye transformation pahases.
     private let eyeTransDuration: [EyeState: [EyeState: TimeInterval]] = [
-        .closed: [.compressed: 0.5, .opened: 1],
-        .compressed: [.closed: 0.5],
-        .opened: [.closed: 1]
+        .closed: [
+            .compressed: Const.Player.eyeCompressing * Const.Player.premoveDuration,
+            .opened: Const.Player.eyeOpening * Const.Player.premoveDuration
+        ],
+        .compressed: [
+            .closed: Const.Player.eyeCompressing * Const.Player.postmoveDuration
+        ],
+        .opened: [
+            .closed: Const.Player.eyeOpening * Const.Player.postmoveDuration
+        ]
     ]
     private let eyeTransBulder: [EyeState: [EyeState: AnimBuilder]] = [
         .closed: [.compressed: { .easeIn(duration: $0) },
@@ -61,6 +72,17 @@ final class AnimationService {
         .compressed: [.closed: { .easeIn(duration: $0) }],
         .opened: [.closed: { .easeIn(duration: $0) }]
     ]
+
+    func eyeTransDuration(from: EyeState, to: EyeState) -> TimeInterval {
+        return eyeTransDuration[from]?[to] ?? 0
+    }
+
+    func eyeTransAnimation(from: EyeState, to: EyeState) -> Animation? {
+        guard let builder = eyeTransBulder[from]?[to] else {
+            return nil
+        }
+        return builder(eyeTransDuration(from: from, to: to))
+    }
 
     var fromAdventure: Animation { .linear(duration: 2) }
     var toAdventure: Animation { .linear(duration: 2) }
@@ -121,19 +143,8 @@ final class AnimationService {
     }
 
     var menuSeedExtension: Animation {
-        let duration = eyeTransDuration(from: .compressed, to: .closed) + eyeTransDuration(from: .closed, to: .opened)
-        return .easeOut(duration: duration * 10)
-    }
-
-    func eyeTransDuration(from: EyeState, to: EyeState) -> TimeInterval {
-        return eyeTransDuration[from]?[to] ?? 0
-    }
-
-    func eyeTransAnimation(from: EyeState, to: EyeState) -> Animation? {
-        guard let builder = eyeTransBulder[from]?[to] else {
-            return nil
-        }
-        return builder(eyeTransDuration(from: from, to: to))
+        let duration = Const.Player.postmoveDuration * Const.Edge.seedExtensionMult
+        return .easeOut(duration: duration)
     }
 
     func playerMovingDuration(length: CGFloat) -> TimeInterval {
@@ -154,7 +165,7 @@ final class AnimationService {
     }
 
     func resourceVertexOut(edgeLength: CGFloat) -> Animation {
-        let duration = AnimationService.shared.playerMovingDuration(length: edgeLength)
+        let duration = playerMovingDuration(length: edgeLength)
         return .easeOut(duration: duration)
     }
 
@@ -180,15 +191,12 @@ final class AnimationService {
     }
 
     var resourceFromGate: Animation {
-        let uncompress = eyeTransDuration(from: .compressed, to: .closed) + eyeTransDuration(from: .closed, to: .opened)
-        let timeleft = uncompress - Const.Gate.resizeDuration
-        return .easeOut(duration: timeleft)
+        let duration = Const.Player.postmoveDuration - Const.Gate.resizeDuration
+        return .easeOut(duration: duration)
     }
 
     var resourceToGate: Animation {
-        let closing = AnimationService.shared.eyeTransDuration(from: .opened, to: .closed)
-        let compression = AnimationService.shared.eyeTransDuration(from: .closed, to: .compressed)
-        return .easeInOut(duration: closing + compression)
+        return .easeInOut(duration: Const.Player.premoveDuration)
     }
 
     func resourceDestroying(index: Int, total: Int) -> Animation {

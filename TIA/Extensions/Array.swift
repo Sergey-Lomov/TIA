@@ -45,7 +45,7 @@ extension Array {
 
 extension Array where Element: Equatable & Hashable {
     func intersection(_ array: [Element]) -> [Element] {
-        return Array(Set(self).intersection(Set(array)))
+        Array(Set(self).intersection(Set(array)))
     }
 }
 
@@ -57,7 +57,7 @@ extension Array where Element: AdditiveArithmetic {
     }
 
     public static var zero: [Element] {
-        return [Element]()
+        [Element]()
     }
 }
 
@@ -88,7 +88,7 @@ extension Array where Element == AnyCancellable {
 
 extension Array where Element: IdEqutable {
     func firstById(_ id: String) -> Element? {
-        return first { $0.id == id }
+        first { $0.id == id }
     }
 }
 

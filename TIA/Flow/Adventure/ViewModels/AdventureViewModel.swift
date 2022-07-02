@@ -62,6 +62,7 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
         self.camera.transferTo(initState, animation: AnimationService.adventureInitial)
 
         self._camera.publisher = objectWillChange
+        self.camera.debugId = "adv"
         self.player.viewModelsProvider = self
 
         // Combine setup

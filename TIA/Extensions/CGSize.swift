@@ -21,8 +21,7 @@ extension CGSize {
     }
 
     func scaled(_ mult: CGFloat) -> CGSize {
-        return CGSize(width: width * mult,
-                      height: height * mult)
+        CGSize(width: width * mult,height: height * mult)
     }
 }
 
@@ -37,11 +36,11 @@ extension CGSize: VectorArithmetic {
     }
 
     public static func + (lhs: CGSize, rhs: CGSize) -> CGSize {
-        return CGSize(width: lhs.width + rhs.width, height: lhs.height + rhs.height)
+        CGSize(width: lhs.width + rhs.width, height: lhs.height + rhs.height)
     }
 
     public static func - (lhs: CGSize, rhs: CGSize) -> CGSize {
-        return CGSize(width: lhs.width - rhs.width, height: lhs.height - rhs.height)
+        CGSize(width: lhs.width - rhs.width, height: lhs.height - rhs.height)
     }
 
 }

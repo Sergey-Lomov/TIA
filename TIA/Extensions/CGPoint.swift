@@ -23,8 +23,7 @@ extension CGPoint {
     }
 
     func mirrored(point: CGPoint = .zero) -> CGPoint {
-        return CGPoint(x: 2 * point.x - self.x,
-                       y: 2 * point.y - self.y)
+         CGPoint(x: 2 * point.x - self.x, y: 2 * point.y - self.y)
     }
 
     func scaled(_ geometry: GeometryProxy) -> CGPoint {
@@ -32,11 +31,11 @@ extension CGPoint {
     }
 
     func scaled(_ size: CGSize) -> CGPoint {
-        return scaled(x: size.width, y: size.height)
+        scaled(x: size.width, y: size.height)
     }
 
     func scaled(_ scale: CGFloat) -> CGPoint {
-        return scaled(x: scale, y: scale)
+        scaled(x: scale, y: scale)
     }
 
     func scaled(x sx: CGFloat, y sy: CGFloat) -> CGPoint {
@@ -56,11 +55,11 @@ extension CGPoint {
     }
 
     func mirroredByLine(p1: CGPoint, p2: CGPoint) -> CGPoint {
-        return mirroredByLine(Line(p1: p1, p2: p2))
+        mirroredByLine(Line(p1: p1, p2: p2))
     }
 
     func relative(zero: CGPoint, unit: CGFloat = 1) -> CGPoint {
-        return CGPoint(x: (x - zero.x) / unit, y: (y - zero.y) / unit)
+        CGPoint(x: (x - zero.x) / unit, y: (y - zero.y) / unit)
     }
 
     func randomPoint(maxDelta: CGFloat) -> CGPoint {
@@ -94,7 +93,8 @@ extension CGPoint {
     }
 
     func toUnit(geometry: GeometryProxy) -> UnitPoint {
-        return UnitPoint(x: (x / geometry.size.width) + 0.5, y: (y / geometry.size.height) + 0.5)
+        UnitPoint(x: (x / geometry.size.width) + 0.5,
+                  y: (y / geometry.size.height) + 0.5)
     }
 }
 
@@ -106,7 +106,7 @@ extension CGPoint: VectorArithmetic {
     }
 
     public var magnitudeSquared: Double {
-        return x * x + y * y
+        x * x + y * y
     }
 
     public static func + (lhs: CGPoint, rhs: CGPoint) -> CGPoint {

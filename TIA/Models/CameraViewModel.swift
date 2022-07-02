@@ -26,6 +26,10 @@ struct CameraState {
     }
 
     static var `default` = CameraState(center: .zero)
+
+    static func == (lhs: CameraState, rhs: CameraState) -> Bool {
+        lhs.angle == rhs.angle && lhs.zoom == rhs.zoom && lhs.center == rhs.center
+    }
 }
 
 private struct TransferStep {
@@ -35,10 +39,11 @@ private struct TransferStep {
 }
 
 final class CameraViewModel: ObservableObject {
-
+    
     @Published var state: CameraState
     @Published var anchorState: CameraState
     @Published var animation: Animation = .none
+    var immideatelyUpdate: Bool = true
     var completion: Action?
 
     private var transferInProgress: Bool = true
@@ -88,6 +93,7 @@ final class CameraViewModel: ObservableObject {
 
         transferInProgress = true
         steps.removeFirst()
+        immideatelyUpdate = next.state == state && next.anchorState == anchorState
         state = next.state
         anchorState = next.anchorState
         animation = next.animation

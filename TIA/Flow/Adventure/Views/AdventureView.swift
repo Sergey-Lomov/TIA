@@ -22,21 +22,21 @@ struct AdventureView: View {
                     AdventureLayerBackground(layer: layer, theme: adventure.model.theme)
                         .edgesIgnoringSafeArea(.all)
 
-                    LayerContentView(layer: layer)
-                        .applyCamera(adventure.camera)
-                        .onAppear {
-                            handleLayerAppear(layer)
+                    ZStack {
+                        LayerContentView(layer: layer)
+                            .onAppear {
+                                handleLayerAppear(layer)
+                            }
+
+                        let isCurrent = layer.id == adventure.model.currentLayer.id
+                        if isCurrent {
+                            PlayerWrapperView(player: adventure.player)
                         }
 
-                    let isCurrent = layer.id == adventure.model.currentLayer.id
-                    if isCurrent {
-                        PlayerWrapperView(player: adventure.player)
-                            .applyCamera(adventure.camera)
-                    }
-
-                    let resources = adventure.layerResources(layer)
-                    ForEach(resources, id: \.id) { resource in
-                        ResourceWrapper(resource: resource, layer: layer.model)
+                        let resources = adventure.layerResources(layer)
+                        ForEach(resources, id: \.id) { resource in
+                            ResourceWrapper(resource: resource, layer: layer.model)
+                        }
                     }.applyCamera(adventure.camera)
                 }
             }

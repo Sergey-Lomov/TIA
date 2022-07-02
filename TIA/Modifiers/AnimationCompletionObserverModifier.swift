@@ -22,7 +22,7 @@ struct AnimationCompletionObserverModifier<Value>: AnimatableModifier where Valu
     init(observedValue: Value, completion: @escaping Action) {
         self.completion = completion
         self.animatableData = observedValue
-        targetValue = observedValue
+        self.targetValue = observedValue
     }
 
     private func notifyCompletionIfFinished() {

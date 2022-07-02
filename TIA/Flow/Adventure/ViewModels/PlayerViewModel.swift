@@ -8,7 +8,7 @@
 import SwiftUI
 import Combine
 
-final class PlayerViewModel: BaseViewModel<Player> {
+final class PlayerViewModel: IngameViewModel<Player> {
 
     weak var viewModelsProvider: ViewModelsProvider?
     @Transpublished var eye: EyeViewModel
@@ -19,11 +19,11 @@ final class PlayerViewModel: BaseViewModel<Player> {
     var position: PlayerPosition { model.position }
     var metastate: PlayerMetastate { model.metastate }
 
-    init(player: Player, color: Color, movingColor: Color) {
+    init(player: Player, eventsPublisher: ViewEventsPublisher, color: Color, movingColor: Color) {
 
         self.color = color
         self.eye = EyeViewModel()
-        super.init(model: player)
+        super.init(model: player, publisher: eventsPublisher)
 
         self._eye.publisher = objectWillChange
 
@@ -79,11 +79,11 @@ final class PlayerViewModel: BaseViewModel<Player> {
         case .state(let state):
             switch state {
             case .compressed:
-                model.compressingFinished()
+                send(.playerCompressed(player: model))
             case .closed:
                 break
             case .opened:
-                model.expandingFinished()
+                send(.playerExpanded(player: model))
             }
         case .transiotion:
             break

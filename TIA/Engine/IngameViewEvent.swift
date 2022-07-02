@@ -21,6 +21,9 @@ protocol ViewEventsListener {
 enum IngameViewEvent {
     case viewInitFinished
 
+    case playerCompressed(player: Player)
+    case playerExpanded(player: Player)
+
     case layerPrepared(layer: AdventureLayer)
     case layerPresented(layer: AdventureLayer)
     case layerWasHidden(layer: AdventureLayer)

@@ -501,6 +501,11 @@ extension AdventureEngine: ViewEventsListener {
         case .viewInitFinished:
             growFromVertex(adventure.currentLayer.entrance)
 
+        case .playerCompressed(let player):
+            player.compressingFinished()
+        case .playerExpanded(let player):
+            handlePlayerExpanded(player)
+
         case .layerPrepared(let layer):
             layer.state = .presenting
         case .layerPresented(let layer):
@@ -552,9 +557,15 @@ extension AdventureEngine: ViewEventsListener {
     // swiftlint:enable function_body_length
 
     private func handleInitGrowingCompletion() {
-        lifestate = .gameplay
         let entrance = adventure.currentLayer.entrance
         player.position = .vertex(vertex: entrance)
+    }
+
+    private func handlePlayerExpanded(_ player: Player) {
+        player.expandingFinished()
+        if player == self.player && lifestate == .initializing {
+            lifestate = .gameplay
+        }
     }
 
     private func handleLayerPresented(_ layer: AdventureLayer) {
@@ -594,6 +605,7 @@ extension AdventureEngine: ViewEventsListener {
     }
 
     private func handleVertexSelection(_ newVertex: Vertex) {
+        guard lifestate == .gameplay || lifestate == .menu else { return }
         guard case .vertex(let oldVertex) = player.position else { return }
         guard case .shown = adventure.currentLayer.state else { return }
 

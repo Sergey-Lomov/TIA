@@ -12,8 +12,6 @@ import SwiftUI
 final class AnimationService {
     typealias AnimBuilder = (TimeInterval) -> Animation
 
-    static let shared = AnimationService()
-
     enum Const {
         enum Player {
             // TODO: this value was decreased for development purposes, should be changed to more slow
@@ -54,7 +52,7 @@ final class AnimationService {
         }
     }
 
-    private let eyeTransDuration: [EyeState: [EyeState: TimeInterval]] = [
+    static private let eyeTransDuration: [EyeState: [EyeState: TimeInterval]] = [
         .closed: [
             .compressed: Const.Player.eyeCompressing * Const.Player.premoveDuration,
             .opened: Const.Player.eyeOpening * Const.Player.premoveDuration
@@ -66,110 +64,113 @@ final class AnimationService {
             .closed: Const.Player.eyeOpening * Const.Player.postmoveDuration
         ]
     ]
-    private let eyeTransBulder: [EyeState: [EyeState: AnimBuilder]] = [
+    static private let eyeTransBulder: [EyeState: [EyeState: AnimBuilder]] = [
         .closed: [.compressed: { .easeIn(duration: $0) },
                   .opened: { .easeOut(duration: $0) }],
         .compressed: [.closed: { .easeIn(duration: $0) }],
         .opened: [.closed: { .easeIn(duration: $0) }]
     ]
 
-    func eyeTransDuration(from: EyeState, to: EyeState) -> TimeInterval {
+    static func eyeTransDuration(from: EyeState, to: EyeState) -> TimeInterval {
         return eyeTransDuration[from]?[to] ?? 0
     }
 
-    func eyeTransAnimation(from: EyeState, to: EyeState) -> Animation? {
+    static func eyeTransAnimation(from: EyeState, to: EyeState) -> Animation? {
         guard let builder = eyeTransBulder[from]?[to] else {
             return nil
         }
         return builder(eyeTransDuration(from: from, to: to))
     }
 
-    var fromAdventure: Animation { .linear(duration: 2) }
-    var toAdventure: Animation { .linear(duration: 2) }
-    var switchAdventure: Animation { .linear(duration: 1) }
-    var adventureInitial: Animation { .easeOut(duration: 1.5) }
-    var adventureFinal: Animation {
+    static var fromAdventure: Animation { .linear(duration: 2) }
+    static var toAdventure: Animation { .linear(duration: 2) }
+    static var switchAdventure: Animation { .linear(duration: 1) }
+    static var adventureInitial: Animation { .easeOut(duration: 1.5) }
+    static var adventureFinal: Animation {
         let duration = Const.Edge.elementsUngrowingDuration + Const.Edge.pathUngrowingDuration
         return .linear(duration: duration)
     }
 
-    var presentLayer: Animation {
+    static var presentLayer: Animation {
         .easeOut(duration: Const.Layer.transitionDuration)
     }
-    var hideLayer: Animation {
+    static var hideLayer: Animation {
         .easeIn(duration: Const.Layer.transitionDuration)
     }
 
-    var vertexGrowing: Animation {
+    static var vertexGrowing: Animation {
         .easeOut(duration: Const.Vertex.growingDuration)
     }
 
-    var vertexUngrowing: Animation {
+    static var vertexUngrowing: Animation {
         .easeIn(duration: Const.Vertex.ungrowingDuration)
     }
 
-    var vertexElementsGrowing: Animation {
+    static var vertexElementsGrowing: Animation {
         .linear(duration: Const.Vertex.elementsGrowingDuration)
     }
 
-    func edgePathGrowing(length: CGFloat) -> Animation {
+    static func edgePathGrowing(length: CGFloat) -> Animation {
         let duration = Const.Edge.pathGrowingMult * length
         return .easeOut(duration: duration)
     }
 
-    var edgeElementsGrowing: Animation {
+    static var edgeElementsGrowing: Animation {
         .easeOut(duration: Const.Edge.elementsGrowingDuration)
     }
 
-    var edgePathUngrowing: Animation {
+    static var edgePathUngrowing: Animation {
         .easeIn(duration: Const.Edge.pathUngrowingDuration)
     }
 
-    var edgeElementsUngrowing: Animation {
+    static var edgeElementsUngrowing: Animation {
         .easeIn(duration: Const.Edge.elementsUngrowingDuration)
     }
 
-    var growingGate: Animation {
+    static var growingGate: Animation {
         .easeOut(duration: Const.Edge.elementsGrowingDuration)
     }
-    var ungrowingGate: Animation {
+
+    static var ungrowingGate: Animation {
         .easeIn(duration: Const.Edge.elementsUngrowingDuration)
     }
-    var openGate: Animation {
+
+    static var openGate: Animation {
         .easeIn(duration: Const.Gate.resizeDuration)
     }
-    var closeGate: Animation {
+
+    static var closeGate: Animation {
         .easeOut(duration: Const.Gate.resizeDuration)
     }
 
-    var menuSeedExtension: Animation {
+    static var menuSeedExtension: Animation {
         let duration = Const.Player.postmoveDuration * Const.Edge.seedExtensionMult
         return .easeOut(duration: duration)
     }
 
-    func playerMovingDuration(length: CGFloat) -> TimeInterval {
+    private static func playerMovingDuration(length: CGFloat) -> TimeInterval {
         return length * Const.Player.lengthMult
     }
 
-    func onVisitHiding(incomeLength: CGFloat) -> Animation {
+    static func onVisitHiding(incomeLength: CGFloat) -> Animation {
         let duration = playerMovingDuration(length: incomeLength)
         return .linear(duration: duration)
     }
 
-    var resourceGroupRotation: Animation {
+    static var resourceGroupRotation: Animation {
         .linear(duration: Const.Resource.groupIdleDuration)
     }
 
-    var resourceSoloRotation: Animation {
+    static var resourceSoloRotation: Animation {
         .linear(duration: Const.Resource.soloIdleDuration)
     }
 
-    func resourceVertexOut(edgeLength: CGFloat) -> Animation {
+    static func resourceVertexOut(edgeLength: CGFloat) -> Animation {
         let duration = playerMovingDuration(length: edgeLength)
         return .easeOut(duration: duration)
     }
 
-    func resourceMoving(_ geometry: GeometryProxy,
+    static func resourceMoving(_ geometry: GeometryProxy,
                         playerLength: CGFloat,
                         resourceLength: CGFloat,
                         index: Int,
@@ -190,18 +191,23 @@ final class AnimationService {
         return .easeInOut(duration: duration).delay(delay)
     }
 
-    var resourceFromGate: Animation {
+    static var resourceFromGate: Animation {
         let duration = Const.Player.postmoveDuration - Const.Gate.resizeDuration
         return .easeOut(duration: duration)
     }
 
-    var resourceToGate: Animation {
+    static var resourceToGate: Animation {
         return .easeInOut(duration: Const.Player.premoveDuration)
     }
 
-    func resourceDestroying(index: Int, total: Int) -> Animation {
+    static func resourceDestroying(index: Int, total: Int) -> Animation {
         let step = total > 1 ? 1 / CGFloat(total - 1) : 0
         let delay = CGFloat(index) * step
         return .easeInOut(duration: 1).delay(delay)
+    }
+
+    static func playerMoving(length: CGFloat) -> Animation {
+        let duration = AnimationService.playerMovingDuration(length: length)
+        return .linear(duration: duration)
     }
 }

@@ -81,11 +81,11 @@ struct AdventureIconWrapper: View {
         case .planed, .preclosing, .current:
             return nil
         case .opening:
-            return AnimationService.shared.toAdventure
+            return AnimationService.toAdventure
         case .closing:
-            return AnimationService.shared.fromAdventure
+            return AnimationService.fromAdventure
         case .done, .becameDone, .becameCurrent:
-            return AnimationService.shared.switchAdventure
+            return AnimationService.switchAdventure
         }
     }
 

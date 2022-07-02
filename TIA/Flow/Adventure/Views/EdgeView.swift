@@ -146,16 +146,16 @@ struct EdgePathView: View {
         case .preextendedSeed, .pregrowing, .pregrowingElements:
             return Animation.none
         case .extendedSeed:
-            return AnimationService.shared.menuSeedExtension
+            return AnimationService.menuSeedExtension
         case .growPath:
             let length = edge.model.length(geometry)
-            return AnimationService.shared.edgePathGrowing(length: length)
+            return AnimationService.edgePathGrowing(length: length)
         case .growElements:
-            return AnimationService.shared.edgeElementsGrowing
+            return AnimationService.edgeElementsGrowing
         case .ungrowPath:
-            return AnimationService.shared.edgePathUngrowing
+            return AnimationService.edgePathUngrowing
         case .ungrowElements:
-            return AnimationService.shared.edgeElementsUngrowing
+            return AnimationService.edgeElementsUngrowing
         default:
             return nil
         }

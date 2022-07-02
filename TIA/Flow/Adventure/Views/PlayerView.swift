@@ -70,7 +70,8 @@ struct PlayerWrapperView: View {
         case .abscent, .vertex, .compressing, .expanding:
             return nil
         case .moving(let edge, _):
-            return .positioning(length: edge.length(geometry))
+            let length = edge.length(geometry)
+            return AnimationService.playerMoving(length: length)
         case .movingToGate(let gate, let edge, let forward),
                 .movingFromGate(let gate, let edge, let forward):
             guard let index = edge.gates.firstIndex(of: gate) else {
@@ -79,7 +80,7 @@ struct PlayerWrapperView: View {
             let ratio = CGFloat(index + 1) / CGFloat(edge.gates.count + 1)
             let multiplier = forward ? ratio : 1 - ratio
             let length = edge.length(geometry) * multiplier
-            return .positioning(length: length)
+            return AnimationService.playerMoving(length: length)
         }
     }
 }
@@ -125,12 +126,5 @@ struct PlayerView: View {
 
     func eyeSize(_ geometry: GeometryProxy) -> CGFloat {
         geometry.minSize * Layout.Player.eyeSize
-    }
-}
-
-private extension Animation {
-    static func positioning(length: CGFloat) -> Animation {
-        let duration = AnimationService.shared.playerMovingDuration(length: length)
-        return .linear(duration: duration)
     }
 }

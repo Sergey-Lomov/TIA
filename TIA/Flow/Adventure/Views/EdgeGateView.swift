@@ -49,13 +49,13 @@ struct EdgeGateView: View {
     private var sizeAnimation: Animation? {
         switch gate.state {
         case .growing:
-            return AnimationService.shared.growingGate
+            return AnimationService.growingGate
         case .open:
-            return AnimationService.shared.openGate
+            return AnimationService.openGate
         case .close:
-            return AnimationService.shared.closeGate
+            return AnimationService.closeGate
         case .ungrowing:
-            return AnimationService.shared.ungrowingGate
+            return AnimationService.ungrowingGate
         default:
             return nil
         }

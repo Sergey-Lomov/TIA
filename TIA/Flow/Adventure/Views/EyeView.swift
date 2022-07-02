@@ -164,7 +164,7 @@ private extension Animation {
         case .state:
             return .default
         case .transiotion(let from, let to):
-            return AnimationService.shared.eyeTransAnimation(from: from, to: to)
+            return AnimationService.eyeTransAnimation(from: from, to: to)
         }
     }
 }

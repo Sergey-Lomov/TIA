@@ -149,32 +149,32 @@ struct ResourceWrapper: View {
         switch resource.metastate {
         case .vertexIdle(_, _, let total):
             if total == 1 {
-                return AnimationService.shared.resourceSoloRotation
+                return AnimationService.resourceSoloRotation
             } else {
-                return AnimationService.shared.resourceGroupRotation
+                return AnimationService.resourceGroupRotation
             }
         case .vertexRestoring, .predestroying:
             return Animation.none
         case .outFromVertex(_, _, let edge):
-            return AnimationService.shared.resourceVertexOut(edgeLength: edge.length(geometry))
+            return AnimationService.resourceVertexOut(edgeLength: edge.length(geometry))
         case .successMoving(let edge, _, _, let toIndex, let total):
             let length = edge.length(geometry)
-            return AnimationService.shared.resourceMoving(geometry, playerLength: length, resourceLength: length, index: toIndex, total: total)
+            return AnimationService.resourceMoving(geometry, playerLength: length, resourceLength: length, index: toIndex, total: total)
         case .toGate:
-            return AnimationService.shared.resourceToGate
+            return AnimationService.resourceToGate
         case .fromGate:
-            return AnimationService.shared.resourceFromGate
+            return AnimationService.resourceFromGate
         case .onGate(let gate, _):
-            return gate.state == .open ? AnimationService.shared.closeGate : AnimationService.shared.openGate
+            return gate.state == .open ? AnimationService.closeGate : AnimationService.openGate
         case .failedNear(let gate, let edge, let vertex, let index, let total):
             return failNearGateAnimation(geometry, gate: gate, edge: edge, vertex: vertex, slot: index, total: total)
         case .layerChanging(_, _, _, let type):
             switch type {
-            case .presenting: return AnimationService.shared.presentLayer
-            case .hiding: return AnimationService.shared.hideLayer
+            case .presenting: return AnimationService.presentLayer
+            case .hiding: return AnimationService.hideLayer
             }
         case .destroying(_, let index, let total):
-            return AnimationService.shared.resourceDestroying(index: index, total: total)
+            return AnimationService.resourceDestroying(index: index, total: total)
         default:
             return nil
         }
@@ -186,7 +186,7 @@ struct ResourceWrapper: View {
         let multiplier = edge.from == vertex ? ratio : 1 - ratio
         let playerLength = edge.length(geometry) * multiplier * 2
         let curve = failNearGateCurve(geometry, gate: gate, edge: edge, vertex: vertex, slot: slot)
-        return AnimationService.shared.resourceMoving(geometry, playerLength: playerLength, resourceLength: curve.length(), index: slot, total: total)
+        return AnimationService.resourceMoving(geometry, playerLength: playerLength, resourceLength: curve.length(), index: slot, total: total)
     }
 
     private func positionCurve(_ geometry: GeometryProxy) -> ComplexCurve {

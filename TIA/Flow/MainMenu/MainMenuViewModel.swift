@@ -55,7 +55,7 @@ final class MainMenuViewModel: ObservableObject {
         state = .closing(adventure)
         let willBeDone = adventure.state == .done
         iconFor(adventure)?.state = .closing(willBeDone: willBeDone)
-        let animation = AnimationService.shared.fromAdventure
+        let animation = AnimationService.fromAdventure
         camera.transferTo(.default, animation: animation) { [weak self] in
             self?.closingFinished(adventure)
         }
@@ -146,7 +146,7 @@ extension MainMenuViewModel {
         iconFor(adventure)?.state = .opening
 
         let to = cameraService.focusOnCurrentAdventure(adventure.theme)
-        let animation = AnimationService.shared.toAdventure
+        let animation = AnimationService.toAdventure
         camera.transferTo(to, animation: animation, anchorAnimation: .final) { [weak self] in
             if self?.game.activeAdventure == nil {
                 GameEngine.shared.startAdventure(adventure)

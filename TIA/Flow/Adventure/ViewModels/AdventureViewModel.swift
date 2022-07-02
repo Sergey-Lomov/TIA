@@ -59,7 +59,7 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
         let transState = cameraService.focusOnVertex(entrance)
         let initState = cameraService.forLayer(adventure.currentLayer, focusPoint: entrance.point)
         self.camera = CameraViewModel(state: transState)
-        self.camera.transferTo(initState, animation: AnimationService.shared.adventureInitial)
+        self.camera.transferTo(initState, animation: AnimationService.adventureInitial)
 
         self._camera.publisher = objectWillChange
         self.player.viewModelsProvider = self
@@ -135,9 +135,9 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
     private func cameraAnimation(layerState: AdventureLayerState) -> Animation {
         switch layerState {
         case .presenting:
-            return AnimationService.shared.presentLayer
+            return AnimationService.presentLayer
         case .hiding:
-            return AnimationService.shared.hideLayer
+            return AnimationService.hideLayer
         default:
             return .none
         }
@@ -199,7 +199,7 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
     private func handleAdventureFinalizing(exit: Vertex) {
         let cameraState = cameraService.focusOnVertex(exit)
         DispatchQueue.main.async {
-            self.camera.transferTo(cameraState, animation: AnimationService.shared.adventureFinal)
+            self.camera.transferTo(cameraState, animation: AnimationService.adventureFinal)
             self.player.eye.compress()
         }
     }

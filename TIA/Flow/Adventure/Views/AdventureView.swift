@@ -68,7 +68,7 @@ struct LayerContentView: View {
             }
         }
         .opacity(opacity)
-        .animation(AnimationService.shared.hideLayer, value: opacity)
+        .animation(AnimationService.hideLayer, value: opacity)
     }
 
     private var opacity: CGFloat {

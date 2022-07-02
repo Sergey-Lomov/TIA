@@ -10,25 +10,23 @@ import SwiftUI
 struct PlayerWrapperView: View {
 
     @ObservedObject var player: PlayerViewModel
-    @State var positionProgress: CGFloat = 0
 
     var body: some View {
         CenteredGeometryReader { geometry in
             if isVisible {
+                let positionProgress = positionProgress(geometry)
                 PlayerView(player: player, superSize: geometry.size)
-                    .bezierPositioning(curve: curve(geometry), progress: positionProgress, target: targetPositionProgress(geometry)) {
+                    .bezierPositioning(curve: curve(geometry), progress: positionProgress)
+                    .onAnimationCompleted(for: positionProgress) {
                         player.model.movingFinished()
                     }
                     .animation(positionAnimation(geometry), value: positionProgress)
-                    .onReceive(player.objectWillChange) {
-                        positionProgress = targetPositionProgress(geometry)
-                    }
             }
         }
     }
 
     private var isVisible: Bool {
-        switch player.model.metastate {
+        switch player.metastate {
         case .abscent:
             return false
         default:
@@ -36,8 +34,8 @@ struct PlayerWrapperView: View {
         }
     }
 
-    private func targetPositionProgress(_ geometry: GeometryProxy) -> CGFloat {
-        switch player.model.metastate {
+    private func positionProgress(_ geometry: GeometryProxy) -> CGFloat {
+        switch player.metastate {
         case .moving:
             return 1
         case .movingToGate(let gate, let edge, let forward):
@@ -49,7 +47,7 @@ struct PlayerWrapperView: View {
     }
 
     private func curve(_ geometry: GeometryProxy) -> BezierCurve {
-        switch player.model.metastate {
+        switch player.metastate {
         case .abscent:
             return .zero
         case .moving(let edge, let forward),
@@ -66,7 +64,7 @@ struct PlayerWrapperView: View {
     }
 
     private func positionAnimation(_ geometry: GeometryProxy) -> Animation? {
-        switch player.model.metastate {
+        switch player.metastate {
         case .abscent, .vertex, .compressing, .expanding:
             return nil
         case .moving(let edge, _):

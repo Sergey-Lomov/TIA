@@ -29,10 +29,7 @@ struct EyeView: View {
             ZStack {
                 EyelidView(status: $eye.status)
                 EyeballView(size: geometry.size)
-                    .mask(
-                        EyeSocketView(eye: $eye)
-                    )
-
+                    .mask(EyeSocketView(eye: $eye))
             }
             .foregroundColor(color)
             .frame(geometry: geometry)

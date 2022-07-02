@@ -17,6 +17,7 @@ final class PlayerViewModel: BaseViewModel<Player> {
     private var subscriptions: [AnyCancellable] = []
 
     var position: PlayerPosition { model.position }
+    var metastate: PlayerMetastate { model.metastate }
 
     init(player: Player, color: Color, movingColor: Color) {
 

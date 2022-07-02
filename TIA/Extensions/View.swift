@@ -39,18 +39,13 @@ extension View {
     }
 
     func bezierPositioning(curve: BezierCurve,
-                           progress: CGFloat = 0,
-                           target: CGFloat = 1,
-                           onFinish: @escaping Action) -> some View {
-        bezierPositioning(curve: ComplexCurve(curve), progress: progress, target: target, onFinish: onFinish)
+                           progress: CGFloat = 0) -> some View {
+        bezierPositioning(curve: ComplexCurve(curve), progress: progress)
     }
 
     func bezierPositioning(curve: ComplexCurve,
-                           progress: CGFloat = 0,
-                           target: CGFloat = 1,
-                           deltaT: CGFloat = 0,
-                           onFinish: @escaping Action) -> some View {
-        modifier(BezierPositioning(curve: curve, onFinish: onFinish, progress: progress, targetProgress: target, deltaT: deltaT))
+                           progress: CGFloat = 0) -> some View {
+        modifier(BezierPositioning(curve: curve, progress: progress))
     }
 
     func offset(_ point: CGPoint, geomtery: GeometryProxy) -> some View {

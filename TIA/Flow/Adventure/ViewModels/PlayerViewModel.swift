@@ -8,11 +8,10 @@
 import SwiftUI
 import Combine
 
-final class PlayerViewModel: ObservableObject {
-    var model: Player
+final class PlayerViewModel: BaseViewModel<Player> {
 
     weak var viewModelsProvider: ViewModelsProvider?
-    @Published var eye: EyeViewModel
+    @Transpublished var eye: EyeViewModel
     @Published var color: Color
 
     private var subscriptions: [AnyCancellable] = []
@@ -20,9 +19,12 @@ final class PlayerViewModel: ObservableObject {
     var position: PlayerPosition { model.position }
 
     init(player: Player, color: Color, movingColor: Color) {
-        self.model = player
+
         self.color = color
         self.eye = EyeViewModel()
+        super.init(model: player)
+
+        self._eye.publisher = objectWillChange
 
         subscriptions.sink(model.$position) { [weak self] position in
             if case .abscent = self?.model.position { return }
@@ -31,14 +33,6 @@ final class PlayerViewModel: ObservableObject {
 
         subscriptions.sink(eye.$status) { [weak self] status in
             self?.handleEyeStatusUpdate(status)
-        }
-
-        subscriptions.sink(model.objectWillChange) { [weak self] in
-            self?.objectWillChange.sendOnMain()
-        }
-
-        subscriptions.sink(eye.objectWillChange) { [weak self] in
-            self?.objectWillChange.sendOnMain()
         }
     }
 

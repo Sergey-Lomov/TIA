@@ -18,11 +18,9 @@ private enum MainMenuState {
 
 final class MainMenuViewModel: ObservableObject {
 
-    private var subscriptions: [AnyCancellable] = []
-
     private var state: MainMenuState
     private var game: GameState
-    @Published var camera: CameraViewModel
+    @Transpublished var camera: CameraViewModel
     @Published var icons: [AdventureTheme: [AdventureIconViewModel]] = [:]
     var cameraService: CameraService
 
@@ -46,14 +44,10 @@ final class MainMenuViewModel: ObservableObject {
             self.state = .common
             self.camera = .init(state: .default)
         }
+        self._camera.publisher = objectWillChange
 
         AdventureTheme.allCases.forEach {
             self.icons[$0] = icons($0)
-        }
-
-        // Combine setup
-        subscriptions.sink(camera.objectWillChange) { [weak self] in
-            self?.objectWillChange.sendOnMain()
         }
     }
 
@@ -79,7 +73,7 @@ final class MainMenuViewModel: ObservableObject {
         let adventures = game.scenario.adventures[adventure.theme]
         let filtered = adventures?.filter { $0.state == .done && $0 != adventure }
         filtered?.forEach {
-            let slot = icon.adventure.index - $0.index
+            let slot = icon.model.index - $0.index
             iconFor($0)?.state = .done(slot: slot)
         }
         if let next = game.scenario.currentAdventure(theme: adventure.theme) {
@@ -90,7 +84,7 @@ final class MainMenuViewModel: ObservableObject {
     private func icons(_ theme: AdventureTheme) -> [AdventureIconViewModel] {
         let adventures = game.scenario.adventures[theme] ?? []
         return adventures.map {
-            AdventureIconViewModel(adventure: $0, state: stateFor($0))
+            AdventureIconViewModel(model: $0, state: stateFor($0))
         }
     }
 
@@ -141,7 +135,7 @@ final class MainMenuViewModel: ObservableObject {
     }
 
     private func iconFor(_ adventure: AdventureDescriptor) -> AdventureIconViewModel? {
-        icons[adventure.theme]?.first { $0.adventure == adventure }
+        icons[adventure.theme]?.first { $0.model == adventure }
     }
 }
 

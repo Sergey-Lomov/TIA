@@ -1,5 +1,5 @@
 //
-//  ViewEvent.swift
+//  IngameViewEvent.swift
 //  TIA
 //
 //  Created by Serhii.Lomov on 19.04.2022.
@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-typealias ViewEventsPublisher = PassthroughSubject<ViewEvent, Never>
+typealias ViewEventsPublisher = PassthroughSubject<IngameViewEvent, Never>
 
 protocol ViewEventsSource {
     var eventsPublisher: ViewEventsPublisher { get }
@@ -18,7 +18,7 @@ protocol ViewEventsListener {
     func subscribeTo(_ publisher: ViewEventsPublisher)
 }
 
-enum ViewEvent {
+enum IngameViewEvent {
     case viewInitFinished
 
     case layerPrepared(layer: AdventureLayer)

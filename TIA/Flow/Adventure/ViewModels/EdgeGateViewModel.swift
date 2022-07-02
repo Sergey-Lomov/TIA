@@ -8,33 +8,23 @@
 import SwiftUI
 import Combine
 
-final class EdgeGateViewModel: ObservableObject, IdEqutable {
+final class EdgeGateViewModel: IngameViewModel<EdgeGate> {
 
-    var model: EdgeGate
     @Published var color: Color
     @Published var symbolColor: Color
 
-    private var subscriptions: [AnyCancellable] = []
-    var eventsPublisher: ViewEventsPublisher
-
-    var id: String { model.id }
     var state: EdgeGateState { model.state }
 
     init(model: EdgeGate, color: Color, symbolColor: Color, eventsPublisher: ViewEventsPublisher) {
-        self.model = model
         self.color = color
         self.symbolColor = symbolColor
-        self.eventsPublisher = eventsPublisher
-
-        subscriptions.sink(model.objectWillChange) { [weak self] in
-            self?.objectWillChange.sendOnMain()
-        }
+        super.init(model: model, publisher: eventsPublisher)
     }
 }
 
 // MARK: View interaction methods
 extension EdgeGateViewModel {
     func closingFinished() {
-        eventsPublisher.send(.gateClosed(gate: model))
+        send(.gateClosed(gate: model))
     }
 }

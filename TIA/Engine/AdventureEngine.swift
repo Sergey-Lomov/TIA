@@ -496,7 +496,7 @@ private extension EdgeState {
 extension AdventureEngine: ViewEventsListener {
 
     // swiftlint:disable function_body_length
-    private func handleViewEvent(_ event: ViewEvent) {
+    private func handleViewEvent(_ event: IngameViewEvent) {
         switch event {
         case .viewInitFinished:
             growFromVertex(adventure.currentLayer.entrance)

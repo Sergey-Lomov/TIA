@@ -27,7 +27,7 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
     @Published var layers: [AdventureLayerViewModel]
     @Published var resources: [ResourceViewModel]
     @Published var background: Color
-    @Published var camera: CameraViewModel
+    @Transpublished var camera: CameraViewModel
 
     init(_ adventure: Adventure,
          cameraService: CameraService,
@@ -61,6 +61,7 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
         self.camera = CameraViewModel(state: transState)
         self.camera.transferTo(initState, animation: AnimationService.shared.adventureInitial)
 
+        self._camera.publisher = objectWillChange
         self.player.viewModelsProvider = self
 
         // Combine setup
@@ -73,9 +74,6 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
             resource.eventsPublisher = eventsPublisher
         }
 
-        subscriptions.sink(camera.objectWillChange) { [weak self] in
-            self?.objectWillChange.sendOnMain()
-        }
         subscriptions.sink(adventure.$layers) { [weak self] updatedLayers in
             self?.handleLayersUpdate(updatedLayers)
         }

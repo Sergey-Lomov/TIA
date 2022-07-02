@@ -19,22 +19,13 @@ enum AdventureIconState: Equatable {
     case done(slot: Int)
 }
 
-final class AdventureIconViewModel: ObservableObject, IdEqutable {
-    private var subscriptions: [AnyCancellable] = []
+final class AdventureIconViewModel: BaseViewModel<AdventureDescriptor> {
 
-    var adventure: AdventureDescriptor
     @Published var state: AdventureIconState
 
-    var id: String { adventure.id }
-
-    init(adventure: AdventureDescriptor, state: AdventureIconState) {
-        self.adventure = adventure
+    init(model: AdventureDescriptor, state: AdventureIconState) {
         self.state = state
-
-        // TODO: Move this common case to custom property wrapper Transpublished
-        subscriptions.sink(adventure.objectWillChange) { [weak self] in
-            self?.objectWillChange.sendOnMain()
-        }
+        super.init(model: model)
     }
 
     func animationCompleted() {

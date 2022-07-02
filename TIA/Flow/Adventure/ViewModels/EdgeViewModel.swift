@@ -9,33 +9,24 @@ import Foundation
 import SwiftUI
 import Combine
 
-final class EdgeViewModel: ObservableObject, IdEqutable {
+final class EdgeViewModel: IngameViewModel<Edge> {
 
-    var model: Edge
     var gates: [EdgeGateViewModel]
     @Published var color: Color
     @Published var borderColor: Color
 
-    private var subscriptions: [AnyCancellable] = []
-    var eventsPublisher: ViewEventsPublisher
-
-    var id: String { model.id }
     var curve: BezierCurve { model.curve }
     var state: EdgeState { model.state }
 
     init(model: Edge, color: Color, borderColor: Color, gateColor: Color, gateSymbolColor: Color, eventsPublisher: ViewEventsPublisher) {
-        self.model = model
         self.color = color
         self.borderColor = borderColor
-        self.eventsPublisher = eventsPublisher
 
         self.gates = model.gates.map {
             EdgeGateViewModel(model: $0, color: gateColor, symbolColor: gateSymbolColor, eventsPublisher: eventsPublisher)
         }
 
-        subscriptions.sink(model.objectWillChange) { [weak self] in
-            self?.objectWillChange.sendOnMain()
-        }
+        super.init(model: model, publisher: eventsPublisher)
     }
 }
 
@@ -43,34 +34,34 @@ final class EdgeViewModel: ObservableObject, IdEqutable {
 extension EdgeViewModel {
 
     func seedExtensionPrepared() {
-        eventsPublisher.send(.edgeSeedExtensionPrepared(edge: model))
+        send(.edgeSeedExtensionPrepared(edge: model))
     }
 
     func growingPrepared() {
-        eventsPublisher.send(.edgeGrowingPrepared(edge: model))
+        send(.edgeGrowingPrepared(edge: model))
     }
 
     func pathGrowingFinished() {
-        eventsPublisher.send(.edgePathGrowed(edge: model))
+        send(.edgePathGrowed(edge: model))
     }
 
     func elementsGrowingPrepared() {
-        eventsPublisher.send(.edgeElementsPrepared(edge: model))
+        send(.edgeElementsPrepared(edge: model))
     }
 
     func elementsGrowingFinished() {
-        eventsPublisher.send(.edgeElementsGrowed(edge: model))
+        send(.edgeElementsGrowed(edge: model))
     }
 
     func ungrowingPrepared() {
-        eventsPublisher.send(.edgeUngrowingPrepared(edge: model))
+        send(.edgeUngrowingPrepared(edge: model))
     }
 
     func elementsUngrowed() {
-        eventsPublisher.send(.edgeElementsUngrowed(edge: model))
+        send(.edgeElementsUngrowed(edge: model))
     }
 
     func ungrowingFinished() {
-        eventsPublisher.send(.edgeUngrowed(edge: model))
+        send(.edgeUngrowed(edge: model))
     }
 }

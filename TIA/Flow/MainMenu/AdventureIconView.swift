@@ -30,7 +30,7 @@ struct AdventureIconWrapper: View {
                 }
 
             if isSelected {
-                Color.clear.preference(key: SelectedAdventurePreferenceKey.self, value: model.adventure)
+                Color.clear.preference(key: SelectedAdventurePreferenceKey.self, value: model.model)
             }
         }
     }
@@ -42,12 +42,12 @@ struct AdventureIconWrapper: View {
     private func offset(_ geometry: GeometryProxy) -> CGPoint {
         switch model.state {
         case .opening, .becameCurrent, .current, .preclosing, .closing:
-            return LayoutService.currentAdventureIconPosition(theme: model.adventure.theme).scaled(geometry)
+            return LayoutService.currentAdventureIconPosition(theme: model.model.theme).scaled(geometry)
         case .planed:
             return .zero
         case .becameDone, .done:
             var y = geometry.minSize / 2 + size(geometry) / 2 + Layout.MainMenu.doneIconsGap
-            y = model.adventure.theme == .dark ? y * -1 : y
+            y = model.model.theme == .dark ? y * -1 : y
             return CGPoint(x: 0, y: y)
         }
     }
@@ -105,7 +105,7 @@ struct AdventureIconView: View {
 
     var body: some View {
         ZStack {
-            let palette = ColorPalette.paletteFor(model.adventure.theme)
+            let palette = ColorPalette.paletteFor(model.model.theme)
             ComplexCurveShape(curve: shapeCurve)
                 .fill(color)
                 .animation(.linear(duration: 1), value: color)
@@ -115,7 +115,7 @@ struct AdventureIconView: View {
     }
 
     var color: Color {
-        let palette = ColorPalette.paletteFor(model.adventure.theme)
+        let palette = ColorPalette.paletteFor(model.model.theme)
         switch model.state {
         case .done:
             return palette.borders
@@ -133,10 +133,10 @@ struct AdventureIconView: View {
         case .closing(let willBeDone):
             return willBeDone ? shapeFor(.done(slot: 0)) : shapeFor(.current)
         case .done, .becameDone:
-            let doneShape = model.adventure.doneShape
+            let doneShape = model.model.doneShape
             return AdventuresIconsService.curveFor(doneShape)
         default:
-            let doneShape = model.adventure.doneShape
+            let doneShape = model.model.doneShape
             let curve = AdventuresIconsService.curveFor(doneShape)
             return .circle(radius: 0.5, componentsCount: curve.components.count)
         }

@@ -10,8 +10,12 @@ import Combine
 
 extension ObservableObjectPublisher {
     func sendOnMain() {
-        DispatchQueue.main.async {
+        if Thread.isMainThread {
             self.send()
+        } else {
+            DispatchQueue.main.async {
+                self.send()
+            }
         }
     }
 }

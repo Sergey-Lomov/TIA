@@ -19,7 +19,7 @@ final class AnimationService {
             static let premoveDuration: CGFloat = 1.5
             static let postmoveDuration: CGFloat = 1.5
             static let eyeCompressing: CGFloat = 0.33
-            static let eyeOpening: CGFloat = 0.33
+            static let eyeOpening: CGFloat = 0.66
         }
 
         enum Layer {

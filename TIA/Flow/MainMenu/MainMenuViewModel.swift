@@ -44,7 +44,6 @@ final class MainMenuViewModel: ObservableObject {
             self.state = .common
             self.camera = .init(state: .default)
         }
-        self._camera.publisher = objectWillChange
 
         AdventureTheme.allCases.forEach {
             self.icons[$0] = icons($0)

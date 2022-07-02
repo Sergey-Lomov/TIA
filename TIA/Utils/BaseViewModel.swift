@@ -16,7 +16,6 @@ class BaseViewModel<Model: IdEqutable>: ObservableObject, IdEqutable where Model
 
     init(model: Model) {
         self.model = model
-        self._model.publisher = objectWillChange
     }
 }
 

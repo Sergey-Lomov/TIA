@@ -24,8 +24,6 @@ final class PlayerViewModel: BaseViewModel<Player> {
         self.eye = EyeViewModel()
         super.init(model: player)
 
-        self._eye.publisher = objectWillChange
-
         subscriptions.sink(model.$position) { [weak self] position in
             if case .abscent = self?.model.position { return }
             self?.handlePositionUpdate(position)

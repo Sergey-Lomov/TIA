@@ -316,8 +316,13 @@ final class AdventureEngine: EngineEventsSource {
         guard case .ungrowing(let exit) = layer.state else { return }
 
         let seedsDone = layer.edges.allSatisfy {
-            $0.state.isSeed
+            if case .seed = $0.state {
+                return true
+            } else {
+                return false
+            }
         }
+        
         let verticesDone = layer.vertices.allSatisfy {
             $0.state == .seed || $0 == exit
         }

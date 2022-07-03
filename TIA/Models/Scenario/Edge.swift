@@ -37,11 +37,6 @@ enum EdgeState: Equatable {
     case active
     case ungrowing(phase: EdgeUngrowingPhase)
 
-    // TODO: After handling another TODOs this bool may became unnecessary if all associated values will be removed
-    var isSeed: Bool {
-        if case .seed = self { return true } else { return false }
-    }
-
     var isGrowed: Bool {
         switch self {
         case .seed, .growing, .ungrowing:

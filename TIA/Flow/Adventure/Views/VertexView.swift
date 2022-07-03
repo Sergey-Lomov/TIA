@@ -48,13 +48,14 @@ struct VertexView: View {
                 .foregroundColor(vertex.elementsColor)
 
             // TODO: Visual debug code
+            /*
             let color = Color.random()
             ForEach(slots(geometry), id: \.self) { slot in
                 ComplexCurveShape(curve: .circle(radius: 0.5))
                     .stroke(color)
                     .frame(size: LayoutService.inventoryResourceSize(geometry))
                     .offset(point: slot)
-            }
+            }*/
         }
     }
 

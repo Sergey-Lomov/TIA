@@ -42,6 +42,8 @@ final class VertexSurroundingService {
     }
 
     func surroundingFor(_ vertex: Vertex, layer: AdventureLayer) -> VertexSurrounding {
+        let cached: VertexSurrounding? = CachService.shared.cached(type: .surrounding(vertex, layer))
+        if let cached = cached { return cached }
 
         let center = vertex.point.scaled(size)
         let edges = layer.edges(of: vertex)
@@ -52,7 +54,9 @@ final class VertexSurroundingService {
         let freeSectors = freeSectors(edgesSectors)
         let slots = slots(center: center, sectors: freeSectors, radiuses: radiuses)
 
-        return VertexSurrounding(slots: slots, edgesOuts: edgesOuts, edgesSectors: edgesSectors, freeSectors: freeSectors)
+        let surrounding = VertexSurrounding(slots: slots, edgesOuts: edgesOuts, edgesSectors: edgesSectors, freeSectors: freeSectors)
+        CachService.shared.cach(type: .surrounding(vertex, layer), value: surrounding)
+        return surrounding
     }
 
     private func radiuses() -> [CGFloat] {

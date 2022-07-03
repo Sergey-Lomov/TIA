@@ -12,6 +12,7 @@ enum CacheType: Hashable {
     case layerCamera(_ layer: AdventureLayer)
     case failNearGate(_ gate: EdgeGate, _ vertex: Vertex)
     case curveLength(_ points: [CGPoint])
+    case surrounding(_ vertex: Vertex, _ layer: AdventureLayer)
 }
 
 // TODO: Implement cashing limit for prevent infinity cash extending. Limit should calculates differently for each cash type

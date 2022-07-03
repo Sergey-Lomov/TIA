@@ -55,8 +55,10 @@ final class CameraService {
         return .init(center: center)
     }
 
-    // TODO: Cash layer frame calculations
     private func layerFrame(_ layer: AdventureLayer) -> CGRect {
+        let cached: CGRect? = CachService.shared.cached(type: .layerCamera(layer))
+        if let cached = cached { return cached }
+
         let entrancePoint = layer.entrance.point.scaled(safeSize)
         var frame = CGRect(origin: entrancePoint, size: .zero)
 
@@ -72,6 +74,8 @@ final class CameraService {
             frame = frame.union(edgeFrame)
         }
 
-        return frame.insetBy(dx: -1 * border, dy: -1 * border)
+        let result = frame.insetBy(dx: -1 * border, dy: -1 * border)
+        CachService.shared.cach(type: .layerCamera(layer), value: result)
+        return result
     }
 }

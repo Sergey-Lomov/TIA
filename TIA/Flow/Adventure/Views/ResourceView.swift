@@ -283,8 +283,8 @@ extension ResourceWrapper {
     }
 
     private func failNearGateControls(_ geometry: GeometryProxy, gate: EdgeGate, edge: Edge, vertex: Vertex, slot: Int) -> [CGPoint] {
-        let cachedControls = GeometryCacheService.shared.failNearGate(gate: gate, vertex: vertex)
-        if let cached = cachedControls { return cached }
+        let cached: [CGPoint]? = CachService.shared.cached(type: .failNearGate(gate, vertex))
+        if let cached = cached { return cached }
 
         let gateT = LayoutService.gateProgress(geometry, gate: gate, edge: edge)
         let t = edge.from == vertex ? gateT + failedMovingGap : gateT - failedMovingGap
@@ -300,15 +300,15 @@ extension ResourceWrapper {
         let c2p1 = CGPoint(center: nearGate, angle: angle + .pi, radius: distance)
 
         let result = [c1p1, c1p2, nearGate, c2p1, c2p2]
-        GeometryCacheService.shared.setFailNearGate(gate: gate, vertex: vertex, controls: result)
+        CachService.shared.cach(type: .failNearGate(gate, vertex), value: result)
         return result
     }
 
-    private func resourceSlot(geometry: GeometryProxy, vertex: Vertex, index: Int, forcedLayer: AdventureLayer? = nil) -> CGPoint {
+    private func resourceSlot(geometry: GeometryProxy, vertex: Vertex, index: Int, total: Int, forcedLayer: AdventureLayer? = nil) -> CGPoint {
         let service = VertexSurroundingService(screenSize: geometry.size)
         let layer = forcedLayer ?? layer
-        let surrounding = service.surroundingFor(vertex, layer: layer, slotsCount: index + 1)
-        return surrounding.slots.last ?? .zero
+        let surrounding = service.surroundingFor(vertex, layer: layer, slotsCount: total)
+        return surrounding.slots.safe(index: index) ?? .zero
     }
 
     private func inVertextResourcePosition(index: Int, total: Int) -> CGPoint {

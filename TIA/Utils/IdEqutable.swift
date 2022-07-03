@@ -7,12 +7,16 @@
 
 import Foundation
 
-protocol IdEqutable: Equatable {
+protocol IdEqutable: Hashable {
     var id: String { get }
 }
 
 extension IdEqutable {
     static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }

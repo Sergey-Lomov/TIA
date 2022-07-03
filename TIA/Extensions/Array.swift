@@ -22,6 +22,11 @@ extension Array {
         filter({ validator($0) }).count
     }
 
+    func safe(index: Int) -> Element? {
+        guard count > index else { return nil }
+        return self[index]
+    }
+
     public func merged(with: [Element],
                        stub: Element,
                        merger: (Element, Element) -> Element) -> [Element] {

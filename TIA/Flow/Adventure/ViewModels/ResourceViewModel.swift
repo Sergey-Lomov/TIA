@@ -93,7 +93,7 @@ extension ResourceViewModel {
     func moveNearGateFinished() {
         switch metastate {
         case .failedNear(let gate, _, let vertex, _, _):
-            GeometryCacheService.shared.invalidateFailNearGate(gate: gate, vertex: vertex)
+            CachService.shared.invalidate(type: .failNearGate(gate, vertex))
         default:
             break
         }

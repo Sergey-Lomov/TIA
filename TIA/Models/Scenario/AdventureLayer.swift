@@ -41,7 +41,7 @@ enum AdventureLayerState: Equatable {
     #endif
 }
 
-class AdventureLayer: ObservableObject, IdEqutable, Hashable {
+class AdventureLayer: ObservableObject, IdEqutable {
     let id: String = UUID().uuidString
     let type: AdventureLayerType
     @Published var state: AdventureLayerState
@@ -94,20 +94,21 @@ class AdventureLayer: ObservableObject, IdEqutable, Hashable {
         return !edges.contains { $0.growOnStart && !growingChecker($0)}
     }
 
-//    func menuEdge(from: Vertex) -> Edge? {
-//        return edges.firstById(Self.menuEdgePrefix + from.id)
-//    }
-//
-//    func addMenuEdge(from: Vertex, to: Vertex, curve: BezierCurve) -> Edge {
-//        let edge = Edge(id: Self.menuEdgePrefix + from.id, from: from, to: to, growOnStart: false, curve: curve)
-//        edges.append(edge)
-//        return edge
-//    }
-//
-//    func removeMenuEdge(from: Vertex) -> Edge? {
-//        let edge = edges.first { $0.id == Self.menuEdgePrefix + from.id }
-//        guard let edge = edge else { return nil }
-//        edges.remove(edge)
-//        return edge
-//    }
+    func contains(_ vertex: Vertex) -> Bool {
+        vertices.contains(vertex)
+    }
+
+    func contains(_ edge: Edge) -> Bool {
+        edges.contains(edge)
+    }
+}
+
+extension Array where Element == AdventureLayer {
+    func allContain(_ edge: Edge) -> [AdventureLayer] {
+        filter { $0.contains(edge) }
+    }
+
+    func allContain(_ vertex: Vertex) -> [AdventureLayer] {
+        filter { $0.contains(vertex) }
+    }
 }

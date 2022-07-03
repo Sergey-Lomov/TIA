@@ -45,6 +45,15 @@ enum EdgeState: Equatable {
             return true
         }
     }
+
+    var isVisible: Bool {
+        switch self {
+        case .seed:
+            return false
+        case .active, .growing, .ungrowing:
+            return true
+        }
+    }
 }
 
 class Edge: ObservableObject, IdEqutable {

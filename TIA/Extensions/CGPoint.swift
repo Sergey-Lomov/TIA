@@ -117,3 +117,10 @@ extension CGPoint: VectorArithmetic {
         CGPoint(x: lhs.x - rhs.x, y: lhs.y - rhs.y)
     }
 }
+
+extension CGPoint: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(x)
+        hasher.combine(y)
+    }
+}

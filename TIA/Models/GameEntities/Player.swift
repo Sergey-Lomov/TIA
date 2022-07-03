@@ -151,9 +151,9 @@ class Player: ObservableObject, IdEqutable {
         case .abscent:
             return false
         case .edge(let edge, _, _):
-            return layer.edges.contains(edge)
+            return layer.contains(edge)
         case .vertex(let vertex):
-            return layer.vertices.contains(vertex)
+            return layer.contains(vertex)
         }
     }
 }

@@ -26,14 +26,14 @@ struct Sector {
 
 struct VertexSurrounding {
     let slots: [CGPoint]
-    let edgesOuts: [(CGFloat, CGFloat)]
-    let edgeSpacings: [Sector]
-    let freeSectors: [Sector]
+    let edgesOuts: [Edge: [CGFloat]]
+    let edgesSectors: [Edge: [Sector]]
+    let freeSectors: [Int: [Sector]]
 }
 
 final class VertexSurroundingService {
 
-    private let accuracy: CGFloat = 2
+    private let radiusesCount: Int = 3
 
     var size: CGSize
 
@@ -41,64 +41,93 @@ final class VertexSurroundingService {
         self.size = size
     }
 
-    func surroundingFor(_ vertex: Vertex, layer: AdventureLayer, slotsCount: Int) -> VertexSurrounding {
+    func surroundingFor(_ vertex: Vertex, layer: AdventureLayer) -> VertexSurrounding {
 
         let center = vertex.point.scaled(size)
+        let edges = layer.edges(of: vertex)
+        let radiuses = radiuses()
+
+        let edgesOuts = edgesOuts(edges: edges, center: center)
+        let edgesSectors = edgesSectors(edgesOuts: edgesOuts, radiuses: radiuses)
+        let freeSectors = freeSectors(edgesSectors)
+        let slots = slots(center: center, sectors: freeSectors, radiuses: radiuses)
+
+        return VertexSurrounding(slots: slots, edgesOuts: edgesOuts, edgesSectors: edgesSectors, freeSectors: freeSectors)
+    }
+
+    private func radiuses() -> [CGFloat] {
         let vertexRadius = Layout.Vertex.diameter / 2 * size.minSize
         let resourceSize = LayoutService.inventoryResourceSize(size).maxSize
-        let resourcesOuterRadius = vertexRadius * (1 + Layout.Resources.Player.vertexGap) + resourceSize
-
-        let edges = layer.edges(of: vertex)
-        let edgesOuts = edgesOuts(edges: edges, center: center, innerRadius: vertexRadius, outerRadius: resourcesOuterRadius)
-        let edgesSpacings = edgeSpacings(edgesOuts: edgesOuts, radius: vertexRadius)
-        let freeSectors = freeSectors(edgesSpacings: edgesSpacings)
-        let slots = slots(center: center, sectors: freeSectors, count: slotsCount, vertexRadius: vertexRadius)
-
-        return VertexSurrounding(slots: slots, edgesOuts: edgesOuts, edgeSpacings: edgesSpacings, freeSectors: freeSectors)
+        return (0..<radiusesCount).map {
+            let index = CGFloat($0)
+            let resources = (index + 0.5) * resourceSize
+            let gaps = index * Layout.Resources.Player.vertexGap
+            return vertexRadius + resources + gaps
+        }
     }
 
-    // Inner radius is vertex radius
-    // Outer radius is radius of resources edge
-    private func edgesOuts(edges: [Edge], center: CGPoint, innerRadius: CGFloat, outerRadius: CGFloat) -> [(CGFloat, CGFloat)] {
-        let edgesOutPoints: [(CGPoint, CGPoint)] = edges.map {
+    private func edgesOuts(edges: [Edge], center: CGPoint) -> [Edge: [CGFloat]] {
+        let vertexRadius = Layout.Vertex.diameter / 2 * size.minSize
+        let resourceSize = LayoutService.inventoryResourceSize(size).maxSize
+        let radiusStep = vertexRadius * Layout.Resources.Player.vertexGap + resourceSize
+        let radiuses = (0...radiusesCount).map {
+            vertexRadius + CGFloat($0) * radiusStep
+        }
+
+        var result = [Edge: [CGFloat]]()
+        edges.forEach() {
             let scaled = $0.curve.scaled(size)
-            let inner = scaled.intersectionWith(center: center, radius: innerRadius, accuracy: accuracy)
-            let outer = scaled.intersectionWith(center: center, radius: outerRadius, accuracy: accuracy)
-            return (inner, outer)
+            let intersectios = scaled.intersectionsWith(center: center, radiuses: radiuses)
+            result[$0] = intersectios.map { Math.angle(p1: $0, p2: center) }
         }
 
-        return edgesOutPoints.map {
-            let a1 = Math.angle(p1: $0.0, p2: center)
-            let a2 = Math.angle(p1: $0.1, p2: center)
-            return (a1, a2)
+        return result
+    }
+
+    private func edgesSectors(edgesOuts: [Edge: [CGFloat]], radiuses: [CGFloat]) -> [Edge: [Sector]] {
+        var result = [Edge: [Sector]]()
+        for edge in edgesOuts.keys {
+            guard let outs = edgesOuts[edge] else { continue }
+            result[edge] = []
+            for i in 1..<outs.count {
+                let deltaAngle = Layout.Edge.outSpacing / 2 / radiuses[i - 1]
+                let min = min(outs[i], outs[i - 1])
+                let max = max(outs[i], outs[i - 1])
+                let sector = Sector(min: min - deltaAngle, max: max + deltaAngle)
+                result[edge]?.append(sector)
+            }
         }
+
+        return result
     }
 
-    private func edgeSpacings(edgesOuts: [(CGFloat, CGFloat)], radius: CGFloat) -> [Sector] {
-        return edgesOuts.map {
-            let deltaAngle = Layout.Edge.outSpacing / 2 / radius
-            let mina = min($0.0, $0.1)
-            let maxa = max($0.0, $0.1)
-            return Sector(min: mina - deltaAngle, max: maxa + deltaAngle)
-        }.sorted { $0.min < $1.min }
+    private func freeSectors(_ edgesSectors: [Edge: [Sector]]) -> [Int: [Sector]] {
+        var result = [Int: [Sector]]()
+        for i in 0..<radiusesCount {
+            let radiusEdgesSectors = edgesSectors.values.map { $0[i] }
+            result[i] = radiusFreeSectors(radiusEdgesSectors)
+        }
+        return result
     }
 
-    private func freeSectors(edgesSpacings: [Sector]) -> [Sector] {
-        guard !edgesSpacings.isEmpty else { return [] }
+    private func radiusFreeSectors(_ edgesSectors: [Sector]) -> [Sector] {
+        // TODO: Here should be full-radius sector instead no sectors
+        guard !edgesSectors.isEmpty else { return [] }
 
-        var freeSectors: [Sector] = []
-        for index in 1..<edgesSpacings.count {
-            let current = edgesSpacings[index]
-            let prev = edgesSpacings[index - 1]
+        let sorted = edgesSectors.sorted { $0.min < $1.min }
+        var freeSectors = [Sector]()
+        for index in 1..<sorted.count {
+            let current = sorted[index]
+            let prev = sorted[index - 1]
             if prev.max < current.min {
                 let sector = Sector(min: prev.max, max: current.min)
                 freeSectors.append(sector)
             }
         }
-        if let lastSpacing = edgesSpacings.last, let firstSpacing = edgesSpacings.first {
-            let min = lastSpacing.max - .dpi
-            if min < firstSpacing.min {
-                let sector = Sector(min: min, max: firstSpacing.min)
+        if let last = sorted.last, let first = sorted.first {
+            let min = last.max - .dpi
+            if min < first.min {
+                let sector = Sector(min: min, max: first.min)
                 freeSectors.append(sector)
             }
         }
@@ -106,14 +135,23 @@ final class VertexSurroundingService {
         return freeSectors
     }
 
-    private func slots(center: CGPoint, sectors: [Sector], count: Int, vertexRadius: CGFloat) -> [CGPoint] {
+    private func slots(center: CGPoint, sectors: [Int: [Sector]], radiuses: [CGFloat]) -> [CGPoint]
+    {
+        var result = [CGPoint]()
+        for i in 0..<radiuses.count {
+            guard let sectors = sectors[i] else { continue }
+            let slots = radiusSlots(center: center, sectors: sectors, radius: radiuses[i])
+            result.append(contentsOf: slots)
+        }
+        return result
+    }
+
+    private func radiusSlots(center: CGPoint, sectors: [Sector], radius: CGFloat) -> [CGPoint] {
         let sortedSectors = sectors.sorted {$0.size > $1.size}
-        let resourceRadius = vertexRadius * Layout.Resources.Player.sizeRatio
-        let firstRadius = vertexRadius * (1 + Layout.Resources.Player.vertexGap) + resourceRadius
+        let resourceRadius = LayoutService.inventoryResourceSize(size).maxSize / 2
         let interitem = resourceRadius * 2 * Layout.Resources.Player.interitemGap
 
         var slots: [CGPoint] = []
-        let radius = firstRadius
         for sector in sortedSectors {
             let slotAngle = resourceRadius * 2 / radius
             var cursor = sector.max - slotAngle / 2
@@ -121,11 +159,8 @@ final class VertexSurroundingService {
             while cursor - slotAngle / 2 >= sector.min {
                 let slot = CGPoint(center: .zero, angle: cursor, radius: radius)
                 slots.append(slot)
-                if slots.count >= count { break }
                 cursor -= cursorStep
             }
-
-            if slots.count >= count { break }
         }
 
         return slots

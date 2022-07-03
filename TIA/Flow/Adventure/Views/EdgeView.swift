@@ -112,7 +112,7 @@ struct EdgePathView: View {
             let curve = edge.curve.scaled(geometry)
             let center = edge.model.from.point.scaled(geometry)
             let radius = Layout.Vertex.diameter / 2 * geometry.minSize
-            return curve.intersectionTWith(center: center, radius: radius, accuracy: Self.intersectionAccuracy)
+            return curve.intersectionTWith(center: center, radius: radius)
         default:
             return 1
         }
@@ -126,7 +126,7 @@ struct EdgePathView: View {
             let curve = edge.curve.reversed().scaled(geometry)
             let center = edge.model.to.point.scaled(geometry)
             let radius = Layout.Vertex.diameter / 2 * geometry.minSize
-            return curve.intersectionTWith(center: center, radius: radius, accuracy: Self.intersectionAccuracy)
+            return curve.intersectionTWith(center: center, radius: radius)
         default:
             return 1
         }

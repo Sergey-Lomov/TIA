@@ -39,19 +39,27 @@ final class Math {
         return nil
     }
 
-    static func stepSearch<Value>(from: Value, to: Value, steps: Int, estimator: (Value) -> CGFloat) -> Value where Value: VectorArithmetic {
-        var best = from
+    static func stepSearch<Value>(from: Value, to: Value, steps: Int, estimator: (Value) -> [CGFloat]) -> [Value] where Value: VectorArithmetic {
         var bestAccuracy = estimator(from)
+        let valuesCount = bestAccuracy.count
+        var best = [Value](repeating: from, count: valuesCount)
         var step = from + to
         step.scale(by: 1 / Double(steps))
         var cursor = from
 
         for _ in 0 ..< steps {
             cursor += step
-            let accuracy = estimator(cursor)
-            if accuracy < bestAccuracy {
-                best = cursor
-                bestAccuracy = accuracy
+            let accuracies = estimator(cursor)
+            for i in 0..<valuesCount {
+                let accuracy = accuracies.safe(index: i)
+                guard let accuracy = accuracy else {
+                    fatalError("Etimator returns array of invalid size")
+                }
+
+                if accuracy < bestAccuracy[i] {
+                    best[i] = cursor
+                    bestAccuracy[i] = accuracy
+                }
             }
         }
 

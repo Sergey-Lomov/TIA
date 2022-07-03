@@ -81,7 +81,7 @@
 		6793A97D27FCF3B9002198E9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6793A97C27FCF3B9002198E9 /* Preview Assets.xcassets */; };
 		6793A98527FCF4FD002198E9 /* MainMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6793A98427FCF4FD002198E9 /* MainMenuView.swift */; };
 		6793A98727FCF50E002198E9 /* WorldPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6793A98627FCF50E002198E9 /* WorldPickerView.swift */; };
-		6793A98B27FD1936002198E9 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6793A98A27FD1936002198E9 /* Colors.swift */; };
+		6793A98B27FD1936002198E9 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6793A98A27FD1936002198E9 /* Color.swift */; };
 		679E37222831928700D9EE41 /* EdgeConnectorShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679E37212831928700D9EE41 /* EdgeConnectorShape.swift */; };
 		679E37242832616D00D9EE41 /* EdgeViewMetastate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679E37232832616D00D9EE41 /* EdgeViewMetastate.swift */; };
 		679E372B2836C08800D9EE41 /* AnimatableTrio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679E372A2836C08800D9EE41 /* AnimatableTrio.swift */; };
@@ -207,7 +207,7 @@
 		6793A97C27FCF3B9002198E9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		6793A98427FCF4FD002198E9 /* MainMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuView.swift; sourceTree = "<group>"; };
 		6793A98627FCF50E002198E9 /* WorldPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldPickerView.swift; sourceTree = "<group>"; };
-		6793A98A27FD1936002198E9 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		6793A98A27FD1936002198E9 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		679E37212831928700D9EE41 /* EdgeConnectorShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeConnectorShape.swift; sourceTree = "<group>"; };
 		679E37232832616D00D9EE41 /* EdgeViewMetastate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeViewMetastate.swift; sourceTree = "<group>"; };
 		679E372A2836C08800D9EE41 /* AnimatableTrio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatableTrio.swift; sourceTree = "<group>"; };
@@ -422,7 +422,7 @@
 		6793A98927FD18E0002198E9 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				6793A98A27FD1936002198E9 /* Colors.swift */,
+				6793A98A27FD1936002198E9 /* Color.swift */,
 				67B5336B28009DC100EA959A /* Path.swift */,
 				67B53378280336A900EA959A /* View.swift */,
 				675E2741280A2C4D00FB5783 /* CGFloat.swift */,
@@ -716,7 +716,7 @@
 				67811B932864D8BC00861ADA /* EnvironmentKeys.swift in Sources */,
 				6771F8E62855242000D7B742 /* VertexActionsIconsService.swift in Sources */,
 				679E37242832616D00D9EE41 /* EdgeViewMetastate.swift in Sources */,
-				6793A98B27FD1936002198E9 /* Colors.swift in Sources */,
+				6793A98B27FD1936002198E9 /* Color.swift in Sources */,
 				677C3100281099500014BECD /* AnimationState.swift in Sources */,
 				67BDE95D2817E841005B0194 /* ResourceView.swift in Sources */,
 				67B533982804ED6D00EA959A /* TIAPrototypingError.swift in Sources */,

@@ -12,7 +12,7 @@
         {
             "id": "v2",
             "role": "common",
-            "resources": ["anger"]
+            "resources": ["anger", "anger", "despair", "yearning"]
         },
         {
             "id": "v3",
@@ -22,7 +22,7 @@
         {
             "id": "v4",
             "role": "common",
-            "resources": ["yearning","yearning"]
+            "resources": ["yearning","yearning", "anger", "despair"]
         },
         {
             "id": "v5",

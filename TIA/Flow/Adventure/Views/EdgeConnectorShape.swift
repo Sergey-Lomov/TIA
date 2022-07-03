@@ -14,7 +14,6 @@ struct EdgeConnectorShape: Shape {
 
     static private let connectWidth: CGFloat = 0.06
     static private let blobingSize: CGFloat = 0.5
-    static private let intersectionAccuracy: CGFloat = 5
     static private let connectLength: CGFloat = 0.05
     static private let length: CGFloat = 0.1
     static private let hConcavity: CGFloat = 0.5
@@ -40,7 +39,7 @@ struct EdgeConnectorShape: Shape {
         // In code below uses many postfixes in format x_y. This postfix means, variable are related to point number X in curve number Y. Names "p" is short for point, "a" - for angles, "nb" - no blobing calculations, "fb" - full blobing calculations.
 
         // TODO: Investigate possibility to caches part of calculations. This may be actual for "from" connectors
-        let initialT = curve.intersectionTWith(center: center, radius: radius, accuracy: Self.intersectionAccuracy)
+        let initialT = curve.intersectionTWith(center: center, radius: radius)
         let intersection = curve.getPoint(t: initialT)
         let midAngle = Math.angle(p1: intersection, p2: center)
 

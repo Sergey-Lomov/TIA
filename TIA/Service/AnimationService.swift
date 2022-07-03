@@ -13,6 +13,8 @@ final class AnimationService {
     typealias AnimBuilder = (TimeInterval) -> Animation
 
     enum Const {
+        static let debugMult = 0.33
+
         enum Player {
             // TODO: this value was decreased for development purposes, should be changed to more slow
             static let lengthMult: CGFloat = 0.005
@@ -27,16 +29,16 @@ final class AnimationService {
         }
 
         enum Vertex {
-            static let growingDuration: CGFloat = 0.5
-            static let ungrowingDuration: CGFloat = 0.5
-            static let elementsGrowingDuration: CGFloat = 1
+            static let growingDuration: CGFloat = 0.5 * debugMult
+            static let ungrowingDuration: CGFloat = 0.5 * debugMult
+            static let elementsGrowingDuration: CGFloat = 1 * debugMult
         }
 
         enum Edge {
-            static let pathGrowingMult: CGFloat = 0.005
-            static let elementsGrowingDuration: CGFloat = 1.0
-            static let elementsUngrowingDuration: CGFloat = 0.3
-            static let pathUngrowingDuration: CGFloat = 0.7
+            static let pathGrowingMult: CGFloat = 0.005 * debugMult
+            static let elementsGrowingDuration: CGFloat = 1.0 * debugMult
+            static let elementsUngrowingDuration: CGFloat = 0.3 * debugMult
+            static let pathUngrowingDuration: CGFloat = 0.7 * debugMult
             static let seedExtensionMult: CGFloat = 10
         }
 

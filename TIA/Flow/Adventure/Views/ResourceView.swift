@@ -304,11 +304,12 @@ extension ResourceWrapper {
         return result
     }
 
-    private func resourceSlot(geometry: GeometryProxy, vertex: Vertex, index: Int, total: Int, forcedLayer: AdventureLayer? = nil) -> CGPoint {
+    private func resourceSlot(geometry: GeometryProxy, vertex: Vertex, index: Int, forcedLayer: AdventureLayer? = nil) -> CGPoint {
         let service = VertexSurroundingService(screenSize: geometry.size)
         let layer = forcedLayer ?? layer
-        let surrounding = service.surroundingFor(vertex, layer: layer, slotsCount: total)
-        return surrounding.slots.safe(index: index) ?? .zero
+        let surrounding = service.surroundingFor(vertex, layer: layer)
+        let slots = surrounding.slots
+        return slots.safe(index: index) ?? slots.first ?? .zero
     }
 
     private func inVertextResourcePosition(index: Int, total: Int) -> CGPoint {

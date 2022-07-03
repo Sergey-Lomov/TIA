@@ -42,6 +42,11 @@ final class LayoutService {
     }
 
     static func inventoryResourceSize(_ geometry: GeometryProxy) -> CGSize {
-        CGSize(Layout.Vertex.diameter * Layout.Resources.Player.sizeRatio).scaled(geometry.minSize)
+        inventoryResourceSize(geometry.size)
+    }
+
+    static func inventoryResourceSize(_ size: CGSize) -> CGSize {
+        let relativeSize = Layout.Vertex.diameter * Layout.Resources.Player.sizeRatio
+        return CGSize(relativeSize).scaled(size.minSize)
     }
 }

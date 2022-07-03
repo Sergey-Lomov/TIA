@@ -24,10 +24,9 @@ struct Sector {
     }
 }
 
-// TODO: Implement double outs for each edge - first for edge out from vertex and second for edge out of resources orbit. This should fix problem with edges overlaping by resources in corner cases. For example in menu layer.
 struct VertexSurrounding {
     let slots: [CGPoint]
-    let edgesOuts: [CGFloat]
+    let edgesOuts: [(CGFloat, CGFloat)]
     let edgeSpacings: [Sector]
     let freeSectors: [Sector]
 }
@@ -45,32 +44,42 @@ final class VertexSurroundingService {
     func surroundingFor(_ vertex: Vertex, layer: AdventureLayer, slotsCount: Int) -> VertexSurrounding {
 
         let center = vertex.point.scaled(size)
-        let radius = Layout.Vertex.diameter / 2 * size.minSize
+        let vertexRadius = Layout.Vertex.diameter / 2 * size.minSize
+        let resourceSize = LayoutService.inventoryResourceSize(size).maxSize
+        let resourcesOuterRadius = vertexRadius * (1 + Layout.Resources.Player.vertexGap) + resourceSize
 
         let edges = layer.edges(of: vertex)
-        let edgesOuts = edgesOuts(edges: edges, center: center, radius: radius)
-        let edgesSpacings = edgeSpacings(edgesOuts: edgesOuts, radius: radius)
+        let edgesOuts = edgesOuts(edges: edges, center: center, innerRadius: vertexRadius, outerRadius: resourcesOuterRadius)
+        let edgesSpacings = edgeSpacings(edgesOuts: edgesOuts, radius: vertexRadius)
         let freeSectors = freeSectors(edgesSpacings: edgesSpacings)
-        let slots = slots(center: center, sectors: freeSectors, count: slotsCount, vertexRadius: radius)
+        let slots = slots(center: center, sectors: freeSectors, count: slotsCount, vertexRadius: vertexRadius)
 
         return VertexSurrounding(slots: slots, edgesOuts: edgesOuts, edgeSpacings: edgesSpacings, freeSectors: freeSectors)
     }
 
-    private func edgesOuts(edges: [Edge], center: CGPoint, radius: CGFloat) -> [CGFloat] {
-        let edgesOutPoints: [CGPoint] = edges.map {
+    // Inner radius is vertex radius
+    // Outer radius is radius of resources edge
+    private func edgesOuts(edges: [Edge], center: CGPoint, innerRadius: CGFloat, outerRadius: CGFloat) -> [(CGFloat, CGFloat)] {
+        let edgesOutPoints: [(CGPoint, CGPoint)] = edges.map {
             let scaled = $0.curve.scaled(size)
-            return scaled.intersectionWith(center: center, radius: radius, accuracy: accuracy)
+            let inner = scaled.intersectionWith(center: center, radius: innerRadius, accuracy: accuracy)
+            let outer = scaled.intersectionWith(center: center, radius: outerRadius, accuracy: accuracy)
+            return (inner, outer)
         }
 
         return edgesOutPoints.map {
-            return Math.angle(p1: $0, p2: center)
+            let a1 = Math.angle(p1: $0.0, p2: center)
+            let a2 = Math.angle(p1: $0.1, p2: center)
+            return (a1, a2)
         }
     }
 
-    private func edgeSpacings(edgesOuts: [CGFloat], radius: CGFloat) -> [Sector] {
+    private func edgeSpacings(edgesOuts: [(CGFloat, CGFloat)], radius: CGFloat) -> [Sector] {
         return edgesOuts.map {
             let deltaAngle = Layout.Edge.outSpacing / 2 / radius
-            return Sector(min: $0 - deltaAngle, max: $0 + deltaAngle)
+            let mina = min($0.0, $0.1)
+            let maxa = max($0.0, $0.1)
+            return Sector(min: mina - deltaAngle, max: maxa + deltaAngle)
         }.sorted { $0.min < $1.min }
     }
 

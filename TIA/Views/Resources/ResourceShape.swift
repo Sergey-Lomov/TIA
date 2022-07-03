@@ -8,12 +8,15 @@
 import Foundation
 import SwiftUI
 
-struct ResourceShape: Shape {
+struct ResourceShape: InsettableShape {
     let type: ResourceType
+    var inset: CGFloat = .zero
 
     func path(in rect: CGRect) -> Path {
-        let halfSize = rect.size.half
-        var transform = CGAffineTransform(scaleX: halfSize.width, y: halfSize.height)
+        var size = rect.size.half
+        size.width -= inset / 2
+        size.height -= inset / 2
+        var transform = CGAffineTransform(scaleX: size.width, y: size.height)
         transform = transform.translatedBy(x: 1, y: 1)
 
         switch type {
@@ -30,5 +33,11 @@ struct ResourceShape: Shape {
         case .love:
             return Path()
         }
+    }
+
+    func inset(by amount: CGFloat) -> some InsettableShape {
+        var shape = self
+        shape.inset += amount
+        return shape
     }
 }

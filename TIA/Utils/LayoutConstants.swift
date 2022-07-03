@@ -65,7 +65,7 @@ struct Layout {
 
         struct Player {
             static let sizeRatio: CGFloat = 0.3
-            static let vertexGap: CGFloat = 0.15 // Ratio of first radius gap to vertex size
+            static let vertexGap: CGFloat = 4 
             static let interitemGap: CGFloat = 0.3 // Ratio of interitem gap to item size
         }
     }

@@ -65,17 +65,16 @@ final class VertexSurroundingService {
         return (0..<radiusesCount).map {
             let index = CGFloat($0)
             let resources = (index + 0.5) * resourceSize
-            let gaps = index * Layout.Resources.Player.vertexGap
-            return vertexRadius + resources + gaps
+            let gap = Layout.Resources.Player.vertexGap
+            return vertexRadius + resources + gap
         }
     }
 
     private func edgesOuts(edges: [Edge], center: CGPoint) -> [Edge: [CGFloat]] {
         let vertexRadius = Layout.Vertex.diameter / 2 * size.minSize
         let resourceSize = LayoutService.inventoryResourceSize(size).maxSize
-        let radiusStep = vertexRadius * Layout.Resources.Player.vertexGap + resourceSize
         let radiuses = (0...radiusesCount).map {
-            vertexRadius + CGFloat($0) * radiusStep
+            vertexRadius + CGFloat($0) * resourceSize + Layout.Resources.Player.vertexGap
         }
 
         var result = [Edge: [CGFloat]]()

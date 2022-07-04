@@ -12,22 +12,22 @@ import SwiftUI
 enum CacheCounter: Hashable, CaseIterable {
     case layerCamera
     case failNearGate
-    case curveLength
     case surrounding
+    case connector
 }
 
 enum CacheId: Hashable {
     case layerCamera(_ layer: AdventureLayer)
     case failNearGate(_ gate: EdgeGate, _ vertex: Vertex)
-    case curveLength(_ points: [CGPoint])
     case surrounding(_ vertex: Vertex, _ layer: AdventureLayer)
+    case connector(_ points: [CGPoint], _ center: CGPoint, _ radius: CGFloat)
 
     var counter: CacheCounter {
         switch self {
         case .layerCamera: return .layerCamera
         case .failNearGate: return .failNearGate
-        case .curveLength: return .curveLength
         case .surrounding: return .surrounding
+        case .connector: return .connector
         }
     }
 }
@@ -38,8 +38,8 @@ final class CacheService {
     private let limits: [CacheCounter: Int] = [
         .failNearGate: 50,
         .surrounding: 100,
-        .curveLength: 200,
-        .layerCamera: 5
+        .layerCamera: 5,
+        .connector: 200
     ]
     private var caches: [CacheId: Any] = [:]
     private var counters: [CacheCounter: [CacheId: TimeInterval]]

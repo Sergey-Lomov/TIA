@@ -34,9 +34,18 @@ struct EdgeConnectorShape: Shape {
         }
     }
 
+    private var cacheId: CacheId {
+        .connector(curve.points, center, radius)
+    }
+
     // swiftlint:disable function_body_length
     func path(in rect: CGRect) -> Path {
         // In code below uses many postfixes in format x_y. This postfix means, variable are related to point number X in curve number Y. Names "p" is short for point, "a" - for angles, "nb" - no blobing calculations, "fb" - full blobing calculations.
+
+        if progress == 1 {
+            let cached: Path? = CacheService.shared.cached(id: cacheId)
+            if let cached = cached { return cached }
+        }
 
         // TODO: Investigate possibility to caches part of calculations. This may be actual for "from" connectors
         let initialT = curve.intersectionTWith(center: center, radius: radius)
@@ -97,6 +106,7 @@ struct EdgeConnectorShape: Shape {
         path.addCurve(curve1)
         path.addLine(to: curve2.from)
         path.addCurve(curve2)
+        CacheService.shared.cach(id: cacheId, value: path)
         return path
     }
 

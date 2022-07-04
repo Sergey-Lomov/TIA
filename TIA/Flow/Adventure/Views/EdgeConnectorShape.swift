@@ -47,7 +47,6 @@ struct EdgeConnectorShape: Shape {
             if let cached = cached { return cached }
         }
 
-        // TODO: Investigate possibility to caches part of calculations. This may be actual for "from" connectors
         let initialT = curve.intersectionTWith(center: center, radius: radius)
         let intersection = curve.getPoint(t: initialT)
         let midAngle = Math.angle(p1: intersection, p2: center)

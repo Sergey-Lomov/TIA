@@ -56,7 +56,7 @@ final class CameraService {
     }
 
     private func layerFrame(_ layer: AdventureLayer) -> CGRect {
-        let cached: CGRect? = CachService.shared.cached(type: .layerCamera(layer))
+        let cached: CGRect? = CacheService.shared.cached(id: .layerCamera(layer))
         if let cached = cached { return cached }
 
         let entrancePoint = layer.entrance.point.scaled(safeSize)
@@ -75,7 +75,7 @@ final class CameraService {
         }
 
         let result = frame.insetBy(dx: -1 * border, dy: -1 * border)
-        CachService.shared.cach(type: .layerCamera(layer), value: result)
+        CacheService.shared.cach(id: .layerCamera(layer), value: result)
         return result
     }
 }

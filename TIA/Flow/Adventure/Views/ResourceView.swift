@@ -280,7 +280,7 @@ extension ResourceWrapper {
     }
 
     private func failNearGateControls(_ geometry: GeometryProxy, gate: EdgeGate, edge: Edge, vertex: Vertex, slot: Int) -> [CGPoint] {
-        let cached: [CGPoint]? = CachService.shared.cached(type: .failNearGate(gate, vertex))
+        let cached: [CGPoint]? = CacheService.shared.cached(id: .failNearGate(gate, vertex))
         if let cached = cached { return cached }
 
         let gateT = LayoutService.gateProgress(geometry, gate: gate, edge: edge)
@@ -297,7 +297,7 @@ extension ResourceWrapper {
         let c2p1 = CGPoint(center: nearGate, angle: angle + .pi, radius: distance)
 
         let result = [c1p1, c1p2, nearGate, c2p1, c2p2]
-        CachService.shared.cach(type: .failNearGate(gate, vertex), value: result)
+        CacheService.shared.cach(id: .failNearGate(gate, vertex), value: result)
         return result
     }
 

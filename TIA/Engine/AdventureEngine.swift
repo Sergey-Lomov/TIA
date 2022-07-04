@@ -76,7 +76,7 @@ final class AdventureEngine: EngineEventsSource {
 
     private func growVertex(_ vertex: Vertex) {
         layers.allContain(vertex).forEach {
-            CachService.shared.invalidate(type: .layerCamera($0))
+            CacheService.shared.invalidate(type: .layerCamera($0))
         }
 
         switch vertex.state {
@@ -113,9 +113,9 @@ final class AdventureEngine: EngineEventsSource {
 
     private func growEdge(_ edge: Edge) {
         layers.allContain(edge).forEach {
-            CachService.shared.invalidate(type: .layerCamera($0))
-            CachService.shared.invalidate(type: .surrounding(edge.from, $0))
-            CachService.shared.invalidate(type: .surrounding(edge.to, $0))
+            CacheService.shared.invalidate(type: .layerCamera($0))
+            CacheService.shared.invalidate(type: .surrounding(edge.from, $0))
+            CacheService.shared.invalidate(type: .surrounding(edge.to, $0))
         }
         edge.state = .growing(phase: .preparing)
     }

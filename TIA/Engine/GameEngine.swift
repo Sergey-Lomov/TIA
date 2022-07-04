@@ -29,6 +29,8 @@ final class GameEngine {
         if isDone {
             state.scenario.doneAdventure(adventure)
         }
+
+        CacheService.shared.invalidateAll()
     }
 
     func startAdventure(_ descriptor: AdventureDescriptor) {

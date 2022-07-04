@@ -1,0 +1,27 @@
+{
+    "id": "sl1",
+    "theme": "light",
+    "index": 2,
+    "done_shape": "star8",
+    "vertices": [
+        {
+            "id": "v1",
+            "role": "entrance",
+            "resources": []
+        },
+        {
+            "id": "v2",
+            "role": "exit",
+            "resources": []
+        }
+    ],
+    "edges": [
+        {
+            "id": "e1",
+            "from": "v1",
+            "to": "v2",
+            "grow_on_start": true,
+            "price": []
+        }
+    ]
+}

@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		670F9C3B28735BEB00E84836 /* sl2.json in Resources */ = {isa = PBXBuildFile; fileRef = 670F9C3928735BEB00E84836 /* sl2.json */; };
+		670F9C3C28735BEB00E84836 /* sl1.json in Resources */ = {isa = PBXBuildFile; fileRef = 670F9C3A28735BEB00E84836 /* sl1.json */; };
+		670F9C3F28735BFA00E84836 /* sl1_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 670F9C3D28735BFA00E84836 /* sl1_1.json */; };
+		670F9C4028735BFA00E84836 /* sl2_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 670F9C3E28735BFA00E84836 /* sl2_1.json */; };
 		6727922C2805C2C000FEE07E /* scenario.json in Resources */ = {isa = PBXBuildFile; fileRef = 6727922B2805C2C000FEE07E /* scenario.json */; };
 		6727922F2805CBE400FEE07E /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6727922E2805CBE400FEE07E /* Bundle.swift */; };
 		672792322806073B00FEE07E /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 672792312806073B00FEE07E /* Data.swift */; };
@@ -132,6 +136,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		670F9C3928735BEB00E84836 /* sl2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sl2.json; sourceTree = "<group>"; };
+		670F9C3A28735BEB00E84836 /* sl1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sl1.json; sourceTree = "<group>"; };
+		670F9C3D28735BFA00E84836 /* sl1_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sl1_1.json; sourceTree = "<group>"; };
+		670F9C3E28735BFA00E84836 /* sl2_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sl2_1.json; sourceTree = "<group>"; };
 		6727922B2805C2C000FEE07E /* scenario.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = scenario.json; sourceTree = "<group>"; };
 		6727922E2805CBE400FEE07E /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
 		672792312806073B00FEE07E /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
@@ -271,6 +279,8 @@
 		67279235280615A600FEE07E /* Layouts */ = {
 			isa = PBXGroup;
 			children = (
+				670F9C3D28735BFA00E84836 /* sl1_1.json */,
+				670F9C3E28735BFA00E84836 /* sl2_1.json */,
 				6791A8F0286CAEAF00231BFA /* sd1_1.json */,
 				6791A8EE286CAEAF00231BFA /* sd2_1.json */,
 				6791A8EF286CAEAF00231BFA /* sd3_1.json */,
@@ -561,6 +571,8 @@
 		67B5339E2805BBD600EA959A /* Adventures */ = {
 			isa = PBXGroup;
 			children = (
+				670F9C3A28735BEB00E84836 /* sl1.json */,
+				670F9C3928735BEB00E84836 /* sl2.json */,
 				6791A8E8286CAEA100231BFA /* sd1.json */,
 				6791A8E9286CAEA100231BFA /* sd2.json */,
 				6791A8EA286CAEA100231BFA /* sd3.json */,
@@ -642,6 +654,9 @@
 			files = (
 				6791A90D286F5D6400231BFA /* .swiftlint.yml in Resources */,
 				6727923F280632B900FEE07E /* dark2.json in Resources */,
+				670F9C3C28735BEB00E84836 /* sl1.json in Resources */,
+				670F9C4028735BFA00E84836 /* sl2_1.json in Resources */,
+				670F9C3B28735BEB00E84836 /* sl2.json in Resources */,
 				6727922C2805C2C000FEE07E /* scenario.json in Resources */,
 				6791A8EB286CAEA100231BFA /* sd1.json in Resources */,
 				6791A8EC286CAEA100231BFA /* sd2.json in Resources */,
@@ -653,6 +668,7 @@
 				6791A8F3286CAEAF00231BFA /* sd1_1.json in Resources */,
 				6793A97A27FCF3B9002198E9 /* Assets.xcassets in Resources */,
 				67279241280632DD00FEE07E /* light1.json in Resources */,
+				670F9C3F28735BFA00E84836 /* sl1_1.json in Resources */,
 				672792432806330100FEE07E /* truth1.json in Resources */,
 				6791A8F2286CAEAF00231BFA /* sd3_1.json in Resources */,
 				67B533A12805BC0400EA959A /* dark1_1.json in Resources */,

@@ -54,7 +54,7 @@
          <EnvironmentVariable
             key = "VD_SLOTS"
             value = "true"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "VD_RESOURCES_CURVES"

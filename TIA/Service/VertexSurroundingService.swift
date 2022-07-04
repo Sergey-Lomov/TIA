@@ -94,9 +94,10 @@ final class VertexSurroundingService {
             result[edge] = []
             for i in 1..<outs.count {
                 let deltaAngle = Layout.Edge.outSpacing / 2 / radiuses[i - 1]
-                let min = min(outs[i], outs[i - 1])
-                let max = max(outs[i], outs[i - 1])
-                let sector = Sector(min: min - deltaAngle, max: max + deltaAngle)
+                let min = min(outs[i], outs[i - 1]) - deltaAngle
+                var max = max(outs[i], outs[i - 1]) + deltaAngle
+                if max - min > .dpi { max -= .dpi }
+                let sector = Sector(min: min, max: max)
                 result[edge]?.append(sector)
             }
         }

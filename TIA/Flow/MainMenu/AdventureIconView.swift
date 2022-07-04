@@ -96,7 +96,7 @@ struct AdventureIconWrapper: View {
         let ratio = minScreenSize * Layout.Vertex.diameter / (pickerSize * Layout.MainMenu.currentIconSize)
         let screenZoom = cameraService.focusOnAdventureZoom()
         let scale = Layout.MainMenu.currentIconSize * ratio / screenZoom
-        return round(scale * geometry.minSize)
+        return scale * geometry.minSize
     }
 }
 
@@ -104,14 +104,9 @@ struct AdventureIconView: View {
     @StateObject var model: AdventureIconViewModel
 
     var body: some View {
-        ZStack {
-            let palette = ColorPalette.paletteFor(model.model.theme)
-            ComplexCurveShape(curve: shapeCurve)
-                .fill(color)
-                .animation(.linear(duration: 1), value: color)
-            ComplexCurveShape(curve: shapeCurve)
-                .stroke(palette.borders)
-        }
+        ComplexCurveShape(curve: shapeCurve)
+            .fill(color)
+            .animation(animation, value: color)
     }
 
     var color: Color {
@@ -126,6 +121,15 @@ struct AdventureIconView: View {
 
     var shapeCurve: ComplexCurve {
         shapeFor(model.state)
+    }
+
+    var animation: Animation? {
+        switch model.state {
+        case .becameDone, .done:
+            return AnimationService.switchAdventure
+        default:
+            return nil
+        }
     }
 
     private func shapeFor(_ state: AdventureIconState) -> ComplexCurve {

@@ -10,7 +10,7 @@ import SwiftUI
 
 struct BezierCurve {
 
-    private static let intersectionLimit: Int = 1000
+    private static let intersectionSteps: Int = 1000
     private static let legthRatioLimit: Int = 100
     private static let tangentDelta: CGFloat = 0.01
     private static let lengthSteps: Int = 100
@@ -56,17 +56,17 @@ struct BezierCurve {
     }
 
     func length(stepsCount: Int = Self.lengthSteps) -> CGFloat {
-        var lenght: CGFloat = 0
+        var result: CGFloat = 0
         var prevPoint = from
 
         for step in 1...stepsCount {
             let t = CGFloat(step) / CGFloat(stepsCount)
             let point = CGPoint(x: getX(t: t), y: getY(t: t))
-            lenght += point.distanceTo(prevPoint)
+            result += point.distanceTo(prevPoint)
             prevPoint = point
         }
 
-        return lenght
+        return result
     }
 
     func scaled(_ geometry: GeometryProxy) -> BezierCurve {
@@ -169,14 +169,28 @@ struct BezierCurve {
         return t
     }
 
-    func intersectionTWith(center: CGPoint, radius: CGFloat, accuracy: CGFloat, limit: Int = intersectionLimit) -> CGFloat {
-        return Math.stepSearch(from: 0, to: 1, steps: limit) {
-            abs(getPoint(t: $0).distanceTo(center) - radius)
+    func intersectionsTWith(center: CGPoint, radiuses: [CGFloat], steps: Int = intersectionSteps) -> [CGFloat] {
+        return Math.stepSearch(from: 0, to: 1, steps: steps) { value in
+            radiuses.map { radius in
+                abs(getPoint(t: value).distanceTo(center) - radius)
+            }
         }
     }
 
-    func intersectionWith(center: CGPoint, radius: CGFloat, accuracy: CGFloat, limit: Int = intersectionLimit) -> CGPoint {
-        let t = intersectionTWith(center: center, radius: radius, accuracy: accuracy)
+    func intersectionsWith(center: CGPoint, radiuses: [CGFloat], limit: Int = intersectionSteps) -> [CGPoint] {
+        let ts = intersectionsTWith(center: center, radiuses: radiuses)
+        return ts.map { getPoint(t: $0) }
+    }
+
+    func intersectionTWith(center: CGPoint, radius: CGFloat, steps: Int = intersectionSteps) -> CGFloat {
+        let intersections = Math.stepSearch(from: 0, to: 1, steps: steps) {
+            [abs(getPoint(t: $0).distanceTo(center) - radius)]
+        }
+        return intersections.first ?? .zero
+    }
+
+    func intersectionWith(center: CGPoint, radius: CGFloat, limit: Int = intersectionSteps) -> CGPoint {
+        let t = intersectionTWith(center: center, radius: radius)
         return getPoint(t: t)
     }
 

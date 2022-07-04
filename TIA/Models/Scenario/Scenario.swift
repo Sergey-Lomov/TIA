@@ -28,6 +28,12 @@ class Scenario: ObservableObject {
         let sorted = adventures[adventure.theme]?.sorted { $0.index < $1.index }
         let next = sorted?.first { $0.state == .planed }
         next?.state = .current
+
+        let allAdventures = adventures.flatMap { $0.value }
+        let states = allAdventures.reduce(into: [String: AdventureState]()) {
+            $0[$1.id] = $1.state
+        }
+        StorageService.shared.saveAdventureState(states)
     }
 
     func descriptorFor(_ adventure: Adventure) -> AdventureDescriptor? {

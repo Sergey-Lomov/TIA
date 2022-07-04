@@ -22,6 +22,15 @@ final class ScenarioService {
             return adventure
         }
 
+        let themes = [AdventureTheme.light, AdventureTheme.dark]
+        themes.forEach { theme in
+            let filtered = adventures.filter { $0.theme == theme }
+            let allPlaned = filtered.allSatisfy { $0.state == .planed }
+            guard allPlaned else { return }
+            let sorted = filtered.sorted { $0.index < $1.index }
+            sorted.first?.state = .current
+        }
+
         return Scenario(adventures: adventures)
     }
 

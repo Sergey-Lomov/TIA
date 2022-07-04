@@ -13,7 +13,7 @@ enum AdventureTheme: String, Codable, CaseIterable {
     case truth
 }
 
-enum AdventureState {
+enum AdventureState: String, Codable {
     case done
     case current
     case planed

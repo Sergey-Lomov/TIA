@@ -15,13 +15,6 @@ struct ResourceWrapper: View {
     private let failedMovingGap: CGFloat = 0.1
     private let destroyingRadius: CGFloat = 0.5
 
-    static let colors: [Color] = [.yellow, .red, .green, .blue]
-    static var colorIndex = 0
-    static func getColor() -> Color {
-        colorIndex = colorIndex < colors.count - 1 ? colorIndex + 1 : 0
-        return colors[colorIndex]
-    }
-
     @ObservedObject var resource: ResourceViewModel
     var layer: AdventureLayer
 
@@ -44,10 +37,14 @@ struct ResourceWrapper: View {
                         resource.presentationFinished()
                     }
 
-//                let testCurve = positionCurve.scaled(x: 1 / geometry.size.width, y: 1 / geometry.size.height)
-//                ComplexCurveShape(curve: testCurve)
-//                    .stroke(Self.getColor(), lineWidth: 2)
-//                    .frame(geometry: geometry)
+                #if DEBUG
+                if ProcessInfo.processInfo.environment["VD_RESOURCES_CURVES"] != nil {
+                    let debugCurve = positionCurve.scaled(x: 1 / geometry.size.width, y: 1 / geometry.size.height)
+                    ComplexCurveShape(curve: debugCurve)
+                        .stroke(Color.random(), lineWidth: 2)
+                        .frame(geometry: geometry)
+                }
+                #endif
             }
         }
     }

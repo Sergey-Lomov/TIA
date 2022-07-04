@@ -47,25 +47,18 @@ struct VertexView: View {
                 .animation(onVisitAnimation(geometry), value: onVisitProgress)
                 .foregroundColor(vertex.elementsColor)
 
-            // TODO: Visual debug code
-            
-            let color = Color.random()
-            ForEach(slots(geometry), id: \.self) { slot in
-                ComplexCurveShape(curve: .circle(radius: 0.5))
-                    .stroke(color)
-                    .frame(size: LayoutService.inventoryResourceSize(geometry))
-                    .offset(point: slot)
+            #if DEBUG
+            if ProcessInfo.processInfo.environment["VD_SLOTS"] != nil {
+                let color = Color.random()
+                ForEach(slots(geometry), id: \.self) { slot in
+                    ComplexCurveShape(curve: .circle(radius: 0.5))
+                        .stroke(color)
+                        .frame(size: LayoutService.inventoryResourceSize(geometry))
+                        .offset(point: slot)
+                }
             }
+            #endif
         }
-    }
-
-    // TODO: Visual debug code
-    private func slots(_ geometry: GeometryProxy) -> [CGPoint] {
-        let service = VertexSurroundingService(screenSize: geometry.size)
-        let layer = GameEngine.shared.adventureEngine?.currentLayer
-        guard let layer = layer else { return [] }
-        guard layer.contains(vertex.model) else { return [] }
-        return service.surroundingFor(vertex.model, layer: layer).slots
     }
 
     private var scale: CGFloat {
@@ -131,4 +124,14 @@ struct VertexView: View {
                 .environment(\.drawingWidth, 4)
         }
     }
+
+    #if DEBUG
+    private func slots(_ geometry: GeometryProxy) -> [CGPoint] {
+        let service = VertexSurroundingService(screenSize: geometry.size)
+        let layer = GameEngine.shared.adventureEngine?.currentLayer
+        guard let layer = layer else { return [] }
+        guard layer.contains(vertex.model) else { return [] }
+        return service.surroundingFor(vertex.model, layer: layer).slots
+    }
+    #endif
 }

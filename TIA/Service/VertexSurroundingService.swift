@@ -114,8 +114,9 @@ final class VertexSurroundingService {
     }
 
     private func radiusFreeSectors(_ edgesSectors: [Sector]) -> [Sector] {
-        // TODO: Here should be full-radius sector instead no sectors
-        guard !edgesSectors.isEmpty else { return [] }
+        guard !edgesSectors.isEmpty else {
+            return [.init(min: 0, max: .dpi)]
+        }
 
         let sorted = edgesSectors.sorted { $0.min < $1.min }
         var freeSectors = [Sector]()

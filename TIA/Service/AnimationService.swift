@@ -16,7 +16,6 @@ final class AnimationService {
         static let debugMult = 0.33
 
         enum Player {
-            // TODO: this value was decreased for development purposes, should be changed to more slow
             static let lengthMult: CGFloat = 0.005
             static let premoveDuration: CGFloat = 1.5
             static let postmoveDuration: CGFloat = 1.5

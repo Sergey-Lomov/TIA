@@ -31,7 +31,6 @@ enum EdgeSeedPhase {
 }
 
 enum EdgeState: Equatable {
-    // TODO: Remove seed phases before reslease if this concept still be unused. After removing phases should be carrefully checked edge view to find unused code.
     case seed(phase: EdgeSeedPhase)
     case growing(phase: EdgeGrowingPhase)
     case active

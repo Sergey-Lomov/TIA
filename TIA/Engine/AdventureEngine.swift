@@ -10,11 +10,8 @@
 import Foundation
 import Combine
 
-enum AdventureLifecycle {
-    case initializing
-    case gameplay
-    case menu
-    case finalizing
+protocol AdventureLayoutProvider {
+    func getLayout(_ adventure: AdventurePrototype) -> AdventureLayout
 }
 
 // swiftlint:disable type_body_length
@@ -25,20 +22,27 @@ final class AdventureEngine: EngineEventsSource {
 
     var subscriptions: [AnyCancellable] = []
     var eventsPublisher = EngineEventsPublisher()
+    var prototype: AdventurePrototype
+    var layoutProvider: AdventureLayoutProvider
 
     var adventure: Adventure
-    var lifestate: AdventureLifecycle = .initializing
     var player: Player
     var resources: [Resource]
+    var menuItems: [IngameMenuItem]
 
     var layers: [AdventureLayer] { adventure.layers }
     var currentLayer: AdventureLayer { adventure.currentLayer }
+    var state: AdventureState { adventure.state }
 
-    init(adventure: Adventure) {
-        self.adventure = adventure
+    init(prototype: AdventurePrototype, layoutProvider: AdventureLayoutProvider, menuItems: [IngameMenuItem]) {
+        let layout = layoutProvider.getLayout(prototype)
+        self.adventure = AdventureService.adventureFor(prototype, layout: layout)
         self.player = Player(position: .abscent)
-
+        self.prototype = prototype
+        self.layoutProvider = layoutProvider
+        self.menuItems = menuItems
         self.resources = []
+
         adventure.allVertices.forEach { handleNewVertex($0) }
 
         subscriptions.sink(player.$position) { [weak self] in
@@ -183,8 +187,8 @@ final class AdventureEngine: EngineEventsSource {
     private func showMenu(from: Vertex) {
         guard case .active = from.state else { return }
 
-        lifestate = .menu
-        let menuLayer = IngameMenuService.menuLayer(from: from, theme: adventure.theme)
+        adventure.state = .menu
+        let menuLayer = IngameMenuService.menuLayer(from: from, theme: adventure.theme, items: menuItems)
         startLayerPresenting(menuLayer, from: from)
     }
 
@@ -269,17 +273,17 @@ final class AdventureEngine: EngineEventsSource {
     }
 
     private func restartAdventure(_ vertex: Vertex) {
-        let layout = AdventureLayout.random(for: adventure.id)
-        let layer = ScenarioService.shared.layerFor(adventure.id, layout: layout, forcedEntrance: vertex)
-        layer.state = .preparing
+        let layout = layoutProvider.getLayout(prototype)
+        let layer = AdventureService.layerFor(prototype, layout: layout, forcedEntrance: vertex)
+         layer.state = .preparing
         startLayerPresenting(layer, from: vertex)
-        lifestate = .gameplay
+        adventure.state = .gameplay
     }
 
     private func exitFromAdventure(_ vertex: Vertex) {
         let menuLayer = layers.first { $0.type == .menu }
         guard let menuLayer = menuLayer else { return }
-        lifestate = .finalizing
+        adventure.state = .finalizing
         eventsPublisher.send(.adventureFinalizing(exit: vertex))
         startUngrowing(menuLayer, exit: vertex)
     }
@@ -289,7 +293,7 @@ final class AdventureEngine: EngineEventsSource {
             let exit = $0.contains(vertex) ? vertex : nil
             startUngrowing($0, exit: exit)
         }
-        lifestate = .finalizing
+        adventure.state = .finalizing
         eventsPublisher.send(.adventureFinalizing(exit: vertex))
     }
 
@@ -345,9 +349,9 @@ final class AdventureEngine: EngineEventsSource {
     }
 
     private func handleLayerUngrowedCompleted(_ layer: AdventureLayer) {
-        if lifestate == .finalizing {
+        if state == .finalizing {
             let done = player.position.currentVertex?.onVisit == .completeAdventure
-            GameEngine.shared.finalizeAdenture(adventure, isDone: done)
+            eventsPublisher.send(.adventureFinalized(adventure, isDone: done))
         } else if layer == currentLayer {
             hideCurrentLayer()
         } else {
@@ -580,8 +584,8 @@ extension AdventureEngine: ViewEventsListener {
 
     private func handlePlayerExpanded(_ player: Player) {
         player.expandingFinished()
-        if player == self.player && lifestate == .initializing {
-            lifestate = .gameplay
+        if player == self.player && state == .initializing {
+            adventure.state = .gameplay
         }
     }
 
@@ -601,7 +605,7 @@ extension AdventureEngine: ViewEventsListener {
     private func handleLayerWasHidden(_ layer: AdventureLayer) {
         guard case .hiding(let next) = layer.state else { return }
         if layer.type == .menu {
-            lifestate = .gameplay
+            adventure.state = .gameplay
         }
         if let next = next {
             adventure.currentLayer = next
@@ -621,12 +625,12 @@ extension AdventureEngine: ViewEventsListener {
     }
 
     private func handleVertexSelection(_ newVertex: Vertex) {
-        guard lifestate == .gameplay || lifestate == .menu else { return }
+        guard state == .gameplay || state == .menu else { return }
         guard case .vertex(let oldVertex) = player.position else { return }
         guard case .shown = currentLayer.state else { return }
 
         if oldVertex == newVertex {
-            switch lifestate {
+            switch state {
             case .gameplay:
                 showMenu(from: oldVertex)
             case .menu:

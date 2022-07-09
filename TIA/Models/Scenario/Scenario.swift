@@ -30,10 +30,10 @@ class Scenario: ObservableObject {
         next?.state = .current
 
         let allAdventures = adventures.flatMap { $0.value }
-        let states = allAdventures.reduce(into: [String: AdventureState]()) {
+        let completeness = allAdventures.reduce(into: [String: AdventureСompleteness]()) {
             $0[$1.id] = $1.state
         }
-        StorageService.shared.saveAdventureState(states)
+        StorageService.shared.saveAdventureState(completeness)
     }
 
     func descriptorFor(_ adventure: Adventure) -> AdventureDescriptor? {

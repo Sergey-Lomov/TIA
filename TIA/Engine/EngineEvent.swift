@@ -22,4 +22,5 @@ enum EngineEvent {
     case resourceAdded(resource: Resource)
     case resourceRemoved(resource: Resource)
     case adventureFinalizing(exit: Vertex)
+    case adventureFinalized(_ adventure: Adventure, isDone: Bool)
 }

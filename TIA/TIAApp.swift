@@ -32,9 +32,10 @@ struct TIAApp: App {
     }
 
     func adventureViewModel(_ cameraService: CameraService) -> AdventureViewModel? {
-        guard let adventure = game.activeAdventure,
-           let player = GameEngine.shared.player,
-           let resources = GameEngine.shared.resources else {
+        let adventure = GameEngine.shared.adventureEngine?.adventure
+        let resources = GameEngine.shared.adventureEngine?.resources
+        let player = GameEngine.shared.adventureEngine?.player
+        guard let adventure = adventure, let player = player, let resources = resources else {
                return nil
            }
 

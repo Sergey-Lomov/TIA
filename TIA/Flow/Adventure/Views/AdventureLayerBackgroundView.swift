@@ -14,7 +14,7 @@ struct AdventureLayerBackground: View {
     var theme: AdventureTheme
 
     var body: some View {
-        VisualEffectView(effect: effect)
+        dimView()
             .opacity(opacity)
             .onAnimationCompleted(for: opacity) {
                 handleAnimationCompletion()
@@ -22,16 +22,23 @@ struct AdventureLayerBackground: View {
             .animation(animation, value: opacity)
     }
 
+    #if os(iOS)
     private var effect: UIVisualEffect {
         switch theme {
-        case .dark:
-            return UIBlurEffect(style: .dark)
-        case .light:
-            return UIBlurEffect(style: .light)
-        case .truth:
-            return UIBlurEffect(style: .dark)
+        case .dark: return UIBlurEffect(style: .dark)
+        case .light: return UIBlurEffect(style: .light)
+        case .truth: return UIBlurEffect(style: .dark)
         }
     }
+    #elseif os(macOS)
+    private var dimColor: Color {
+        switch theme {
+        case .dark: return .softBlack
+        case .light: return .softWhite
+        case .truth: return .softBlack
+        }
+    }
+    #endif
 
     private var opacity: CGFloat {
         switch layer.state {
@@ -59,5 +66,13 @@ struct AdventureLayerBackground: View {
         default:
             break
         }
+    }
+
+    @ViewBuilder private func dimView() -> some View {
+        #if os(iOS)
+        VisualEffectView(effect: effect)
+        #elseif os(macOS)
+        dimColor
+        #endif
     }
 }

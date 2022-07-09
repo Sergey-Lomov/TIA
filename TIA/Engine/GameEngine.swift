@@ -6,22 +6,62 @@
 //
 
 import Foundation
+import CoreGraphics
+import Combine
 
 final class GameEngine {
 
     static let shared = GameEngine(state: GameState())
 
+    private var subscriptions: [AnyCancellable] = []
+
     let state: GameState
     var adventureEngine: AdventureEngine?
-
-    var player: Player? { adventureEngine?.player }
-    var resources: [Resource]? { adventureEngine?.resources }
 
     init(state: GameState) {
         self.state = state
     }
 
-    func finalizeAdenture(_ adventure: Adventure, isDone: Bool) {
+    func startAdventure(_ descriptor: AdventureDescriptor) {
+        let prototype = JSONDecoder.decodeAdventure(id: descriptor.id)
+        state.activeAdventure = prototype
+        let engine = AdventureEngine(prototype: prototype, layoutProvider: self, menuItems: availableIngameMenuItems())
+        subscribeTo(engine.eventsPublisher)
+        adventureEngine = engine
+    }
+
+    func availableIngameMenuItems() -> [IngameMenuItem] {
+        return [.exit, .restart]
+    }
+}
+
+extension GameEngine: AdventureLayoutProvider {
+    private static let layoutsCount = 1
+
+    func getLayout(_ adventure: AdventurePrototype) -> AdventureLayout {
+        let index = Int.random(in: 1...Self.layoutsCount)
+        let protoLayout = JSONDecoder.decodeLayout(adventureId: adventure.id, index: index)
+        return AdventureLayout(protoLayout)
+    }
+}
+
+extension GameEngine: EngineEventsListener {
+    func subscribeTo(_ publisher: EngineEventsPublisher) {
+        subscriptions.sink(publisher) { [self] event in
+            handleEngineEvent(event)
+        }
+    }
+
+    private func handleEngineEvent(_ event: EngineEvent) {
+        switch event {
+        case .adventureFinalized(let adventure, let isDone):
+            handleAdventureFinalized(adventure, isDone: isDone)
+        default:
+            break
+        }
+    }
+
+    private func handleAdventureFinalized(_ adventure: Adventure, isDone: Bool) {
         adventureEngine = nil
         state.finalizedAdventure = adventure
         state.activeAdventure = nil
@@ -31,17 +71,5 @@ final class GameEngine {
         }
 
         CacheService.shared.invalidateAll()
-    }
-
-    func startAdventure(_ descriptor: AdventureDescriptor) {
-        let layout = AdventureLayout.random(for: descriptor.id)
-        let adventure = ScenarioService.shared.adventureFor(descriptor, layout: layout)
-
-        adventureEngine = AdventureEngine(adventure: adventure)
-        state.activeAdventure = adventure
-    }
-
-    func availableIngameMenuItems() -> [IngameMenuItem] {
-        return [.exit, .restart]
     }
 }

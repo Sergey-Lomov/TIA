@@ -8,10 +8,7 @@
 import Foundation
 
 extension JSONDecoder {
-    typealias Scenario = ScenarioService.ScenarioPrototype
-    typealias Adventure = ScenarioService.AdventurePrototype
-    typealias Layout = AdventureLayout.Prototype
-
+    
     static let snakeCaseDecoder: JSONDecoder = {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
@@ -31,19 +28,19 @@ extension JSONDecoder {
         }
     }
 
-    static func decodeScenario() -> Scenario {
+    static func decodeScenario() -> ScenarioPrototype {
         let data = Data.scenarioData()
         let message = "Error at parsing scenarion json"
         return snakeCaseDecoder.decode(data, errorMessage: message)
     }
 
-    static func decodeAdventure(id: String) -> Adventure {
+    static func decodeAdventure(id: String) -> AdventurePrototype {
         let data = Data.adventureData(id: id)
         let message = "Error at parsing adventure json for id \"\(id)\""
         return snakeCaseDecoder.decode(data, errorMessage: message)
     }
 
-    static func decodeLayout(adventureId: String, index: Int) -> Layout {
+    static func decodeLayout(adventureId: String, index: Int) -> AdventureLayout.Prototype {
         let data = Data.layoutData(adventureId: adventureId, index: index)
         let message = "Error at parsing adventure layout json for adventure \"\(adventureId)\" index \(index)"
         return snakeCaseDecoder.decode(data, errorMessage: message)

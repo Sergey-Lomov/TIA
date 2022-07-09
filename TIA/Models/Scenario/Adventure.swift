@@ -13,10 +13,11 @@ enum AdventureTheme: String, Codable, CaseIterable {
     case truth
 }
 
-enum AdventureState: String, Codable {
-    case done
-    case current
-    case planed
+enum AdventureState {
+    case initializing
+    case gameplay
+    case menu
+    case finalizing
 }
 
 enum AdventureDoneShape: String, Codable {
@@ -32,6 +33,7 @@ class Adventure: ObservableObject {
     let index: Int
     let theme: AdventureTheme
     let doneShape: AdventureDoneShape
+    var state: AdventureState = .initializing
     @Published var layers: [AdventureLayer]
     @Published var currentLayer: AdventureLayer
 

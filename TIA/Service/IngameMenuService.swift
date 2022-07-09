@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreGraphics
+import Combine
 
 enum IngameMenuItem: String {
     case exit
@@ -30,8 +31,7 @@ final class IngameMenuService {
     private static let vertexIdPrefix = "menu_"
     private static let edgeIdPrefix = "edge_to_"
 
-    static func menuLayer(from source: Vertex, theme: AdventureTheme) -> AdventureLayer {
-        let items = GameEngine.shared.availableIngameMenuItems()
+    static func menuLayer(from source: Vertex, theme: AdventureTheme, items: [IngameMenuItem]) -> AdventureLayer {
 
         var vertices: [Vertex] = []
         var angle: CGFloat = 0

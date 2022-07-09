@@ -112,9 +112,8 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
     }
 
     private func handleCurrentLayer(_ layer: AdventureLayer, newState state: AdventureLayerState) {
-        let lifestate = GameEngine.shared.adventureEngine?.lifestate
         guard state != .preparing else { return }
-        guard lifestate != .initializing && lifestate != .finalizing else { return }
+        guard model.state != .initializing && model.state != .finalizing else { return }
 
         var targetLayer: AdventureLayer? = layer
         if case .hiding(let nextLayer) = state {
@@ -177,6 +176,8 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
             handleResourceRemoving(resource)
         case .adventureFinalizing(let exit):
             handleAdventureFinalizing(exit: exit)
+        case .adventureFinalized:
+            break
         }
     }
 

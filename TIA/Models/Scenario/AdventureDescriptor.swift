@@ -12,7 +12,7 @@ final class AdventureDescriptor: ObservableObject, IdEqutable {
     let index: Int
     let theme: AdventureTheme
     let doneShape: AdventureDoneShape
-    @Published var state: AdventureState = .planed
+    @Published var state: AdventureСompleteness = .planed
 
     init(id: String, index: Int, theme: AdventureTheme, doneShape: AdventureDoneShape) {
         self.id = id

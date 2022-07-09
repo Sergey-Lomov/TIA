@@ -6,10 +6,13 @@
 //
 
 import Foundation
+import Combine
 
 final class GameState: ObservableObject {
 
-    @Published var scenario = ScenarioService.shared.restoreScenario()
-    @Published var activeAdventure: Adventure?
+    private var subscriptions: [AnyCancellable] = []
+
+    @Published var scenario = ScenarioService.restoreScenario()
+    @Published var activeAdventure: AdventurePrototype?
     var finalizedAdventure: Adventure?
 }

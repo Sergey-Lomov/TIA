@@ -48,6 +48,7 @@ struct VertexView: View {
                 .foregroundColor(vertex.elementsColor)
 
             #if DEBUG
+            #if GAME
             if ProcessInfo.processInfo.environment["VD_SLOTS"] != nil {
                 let color = Color.random()
                 ForEach(slots(geometry), id: \.self) { slot in
@@ -57,6 +58,7 @@ struct VertexView: View {
                         .offset(point: slot)
                 }
             }
+            #endif
             #endif
         }
     }
@@ -126,6 +128,7 @@ struct VertexView: View {
     }
 
     #if DEBUG
+    #if GAME
     private func slots(_ geometry: GeometryProxy) -> [CGPoint] {
         let service = VertexSurroundingService(screenSize: geometry.size)
         let layer = GameEngine.shared.adventureEngine?.currentLayer
@@ -133,5 +136,6 @@ struct VertexView: View {
         guard layer.contains(vertex.model) else { return [] }
         return service.surroundingFor(vertex.model, layer: layer).slots
     }
+    #endif
     #endif
 }

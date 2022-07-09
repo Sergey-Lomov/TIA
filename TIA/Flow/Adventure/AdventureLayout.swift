@@ -7,20 +7,19 @@
 
 import CoreGraphics
 import Foundation
-import UIKit
 
 final class AdventureLayout {
     typealias Controls = (p1: CGPoint, p2: CGPoint)
 
-    private static let layoutsCount = 1
-
     var vertices: [String: CGPoint]
     var edges: [String: Controls]
 
-    static func random(for id: String) -> AdventureLayout {
-        let index = Int.random(in: 1...layoutsCount)
-        let prototype = JSONDecoder.decodeLayout(adventureId: id, index: index)
+    init(vertices: [String: CGPoint], edges: [String: Controls]) {
+        self.vertices = vertices
+        self.edges = edges
+    }
 
+    convenience init(_ prototype: Prototype) {
         let vertices = prototype.vertices.reduce(into: [String: CGPoint]()) {
             $0[$1.id] = $1.point
         }
@@ -29,12 +28,7 @@ final class AdventureLayout {
             $0[$1.id] = (p1: $1.p1, p2: $1.p2)
         }
 
-        return AdventureLayout(vertices: vertices, edges: edges)
-    }
-
-    init(vertices: [String: CGPoint], edges: [String: Controls]) {
-        self.vertices = vertices
-        self.edges = edges
+        self.init(vertices: vertices, edges: edges)
     }
 
     func translate(by delta: CGPoint) {

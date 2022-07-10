@@ -12,6 +12,11 @@
 		67067860287AF48D00ED0899 /* LayoutDesignerCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6706785F287AF48D00ED0899 /* LayoutDesignerCommands.swift */; };
 		67067862287AF7BA00ED0899 /* EditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67067861287AF7BA00ED0899 /* EditorViewModel.swift */; };
 		67067865287AF88500ED0899 /* ScreenSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67067864287AF88500ED0899 /* ScreenSize.swift */; };
+		6706786C287B17F400ED0899 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6706786B287B17F400ED0899 /* String.swift */; };
+		6706786D287B181D00ED0899 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6706786B287B17F400ED0899 /* String.swift */; };
+		67067870287B1AED00ED0899 /* JSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6706786F287B1AED00ED0899 /* JSONDecoder.swift */; };
+		67067872287B1E6900ED0899 /* MissedLayoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67067871287B1E6900ED0899 /* MissedLayoutView.swift */; };
+		67067874287B208C00ED0899 /* AdventureLayoutExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67067873287B208C00ED0899 /* AdventureLayoutExtension.swift */; };
 		670F9C3B28735BEB00E84836 /* sl2.json in Resources */ = {isa = PBXBuildFile; fileRef = 670F9C3928735BEB00E84836 /* sl2.json */; };
 		670F9C3C28735BEB00E84836 /* sl1.json in Resources */ = {isa = PBXBuildFile; fileRef = 670F9C3A28735BEB00E84836 /* sl1.json */; };
 		670F9C3F28735BFA00E84836 /* sl1_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 670F9C3D28735BFA00E84836 /* sl1_1.json */; };
@@ -20,8 +25,7 @@
 		670F9C4C28745F1700E84836 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670F9C4B28745F1700E84836 /* EditorView.swift */; };
 		670F9C4E28745F1D00E84836 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 670F9C4D28745F1D00E84836 /* Assets.xcassets */; };
 		670F9C5128745F1D00E84836 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 670F9C5028745F1D00E84836 /* Preview Assets.xcassets */; };
-		670F9C57287460AB00E84836 /* SimpleMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670F9C56287460AB00E84836 /* SimpleMessageView.swift */; };
-		670F9C592874614800E84836 /* LayoutEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670F9C582874614800E84836 /* LayoutEditorView.swift */; };
+		670F9C57287460AB00E84836 /* MissedAdventureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670F9C56287460AB00E84836 /* MissedAdventureView.swift */; };
 		670F9C5A2874634600E84836 /* AdventureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B533882804CB8E00EA959A /* AdventureView.swift */; };
 		670F9C5B2874635300E84836 /* VertexView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5338A2804CC4500EA959A /* VertexView.swift */; };
 		670F9C5C2874635300E84836 /* EdgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 672792462806441300FEE07E /* EdgeView.swift */; };
@@ -245,6 +249,10 @@
 		6706785F287AF48D00ED0899 /* LayoutDesignerCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutDesignerCommands.swift; sourceTree = "<group>"; };
 		67067861287AF7BA00ED0899 /* EditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewModel.swift; sourceTree = "<group>"; };
 		67067864287AF88500ED0899 /* ScreenSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenSize.swift; sourceTree = "<group>"; };
+		6706786B287B17F400ED0899 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		6706786F287B1AED00ED0899 /* JSONDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoder.swift; sourceTree = "<group>"; };
+		67067871287B1E6900ED0899 /* MissedLayoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissedLayoutView.swift; sourceTree = "<group>"; };
+		67067873287B208C00ED0899 /* AdventureLayoutExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureLayoutExtension.swift; sourceTree = "<group>"; };
 		670F9C3928735BEB00E84836 /* sl2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sl2.json; sourceTree = "<group>"; };
 		670F9C3A28735BEB00E84836 /* sl1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sl1.json; sourceTree = "<group>"; };
 		670F9C3D28735BFA00E84836 /* sl1_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sl1_1.json; sourceTree = "<group>"; };
@@ -255,8 +263,7 @@
 		670F9C4D28745F1D00E84836 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		670F9C5028745F1D00E84836 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		670F9C5228745F1D00E84836 /* LayoutDesigner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LayoutDesigner.entitlements; sourceTree = "<group>"; };
-		670F9C56287460AB00E84836 /* SimpleMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleMessageView.swift; sourceTree = "<group>"; };
-		670F9C582874614800E84836 /* LayoutEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutEditorView.swift; sourceTree = "<group>"; };
+		670F9C56287460AB00E84836 /* MissedAdventureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissedAdventureView.swift; sourceTree = "<group>"; };
 		670F9CC628746B8000E84836 /* AdventureService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureService.swift; sourceTree = "<group>"; };
 		6727922B2805C2C000FEE07E /* scenario.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = scenario.json; sourceTree = "<group>"; };
 		6727922E2805CBE400FEE07E /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
@@ -410,15 +417,33 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
+		67067866287B169C00ED0899 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				670F9C56287460AB00E84836 /* MissedAdventureView.swift */,
+				67067871287B1E6900ED0899 /* MissedLayoutView.swift */,
+				670F9C4B28745F1700E84836 /* EditorView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		6706786E287B1A1E00ED0899 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				6706786F287B1AED00ED0899 /* JSONDecoder.swift */,
+				67067873287B208C00ED0899 /* AdventureLayoutExtension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		670F9C4828745F1700E84836 /* LayoutDesigner */ = {
 			isa = PBXGroup;
 			children = (
+				6706786E287B1A1E00ED0899 /* Extensions */,
+				67067866287B169C00ED0899 /* Views */,
 				67067863287AF86D00ED0899 /* ViewModels */,
-				670F9C56287460AB00E84836 /* SimpleMessageView.swift */,
-				670F9C582874614800E84836 /* LayoutEditorView.swift */,
 				6706785F287AF48D00ED0899 /* LayoutDesignerCommands.swift */,
 				670F9C4928745F1700E84836 /* LayoutDesignerApp.swift */,
-				670F9C4B28745F1700E84836 /* EditorView.swift */,
 				670F9C4D28745F1D00E84836 /* Assets.xcassets */,
 				670F9C5228745F1D00E84836 /* LayoutDesigner.entitlements */,
 				670F9C4F28745F1D00E84836 /* Preview Content */,
@@ -612,6 +637,7 @@
 				67811BCB286892BE00861ADA /* Animation.swift */,
 				6791A914287086BC00231BFA /* UnitPoint.swift */,
 				6791A9162870888200231BFA /* VectorArithmetic.swift */,
+				6706786B287B17F400ED0899 /* String.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -912,6 +938,7 @@
 				670F9C972874678F00E84836 /* CGSize.swift in Sources */,
 				670F9C952874677E00E84836 /* IngameViewEvent.swift in Sources */,
 				670F9C832874677000E84836 /* StorageService.swift in Sources */,
+				67067870287B1AED00ED0899 /* JSONDecoder.swift in Sources */,
 				670F9CB7287467E800E84836 /* ResourcePath.swift in Sources */,
 				670F9C6C2874635C00E84836 /* AdventureLayerViewModel.swift in Sources */,
 				670F9C602874635300E84836 /* AdventureLayerBackgroundView.swift in Sources */,
@@ -925,7 +952,6 @@
 				670F9C8F2874677500E84836 /* IdEqutable.swift in Sources */,
 				670F9C6F2874639200E84836 /* Vertex.swift in Sources */,
 				670F9C932874677500E84836 /* PointerWrapper.swift in Sources */,
-				670F9C592874614800E84836 /* LayoutEditorView.swift in Sources */,
 				670F9C612874635300E84836 /* PlayerView.swift in Sources */,
 				670F9C74287464B500E84836 /* Player.swift in Sources */,
 				670F9CC02874686500E84836 /* CameraModifier.swift in Sources */,
@@ -962,14 +988,16 @@
 				670F9C5B2874635300E84836 /* VertexView.swift in Sources */,
 				670F9CBB2874686500E84836 /* BezierPositioning.swift in Sources */,
 				670F9C5D2874635300E84836 /* EdgeConnectorShape.swift in Sources */,
+				67067874287B208C00ED0899 /* AdventureLayoutExtension.swift in Sources */,
 				670F9C622874635300E84836 /* ResourceView.swift in Sources */,
 				67067860287AF48D00ED0899 /* LayoutDesignerCommands.swift in Sources */,
 				670F9C942874677E00E84836 /* EngineEvent.swift in Sources */,
 				670F9C8A2874677000E84836 /* CameraService.swift in Sources */,
-				670F9C57287460AB00E84836 /* SimpleMessageView.swift in Sources */,
+				670F9C57287460AB00E84836 /* MissedAdventureView.swift in Sources */,
 				670F9C8C2874677500E84836 /* ColorPalette.swift in Sources */,
 				670F9CA62874678F00E84836 /* ClosedRange.swift in Sources */,
 				670F9C9F2874678F00E84836 /* VectorArithmetic.swift in Sources */,
+				6706786D287B181D00ED0899 /* String.swift in Sources */,
 				670F9C802874677000E84836 /* Math.swift in Sources */,
 				670F9C912874677500E84836 /* EnvironmentKeys.swift in Sources */,
 				670F9C902874677500E84836 /* Transpublished.swift in Sources */,
@@ -990,6 +1018,7 @@
 				670F9CA42874678F00E84836 /* Data.swift in Sources */,
 				670F9C79287464BC00E84836 /* Line.swift in Sources */,
 				670F9C982874678F00E84836 /* UnitPoint.swift in Sources */,
+				67067872287B1E6900ED0899 /* MissedLayoutView.swift in Sources */,
 				670F9C9B2874678F00E84836 /* CGPoint.swift in Sources */,
 				670F9CA72874678F00E84836 /* GeometryProxy.swift in Sources */,
 				670F9C962874677E00E84836 /* AdventureEngine.swift in Sources */,
@@ -1026,6 +1055,7 @@
 				67EFD4772844348200DA02EC /* VisualEffectView.swift in Sources */,
 				670678572876287300ED0899 /* ProtoScenario.swift in Sources */,
 				6771F8DB2851677500D7B742 /* ViewRedrawHandlerModifier.swift in Sources */,
+				6706786C287B17F400ED0899 /* String.swift in Sources */,
 				675E2770280F6F0400FB5783 /* ColorPalette.swift in Sources */,
 				67B533892804CB8E00EA959A /* AdventureView.swift in Sources */,
 				675E2747280B4BD100FB5783 /* VertexViewModel.swift in Sources */,

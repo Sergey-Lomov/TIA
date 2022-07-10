@@ -92,6 +92,10 @@ struct EdgePathView: View {
                     .offset(geometry.size.half)
                     .transition(.identity)
             }
+
+            #if EDITOR
+            CurveControlsView(edge: edge)
+            #endif
         }
     }
 

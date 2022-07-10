@@ -9,6 +9,13 @@ import SwiftUI
 
 extension Path {
 
+    static func line(from: CGPoint, to: CGPoint) -> Path {
+        var path = Path()
+        path.move(to: from)
+        path.addLine(to: to)
+        return path
+    }
+
     init (curves: [BezierCurve], size: CGSize? = nil, close: Bool = false) {
         self.init()
 

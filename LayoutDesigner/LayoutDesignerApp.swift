@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct LayoutDesignerApp: App {
+    @ObservedObject var editorModel = EditorViewModel()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            EditorView(model: editorModel)
+        }.commands {
+            LayoutDesignerCommands(screenSize: $editorModel.screenSize)
         }
     }
 }

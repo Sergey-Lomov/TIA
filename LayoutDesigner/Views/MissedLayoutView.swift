@@ -15,12 +15,8 @@ struct MissedLayouteView: View {
         VStack {
             Text(message)
             Button("Select layout".localized()) {
-                let panel = NSOpenPanel()
-                panel.allowsMultipleSelection = false
-                panel.canChooseDirectories = false
-                panel.allowedContentTypes = [.json]
-                if panel.runModal() == .OK {
-                    handleFileSelection(panel: panel)
+                NSOpenPanel.runJsonPanel {
+                    handleFileSelection(panel: $0)
                 }
             }
             Button("Generate layout".localized()) {
@@ -30,12 +26,9 @@ struct MissedLayouteView: View {
     }
 
     func handleFileSelection(panel: NSOpenPanel) {
-        let path = panel.url?.absoluteString ?? ""
-        let layoutPrototype = JSONDecoder.decodeLayout(path)
-        if let layoutPrototype = layoutPrototype {
-            let layout = AdventureLayout(layoutPrototype)
-            editorModel.applyLayout(layout)
-        } else {
+        let path = panel.url?.absoluteString
+        editorModel.loadLayout(path)
+        if editorModel.adventureEngine == nil {
             let fileName = panel.url?.lastPathComponent ?? ""
             message = fileName + " is not valid layout file".localized()
         }

@@ -30,6 +30,7 @@ extension JSONDecoder {
             let result = try snakeCaseDecoder.decode(T.self, from: data)
             return result
         } catch {
+            print(error)
             return nil
         }
     }

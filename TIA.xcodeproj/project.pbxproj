@@ -64,7 +64,6 @@
 		670F9C802874677000E84836 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EDAC6028201BFF00EA41CF /* Math.swift */; };
 		670F9C812874677000E84836 /* VertexSurroundingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EDAC26281CA01F00EA41CF /* VertexSurroundingService.swift */; };
 		670F9C822874677000E84836 /* CacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6791A91A2871CABA00231BFA /* CacheService.swift */; };
-		670F9C832874677000E84836 /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5336127FFAA6200EA959A /* StorageService.swift */; };
 		670F9C842874677000E84836 /* LayoutService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EDAC642820625500EA41CF /* LayoutService.swift */; };
 		670F9C852874677000E84836 /* IngameMenuService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B07B262840F7EE00EAC03D /* IngameMenuService.swift */; };
 		670F9C862874677000E84836 /* AnimationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EDAC5E281F3E2200EA41CF /* AnimationService.swift */; };
@@ -151,6 +150,8 @@
 		675E276E280F39B500FB5783 /* CenteredGeometryReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E276D280F39B500FB5783 /* CenteredGeometryReader.swift */; };
 		675E2770280F6F0400FB5783 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E276F280F6F0400FB5783 /* ColorPalette.swift */; };
 		675E27F9281087E800FB5783 /* StatesAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E27F8281087E800FB5783 /* StatesAnimationView.swift */; };
+		676CFBC0287C5A4000B96192 /* CustomFileCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 676CFBBF287C5A4000B96192 /* CustomFileCommands.swift */; };
+		676CFBC2287C5C4300B96192 /* NSOpenPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 676CFBC1287C5C4300B96192 /* NSOpenPanel.swift */; };
 		6771F8DB2851677500D7B742 /* ViewRedrawHandlerModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6771F8DA2851677500D7B742 /* ViewRedrawHandlerModifier.swift */; };
 		6771F8E12855021B00D7B742 /* DrawableCurvesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6771F8E02855021B00D7B742 /* DrawableCurvesView.swift */; };
 		6771F8E62855242000D7B742 /* VertexActionsIconsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6771F8E52855242000D7B742 /* VertexActionsIconsService.swift */; };
@@ -158,6 +159,8 @@
 		6771F8F828592A3300D7B742 /* DrawableCurve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6771F8F728592A3300D7B742 /* DrawableCurve.swift */; };
 		6771F8FA285A8F1900D7B742 /* VertexViewMetastate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6771F8F9285A8F1900D7B742 /* VertexViewMetastate.swift */; };
 		677C3100281099500014BECD /* AnimationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677C30FF281099500014BECD /* AnimationState.swift */; };
+		677C8E68287C2CA200A50B51 /* EditorStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677C8E67287C2CA200A50B51 /* EditorStorageService.swift */; };
+		677C8E6A287C36B600A50B51 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677C8E69287C36B600A50B51 /* UserDefaults.swift */; };
 		677D6988282B28EB00124486 /* ResourceViewMetastate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677D6987282B28EB00124486 /* ResourceViewMetastate.swift */; };
 		6780F47128296D2800FF95FE /* ObservableObjectPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6780F47028296D2800FF95FE /* ObservableObjectPublisher.swift */; };
 		67811B882862712E00861ADA /* CameraModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67811B872862712E00861ADA /* CameraModifier.swift */; };
@@ -297,6 +300,8 @@
 		675E276D280F39B500FB5783 /* CenteredGeometryReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteredGeometryReader.swift; sourceTree = "<group>"; };
 		675E276F280F6F0400FB5783 /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 		675E27F8281087E800FB5783 /* StatesAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatesAnimationView.swift; sourceTree = "<group>"; };
+		676CFBBF287C5A4000B96192 /* CustomFileCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFileCommands.swift; sourceTree = "<group>"; };
+		676CFBC1287C5C4300B96192 /* NSOpenPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSOpenPanel.swift; sourceTree = "<group>"; };
 		6771F8DA2851677500D7B742 /* ViewRedrawHandlerModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewRedrawHandlerModifier.swift; sourceTree = "<group>"; };
 		6771F8E02855021B00D7B742 /* DrawableCurvesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawableCurvesView.swift; sourceTree = "<group>"; };
 		6771F8E52855242000D7B742 /* VertexActionsIconsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexActionsIconsService.swift; sourceTree = "<group>"; };
@@ -304,6 +309,8 @@
 		6771F8F728592A3300D7B742 /* DrawableCurve.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawableCurve.swift; sourceTree = "<group>"; };
 		6771F8F9285A8F1900D7B742 /* VertexViewMetastate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexViewMetastate.swift; sourceTree = "<group>"; };
 		677C30FF281099500014BECD /* AnimationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationState.swift; sourceTree = "<group>"; };
+		677C8E67287C2CA200A50B51 /* EditorStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorStorageService.swift; sourceTree = "<group>"; };
+		677C8E69287C36B600A50B51 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		677D6987282B28EB00124486 /* ResourceViewMetastate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceViewMetastate.swift; sourceTree = "<group>"; };
 		6780F47028296D2800FF95FE /* ObservableObjectPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableObjectPublisher.swift; sourceTree = "<group>"; };
 		67811B872862712E00861ADA /* CameraModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraModifier.swift; sourceTree = "<group>"; };
@@ -435,6 +442,8 @@
 			children = (
 				6706786F287B1AED00ED0899 /* JSONDecoder.swift */,
 				67067873287B208C00ED0899 /* AdventureLayoutExtension.swift */,
+				677C8E69287C36B600A50B51 /* UserDefaults.swift */,
+				676CFBC1287C5C4300B96192 /* NSOpenPanel.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -442,10 +451,12 @@
 		670F9C4828745F1700E84836 /* LayoutDesigner */ = {
 			isa = PBXGroup;
 			children = (
+				677C8E66287C2C8F00A50B51 /* Services */,
 				6706786E287B1A1E00ED0899 /* Extensions */,
 				67067866287B169C00ED0899 /* Views */,
 				67067863287AF86D00ED0899 /* ViewModels */,
 				6706785F287AF48D00ED0899 /* LayoutDesignerCommands.swift */,
+				676CFBBF287C5A4000B96192 /* CustomFileCommands.swift */,
 				670F9C4928745F1700E84836 /* LayoutDesignerApp.swift */,
 				670F9C4D28745F1D00E84836 /* Assets.xcassets */,
 				670F9C5228745F1D00E84836 /* LayoutDesigner.entitlements */,
@@ -544,6 +555,14 @@
 				677C30FF281099500014BECD /* AnimationState.swift */,
 			);
 			path = Animation;
+			sourceTree = "<group>";
+		};
+		677C8E66287C2C8F00A50B51 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				677C8E67287C2CA200A50B51 /* EditorStorageService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		6793A96927FCF3B7002198E9 = {
@@ -940,7 +959,6 @@
 				670F9C692874635C00E84836 /* PlayerViewModel.swift in Sources */,
 				670F9C972874678F00E84836 /* CGSize.swift in Sources */,
 				670F9C952874677E00E84836 /* IngameViewEvent.swift in Sources */,
-				670F9C832874677000E84836 /* StorageService.swift in Sources */,
 				67067870287B1AED00ED0899 /* JSONDecoder.swift in Sources */,
 				670F9CB7287467E800E84836 /* ResourcePath.swift in Sources */,
 				670F9C6C2874635C00E84836 /* AdventureLayerViewModel.swift in Sources */,
@@ -979,6 +997,7 @@
 				670F9C9A2874678F00E84836 /* Bundle.swift in Sources */,
 				670F9C5C2874635300E84836 /* EdgeView.swift in Sources */,
 				670F9C992874678F00E84836 /* Array.swift in Sources */,
+				676CFBC2287C5C4300B96192 /* NSOpenPanel.swift in Sources */,
 				670F9C76287464B500E84836 /* PlayerMetastate.swift in Sources */,
 				670F9C6B2874635C00E84836 /* VertexViewModel.swift in Sources */,
 				670F9CBF2874686500E84836 /* ResourceStateTransform.swift in Sources */,
@@ -1010,6 +1029,7 @@
 				670F9CA52874678F00E84836 /* DecodingError.swift in Sources */,
 				670F9C662874635C00E84836 /* EyeViewModel.swift in Sources */,
 				670F9CB1287467E000E84836 /* DrawableCurvesView.swift in Sources */,
+				677C8E6A287C36B600A50B51 /* UserDefaults.swift in Sources */,
 				670F9C682874635C00E84836 /* EdgeViewMetastate.swift in Sources */,
 				670F9C8B2874677500E84836 /* Closures.swift in Sources */,
 				670F9C822874677000E84836 /* CacheService.swift in Sources */,
@@ -1025,7 +1045,9 @@
 				67067872287B1E6900ED0899 /* MissedLayoutView.swift in Sources */,
 				670F9C9B2874678F00E84836 /* CGPoint.swift in Sources */,
 				670F9CA72874678F00E84836 /* GeometryProxy.swift in Sources */,
+				676CFBC0287C5A4000B96192 /* CustomFileCommands.swift in Sources */,
 				670F9C962874677E00E84836 /* AdventureEngine.swift in Sources */,
+				677C8E68287C2CA200A50B51 /* EditorStorageService.swift in Sources */,
 				670F9C642874635C00E84836 /* ResourceViewMetastate.swift in Sources */,
 				670F9C77287464B500E84836 /* Resource.swift in Sources */,
 			);

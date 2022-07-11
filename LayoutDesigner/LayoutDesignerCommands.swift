@@ -12,6 +12,7 @@ struct LayoutDesignerCommands: Commands {
 
     var body: some Commands {
         CommandMenu("Editor".localized()) {
+            // TODO: Fix resources after screen size changing. For now bug here.
             Picker("Screen size".localized(), selection: $screenSize) {
                 ForEach(ScreenSize.allCases, id: \.self) { value in
                     Text(value.title)

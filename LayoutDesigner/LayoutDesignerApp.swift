@@ -15,6 +15,7 @@ struct LayoutDesignerApp: App {
         WindowGroup {
             EditorView(model: editorModel)
         }.commands {
+            CustomFileCommands(editor: editorModel)
             LayoutDesignerCommands(screenSize: $editorModel.screenSize)
         }
     }

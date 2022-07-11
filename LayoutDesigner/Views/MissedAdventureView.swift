@@ -15,23 +15,17 @@ struct MissedAdventureView: View {
         VStack {
             Text(message)
             Button("Select adventure".localized()) {
-                let panel = NSOpenPanel()
-                panel.allowsMultipleSelection = false
-                panel.canChooseDirectories = false
-                panel.allowedContentTypes = [.json]
-                if panel.runModal() == .OK {
-                    handleFileSelection(panel: panel)
+                NSOpenPanel.runJsonPanel() {
+                    handleFileSelection(panel: $0)
                 }
             }
         }
     }
 
     func handleFileSelection(panel: NSOpenPanel) {
-        let path = panel.url?.absoluteString ?? ""
-        let prototype = JSONDecoder.decodeAdventure(path)
-        if let prototype = prototype {
-            editorModel.adventurePrototype = prototype
-        } else {
+        let path = panel.url?.absoluteString
+        editorModel.loadAdventure(path)
+        if editorModel.adventurePrototype == nil {
             let fileName = panel.url?.lastPathComponent ?? ""
             message = fileName + " is not valid adventure file".localized()
         }

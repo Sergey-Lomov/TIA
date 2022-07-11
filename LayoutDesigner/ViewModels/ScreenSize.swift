@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ScreenSize: Hashable, CaseIterable {
+enum ScreenSize: String, Hashable, CaseIterable, Encodable {
 
     case iPhone12
     case iPhone12Pro

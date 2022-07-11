@@ -21,7 +21,19 @@ extension CGSize {
     }
 
     func scaled(_ mult: CGFloat) -> CGSize {
-        CGSize(width: width * mult,height: height * mult)
+        CGSize(width: width * mult, height: height * mult)
+    }
+
+    func devided(_ mult: CGFloat) -> CGSize {
+        CGSize(width: width / mult, height: height / mult)
+    }
+
+    func scaled(_ mult: CGSize) -> CGSize {
+        CGSize(width: width * mult.width, height: height * mult.height)
+    }
+
+    func devided(_ mult: CGSize) -> CGSize {
+        CGSize(width: width / mult.width, height: height / mult.height)
     }
 }
 

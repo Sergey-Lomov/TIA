@@ -71,6 +71,9 @@ struct EdgePathView: View {
                 }
                 .animation(animation, value: progress)
                 .foregroundColor(edge.color)
+                .onTapGesture {
+                    print("tapper")
+                }
 
             // Connectors
             if edge.metastate.fromConnectorVisible {

@@ -8,6 +8,13 @@
 import CoreGraphics
 import SwiftUI
 
+enum ControlPoint {
+    case p0
+    case p1
+    case p2
+    case p3
+}
+
 struct BezierCurve {
 
     private static let intersectionSteps: Int = 1000
@@ -53,6 +60,24 @@ struct BezierCurve {
         p1 = points[1]
         p2 = points[2]
         p3 = points[3]
+    }
+
+    func point(_ point: ControlPoint) -> CGPoint {
+        switch point {
+        case .p0: return p0
+        case .p1: return p1
+        case .p2: return p2
+        case .p3: return p3
+        }
+    }
+
+    mutating func setPoint(_ point: ControlPoint, newValue: CGPoint) {
+        switch point {
+        case .p0: p0 = newValue
+        case .p1: p1 = newValue
+        case .p2: p2 = newValue
+        case .p3: p3 = newValue
+        }
     }
 
     func length(stepsCount: Int = Self.lengthSteps) -> CGFloat {

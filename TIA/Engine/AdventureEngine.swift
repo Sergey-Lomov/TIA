@@ -540,6 +540,8 @@ extension AdventureEngine: ViewEventsListener {
             handleVertexUngrowed(vertex)
         case .vertexSelected(let vertex):
             handleVertexSelection(vertex)
+        case .vertexMoved(let vertex, let position, let finished):
+            handleVertexMoved(vertex, position: position, finished: finished)
 
         case .edgeSeedExtensionPrepared(let edge):
             edge.state = .seed(phase: .extended)
@@ -557,6 +559,8 @@ extension AdventureEngine: ViewEventsListener {
             handleEdgeElementsUngrowed(edge)
         case .edgeUngrowed(let edge):
             handleEdgeUngrowed(edge)
+        case .edgeControlChanged(let edge, let point, let newValue, let finished):
+            handleEdgeControlChanged(edge: edge, point: point, newValue: newValue, finished: finished)
 
         case .gateClosed(let gate):
             handleGateClosed(gate)
@@ -643,6 +647,39 @@ extension AdventureEngine: ViewEventsListener {
         }
     }
 
+    private func handleVertexMoved(_ vertex: Vertex, position: CGPoint, finished: Bool) {
+        // TODO: Add connectors cache clearing. For this purpose should be added new way to invalidate cash by some keys/ids. Connectors cache should be cleared event if finished is false.
+
+        vertex.point = position
+        layers.allContain(vertex).forEach { layer in
+            layer.outcome(vertex).forEach {
+                $0.curve.p0 = position
+                $0.objectWillChange.sendOnMain()
+            }
+            layer.income(vertex).forEach {
+                $0.curve.p3 = position
+                $0.objectWillChange.sendOnMain()
+            }
+        }
+
+        vertexResources(vertex).forEach {
+            $0.objectWillChange.sendOnMain()
+        }
+
+        if player.position.currentVertex == vertex {
+            player.objectWillChange.sendOnMain()
+            let resources = playerResources(player)
+            resources.forEach { $0.objectWillChange.sendOnMain() }
+        }
+
+        guard finished else { return }
+
+        let layers = layers.allContain(vertex)
+        layers.forEach {
+            CacheService.shared.invalidate(type: .surrounding(vertex, $0))
+        }
+    }
+
     private func handleEdgePathGrowed(_ edge: Edge) {
         if edge.to.state.isGrowed {
             edge.state = .growing(phase: .preparingElements)
@@ -671,6 +708,27 @@ extension AdventureEngine: ViewEventsListener {
         startUngrowingIfReady(edge.from)
         layers.allContain(edge).forEach { checkLayerUngrowingCompletion($0) }
     }
+
+    private func handleEdgeControlChanged(edge: Edge, point: ControlPoint, newValue: CGPoint, finished: Bool) {
+        // TODO: Add connectors cache clearing. For this purpose should be added new way to invalidate cash by some keys/ids. Connectors cache should be cleared event if finished is false.
+        edge.curve.setPoint(point, newValue: newValue)
+        edge.objectWillChange.sendOnMain()
+
+        guard finished else { return }
+
+        let layers = layers.allContain(edge)
+        layers.forEach {
+            CacheService.shared.invalidate(type: .surrounding(edge.from, $0))
+            CacheService.shared.invalidate(type: .surrounding(edge.to, $0))
+        }
+
+        let playerVertex = player.position.currentVertex
+        if playerVertex == edge.from || playerVertex == edge.to {
+            let resources = playerResources(player)
+            resources.forEach { $0.objectWillChange.sendOnMain() }
+        }
+    }
+
 
     private func handleGateClosed(_ gate: EdgeGate) {
         gateResources(gate).forEach {

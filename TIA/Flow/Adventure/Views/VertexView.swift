@@ -21,6 +21,28 @@ struct VertexWrapper: View {
                 .onTapGesture {
                     vertex.wasTapped()
                 }
+            #if EDITOR
+                .gesture(
+                    DragGesture()
+                        .onChanged { gesture in
+                            handleMove(geometry, gesture.translation, finished: false)
+                        }
+                        .onEnded { gesture in
+                            handleMove(geometry, gesture.translation, finished: true)
+                        }
+                )
+            #endif
+        }
+    }
+
+    func handleMove(_ geometry: GeometryProxy, _ translation: CGSize, finished: Bool) {
+        let delta = translation.devided(geometry.size)
+        let point = vertex.prechangePoint ?? vertex.point
+        let newValue = point.translated(by: delta)
+        if finished {
+            vertex.movingFinished(newPoint: newValue)
+        } else {
+            vertex.wasMoved(newPoint: newValue)
         }
     }
 }

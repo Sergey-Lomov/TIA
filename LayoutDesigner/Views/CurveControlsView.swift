@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 struct CurveControlsView: View {
+    private let controlSize: CGFloat = 10
     private let controlStyle = StrokeStyle(lineWidth: 2, dash: [10, 10])
 
     @ObservedObject var edge: EdgeViewModel
@@ -25,13 +26,42 @@ struct CurveControlsView: View {
                 .stroke(style: controlStyle)
 
             Circle()
-                .frame(size: 10)
+                .frame(size: controlSize)
                 .offset(point: scaled.p1)
+                .gesture(
+                    DragGesture()
+                        .onChanged { gesture in
+                            handleUpdate(geometry, gesture.translation, point: .p1, finished: false)
+                        }
+                        .onEnded { gesture in
+                            handleUpdate(geometry, gesture.translation, point: .p1, finished: true)
+                        }
+                    )
 
             Circle()
-                .frame(size: 10)
+                .frame(size: controlSize)
                 .offset(point: scaled.p2)
+                .gesture(
+                    DragGesture()
+                        .onChanged { gesture in
+                            handleUpdate(geometry, gesture.translation, point: .p2, finished: false)
+                        }
+                        .onEnded { gesture in
+                            handleUpdate(geometry, gesture.translation, point: .p2, finished: true)
+                        }
+                    )
         }
         .foregroundColor(edge.color)
+    }
+
+    func handleUpdate(_ geometry: GeometryProxy, _ translation: CGSize, point: ControlPoint, finished: Bool) {
+        let delta = translation.devided(geometry.size)
+        let curve = edge.prechangeCurve ?? edge.curve
+        let newValue = curve.point(point).translated(by: delta)
+        if finished {
+            edge.controlChangingFinished(point: point, newValue: newValue)
+        } else {
+            edge.controlChanged(point: point, newValue: newValue)
+        }
     }
 }

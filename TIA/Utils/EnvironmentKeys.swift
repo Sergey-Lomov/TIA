@@ -19,6 +19,16 @@ struct CameraServiceKey: EnvironmentKey {
     static var defaultValue = CameraService(safe: .zero, full: .zero)
 }
 
+enum ControlsShowingMode {
+    case none
+    case selected
+    case all
+}
+
+struct ControlsShowingModeKey: EnvironmentKey {
+    static var defaultValue: ControlsShowingMode = .none
+}
+
 extension EnvironmentValues {
     var drawingWidth: CGFloat {
         get { self[DrawingWidthKey.self] }
@@ -33,5 +43,10 @@ extension EnvironmentValues {
     var cameraService: CameraService {
         get { self[CameraServiceKey.self] }
         set { self[CameraServiceKey.self] = newValue }
+    }
+
+    var controlsShowingMode: ControlsShowingMode {
+        get { self[ControlsShowingModeKey.self] }
+        set { self[ControlsShowingModeKey.self] = newValue }
     }
 }

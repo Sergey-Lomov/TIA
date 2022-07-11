@@ -13,6 +13,7 @@ final class VertexViewModel: IngameViewModel<Vertex> {
 
     @Published var color: Color
     @Published var elementsColor: Color
+    var prechangePoint: CGPoint?
 
     var state: VertexState { model.state }
     var point: CGPoint { model.point }
@@ -36,5 +37,15 @@ extension VertexViewModel {
 
     func wasTapped() {
         send(.vertexSelected(vertex: model))
+    }
+
+    func wasMoved(newPoint: CGPoint) {
+        prechangePoint = prechangePoint ?? point
+        send(.vertexMoved(vertex: model, position: newPoint, finished: false))
+    }
+
+    func movingFinished(newPoint: CGPoint) {
+        prechangePoint = nil
+        send(.vertexMoved(vertex: model, position: newPoint, finished: true))
     }
 }

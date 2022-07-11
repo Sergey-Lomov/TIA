@@ -31,6 +31,7 @@ enum IngameViewEvent {
     case vertexGrowingFinished(vertex: Vertex)
     case vertexUngrowingFinished(vertex: Vertex)
     case vertexSelected(vertex: Vertex)
+    case vertexMoved(vertex: Vertex, position: CGPoint, finished: Bool)
 
     case edgeSeedExtensionPrepared(edge: Edge)
     case edgeGrowingPrepared(edge: Edge)
@@ -40,6 +41,7 @@ enum IngameViewEvent {
     case edgeUngrowingPrepared(edge: Edge)
     case edgeElementsUngrowed(edge: Edge)
     case edgeUngrowed(edge: Edge)
+    case edgeControlChanged(edge: Edge, point: ControlPoint, newValue: CGPoint, finished: Bool)
 
     case resourceMovedToGate(resource: Resource)
     case resourceDestroyingPrepared(resource: Resource)

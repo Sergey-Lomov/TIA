@@ -14,6 +14,7 @@ final class EdgeViewModel: IngameViewModel<Edge> {
     var gates: [EdgeGateViewModel]
     @Published var color: Color
     @Published var borderColor: Color
+    var prechangeCurve: BezierCurve?
 
     var curve: BezierCurve { model.curve }
     var state: EdgeState { model.state }
@@ -63,5 +64,15 @@ extension EdgeViewModel {
 
     func ungrowingFinished() {
         send(.edgeUngrowed(edge: model))
+    }
+
+    func controlChanged(point: ControlPoint, newValue: CGPoint) {
+        prechangeCurve = prechangeCurve ?? model.curve
+        send(.edgeControlChanged(edge: model, point: point, newValue: newValue, finished: false))
+    }
+
+    func controlChangingFinished(point: ControlPoint, newValue: CGPoint) {
+        prechangeCurve = nil
+        send(.edgeControlChanged(edge: model, point: point, newValue: newValue, finished: true))
     }
 }

@@ -68,7 +68,7 @@ class Vertex: ObservableObject, IdEqutable {
     var actions: [VertexAction] = []
 
     @Published var state: VertexState
-    var point: CGPoint
+    @Published var point: CGPoint
     var initialResources: [ResourceType]
 
     init(id: String, state: VertexState = .seed, point: CGPoint = .zero, resources: [ResourceType] = []) {

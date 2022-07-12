@@ -44,9 +44,7 @@ extension Path {
     }
 
     mutating func addCurve(_ curve: BezierCurve) {
-        if currentPoint != curve.from {
-            move(to: curve.from)
-        }
+        if currentPoint == nil { move(to: curve.from) }
         addCurve(to: curve.to, control1: curve.control1, control2: curve.control2)
     }
 }

@@ -40,7 +40,7 @@ extension JSONDecoder {
         return snakeCaseDecoder.decode(data, errorMessage: message)
     }
 
-    static func decodeLayout(adventureId: String, index: Int) -> AdventureLayout.Prototype {
+    static func decodeLayout(adventureId: String, index: Int) -> AdventureLayoutPrototype {
         let data = Data.layoutData(adventureId: adventureId, index: index)
         let message = "Error at parsing adventure layout json for adventure \"\(adventureId)\" index \(index)"
         return snakeCaseDecoder.decode(data, errorMessage: message)

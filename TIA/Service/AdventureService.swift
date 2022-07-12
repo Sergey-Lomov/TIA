@@ -47,8 +47,7 @@ final class AdventureService {
             let p1 = layout.edges[$0.id]?.p1 ?? from.point
             let p2 = layout.edges[$0.id]?.p2 ?? to.point
             let curve = BezierCurve(points: [from.point, p1, p2, to.point])
-            let id = $0.id + UUID().uuidString
-            let edge = Edge(id: id, from: from, to: to, price: $0.price, growOnStart: $0.growOnStart, curve: curve, theme: protoAdventure.theme)
+            let edge = Edge(originId: $0.id, from: from, to: to, price: $0.price, growOnStart: $0.growOnStart, curve: curve, theme: protoAdventure.theme)
             return edge
         }
 
@@ -58,8 +57,7 @@ final class AdventureService {
     private static func vertexFor(_ proto: VertexPrototype, layout: AdventureLayout) -> Vertex {
         let state: VertexState = proto.role == .entrance ? .active() : .seed
         let point = (layout.vertices[proto.id] ?? .zero)
-        let id = proto.id + UUID().uuidString
-        let vertex = Vertex(id: id, state: state, point: point, resources: proto.resources)
+        let vertex = Vertex(originId: proto.id, state: state, point: point, resources: proto.resources)
         return vertex
     }
 }

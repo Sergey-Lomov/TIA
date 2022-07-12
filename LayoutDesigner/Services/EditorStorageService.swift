@@ -44,6 +44,10 @@ final class EditorStorageService {
         UserDefaults.set(path, forKey: .layoutPath)
     }
 
+    static func clear(_ key: StorageKey) {
+        UserDefaults.standard.removeObject(forKey: key.rawValue)
+    }
+
     static func getScreenSize() -> ScreenSize? {
         let raw = UserDefaults.string(forKey: .screenSize)
         guard let raw = raw else { return nil }

@@ -63,7 +63,10 @@ enum VertexState: Equatable {
 }
 
 class Vertex: ObservableObject, IdEqutable {
-    var id: String
+    private let idSeparator = "|"
+
+    var uuid = UUID().uuidString // This is unique part of vertex id
+    var originId: String // This is valuable part of vertex id
     var onVisit: VertexAction?
     var actions: [VertexAction] = []
 
@@ -71,8 +74,10 @@ class Vertex: ObservableObject, IdEqutable {
     @Published var point: CGPoint
     var initialResources: [ResourceType]
 
-    init(id: String, state: VertexState = .seed, point: CGPoint = .zero, resources: [ResourceType] = []) {
-        self.id = id
+    var id: String { originId + idSeparator + uuid }
+
+    init(originId: String, state: VertexState = .seed, point: CGPoint = .zero, resources: [ResourceType] = []) {
+        self.originId = originId
         self.state = state
         self.point = point
         self.initialResources = resources

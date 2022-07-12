@@ -15,7 +15,7 @@ struct MissedAdventureView: View {
         VStack {
             Text(message)
             Button("Select adventure".localized()) {
-                NSOpenPanel.runJsonPanel() {
+                NSOpenPanel.runOpenJsonPanel() {
                     handleFileSelection(panel: $0)
                 }
             }

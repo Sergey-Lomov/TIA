@@ -9,7 +9,7 @@ import Foundation
 import AppKit
 
 extension NSOpenPanel {
-    static func runJsonPanel(_ completion: (NSOpenPanel) -> Void) {
+    static func runOpenJsonPanel(_ completion: (NSOpenPanel) -> Void) {
         let panel = NSOpenPanel()
         panel.allowsMultipleSelection = false
         panel.canChooseDirectories = false

@@ -19,7 +19,7 @@ extension JSONDecoder {
         decodeByPath(path)
     }
 
-    static func decodeLayout(_ path: String) -> AdventureLayout.Prototype? {
+    static func decodeLayout(_ path: String) -> AdventureLayoutPrototype? {
         decodeByPath(path)
     }
 

@@ -19,7 +19,7 @@ final class AdventureLayout {
         self.edges = edges
     }
 
-    convenience init(_ prototype: Prototype) {
+    convenience init(_ prototype: AdventureLayoutPrototype) {
         let vertices = prototype.vertices.reduce(into: [String: CGPoint]()) {
             $0[$1.id] = $1.point
         }
@@ -41,21 +41,5 @@ final class AdventureLayout {
             }
             edges[id] = (p1.translated(by: delta), p2.translated(by: delta))
         }
-    }
-
-    struct Prototype: Decodable {
-        struct Vertex: Decodable {
-            let id: String
-            let point: CGPoint
-        }
-
-        struct Edge: Decodable {
-            let id: String
-            let p1: CGPoint
-            let p2: CGPoint
-        }
-
-        let vertices: [Vertex]
-        let edges: [Edge]
     }
 }

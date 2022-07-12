@@ -15,7 +15,7 @@ struct MissedLayouteView: View {
         VStack {
             Text(message)
             Button("Select layout".localized()) {
-                NSOpenPanel.runJsonPanel {
+                NSOpenPanel.runOpenJsonPanel {
                     handleFileSelection(panel: $0)
                 }
             }

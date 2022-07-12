@@ -129,6 +129,9 @@
 		672792432806330100FEE07E /* truth1.json in Resources */ = {isa = PBXBuildFile; fileRef = 672792422806330100FEE07E /* truth1.json */; };
 		672792452806382800FEE07E /* AdventureViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 672792442806382800FEE07E /* AdventureViewModel.swift */; };
 		672792472806441300FEE07E /* EdgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 672792462806441300FEE07E /* EdgeView.swift */; };
+		67289C51287E0438001E8A10 /* AdventureLayoutPrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67289C50287E0438001E8A10 /* AdventureLayoutPrototype.swift */; };
+		67289C52287E04B8001E8A10 /* AdventureLayoutPrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67289C50287E0438001E8A10 /* AdventureLayoutPrototype.swift */; };
+		67289C54287E0840001E8A10 /* NSSavePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67289C53287E0840001E8A10 /* NSSavePanel.swift */; };
 		675E273A2809CD7A00FB5783 /* AdventureEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E27392809CD7A00FB5783 /* AdventureEngine.swift */; };
 		675E273C2809D98300FB5783 /* GameEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E273B2809D98300FB5783 /* GameEngine.swift */; };
 		675E273E2809E36800FB5783 /* SingleCurveShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E273D2809E36800FB5783 /* SingleCurveShape.swift */; };
@@ -150,8 +153,10 @@
 		675E276E280F39B500FB5783 /* CenteredGeometryReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E276D280F39B500FB5783 /* CenteredGeometryReader.swift */; };
 		675E2770280F6F0400FB5783 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E276F280F6F0400FB5783 /* ColorPalette.swift */; };
 		675E27F9281087E800FB5783 /* StatesAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E27F8281087E800FB5783 /* StatesAnimationView.swift */; };
+		6768CAF9287E3DA800E3A42F /* dark1_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 6768CAF8287E3DA800E3A42F /* dark1_1.json */; };
 		676CFBC0287C5A4000B96192 /* CustomFileCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 676CFBBF287C5A4000B96192 /* CustomFileCommands.swift */; };
 		676CFBC2287C5C4300B96192 /* NSOpenPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 676CFBC1287C5C4300B96192 /* NSOpenPanel.swift */; };
+		676DAEE3287E0084006EEDD8 /* JSONEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 676DAEE2287E0084006EEDD8 /* JSONEncoder.swift */; };
 		6771F8DB2851677500D7B742 /* ViewRedrawHandlerModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6771F8DA2851677500D7B742 /* ViewRedrawHandlerModifier.swift */; };
 		6771F8E12855021B00D7B742 /* DrawableCurvesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6771F8E02855021B00D7B742 /* DrawableCurvesView.swift */; };
 		6771F8E62855242000D7B742 /* VertexActionsIconsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6771F8E52855242000D7B742 /* VertexActionsIconsService.swift */; };
@@ -231,7 +236,7 @@
 		67B533982804ED6D00EA959A /* TIAPrototypingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B533972804ED6D00EA959A /* TIAPrototypingError.swift */; };
 		67B5339A2805B2B400EA959A /* AdventureLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B533992805B2B400EA959A /* AdventureLayout.swift */; };
 		67B5339D2805B5E200EA959A /* dark1.json in Resources */ = {isa = PBXBuildFile; fileRef = 67B5339C2805B5E200EA959A /* dark1.json */; };
-		67B533A12805BC0400EA959A /* dark1_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 67B533A02805BC0400EA959A /* dark1_1.json */; };
+		67B533A12805BC0400EA959A /* dark1_1v1.json in Resources */ = {isa = PBXBuildFile; fileRef = 67B533A02805BC0400EA959A /* dark1_1v1.json */; };
 		67B93A4B287B4B60009795F4 /* CurveControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B93A4A287B4B60009795F4 /* CurveControlsView.swift */; };
 		67BDE95328171112005B0194 /* ResourceShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BDE95228171112005B0194 /* ResourceShape.swift */; };
 		67BDE95B281712BC005B0194 /* ResourcePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BDE95A281712BC005B0194 /* ResourcePath.swift */; };
@@ -279,6 +284,8 @@
 		672792422806330100FEE07E /* truth1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = truth1.json; sourceTree = "<group>"; };
 		672792442806382800FEE07E /* AdventureViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureViewModel.swift; sourceTree = "<group>"; };
 		672792462806441300FEE07E /* EdgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeView.swift; sourceTree = "<group>"; };
+		67289C50287E0438001E8A10 /* AdventureLayoutPrototype.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureLayoutPrototype.swift; sourceTree = "<group>"; };
+		67289C53287E0840001E8A10 /* NSSavePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSSavePanel.swift; sourceTree = "<group>"; };
 		675E27392809CD7A00FB5783 /* AdventureEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureEngine.swift; sourceTree = "<group>"; };
 		675E273B2809D98300FB5783 /* GameEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameEngine.swift; sourceTree = "<group>"; };
 		675E273D2809E36800FB5783 /* SingleCurveShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleCurveShape.swift; sourceTree = "<group>"; };
@@ -300,8 +307,10 @@
 		675E276D280F39B500FB5783 /* CenteredGeometryReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteredGeometryReader.swift; sourceTree = "<group>"; };
 		675E276F280F6F0400FB5783 /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 		675E27F8281087E800FB5783 /* StatesAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatesAnimationView.swift; sourceTree = "<group>"; };
+		6768CAF8287E3DA800E3A42F /* dark1_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dark1_1.json; sourceTree = "<group>"; };
 		676CFBBF287C5A4000B96192 /* CustomFileCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFileCommands.swift; sourceTree = "<group>"; };
 		676CFBC1287C5C4300B96192 /* NSOpenPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSOpenPanel.swift; sourceTree = "<group>"; };
+		676DAEE2287E0084006EEDD8 /* JSONEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONEncoder.swift; sourceTree = "<group>"; };
 		6771F8DA2851677500D7B742 /* ViewRedrawHandlerModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewRedrawHandlerModifier.swift; sourceTree = "<group>"; };
 		6771F8E02855021B00D7B742 /* DrawableCurvesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawableCurvesView.swift; sourceTree = "<group>"; };
 		6771F8E52855242000D7B742 /* VertexActionsIconsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexActionsIconsService.swift; sourceTree = "<group>"; };
@@ -382,7 +391,7 @@
 		67B533972804ED6D00EA959A /* TIAPrototypingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIAPrototypingError.swift; sourceTree = "<group>"; };
 		67B533992805B2B400EA959A /* AdventureLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureLayout.swift; sourceTree = "<group>"; };
 		67B5339C2805B5E200EA959A /* dark1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = dark1.json; sourceTree = "<group>"; };
-		67B533A02805BC0400EA959A /* dark1_1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = dark1_1.json; sourceTree = "<group>"; };
+		67B533A02805BC0400EA959A /* dark1_1v1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = dark1_1v1.json; sourceTree = "<group>"; };
 		67B93A4A287B4B60009795F4 /* CurveControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurveControlsView.swift; sourceTree = "<group>"; };
 		67BDE95228171112005B0194 /* ResourceShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceShape.swift; sourceTree = "<group>"; };
 		67BDE95A281712BC005B0194 /* ResourcePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourcePath.swift; sourceTree = "<group>"; };
@@ -441,9 +450,11 @@
 			isa = PBXGroup;
 			children = (
 				6706786F287B1AED00ED0899 /* JSONDecoder.swift */,
+				676DAEE2287E0084006EEDD8 /* JSONEncoder.swift */,
 				67067873287B208C00ED0899 /* AdventureLayoutExtension.swift */,
 				677C8E69287C36B600A50B51 /* UserDefaults.swift */,
 				676CFBC1287C5C4300B96192 /* NSOpenPanel.swift */,
+				67289C53287E0840001E8A10 /* NSSavePanel.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -481,7 +492,8 @@
 				6791A8F0286CAEAF00231BFA /* sd1_1.json */,
 				6791A8EE286CAEAF00231BFA /* sd2_1.json */,
 				6791A8EF286CAEAF00231BFA /* sd3_1.json */,
-				67B533A02805BC0400EA959A /* dark1_1.json */,
+				6768CAF8287E3DA800E3A42F /* dark1_1.json */,
+				67B533A02805BC0400EA959A /* dark1_1v1.json */,
 				6791A905286E58B000231BFA /* light1_1.json */,
 			);
 			path = Layouts;
@@ -694,6 +706,8 @@
 				67B533972804ED6D00EA959A /* TIAPrototypingError.swift */,
 				6771F8F728592A3300D7B742 /* DrawableCurve.swift */,
 				67811BC928688F2100861ADA /* CameraViewModel.swift */,
+				67B533992805B2B400EA959A /* AdventureLayout.swift */,
+				67289C50287E0438001E8A10 /* AdventureLayoutPrototype.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -753,7 +767,6 @@
 			children = (
 				675E2753280DA0CB00FB5783 /* Views */,
 				675E2743280B4BAF00FB5783 /* ViewModels */,
-				67B533992805B2B400EA959A /* AdventureLayout.swift */,
 			);
 			path = Adventure;
 			sourceTree = "<group>";
@@ -897,6 +910,7 @@
 				670F9C3C28735BEB00E84836 /* sl1.json in Resources */,
 				670F9C4028735BFA00E84836 /* sl2_1.json in Resources */,
 				670F9C3B28735BEB00E84836 /* sl2.json in Resources */,
+				6768CAF9287E3DA800E3A42F /* dark1_1.json in Resources */,
 				6727922C2805C2C000FEE07E /* scenario.json in Resources */,
 				6791A8EB286CAEA100231BFA /* sd1.json in Resources */,
 				6791A8EC286CAEA100231BFA /* sd2.json in Resources */,
@@ -911,7 +925,7 @@
 				670F9C3F28735BFA00E84836 /* sl1_1.json in Resources */,
 				672792432806330100FEE07E /* truth1.json in Resources */,
 				6791A8F2286CAEAF00231BFA /* sd3_1.json in Resources */,
-				67B533A12805BC0400EA959A /* dark1_1.json in Resources */,
+				67B533A12805BC0400EA959A /* dark1_1v1.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -949,6 +963,7 @@
 				670F9C7B2874650900E84836 /* CameraViewModel.swift in Sources */,
 				670F9C6E2874636300E84836 /* AdventureLayout.swift in Sources */,
 				670F9C732874639200E84836 /* EdgeGate.swift in Sources */,
+				676DAEE3287E0084006EEDD8 /* JSONEncoder.swift in Sources */,
 				67067862287AF7BA00ED0899 /* EditorViewModel.swift in Sources */,
 				670F9C632874635C00E84836 /* EdgeGateViewModel.swift in Sources */,
 				670F9C722874639200E84836 /* AdventureLayer.swift in Sources */,
@@ -996,6 +1011,7 @@
 				670F9CC12874686500E84836 /* ResourceStateHandler.swift in Sources */,
 				670F9C9A2874678F00E84836 /* Bundle.swift in Sources */,
 				670F9C5C2874635300E84836 /* EdgeView.swift in Sources */,
+				67289C52287E04B8001E8A10 /* AdventureLayoutPrototype.swift in Sources */,
 				670F9C992874678F00E84836 /* Array.swift in Sources */,
 				676CFBC2287C5C4300B96192 /* NSOpenPanel.swift in Sources */,
 				670F9C76287464B500E84836 /* PlayerMetastate.swift in Sources */,
@@ -1029,6 +1045,7 @@
 				670F9CA52874678F00E84836 /* DecodingError.swift in Sources */,
 				670F9C662874635C00E84836 /* EyeViewModel.swift in Sources */,
 				670F9CB1287467E000E84836 /* DrawableCurvesView.swift in Sources */,
+				67289C54287E0840001E8A10 /* NSSavePanel.swift in Sources */,
 				677C8E6A287C36B600A50B51 /* UserDefaults.swift in Sources */,
 				670F9C682874635C00E84836 /* EdgeViewMetastate.swift in Sources */,
 				670F9C8B2874677500E84836 /* Closures.swift in Sources */,
@@ -1112,6 +1129,7 @@
 				67A3DD5A2821DD2F00B5A88F /* PlayerMetastate.swift in Sources */,
 				6771F8F828592A3300D7B742 /* DrawableCurve.swift in Sources */,
 				67B5335927FF95AC00EA959A /* Vertex.swift in Sources */,
+				67289C51287E0438001E8A10 /* AdventureLayoutPrototype.swift in Sources */,
 				675E2760280E2FC500FB5783 /* EngineEvent.swift in Sources */,
 				67B5336428007C1400EA959A /* ScenarioService.swift in Sources */,
 				675E2750280C8C2F00FB5783 /* PointerWrapper.swift in Sources */,

@@ -58,8 +58,10 @@ enum EdgeState: Equatable {
 class Edge: ObservableObject, IdEqutable {
     private let curveLengthSteps: Int = 100
     private let seedCurveDelta: CGFloat = 0.1
+    private let idSeparator = "|"
 
-    let id: String
+    var uuid = UUID().uuidString // This is unique part of vertex id
+    var originId: String // This is valuable part of vertex id
     var from: Vertex
     var to: Vertex
     var gates: [EdgeGate] = []
@@ -70,11 +72,13 @@ class Edge: ObservableObject, IdEqutable {
     var pregrowingCurve: BezierCurve
     var curve: BezierCurve
 
+    var id: String { originId + idSeparator + uuid }
+
     func length(_ geometry: GeometryProxy) -> CGFloat {
         curve.scaled(geometry).length(stepsCount: curveLengthSteps)
     }
 
-    init(id: String,
+    init(originId: String,
          from: Vertex,
          to: Vertex,
          price: [ResourceType] = [],
@@ -82,7 +86,7 @@ class Edge: ObservableObject, IdEqutable {
          state: EdgeState = .seed(phase: .compressed),
          curve: BezierCurve,
          theme: AdventureTheme) {
-        self.id = id
+        self.originId = originId
         self.from = from
         self.to = to
         self.growOnStart = growOnStart

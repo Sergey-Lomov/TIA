@@ -38,8 +38,8 @@ final class IngameMenuService {
         let radius = Layout.Menu.radius
         for item in items {
             let point = CGPoint(center: source.point, angle: angle, radius: radius)
-            let id = vertexIdPrefix + item.rawValue + UUID().uuidString
-            let vertex = Vertex(id: id, state: .seed, point: point)
+            let id = vertexIdPrefix + item.rawValue
+            let vertex = Vertex(originId: id, state: .seed, point: point)
             vertex.actions = item.actions
             vertex.onVisit = item.onVisit
             vertices.append(vertex)
@@ -55,7 +55,7 @@ final class IngameMenuService {
             let line = BezierCurve.line(from: source.point, to: vertex.point)
             let edgeCurve = theme == .light ? line : curve
             let id = edgeIdPrefix + vertex.id
-            let edge = Edge(id: id, from: source, to: vertex, growOnStart: true, curve: edgeCurve, theme: theme)
+            let edge = Edge(originId: id, from: source, to: vertex, growOnStart: true, curve: edgeCurve, theme: theme)
             edges.append(edge)
         }
 

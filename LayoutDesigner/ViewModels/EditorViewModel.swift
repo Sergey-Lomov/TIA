@@ -46,6 +46,11 @@ class EditorViewModel: ObservableObject {
         adventurePrototype = JSONDecoder.decodeAdventure(path)
         if adventurePrototype != nil {
             EditorStorageService.setAdventurePath(path)
+        } else {
+            layout = nil
+            adventureEngine = nil
+            EditorStorageService.clear(.layoutPath)
+            EditorStorageService.clear(.adventurePath)
         }
     }
 
@@ -54,11 +59,28 @@ class EditorViewModel: ObservableObject {
               let layoutPrototype = JSONDecoder.decodeLayout(path) else {
             layout = nil
             adventureEngine = nil
+            EditorStorageService.clear(.layoutPath)
             return
         }
 
         applyLayout(AdventureLayout(layoutPrototype))
         EditorStorageService.setLayoutPath(path)
+    }
+
+    func currentStateLayout() -> AdventureLayout? {
+        guard let adventure = adventureEngine?.adventure else { return nil }
+        let initialLayer = adventure.layers.first { $0.type == .initial }
+        guard let layer = initialLayer else { return nil }
+
+        let vertices = layer.vertices.reduce(into: [String: CGPoint]()) {
+            $0[$1.originId] = $1.point
+        }
+        typealias EdgesType = [String: AdventureLayout.Controls]
+        let edges = layer.edges.reduce(into: EdgesType()) {
+            $0[$1.originId] = (p1: $1.curve.p1, p2: $1.curve.p2)
+        }
+
+        return AdventureLayout(vertices: vertices, edges: edges)
     }
 }
 

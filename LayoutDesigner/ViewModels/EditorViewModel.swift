@@ -40,18 +40,27 @@ class EditorViewModel: ObservableObject {
 
     func loadAdventure(_ path: String?) {
         guard let path = path else {
-            adventurePrototype = nil
+            clearAdventure()
             return
         }
+
         adventurePrototype = JSONDecoder.decodeAdventure(path)
         if adventurePrototype != nil {
-            EditorStorageService.setAdventurePath(path)
-        } else {
-            layout = nil
             adventureEngine = nil
+            layout = nil
+            EditorStorageService.setAdventurePath(path)
             EditorStorageService.clear(.layoutPath)
-            EditorStorageService.clear(.adventurePath)
+        } else {
+            clearAdventure()
         }
+    }
+
+    func clearAdventure() {
+        adventureEngine = nil
+        adventurePrototype = nil
+        layout = nil
+        EditorStorageService.clear(.layoutPath)
+        EditorStorageService.clear(.adventurePath)
     }
 
     func loadLayout(_ path: String?) {

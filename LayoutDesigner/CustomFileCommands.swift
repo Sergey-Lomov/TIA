@@ -10,7 +10,6 @@ import SwiftUI
 
 struct CustomFileCommands: Commands {
     @ObservedObject var editor: EditorViewModel
-    @State var menuUpdater: Bool = false
 
     var body: some Commands {
         CommandGroup(replacing: CommandGroupPlacement.newItem) {
@@ -18,9 +17,14 @@ struct CustomFileCommands: Commands {
                 openAdventure()
             }
 
+            Button("Clear adventure".localized()) {
+                editor.clearAdventure()
+            }
+
+            Divider()
             Button("Open layout".localized()) {
                 openLayout()
-            }
+            }.disabled(editor.adventurePrototype == nil)
 
             Button("Generate layout".localized()) {
                 generateLayout()
@@ -75,9 +79,9 @@ struct CustomFileCommands: Commands {
             return
         }
 
+        editor.layout = layout
         let protoLayout = AdventureLayoutPrototype(layout)
         JSONEncoder.encodeLayout(protoLayout, into: path)
         EditorStorageService.setLayoutPath(path)
-        menuUpdater.toggle()
     }
 }

@@ -14,8 +14,7 @@ struct AdventureView: View {
 
     var body: some View {
         CenteredGeometryReader {
-            adventure.background
-                .edgesIgnoringSafeArea(.all)
+            AdventureBackgroundView(adventure: adventure)
 
             ZStack {
                 ForEach(adventure.layers, id: \.id) { layer in

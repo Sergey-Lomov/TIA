@@ -30,6 +30,19 @@ struct CameraState {
     static func == (lhs: CameraState, rhs: CameraState) -> Bool {
         lhs.angle == rhs.angle && lhs.zoom == rhs.zoom && lhs.center == rhs.center
     }
+
+    func translated(_ translation: CGPoint) -> CameraState {
+        CameraState(center: center.translated(by: translation), zoom: zoom, angle: angle)
+    }
+
+    func zoomed(_ scale: CGFloat) -> CameraState {
+        CameraState(center: center, zoom: zoom * scale, angle: angle)
+    }
+
+    func zoomNormalized(_ minZoom: CGFloat, _ maxZoom: CGFloat) -> CameraState {
+        let zoom = min(maxZoom, max(minZoom, zoom))
+        return CameraState(center: center, zoom: zoom, angle: angle)
+    }
 }
 
 private struct TransferStep {
@@ -43,10 +56,11 @@ final class CameraViewModel: ObservableObject {
     @Published var state: CameraState
     @Published var anchorState: CameraState
     @Published var animation: Animation = .none
-    var immideatelyUpdate: Bool = true
+    var immideatelyUpdate = true
     var completion: Action?
 
-    private var transferInProgress: Bool = true
+    var transferInProgress = true
+    var manuallyControlled = false
     private var steps: [TransferStep] = []
 
     init(state: CameraState) {
@@ -58,6 +72,8 @@ final class CameraViewModel: ObservableObject {
                     animation: Animation = .none,
                     anchorAnimation: AnchorAnimation = .dynamic,
                     completion: Action? = nil) {
+        guard !manuallyControlled else { return }
+
         self.completion = completion
         steps = []
 

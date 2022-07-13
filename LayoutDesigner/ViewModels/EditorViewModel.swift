@@ -8,11 +8,14 @@
 import Foundation
 
 class EditorViewModel: ObservableObject {
+    private let zoomStep: CGFloat = 2
+
     @Published var screenSize: ScreenSize
     @Published var adventurePrototype: AdventurePrototype?
     @Published var adventureEngine: AdventureEngine?
 
     var layout: AdventureLayout?
+    var cameraPublisher = CameraControlPublisher()
 
     init () {
         screenSize = EditorStorageService.getScreenSize() ?? .iPhone12
@@ -97,5 +100,24 @@ extension EditorViewModel: AdventureLayoutProvider {
     func getLayout(_ adventure: AdventurePrototype) -> AdventureLayout {
         if let layout = layout { return layout }
         return AdventureLayout.autolayout(for: adventure)
+    }
+}
+
+// MARK: Commands handling
+extension EditorViewModel {
+    func resetCamera() {
+        cameraPublisher.send(.reset)
+    }
+
+    func zoomTo(_ zoom: CGFloat) {
+        cameraPublisher.send(.setZoom(zoom))
+    }
+
+    func zoomIn() {
+        cameraPublisher.send(.multiplyZoom(zoomStep))
+    }
+
+    func zoomOut() {
+        cameraPublisher.send(.multiplyZoom(1 / zoomStep))
     }
 }

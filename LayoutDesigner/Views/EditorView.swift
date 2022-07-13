@@ -8,38 +8,39 @@
 import SwiftUI
 
 struct EditorView: View {
-    @ObservedObject var model: EditorViewModel
+    @ObservedObject var editor: EditorViewModel
 
     var body: some View {
         ZStack {
-            if model.adventurePrototype == nil {
-                MissedAdventureView(editorModel: model)
+            if editor.adventurePrototype == nil {
+                MissedAdventureView(editorModel: editor)
             } else {
-                if model.adventureEngine == nil {
-                    MissedLayouteView(editorModel: model)
+                if editor.adventureEngine == nil {
+                    MissedLayouteView(editorModel: editor)
                 }
             }
 
             if let adventureModel = adventureViewModel {
                 AdventureView(adventure: adventureModel)
             }
-        }.frame(size: model.screenSize.size)
+        }.frame(size: editor.screenSize.size)
     }
 
     var adventureViewModel: AdventureViewModel? {
-        let adventure = model.adventureEngine?.adventure
-        let resources = model.adventureEngine?.resources
-        let player = model.adventureEngine?.player
+        let adventure = editor.adventureEngine?.adventure
+        let resources = editor.adventureEngine?.resources
+        let player = editor.adventureEngine?.player
         guard let adventure = adventure, let player = player, let resources = resources else {
                return nil
            }
 
-        let cameraService = CameraService(safe: model.screenSize.size, full: model.screenSize.size)
+        let cameraService = CameraService(safe: editor.screenSize.size, full: editor.screenSize.size)
         return .init(adventure,
                      cameraService: cameraService,
                      player: player,
                      resources: resources,
-                     listener: model.adventureEngine,
-                     eventsSource: model.adventureEngine)
+                     listener: editor.adventureEngine,
+                     eventsSource: editor.adventureEngine,
+                     cameraPublisher: editor.cameraPublisher)
     }
 }

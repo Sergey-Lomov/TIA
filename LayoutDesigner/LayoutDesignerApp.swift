@@ -9,14 +9,15 @@ import SwiftUI
 
 @main
 struct LayoutDesignerApp: App {
-    @ObservedObject var editorModel = EditorViewModel()
+    @ObservedObject var editor = EditorViewModel()
 
     var body: some Scene {
         WindowGroup {
-            EditorView(model: editorModel)
+            EditorView(editor: editor)
         }.commands {
-            CustomFileCommands(editor: editorModel)
-            LayoutDesignerCommands(screenSize: $editorModel.screenSize)
+            CustomFileCommands(editor: editor)
+            CameraCommands(editor: editor)
+            LayoutDesignerCommands(screenSize: $editor.screenSize)
         }
     }
 }

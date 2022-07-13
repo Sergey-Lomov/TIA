@@ -16,25 +16,30 @@ protocol ViewModelsProvider: AnyObject {
 
 final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEventsListener {
 
+    private let minZoom: CGFloat = 0.2
+    private let maxZoom: CGFloat = 5
+
     private var subscriptions: [AnyCancellable] = []
     private var currentLayerSubscriptions: [AnyCancellable] = []
     let eventsPublisher: ViewEventsPublisher
 
     private var cameraService: CameraService
+    @Transpublished var camera: CameraViewModel
+    private var prechangeCamera: CameraState?
 
     var model: Adventure
     var player: PlayerViewModel
     @Published var layers: [AdventureLayerViewModel]
     @Published var resources: [ResourceViewModel]
     @Published var background: Color
-    @Transpublished var camera: CameraViewModel
 
     init(_ adventure: Adventure,
          cameraService: CameraService,
          player: Player,
          resources: [Resource],
          listener: ViewEventsListener?,
-         eventsSource: EngineEventsSource?) {
+         eventsSource: EngineEventsSource?,
+         cameraPublisher: CameraControlPublisher? = nil) {
         let palette = ColorPalette.paletteFor(adventure.theme)
         let publisher = ViewEventsPublisher()
 
@@ -80,6 +85,12 @@ final class AdventureViewModel: ObservableObject, ViewEventsSource, EngineEvents
         }
         subscriptions.sink(adventure.$currentLayer) { [weak self] layer in
             self?.handleCurrentLayerChange(layer)
+        }
+
+        if let cameraPublisher = cameraPublisher {
+            subscriptions.sink(cameraPublisher) { [weak self] event in
+                self?.camera.handleControlEvent(event)
+            }
         }
     }
 
@@ -221,7 +232,42 @@ extension AdventureViewModel: ViewModelsProvider {
 
 // MARK: View interaction methods
 extension AdventureViewModel {
+
     func viewInitCompleted() {
         eventsPublisher.send(.viewInitFinished)
+    }
+
+    func cameraDragged(_ translation: CGPoint) {
+        guard !camera.transferInProgress else { return }
+        camera.manuallyControlled = true
+        let initState = prechangeCamera ?? camera.state
+        camera.state = initState.translated(translation)
+        prechangeCamera = initState
+    }
+
+    func cameraDraggingFinished(_ translation: CGPoint) {
+        guard let initState = prechangeCamera else { return }
+        prechangeCamera = nil
+        camera.state = initState.translated(translation)
+        camera.manuallyControlled = false
+    }
+
+    func cameraMagnified(_ scale: CGFloat) {
+        guard !camera.transferInProgress else { return }
+        camera.manuallyControlled = true
+        prechangeCamera = prechangeCamera ?? camera.state
+        applyCameraZooming(scale)
+    }
+
+    func cameraMagnificationFinished(_ scale: CGFloat) {
+        applyCameraZooming(scale)
+        prechangeCamera = nil
+        camera.manuallyControlled = false
+    }
+
+    private func applyCameraZooming(_ scale: CGFloat) {
+        guard let initState = prechangeCamera else { return }
+        let zoomed = initState.zoomed(scale)
+        camera.state = zoomed.zoomNormalized(minZoom, maxZoom)
     }
 }

@@ -20,6 +20,7 @@ struct AdventureLayerBackground: View {
                 handleAnimationCompletion()
             }
             .animation(animation, value: opacity)
+            .allowsHitTesting(false)
     }
 
     #if os(iOS)

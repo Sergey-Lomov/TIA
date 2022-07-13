@@ -35,6 +35,10 @@ extension CGSize {
     func devided(_ mult: CGSize) -> CGSize {
         CGSize(width: width / mult.width, height: height / mult.height)
     }
+
+    func toPoint() -> CGPoint {
+        CGPoint(x: width, y: height)
+    }
 }
 
 extension CGSize: VectorArithmetic {

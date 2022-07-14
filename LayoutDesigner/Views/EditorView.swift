@@ -22,6 +22,7 @@ struct EditorView: View {
 
             if let adventureModel = adventureViewModel {
                 AdventureView(adventure: adventureModel)
+                    .environmentObject(editor.config)
             }
         }.frame(size: editor.screenSize.size)
     }

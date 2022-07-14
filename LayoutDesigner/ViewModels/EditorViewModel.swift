@@ -6,9 +6,18 @@
 //
 
 import Foundation
+import SwiftUI
+import Combine
+
+class EditorConfig: ObservableObject {
+    @Published var selectedEdgeColor: Color = .clear
+}
+
 
 class EditorViewModel: ObservableObject {
     private let zoomStep: CGFloat = 2
+
+    private var subscriptions: [AnyCancellable] = []
 
     @Published var screenSize: ScreenSize
     @Published var adventurePrototype: AdventurePrototype?
@@ -16,6 +25,7 @@ class EditorViewModel: ObservableObject {
 
     var layout: AdventureLayout?
     var cameraPublisher = CameraControlPublisher()
+    var config = EditorConfig()
 
     init () {
         screenSize = EditorStorageService.getScreenSize() ?? .iPhone12
@@ -33,6 +43,10 @@ class EditorViewModel: ObservableObject {
         }
         let layout = AdventureLayout(protoLayout)
         self.applyLayout(layout)
+
+        subscriptions.sink($adventurePrototype) { [weak self] proto in
+            self?.config.selectedEdgeColor = proto?.theme.selectionColor ?? .clear
+        }
     }
 
     func applyLayout(_ layout: AdventureLayout) {

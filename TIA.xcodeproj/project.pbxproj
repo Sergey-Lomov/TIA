@@ -159,6 +159,7 @@
 		6768CAFF287F81AF00E3A42F /* CameraCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6768CAFE287F81AF00E3A42F /* CameraCommands.swift */; };
 		6768CB01287F8C7C00E3A42F /* CameraControlEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6768CB00287F8C7C00E3A42F /* CameraControlEvents.swift */; };
 		6768CB02287F8C7C00E3A42F /* CameraControlEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6768CB00287F8C7C00E3A42F /* CameraControlEvents.swift */; };
+		6768CB0728802DAF00E3A42F /* AdventureThemeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6768CB0628802DAF00E3A42F /* AdventureThemeExtension.swift */; };
 		676CFBC0287C5A4000B96192 /* CustomFileCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 676CFBBF287C5A4000B96192 /* CustomFileCommands.swift */; };
 		676CFBC2287C5C4300B96192 /* NSOpenPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 676CFBC1287C5C4300B96192 /* NSOpenPanel.swift */; };
 		676DAEE3287E0084006EEDD8 /* JSONEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 676DAEE2287E0084006EEDD8 /* JSONEncoder.swift */; };
@@ -316,6 +317,7 @@
 		6768CAFA287EE38400E3A42F /* AdventureBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureBackgroundView.swift; sourceTree = "<group>"; };
 		6768CAFE287F81AF00E3A42F /* CameraCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCommands.swift; sourceTree = "<group>"; };
 		6768CB00287F8C7C00E3A42F /* CameraControlEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraControlEvents.swift; sourceTree = "<group>"; };
+		6768CB0628802DAF00E3A42F /* AdventureThemeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureThemeExtension.swift; sourceTree = "<group>"; };
 		676CFBBF287C5A4000B96192 /* CustomFileCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFileCommands.swift; sourceTree = "<group>"; };
 		676CFBC1287C5C4300B96192 /* NSOpenPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSOpenPanel.swift; sourceTree = "<group>"; };
 		676DAEE2287E0084006EEDD8 /* JSONEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONEncoder.swift; sourceTree = "<group>"; };
@@ -463,6 +465,7 @@
 				677C8E69287C36B600A50B51 /* UserDefaults.swift */,
 				676CFBC1287C5C4300B96192 /* NSOpenPanel.swift */,
 				67289C53287E0840001E8A10 /* NSSavePanel.swift */,
+				6768CB0628802DAF00E3A42F /* AdventureThemeExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1020,6 +1023,7 @@
 				670F9CA82874678F00E84836 /* Animation.swift in Sources */,
 				670F9C672874635C00E84836 /* EdgeViewModel.swift in Sources */,
 				670F9CA02874678F00E84836 /* Path.swift in Sources */,
+				6768CB0728802DAF00E3A42F /* AdventureThemeExtension.swift in Sources */,
 				670F9CB0287467E000E84836 /* ComplexCurveShape.swift in Sources */,
 				670F9C812874677000E84836 /* VertexSurroundingService.swift in Sources */,
 				670F9C852874677000E84836 /* IngameMenuService.swift in Sources */,

@@ -30,7 +30,7 @@ struct AdventureIconWrapper: View {
                 }
 
             if isSelected {
-                Color.clear.preference(key: SelectedAdventurePreferenceKey.self, value: model.model)
+                Color.clear.preference(key: SelectedAdventureKey.self, value: model.model)
             }
         }
     }

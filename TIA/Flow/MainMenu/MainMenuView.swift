@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SelectedAdventurePreferenceKey: PreferenceKey {
+struct SelectedAdventureKey: PreferenceKey {
     static var defaultValue: AdventureDescriptor?
 
     static func reduce(value: inout AdventureDescriptor?, nextValue: () -> AdventureDescriptor?) {
@@ -30,7 +30,7 @@ struct MainMenuView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .applyCamera(model.camera)
-        .onPreferenceChange(SelectedAdventurePreferenceKey.self) { descriptor in
+        .onPreferenceChange(SelectedAdventureKey.self) { descriptor in
             if let descriptor = descriptor {
                 model.adventureSelected(descriptor)
             }

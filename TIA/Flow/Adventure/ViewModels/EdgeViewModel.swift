@@ -12,9 +12,11 @@ import Combine
 final class EdgeViewModel: IngameViewModel<Edge> {
 
     var gates: [EdgeGateViewModel]
+    var prechangeCurve: BezierCurve?
+
     @Published var color: Color
     @Published var borderColor: Color
-    var prechangeCurve: BezierCurve?
+    @Published var isEditing: Bool = false
 
     var curve: BezierCurve { model.curve }
     var state: EdgeState { model.state }

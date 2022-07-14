@@ -25,6 +25,11 @@ struct EdgeWrapper: View {
             // Metastate stroing is a trick for fix unnecessary handling of updated state
             handleViewRedraw(metastate)
         }
+        #if EDITOR
+        .onTapGesture {
+            edge.isEditing.toggle()
+        }
+        #endif
     }
 
     private func handleViewRedraw(_ metastate: EdgeViewMetastate) {
@@ -47,6 +52,9 @@ struct EdgePathView: View {
     private static let intersectionAccuracy: CGFloat = 5
 
     @ObservedObject var edge: EdgeViewModel
+    #if EDITOR
+    @EnvironmentObject var editorConfig: EditorConfig
+    #endif
 
     var body: some View {
         CenteredGeometryReader { geometry in
@@ -58,7 +66,7 @@ struct EdgePathView: View {
                 .trim(from: 0, to: progress)
                 .stroke(lineWidth: Layout.Edge.undrelineWidth)
                 .animation(animation, value: progress)
-                .foregroundColor(edge.borderColor)
+                .foregroundColor(borderColor)
 
             // Line
             let metastate = edge.metastate
@@ -71,9 +79,6 @@ struct EdgePathView: View {
                 }
                 .animation(animation, value: progress)
                 .foregroundColor(edge.color)
-                .onTapGesture {
-                    print("tapper")
-                }
 
             // Connectors
             if edge.metastate.fromConnectorVisible {
@@ -97,7 +102,9 @@ struct EdgePathView: View {
             }
 
             #if EDITOR
-            CurveControlsView(edge: edge)
+            if edge.isEditing {
+                CurveControlsView(edge: edge)
+            }
             #endif
         }
     }
@@ -109,6 +116,14 @@ struct EdgePathView: View {
         default:
             return edge.curve
         }
+    }
+
+    private var borderColor: Color {
+        #if EDITOR
+        edge.isEditing ? editorConfig.selectedEdgeColor : edge.borderColor
+        #else
+        edge.borderColor
+        #endif
     }
 
     private func progress(_ geometry: GeometryProxy) -> CGFloat {

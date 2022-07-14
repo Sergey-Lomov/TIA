@@ -13,6 +13,7 @@ struct CurveControlsView: View {
     private let controlStyle = StrokeStyle(lineWidth: 2, dash: [10, 10])
 
     @ObservedObject var edge: EdgeViewModel
+    @EnvironmentObject var editorConfig: EditorConfig
 
     var body: some View {
         CenteredGeometryReader { geometry in
@@ -51,7 +52,7 @@ struct CurveControlsView: View {
                         }
                     )
         }
-        .foregroundColor(edge.color)
+        .foregroundColor(editorConfig.selectedEdgeColor)
     }
 
     func handleUpdate(_ geometry: GeometryProxy, _ translation: CGSize, point: ControlPoint, finished: Bool) {

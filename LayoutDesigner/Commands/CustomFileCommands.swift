@@ -36,7 +36,9 @@ struct CustomFileCommands: Commands {
 
             Button("Save layout as".localized()) {
                 saveLayoutAs()
-            }.disabled(editor.adventureEngine == nil)
+            }
+            .disabled(editor.adventureEngine == nil)
+            .keyboardShortcut("S", modifiers: .command)
         }
     }
 

@@ -60,7 +60,6 @@
 		670F9C7A287464BC00E84836 /* BezierCurve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B533802803868500EA959A /* BezierCurve.swift */; };
 		670F9C7B2874650900E84836 /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67811BC928688F2100861ADA /* CameraViewModel.swift */; };
 		670F9C7E2874674300E84836 /* DrawableCurve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6771F8F728592A3300D7B742 /* DrawableCurve.swift */; };
-		670F9C7F2874674600E84836 /* TIAPrototypingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B533972804ED6D00EA959A /* TIAPrototypingError.swift */; };
 		670F9C802874677000E84836 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EDAC6028201BFF00EA41CF /* Math.swift */; };
 		670F9C812874677000E84836 /* VertexSurroundingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EDAC26281CA01F00EA41CF /* VertexSurroundingService.swift */; };
 		670F9C822874677000E84836 /* CacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6791A91A2871CABA00231BFA /* CacheService.swift */; };
@@ -153,7 +152,6 @@
 		675E276E280F39B500FB5783 /* CenteredGeometryReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E276D280F39B500FB5783 /* CenteredGeometryReader.swift */; };
 		675E2770280F6F0400FB5783 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E276F280F6F0400FB5783 /* ColorPalette.swift */; };
 		675E27F9281087E800FB5783 /* StatesAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675E27F8281087E800FB5783 /* StatesAnimationView.swift */; };
-		6768CAF9287E3DA800E3A42F /* dark1_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 6768CAF8287E3DA800E3A42F /* dark1_1.json */; };
 		6768CAFB287EE38400E3A42F /* AdventureBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6768CAFA287EE38400E3A42F /* AdventureBackgroundView.swift */; };
 		6768CAFC287EED5700E3A42F /* AdventureBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6768CAFA287EE38400E3A42F /* AdventureBackgroundView.swift */; };
 		6768CAFF287F81AF00E3A42F /* CameraCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6768CAFE287F81AF00E3A42F /* CameraCommands.swift */; };
@@ -239,16 +237,18 @@
 		67B533892804CB8E00EA959A /* AdventureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B533882804CB8E00EA959A /* AdventureView.swift */; };
 		67B5338B2804CC4500EA959A /* VertexView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B5338A2804CC4500EA959A /* VertexView.swift */; };
 		67B533962804EC6000EA959A /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B533952804EC6000EA959A /* Array.swift */; };
-		67B533982804ED6D00EA959A /* TIAPrototypingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B533972804ED6D00EA959A /* TIAPrototypingError.swift */; };
 		67B5339A2805B2B400EA959A /* AdventureLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B533992805B2B400EA959A /* AdventureLayout.swift */; };
 		67B5339D2805B5E200EA959A /* dark1.json in Resources */ = {isa = PBXBuildFile; fileRef = 67B5339C2805B5E200EA959A /* dark1.json */; };
-		67B533A12805BC0400EA959A /* dark1_1v1.json in Resources */ = {isa = PBXBuildFile; fileRef = 67B533A02805BC0400EA959A /* dark1_1v1.json */; };
 		67B93A4B287B4B60009795F4 /* CurveControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B93A4A287B4B60009795F4 /* CurveControlsView.swift */; };
 		67BDE95328171112005B0194 /* ResourceShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BDE95228171112005B0194 /* ResourceShape.swift */; };
 		67BDE95B281712BC005B0194 /* ResourcePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BDE95A281712BC005B0194 /* ResourcePath.swift */; };
 		67BDE95D2817E841005B0194 /* ResourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BDE95C2817E841005B0194 /* ResourceView.swift */; };
 		67BDE95F2817E879005B0194 /* ResourceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BDE95E2817E879005B0194 /* ResourceViewModel.swift */; };
 		67BDE961281833D5005B0194 /* LayoutConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BDE960281833D5005B0194 /* LayoutConstants.swift */; };
+		67BF76F5288DB10300680C78 /* dark1_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 67BF76F1288DB10300680C78 /* dark1_3.json */; };
+		67BF76F6288DB10300680C78 /* dark1_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 67BF76F2288DB10300680C78 /* dark1_4.json */; };
+		67BF76F7288DB10300680C78 /* dark1_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 67BF76F3288DB10300680C78 /* dark1_1.json */; };
+		67BF76FA288DB29100680C78 /* dark1_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 67BF76F9288DB29100680C78 /* dark1_2.json */; };
 		67E4DD412812DF9D00F05D87 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E4DD402812DF9D00F05D87 /* Player.swift */; };
 		67EDAC27281CA01F00EA41CF /* VertexSurroundingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EDAC26281CA01F00EA41CF /* VertexSurroundingService.swift */; };
 		67EDAC5F281F3E2200EA41CF /* AnimationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EDAC5E281F3E2200EA41CF /* AnimationService.swift */; };
@@ -313,7 +313,6 @@
 		675E276D280F39B500FB5783 /* CenteredGeometryReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenteredGeometryReader.swift; sourceTree = "<group>"; };
 		675E276F280F6F0400FB5783 /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 		675E27F8281087E800FB5783 /* StatesAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatesAnimationView.swift; sourceTree = "<group>"; };
-		6768CAF8287E3DA800E3A42F /* dark1_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dark1_1.json; sourceTree = "<group>"; };
 		6768CAFA287EE38400E3A42F /* AdventureBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureBackgroundView.swift; sourceTree = "<group>"; };
 		6768CAFE287F81AF00E3A42F /* CameraCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCommands.swift; sourceTree = "<group>"; };
 		6768CB00287F8C7C00E3A42F /* CameraControlEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraControlEvents.swift; sourceTree = "<group>"; };
@@ -398,16 +397,18 @@
 		67B533882804CB8E00EA959A /* AdventureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureView.swift; sourceTree = "<group>"; };
 		67B5338A2804CC4500EA959A /* VertexView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexView.swift; sourceTree = "<group>"; };
 		67B533952804EC6000EA959A /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
-		67B533972804ED6D00EA959A /* TIAPrototypingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TIAPrototypingError.swift; sourceTree = "<group>"; };
 		67B533992805B2B400EA959A /* AdventureLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureLayout.swift; sourceTree = "<group>"; };
 		67B5339C2805B5E200EA959A /* dark1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = dark1.json; sourceTree = "<group>"; };
-		67B533A02805BC0400EA959A /* dark1_1v1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = dark1_1v1.json; sourceTree = "<group>"; };
 		67B93A4A287B4B60009795F4 /* CurveControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurveControlsView.swift; sourceTree = "<group>"; };
 		67BDE95228171112005B0194 /* ResourceShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceShape.swift; sourceTree = "<group>"; };
 		67BDE95A281712BC005B0194 /* ResourcePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourcePath.swift; sourceTree = "<group>"; };
 		67BDE95C2817E841005B0194 /* ResourceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceView.swift; sourceTree = "<group>"; };
 		67BDE95E2817E879005B0194 /* ResourceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceViewModel.swift; sourceTree = "<group>"; };
 		67BDE960281833D5005B0194 /* LayoutConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutConstants.swift; sourceTree = "<group>"; };
+		67BF76F1288DB10300680C78 /* dark1_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dark1_3.json; sourceTree = "<group>"; };
+		67BF76F2288DB10300680C78 /* dark1_4.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dark1_4.json; sourceTree = "<group>"; };
+		67BF76F3288DB10300680C78 /* dark1_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dark1_1.json; sourceTree = "<group>"; };
+		67BF76F9288DB29100680C78 /* dark1_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dark1_2.json; sourceTree = "<group>"; };
 		67E4DD402812DF9D00F05D87 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		67EDAC26281CA01F00EA41CF /* VertexSurroundingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexSurroundingService.swift; sourceTree = "<group>"; };
 		67EDAC5E281F3E2200EA41CF /* AnimationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationService.swift; sourceTree = "<group>"; };
@@ -502,8 +503,10 @@
 				6791A8F0286CAEAF00231BFA /* sd1_1.json */,
 				6791A8EE286CAEAF00231BFA /* sd2_1.json */,
 				6791A8EF286CAEAF00231BFA /* sd3_1.json */,
-				6768CAF8287E3DA800E3A42F /* dark1_1.json */,
-				67B533A02805BC0400EA959A /* dark1_1v1.json */,
+				67BF76F3288DB10300680C78 /* dark1_1.json */,
+				67BF76F9288DB29100680C78 /* dark1_2.json */,
+				67BF76F1288DB10300680C78 /* dark1_3.json */,
+				67BF76F2288DB10300680C78 /* dark1_4.json */,
 				6791A905286E58B000231BFA /* light1_1.json */,
 			);
 			path = Layouts;
@@ -724,7 +727,6 @@
 				679E371E28303E3B00D9EE41 /* Geometry */,
 				679E371D28303E2200D9EE41 /* GameEntities */,
 				67B5335627FF959000EA959A /* Scenario */,
-				67B533972804ED6D00EA959A /* TIAPrototypingError.swift */,
 				6771F8F728592A3300D7B742 /* DrawableCurve.swift */,
 				67811BC928688F2100861ADA /* CameraViewModel.swift */,
 				6768CB00287F8C7C00E3A42F /* CameraControlEvents.swift */,
@@ -932,22 +934,24 @@
 				670F9C3C28735BEB00E84836 /* sl1.json in Resources */,
 				670F9C4028735BFA00E84836 /* sl2_1.json in Resources */,
 				670F9C3B28735BEB00E84836 /* sl2.json in Resources */,
-				6768CAF9287E3DA800E3A42F /* dark1_1.json in Resources */,
 				6727922C2805C2C000FEE07E /* scenario.json in Resources */,
+				67BF76F6288DB10300680C78 /* dark1_4.json in Resources */,
 				6791A8EB286CAEA100231BFA /* sd1.json in Resources */,
 				6791A8EC286CAEA100231BFA /* sd2.json in Resources */,
 				6791A8ED286CAEA100231BFA /* sd3.json in Resources */,
 				6791A906286E58B000231BFA /* light1_1.json in Resources */,
 				67B5339D2805B5E200EA959A /* dark1.json in Resources */,
+				67BF76FA288DB29100680C78 /* dark1_2.json in Resources */,
 				6793A97D27FCF3B9002198E9 /* Preview Assets.xcassets in Resources */,
 				6791A8F1286CAEAF00231BFA /* sd2_1.json in Resources */,
 				6791A8F3286CAEAF00231BFA /* sd1_1.json in Resources */,
 				6793A97A27FCF3B9002198E9 /* Assets.xcassets in Resources */,
 				67279241280632DD00FEE07E /* light1.json in Resources */,
+				67BF76F7288DB10300680C78 /* dark1_1.json in Resources */,
 				670F9C3F28735BFA00E84836 /* sl1_1.json in Resources */,
+				67BF76F5288DB10300680C78 /* dark1_3.json in Resources */,
 				672792432806330100FEE07E /* truth1.json in Resources */,
 				6791A8F2286CAEAF00231BFA /* sd3_1.json in Resources */,
-				67B533A12805BC0400EA959A /* dark1_1v1.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1003,7 +1007,6 @@
 				670F9CBC2874686500E84836 /* AdventureIconStateHandler.swift in Sources */,
 				670F9C862874677000E84836 /* AnimationService.swift in Sources */,
 				670F9CB8287467E800E84836 /* ResourceShape.swift in Sources */,
-				670F9C7F2874674600E84836 /* TIAPrototypingError.swift in Sources */,
 				670F9C4C28745F1700E84836 /* EditorView.swift in Sources */,
 				670F9C6D2874635C00E84836 /* VertexViewMetastate.swift in Sources */,
 				670F9CB3287467E000E84836 /* SingleCurveShape.swift in Sources */,
@@ -1136,7 +1139,6 @@
 				6793A98B27FD1936002198E9 /* Color.swift in Sources */,
 				677C3100281099500014BECD /* AnimationState.swift in Sources */,
 				67BDE95D2817E841005B0194 /* ResourceView.swift in Sources */,
-				67B533982804ED6D00EA959A /* TIAPrototypingError.swift in Sources */,
 				6727923D28062CF200FEE07E /* DecodingError.swift in Sources */,
 				672792472806441300FEE07E /* EdgeView.swift in Sources */,
 				67B5336227FFAA6200EA959A /* StorageService.swift in Sources */,

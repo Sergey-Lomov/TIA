@@ -36,10 +36,13 @@ final class GameEngine {
 }
 
 extension GameEngine: AdventureLayoutProvider {
-    private static let layoutsCount = 1
+    private static let layoutsCount: [String: Int] = [
+        "dark1": 4,
+    ]
 
     func getLayout(_ adventure: AdventurePrototype) -> AdventureLayout {
-        let index = Int.random(in: 1...Self.layoutsCount)
+        let count = Self.layoutsCount[adventure.id] ?? 1
+        let index = Int.random(in: 1...count)
         let protoLayout = JSONDecoder.decodeLayout(adventureId: adventure.id, index: index)
         return AdventureLayout(protoLayout)
     }

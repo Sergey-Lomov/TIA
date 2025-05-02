@@ -960,6 +960,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		6791A90B286F5C5C00231BFA /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 12;
 			files = (
 			);
@@ -973,7 +974,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#for file_path in $(git ls-files -om --exclude-from=.gitignore | grep \".swift$\"); do\n#    swiftlint --path $file_path\n#done\n";
+			shellScript = "for file_path in $(git ls-files -om --exclude-from=.gitignore | grep \".swift$\"); do\n    swiftlint --path $file_path\ndone\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

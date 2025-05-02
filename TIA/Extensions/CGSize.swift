@@ -41,7 +41,7 @@ extension CGSize {
     }
 }
 
-extension CGSize: VectorArithmetic {
+extension CGSize: @retroactive VectorArithmetic {
     public mutating func scale(by rhs: Double) {
         width *= rhs
         height *= rhs

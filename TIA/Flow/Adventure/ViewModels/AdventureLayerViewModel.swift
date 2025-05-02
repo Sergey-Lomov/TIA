@@ -14,6 +14,7 @@ final class AdventureLayerViewModel: IngameViewModel<AdventureLayer> {
     @Published var edges: [EdgeViewModel]
 
     var state: AdventureLayerState { model.state }
+    var subscriptions = [AnyCancellable]()
 
     init(model: AdventureLayer, palette: ColorPalette, eventsPublisher: ViewEventsPublisher) {
         self.vertices = model.vertices.map {
@@ -25,6 +26,13 @@ final class AdventureLayerViewModel: IngameViewModel<AdventureLayer> {
         }
 
         super.init(model: model, publisher: eventsPublisher)
+
+        vertices.forEach { vertex in
+            let sub = vertex.objectWillChange.sink { _ in
+                self.objectWillChange.sendOnMain()
+            }
+            self.subscriptions.append(sub)
+        }
     }
 }
 

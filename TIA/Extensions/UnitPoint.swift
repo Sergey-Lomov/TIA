@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-extension UnitPoint: VectorArithmetic {
+extension UnitPoint: @retroactive VectorArithmetic {
 
     public mutating func scale(by rhs: Double) {
         x *= rhs

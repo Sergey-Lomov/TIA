@@ -109,7 +109,7 @@ struct PlayerView: View {
                     .transition(.identity)
             }
 
-            EyeView(eye: $player.eye, color: player.color)
+            EyeView(eye: player.eye, color: player.color)
                 .frame(size: eyeSize(geometry))
         }
     }

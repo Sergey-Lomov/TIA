@@ -275,7 +275,7 @@ final class AdventureEngine: EngineEventsSource {
     private func restartAdventure(_ vertex: Vertex) {
         let layout = layoutProvider.getLayout(prototype)
         let layer = AdventureService.layerFor(prototype, layout: layout, forcedEntrance: vertex)
-         layer.state = .preparing
+        layer.state = .preparing
         startLayerPresenting(layer, from: vertex)
         adventure.state = .gameplay
     }
@@ -338,7 +338,7 @@ final class AdventureEngine: EngineEventsSource {
                 return false
             }
         }
-        
+
         let verticesDone = layer.vertices.allSatisfy {
             $0.state == .seed || $0 == exit
         }
@@ -728,7 +728,6 @@ extension AdventureEngine: ViewEventsListener {
             resources.forEach { $0.objectWillChange.sendOnMain() }
         }
     }
-
 
     private func handleGateClosed(_ gate: EdgeGate) {
         gateResources(gate).forEach {

@@ -19,17 +19,17 @@ private extension EnvironmentValues {
 }
 
 struct EyeView: View {
-    @Binding var eye: EyeViewModel
+    @ObservedObject var eye: EyeViewModel
 
     var color: Color
     var onAnimationFinish: Action?
 
     var body: some View {
-        return GeometryReader { geometry in
+        GeometryReader { geometry in
             ZStack {
-                EyelidView(status: $eye.status)
+                EyelidView(status: eye.status)
                 EyeballView(size: geometry.size)
-                    .mask(EyeSocketView(eye: $eye))
+                    .mask(EyeSocketView(eye: eye))
             }
             .foregroundColor(color)
             .frame(geometry: geometry)
@@ -46,7 +46,7 @@ struct EyeView: View {
 
 private struct EyeSocketView: View {
 
-    @Binding var eye: EyeViewModel
+    @ObservedObject var eye: EyeViewModel
 
     var curve: ComplexCurve { ComplexCurve.eyelid(status: eye.status) }
     var animation: Animation? { Animation.forStatus(eye.status) }
@@ -66,7 +66,7 @@ private struct EyelidView: View {
     private let compressedMult: CGFloat = 4
 
     @Environment(\.strokeWidth) var strokeWidth
-    @Binding var status: EyeStatus
+    var status: EyeStatus
 
     var curve: ComplexCurve { ComplexCurve.eyelid(status: status) }
     var animation: Animation? { Animation.forStatus(status) }

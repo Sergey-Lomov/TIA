@@ -13,7 +13,7 @@ final class AnimationService {
     typealias AnimBuilder = (TimeInterval) -> Animation
 
     enum Const {
-        static let debugMult = 0.33
+        static let debugMult = 1.0 // 0.33
 
         enum Player {
             static let lengthMult: CGFloat = 0.005

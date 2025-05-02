@@ -12,22 +12,22 @@
         {
             "id": "v2",
             "role": "common",
-            "resources": ["anger", "anger", "despair", "yearning"]
+            "resources": ["anger", "despair", "yearning"]
         },
         {
             "id": "v3",
             "role": "common",
-            "resources": ["yearning", "yearning", "anger", "despair"]
+            "resources": ["yearning", "yearning"]
         },
         {
             "id": "v4",
             "role": "common",
-            "resources": ["yearning","yearning", "anger", "despair"]
+            "resources": ["despair", "anger"]
         },
         {
             "id": "v5",
             "role": "common",
-            "resources": []
+            "resources": ["anger"]
         },
         {
             "id": "v6",

@@ -17,6 +17,7 @@
 		67067870287B1AED00ED0899 /* JSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6706786F287B1AED00ED0899 /* JSONDecoder.swift */; };
 		67067872287B1E6900ED0899 /* MissedLayoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67067871287B1E6900ED0899 /* MissedLayoutView.swift */; };
 		67067874287B208C00ED0899 /* AdventureLayoutExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67067873287B208C00ED0899 /* AdventureLayoutExtension.swift */; };
+		670E1CBA2DC62F6D006E8195 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 670E1CB92DC62F6D006E8195 /* Localizable.xcstrings */; };
 		670F9C3B28735BEB00E84836 /* sl2.json in Resources */ = {isa = PBXBuildFile; fileRef = 670F9C3928735BEB00E84836 /* sl2.json */; };
 		670F9C3C28735BEB00E84836 /* sl1.json in Resources */ = {isa = PBXBuildFile; fileRef = 670F9C3A28735BEB00E84836 /* sl1.json */; };
 		670F9C3F28735BFA00E84836 /* sl1_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 670F9C3D28735BFA00E84836 /* sl1_1.json */; };
@@ -268,6 +269,7 @@
 		6706786F287B1AED00ED0899 /* JSONDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoder.swift; sourceTree = "<group>"; };
 		67067871287B1E6900ED0899 /* MissedLayoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissedLayoutView.swift; sourceTree = "<group>"; };
 		67067873287B208C00ED0899 /* AdventureLayoutExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureLayoutExtension.swift; sourceTree = "<group>"; };
+		670E1CB92DC62F6D006E8195 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		670F9C3928735BEB00E84836 /* sl2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sl2.json; sourceTree = "<group>"; };
 		670F9C3A28735BEB00E84836 /* sl1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sl1.json; sourceTree = "<group>"; };
 		670F9C3D28735BFA00E84836 /* sl1_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sl1_1.json; sourceTree = "<group>"; };
@@ -811,6 +813,7 @@
 				6727922B2805C2C000FEE07E /* scenario.json */,
 				67B5339E2805BBD600EA959A /* Adventures */,
 				67279235280615A600FEE07E /* Layouts */,
+				670E1CB92DC62F6D006E8195 /* Localizable.xcstrings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -931,6 +934,7 @@
 			files = (
 				6791A90D286F5D6400231BFA /* .swiftlint.yml in Resources */,
 				6727923F280632B900FEE07E /* dark2.json in Resources */,
+				670E1CBA2DC62F6D006E8195 /* Localizable.xcstrings in Resources */,
 				670F9C3C28735BEB00E84836 /* sl1.json in Resources */,
 				670F9C4028735BFA00E84836 /* sl2_1.json in Resources */,
 				670F9C3B28735BEB00E84836 /* sl2.json in Resources */,
@@ -1343,6 +1347,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -1397,6 +1402,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};

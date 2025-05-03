@@ -1,0 +1,17 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "main_menu_hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Initiate memory recovery by selecting a node within the positive or negative sector of the Balance Sphere."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

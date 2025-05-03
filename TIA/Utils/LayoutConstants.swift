@@ -17,6 +17,7 @@ struct Layout {
         static let doneIconSize: CGFloat = 0.125
         static let doneIconsInteritem: CGFloat = 15
         static let doneIconsGap: CGFloat = 10
+        static let horizontalInset: CGFloat = 16
     }
 
     struct Menu {

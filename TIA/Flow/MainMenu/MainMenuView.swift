@@ -20,13 +20,21 @@ struct MainMenuView: View {
     @ObservedObject var model: MainMenuViewModel
 
     var body: some View {
-        Color.yellow
-            .edgesIgnoringSafeArea(.all)
-
         ZStack {
+            Color.yellow
+                .edgesIgnoringSafeArea(.all)
+
             WorldPickerView(model: model)
                 .frame(size: Layout.MainMenu.pickerSize)
                 .environment(\.cameraService, model.cameraService)
+
+            GeometryReader { geometry in
+                let x = geometry.size.width / 2
+                let y = geometry.size.height / 4 - Layout.MainMenu.pickerSize / 4
+                Text("main_menu_hint")
+                    .position(x: x, y: y)
+                    .padding(.horizontal, Layout.MainMenu.horizontalInset)
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .applyCamera(model.camera)
@@ -35,5 +43,6 @@ struct MainMenuView: View {
                 model.adventureSelected(descriptor)
             }
         }
+        .background(Color.red)
     }
 }

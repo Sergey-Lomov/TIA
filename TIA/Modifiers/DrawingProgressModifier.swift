@@ -11,6 +11,7 @@ import SwiftUI
 struct DrawingProgressModifier: AnimatableModifier {
 
     var drawingProgress: CGFloat
+
     var animatableData: CGFloat {
         get { drawingProgress }
         set { drawingProgress = newValue  }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BezierPositioning: AnimatableModifier {
-
+    
     static private let defaultLengthSteps = 100
 
     private let curve: ComplexCurve

@@ -12,6 +12,7 @@ import Combine
 struct SingleCurveShape: Shape {
 
     var curve: BezierCurve
+
     var animatableData: BezierCurve {
         get { curve }
         set { curve = newValue }

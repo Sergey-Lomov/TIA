@@ -9,6 +9,7 @@ import Foundation
 import Combine
 
 extension ObservableObjectPublisher {
+
     func sendOnMain() {
         DispatchQueue.main.async {
             self.send()

@@ -11,6 +11,7 @@ struct DrawableCurvesView: View {
 
     let elements: [DrawableCurve]
     var lineCap: CGLineCap = .round
+
     @Environment(\.drawingProgress) var drawingProgress
     @Environment(\.drawingWidth) var drawingWidth
 

@@ -12,6 +12,7 @@ struct ComplexCurveShape: Shape {
 
     var curve: ComplexCurve
     var close: Bool = false
+
     var animatableData: ComplexCurve {
         get { curve }
         set { curve = newValue }

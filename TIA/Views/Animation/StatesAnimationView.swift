@@ -14,6 +14,7 @@ struct StatesAnimationView<Content>: View, Animatable where Content: View & Anim
 
     private var content: Content
     private var states: StatesContainer
+
     private var progress: CGFloat = 0 {
         didSet { content.animatableData = states.valueFor(progress) }
     }

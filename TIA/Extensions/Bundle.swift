@@ -8,6 +8,7 @@
 import Foundation
 
 extension Bundle {
+
     static func scenarioPath() -> String? {
         main.path(forResource: "scenario", ofType: "json")
     }

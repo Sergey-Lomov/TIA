@@ -9,7 +9,6 @@ import Foundation
 import SwiftUI
 
 extension Path {
-
     static func polygon(points: [CGPoint]) -> Path {
         var path = Path()
         guard let first = points.first else { return path }

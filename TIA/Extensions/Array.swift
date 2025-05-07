@@ -10,6 +10,7 @@ import SwiftUI
 import Combine
 
 extension Array {
+
     public subscript(index: Int, default defaultValue: @autoclosure () -> Element) -> Element {
         guard index >= 0, index < endIndex else {
             return defaultValue()
@@ -49,6 +50,7 @@ extension Array {
 }
 
 extension Array where Element: Equatable & Hashable {
+
     func intersection(_ array: [Element]) -> [Element] {
         Array(Set(self).intersection(Set(array)))
     }
@@ -67,6 +69,7 @@ extension Array where Element: AdditiveArithmetic {
 }
 
 extension Array where Element: VectorArithmetic {
+
     public mutating func scale(by rhs: Double) {
         for i in 0..<count {
             self[i].scale(by: rhs)
@@ -80,6 +83,7 @@ extension Array where Element: VectorArithmetic {
 }
 
 extension Array where Element == AnyCancellable {
+
     mutating func sink<P: Publisher>(_ publisher: P, handler: @escaping (P.Output) -> Void) where P.Failure == Never {
         let subscription = publisher.sink { handler($0) }
         self.append(subscription)

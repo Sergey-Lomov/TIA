@@ -11,6 +11,7 @@ import CoreGraphics
 typealias FloatRange = ClosedRange<CGFloat>
 
 extension ClosedRange {
+
     init(from: Bound, to: Bound) {
         self = from ... to
     }

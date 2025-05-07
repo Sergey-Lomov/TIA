@@ -8,6 +8,7 @@
 import CoreGraphics
 
 extension CGFloat {
+
     static var unsingularZero: CGFloat = 0.0001 // Uses for CGAffinTransform related calculations to avoid "singular matrix" warning. Exists constant "leastNonzeroMagnitude" is not valid fix.
     static var negativeInfinity: CGFloat { -1 * infinity }
     static var hpi: CGFloat { .pi / 2 }

@@ -8,6 +8,7 @@
 import Foundation
 
 extension Comparable {
+
     func normalized(min: Self, max: Self) -> Self {
         switch self {
         case let value where value > max:

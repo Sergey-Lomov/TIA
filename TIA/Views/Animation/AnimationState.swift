@@ -10,6 +10,7 @@ import CoreGraphics
 import SwiftUI
 
 protocol AnimationStateProtocol {
+
     associatedtype Value: VectorArithmetic
 
     var progress: CGFloat { get }
@@ -21,6 +22,7 @@ protocol AnimationStateProtocol {
 }
 
 struct AnimationState<Value>: AnimationStateProtocol where Value: VectorArithmetic {
+
     let progress: CGFloat
     let value: Value
     let timing: BezierCurve
@@ -32,6 +34,7 @@ struct AnimationState<Value>: AnimationStateProtocol where Value: VectorArithmet
 }
 
 class AnimationStatesContainer<Value> where Value: VectorArithmetic {
+
     typealias State = AnimationState<Value>
 
     let states: [State]

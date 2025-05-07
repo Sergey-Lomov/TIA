@@ -8,6 +8,7 @@
 import Foundation
 
 extension Data {
+
     static func scenarioData() -> Data {
         guard let path = Bundle.scenarioPath() else {
             fatalError("Scenario json missed")

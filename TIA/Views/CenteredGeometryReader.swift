@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CenteredGeometryReader<Content>: View where Content: View {
+
     private var content: (GeometryProxy) -> Content
 
     init(@ViewBuilder content: @escaping (GeometryProxy) -> Content) {

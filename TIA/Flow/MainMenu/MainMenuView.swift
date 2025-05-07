@@ -24,16 +24,21 @@ struct MainMenuView: View {
             Color.yellow
                 .edgesIgnoringSafeArea(.all)
 
-            WorldPickerView(model: model)
-                .frame(size: Layout.MainMenu.pickerSize)
-                .environment(\.cameraService, model.cameraService)
+            VStack(spacing: 0) {
+                VStack {
+                    Text("main_menu_hint")
+                        .padding(.horizontal, Layout.MainMenu.horizontalInset)
+                        .font(.custom("ShareTechMono-Regular", size: 20))
+                }
+                .frame(maxHeight: .infinity)
 
-            GeometryReader { geometry in
-                let x = geometry.size.width / 2
-                let y = geometry.size.height / 4 - Layout.MainMenu.pickerSize / 4
-                Text("main_menu_hint")
-                    .position(x: x, y: y)
-                    .padding(.horizontal, Layout.MainMenu.horizontalInset)
+                WorldPickerView(model: model)
+                    .frame(size: Layout.MainMenu.pickerSize)
+                    .environment(\.cameraService, model.cameraService)
+                    .frame(maxHeight: .infinity)
+
+                Spacer()
+                    .frame(maxHeight: .infinity)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

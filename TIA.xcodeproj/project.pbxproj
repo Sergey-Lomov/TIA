@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -294,6 +294,7 @@
 		672792462806441300FEE07E /* EdgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeView.swift; sourceTree = "<group>"; };
 		67289C50287E0438001E8A10 /* AdventureLayoutPrototype.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureLayoutPrototype.swift; sourceTree = "<group>"; };
 		67289C53287E0840001E8A10 /* NSSavePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSSavePanel.swift; sourceTree = "<group>"; };
+		673CDDAA2DCADFA9006BDB57 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = Info.plist; sourceTree = "<group>"; };
 		675E27392809CD7A00FB5783 /* AdventureEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdventureEngine.swift; sourceTree = "<group>"; };
 		675E273B2809D98300FB5783 /* GameEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameEngine.swift; sourceTree = "<group>"; };
 		675E273D2809E36800FB5783 /* SingleCurveShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleCurveShape.swift; sourceTree = "<group>"; };
@@ -420,6 +421,10 @@
 		67EDAC6628214FD600EA41CF /* IdEqutable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdEqutable.swift; sourceTree = "<group>"; };
 		67EFD4762844348200DA02EC /* VisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		673CDDA52DCADDA9006BDB57 /* Fonts */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Fonts; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		670F9C4428745F1700E84836 /* Frameworks */ = {
@@ -809,6 +814,8 @@
 		67B5339B2805B49500EA959A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				673CDDAA2DCADFA9006BDB57 /* Info.plist */,
+				673CDDA52DCADDA9006BDB57 /* Fonts */,
 				6791A90C286F5D6400231BFA /* .swiftlint.yml */,
 				6727922B2805C2C000FEE07E /* scenario.json */,
 				67B5339E2805BBD600EA959A /* Adventures */,
@@ -875,6 +882,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				673CDDA52DCADDA9006BDB57 /* Fonts */,
 			);
 			name = TIA;
 			productName = TIA;
@@ -1419,7 +1429,8 @@
 				DEVELOPMENT_TEAM = TW5C93DFWS;
 				ENABLE_PREVIEWS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "$(SRCROOT)/TIA/Resources/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1450,7 +1461,8 @@
 				DEVELOPMENT_TEAM = TW5C93DFWS;
 				ENABLE_PREVIEWS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "";
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "$(SRCROOT)/TIA/Resources/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
